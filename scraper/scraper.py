@@ -173,7 +173,7 @@ EXTRA_INVESTORS = [
 
 def import_extra_investors():
     """Import the hand-curated extra investors into Supabase."""
-    print(f"\n📥 Importing {len(EXTRA_INVESTORS)} extra investors...")
+    print(f"\n>>> Importing {len(EXTRA_INVESTORS)} extra investors...")
     success = 0
     for inv in tqdm(EXTRA_INVESTORS):
         try:
@@ -181,7 +181,7 @@ def import_extra_investors():
             success += 1
         except Exception as e:
             print(f"  ⚠️  {inv['name']}: {e}")
-    print(f"  ✅ Imported {success} extra investors")
+    print(f"  [OK] Imported {success} extra investors")
 
 
 def run_all():
@@ -193,7 +193,7 @@ def run_all():
     import_extra_investors()
 
     # 2. Try public GitHub datasets
-    print("\n🌐 Fetching GitHub public datasets...")
+    print("\n>>> Fetching GitHub public datasets...")
     for url in GITHUB_CSV_SOURCES:
         rows = fetch_github_dataset(url)
         # Map and import (best-effort)
@@ -216,7 +216,7 @@ def run_all():
 
     # 3. Check total
     res = supabase.table("investors").select("id", count="exact").execute()
-    print(f"\n🎉 Total investors in DB: {res.count}")
+    print(f"\n[DONE] Total investors in DB: {res.count}")
     print("=" * 50)
 
 

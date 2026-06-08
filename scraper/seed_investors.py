@@ -805,4 +805,4 @@ for inv in INVESTORS:
         UNIQUE_INVESTORS.append(inv)
 
 INVESTORS = UNIQUE_INVESTORS
-print(f"✅ Loaded {len(INVESTORS)} investors in seed data")
+print(f"[OK] Loaded {len(INVESTORS)} investors in seed data")
