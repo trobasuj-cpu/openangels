@@ -55,9 +55,8 @@ async function init() {
         const { data, error } = await supabaseClient
           .from('investors')
           .select('*')
-          .eq('active', true)
           .order('verified', { ascending: false })
-          .limit(500);
+          .limit(1100);
         if (!error && data?.length > 0) {
           allInvestors = data;
         }
