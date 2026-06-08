@@ -1,7 +1,7 @@
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 // Replace with your actual Supabase credentials
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
 
 // ─── STATIC FALLBACK DATA (shown before Supabase is connected) ───────────────
 const STATIC_INVESTORS = [
