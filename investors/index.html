@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investors — OpenAngels | Free Angel Investor Database</title>
+  <meta name="description" content="Search 1000+ angel investors and VCs. Filter by industry, check size, stage, and location. Completely free."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="investors.css"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">✦</span>
+        <span>OpenAngels</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/investors" class="nav-active">Investors</a>
+        <a href="/#waitlist" class="btn-nav">Get Early Access</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- SIDEBAR FILTERS -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-header">
+          <h2>🔍 Filters</h2>
+          <button class="clear-btn" id="clear-filters" onclick="clearFilters()">Clear all</button>
+        </div>
+
+        <!-- Search -->
+        <div class="filter-group">
+          <label class="filter-label">Search</label>
+          <div class="search-wrap">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="search-input" placeholder="Name, company, keyword..." class="filter-input search-full" oninput="applyFilters()"/>
+          </div>
+        </div>
+
+        <!-- Type -->
+        <div class="filter-group">
+          <label class="filter-label">Type</label>
+          <div class="checkbox-group" id="filter-type">
+            <label class="checkbox-item"><input type="checkbox" value="angel" onchange="applyFilters()"/> Angel Investor</label>
+            <label class="checkbox-item"><input type="checkbox" value="vc" onchange="applyFilters()"/> VC Fund</label>
+            <label class="checkbox-item"><input type="checkbox" value="accelerator" onchange="applyFilters()"/> Accelerator</label>
+          </div>
+        </div>
+
+        <!-- Stage -->
+        <div class="filter-group">
+          <label class="filter-label">Stage</label>
+          <div class="checkbox-group" id="filter-stage">
+            <label class="checkbox-item"><input type="checkbox" value="pre-seed" onchange="applyFilters()"/> Pre-Seed</label>
+            <label class="checkbox-item"><input type="checkbox" value="seed" onchange="applyFilters()"/> Seed</label>
+            <label class="checkbox-item"><input type="checkbox" value="series-a" onchange="applyFilters()"/> Series A</label>
+            <label class="checkbox-item"><input type="checkbox" value="series-b" onchange="applyFilters()"/> Series B+</label>
+          </div>
+        </div>
+
+        <!-- Industry -->
+        <div class="filter-group">
+          <label class="filter-label">Industry</label>
+          <div class="checkbox-group" id="filter-industry">
+            <label class="checkbox-item"><input type="checkbox" value="ai" onchange="applyFilters()"/> 🤖 AI / ML</label>
+            <label class="checkbox-item"><input type="checkbox" value="saas" onchange="applyFilters()"/> ☁️ SaaS</label>
+            <label class="checkbox-item"><input type="checkbox" value="fintech" onchange="applyFilters()"/> 💳 FinTech</label>
+            <label class="checkbox-item"><input type="checkbox" value="consumer" onchange="applyFilters()"/> 🛍️ Consumer</label>
+            <label class="checkbox-item"><input type="checkbox" value="crypto" onchange="applyFilters()"/> ₿ Crypto/Web3</label>
+            <label class="checkbox-item"><input type="checkbox" value="marketplace" onchange="applyFilters()"/> 🏪 Marketplace</label>
+            <label class="checkbox-item"><input type="checkbox" value="biotech" onchange="applyFilters()"/> 🧬 Biotech</label>
+            <label class="checkbox-item"><input type="checkbox" value="edtech" onchange="applyFilters()"/> 📚 EdTech</label>
+            <label class="checkbox-item"><input type="checkbox" value="developer-tools" onchange="applyFilters()"/> 🛠️ Dev Tools</label>
+            <label class="checkbox-item"><input type="checkbox" value="climate" onchange="applyFilters()"/> 🌱 Climate</label>
+          </div>
+        </div>
+
+        <!-- Check Size -->
+        <div class="filter-group">
+          <label class="filter-label">Min Check Size</label>
+          <select class="filter-select" id="filter-check" onchange="applyFilters()">
+            <option value="">Any size</option>
+            <option value="5000">$5K+</option>
+            <option value="25000">$25K+</option>
+            <option value="100000">$100K+</option>
+            <option value="500000">$500K+</option>
+            <option value="1000000">$1M+</option>
+          </select>
+        </div>
+
+        <!-- Location -->
+        <div class="filter-group">
+          <label class="filter-label">Country</label>
+          <select class="filter-select" id="filter-country" onchange="applyFilters()">
+            <option value="">Any country</option>
+            <option value="USA">🇺🇸 United States</option>
+            <option value="UK">🇬🇧 United Kingdom</option>
+            <option value="Germany">🇩🇪 Germany</option>
+            <option value="Canada">🇨🇦 Canada</option>
+            <option value="Sweden">🇸🇪 Sweden</option>
+            <option value="Estonia">🇪🇪 Estonia</option>
+            <option value="Netherlands">🇳🇱 Netherlands</option>
+          </select>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="content-header">
+        <div>
+          <h1 class="page-title">Angel Investors & VCs</h1>
+          <p class="page-sub">
+            <span id="result-count" class="count-badge">Loading...</span>
+            investors found · <span class="free-tag">100% free</span>
+          </p>
+        </div>
+        <div class="sort-wrap">
+          <label class="filter-label" style="margin:0">Sort:</label>
+          <select class="filter-select" id="sort-select" onchange="applyFilters()" style="width:auto">
+            <option value="name">Name A→Z</option>
+            <option value="check_max">Largest check</option>
+            <option value="verified">Verified first</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- AI MATCH BAR -->
+      <div class="ai-bar">
+        <div class="ai-bar-icon">✨</div>
+        <div class="ai-bar-text">
+          <strong>AI Investor Match</strong>
+          <span>Describe your startup and get matched with the right investors</span>
+        </div>
+        <button class="btn-ai" onclick="toggleAIMatch()">Try AI Match</button>
+      </div>
+
+      <!-- AI MATCH PANEL -->
+      <div class="ai-panel" id="ai-panel" style="display:none">
+        <div class="ai-panel-inner">
+          <h3>✨ Describe your startup</h3>
+          <textarea id="ai-input" class="ai-textarea" placeholder="We're building a B2B SaaS tool for marketing teams that automates social media reporting. Pre-seed, raising $500K..."></textarea>
+          <button class="btn-primary" onclick="runAIMatch()" id="ai-btn">
+            <span id="ai-btn-text">Find matching investors</span>
+          </button>
+          <div id="ai-result" class="ai-result" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- INVESTORS GRID -->
+      <div class="investors-grid" id="investors-grid">
+        <!-- Populated by JS -->
+      </div>
+
+      <div id="no-results" class="no-results" style="display:none">
+        <div class="no-results-icon">🔍</div>
+        <h3>No investors found</h3>
+        <p>Try adjusting your filters or search terms</p>
+        <button onclick="clearFilters()" class="btn-primary" style="margin-top:12px">Clear filters</button>
+      </div>
+
+      <div id="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading investors...</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- INVESTOR DETAIL MODAL -->
+  <div class="modal-overlay" id="modal" onclick="closeModal(event)" style="display:none">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="investors.js"></script>
+</body>
+</html>
