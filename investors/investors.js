@@ -197,7 +197,11 @@ function renderCards(list) {
       </div>
       <div class="inv-card-footer">
         <span class="inv-check-range">💰 ${formatCheck(inv.check_min, inv.check_max)}</span>
-        ${inv.verified ? '<span class="inv-verified">✓ Verified</span>' : ''}
+        <div style="display:flex;gap:6px;align-items:center">
+          ${inv.email ? '<span style="font-size:.7rem;background:rgba(16,185,129,0.15);color:#10b981;padding:2px 7px;border-radius:20px;border:1px solid rgba(16,185,129,0.3)">✉ Email</span>' : ''}
+          ${inv.linkedin_url ? '<span style="font-size:.7rem;background:rgba(59,130,246,0.15);color:#60a5fa;padding:2px 7px;border-radius:20px;border:1px solid rgba(59,130,246,0.3)">in LinkedIn</span>' : ''}
+          ${inv.verified ? '<span class="inv-verified">✓</span>' : ''}
+        </div>
       </div>
     </div>
   `).join('');
@@ -257,6 +261,7 @@ function openModal(idOrIndex) {
       ${inv.twitter_url ? `<a href="${inv.twitter_url}" target="_blank" class="modal-link">𝕏 Twitter</a>` : ''}
       ${inv.linkedin_url ? `<a href="${inv.linkedin_url}" target="_blank" class="modal-link">in LinkedIn</a>` : ''}
       ${inv.website ? `<a href="${inv.website}" target="_blank" class="modal-link">🌐 Website</a>` : ''}
+      ${inv.email ? `<a href="mailto:${inv.email}" class="modal-link" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);color:#10b981">✉ ${inv.email}</a>` : ''}
     </div>
   `;
 
