@@ -1,0 +1,393 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2 } from 'lucide-react';
+import { cn } from '../lib/utils';
+import { supabase } from '../lib/supabase.js';
+
+export default function Dashboard() {
+  const [investors, setInvestors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [search, setSearch] = useState('');
+  const [selectedIndustries, setSelectedIndustries] = useState([]);
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
+  const [selectedStages, setSelectedStages] = useState([]);
+
+  useEffect(() => {
+    async function fetchInvestors() {
+      try {
+        const { data, error } = await supabase
+          .from('investors')
+          .select('*');
+        
+        if (error) throw error;
+        
+        // Sort so investors with emails appear first for the Freemium Teaser
+        const sortedData = (data || []).sort((a, b) => {
+          if (a.email && !b.email) return -1;
+          if (!a.email && b.email) return 1;
+          return 0;
+        });
+        
+        setInvestors(sortedData);
+      } catch (err) {
+        console.error('Error fetching investors:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchInvestors();
+  }, []);
+
+  const uniqueIndustries = useMemo(() => {
+    const all = investors.flatMap(inv => {
+      const raw = inv.industry || inv.industries;
+      return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+    });
+    return [...new Set(all)].filter(Boolean).sort();
+  }, [investors]);
+
+  const uniqueLocations = useMemo(() => {
+    const all = investors.map(inv => inv.location);
+    return [...new Set(all)].filter(Boolean).sort();
+  }, [investors]);
+
+  const uniqueCheckSizes = useMemo(() => {
+    const all = investors.map(inv => inv.checkSize || inv.check_size);
+    return [...new Set(all)].filter(Boolean).sort();
+  }, [investors]);
+
+  const uniqueStages = useMemo(() => {
+    const all = investors.flatMap(inv => {
+      const raw = inv.stage || inv.stages;
+      return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+    });
+    return [...new Set(all)].filter(Boolean).sort();
+  }, [investors]);
+
+  const toggleFilter = (setter, value) => {
+    setter(prev => 
+      prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
+    );
+  };
+
+  const filteredInvestors = useMemo(() => {
+    return investors.filter(inv => {
+      const invIndustries = (() => {
+        const raw = inv.industry || inv.industries;
+        return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+      })();
+      const invStages = (() => {
+        const raw = inv.stage || inv.stages;
+        return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+      })();
+      const invCheckSize = inv.checkSize || inv.check_size;
+
+      const matchesSearch = search === '' || 
+        inv.name?.toLowerCase().includes(search.toLowerCase()) || 
+        inv.bio?.toLowerCase().includes(search.toLowerCase()) ||
+        invIndustries.some(ind => ind.toLowerCase().includes(search.toLowerCase()));
+
+      const matchesIndustry = selectedIndustries.length === 0 || 
+        selectedIndustries.some(ind => invIndustries.includes(ind));
+
+      const matchesLocation = selectedLocations.length === 0 || 
+        selectedLocations.includes(inv.location);
+
+      const matchesCheckSize = selectedCheckSizes.length === 0 || 
+        selectedCheckSizes.includes(invCheckSize);
+
+      const matchesStage = selectedStages.length === 0 || 
+        selectedStages.some(stage => invStages.includes(stage));
+
+      return matchesSearch && matchesIndustry && matchesLocation && matchesCheckSize && matchesStage;
+    });
+  }, [investors, search, selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages]);
+
+  const renderFilterOptions = (options, selected, setter) => (
+    <div className="space-y-2.5">
+      {options.length === 0 && <span className="text-xs text-zinc-500">No options</span>}
+      {options.map((item) => (
+        <div key={item} className="flex items-center gap-3 cursor-pointer group" onClick={() => toggleFilter(setter, item)}>
+          <div className={cn(
+            "w-4 h-4 rounded border flex items-center justify-center transition-colors",
+            selected.includes(item) 
+              ? "bg-zinc-900 border-zinc-900 dark:bg-white dark:border-white" 
+              : "border-zinc-300 dark:border-zinc-700 group-hover:border-zinc-400 dark:group-hover:border-zinc-600"
+          )}>
+            {selected.includes(item) && <Check className="w-3 h-3 text-white dark:text-zinc-900" />}
+          </div>
+          <span className="text-sm text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors">{item}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-white dark:bg-zinc-950">
+      {/* Sidebar Filters */}
+      <aside className="w-72 border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/20 flex flex-col hidden md:flex">
+        <div className="h-16 flex items-center px-6 border-b border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-semibold text-lg tracking-tight">
+            <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center">
+              <span className="text-white dark:text-zinc-900 text-sm font-bold">OA</span>
+            </div>
+            OpenAngels
+          </div>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+          <div>
+            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-zinc-400" />
+              Industry
+            </h3>
+            {renderFilterOptions(uniqueIndustries, selectedIndustries, setSelectedIndustries)}
+          </div>
+
+          <div>
+            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-zinc-400" />
+              Stage
+            </h3>
+            {renderFilterOptions(uniqueStages, selectedStages, setSelectedStages)}
+          </div>
+
+          <div>
+            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-zinc-400" />
+              Location
+            </h3>
+            {renderFilterOptions(uniqueLocations, selectedLocations, setSelectedLocations)}
+          </div>
+
+          <div>
+            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+              <DollarSign className="w-4 h-4 text-zinc-400" />
+              Check Size
+            </h3>
+            {renderFilterOptions(uniqueCheckSizes, selectedCheckSizes, setSelectedCheckSizes)}
+          </div>
+        </div>
+        
+        <div className="p-6 border-t border-zinc-200 dark:border-zinc-800">
+          <div className="bg-zinc-100 dark:bg-zinc-900/80 rounded-xl p-4 border border-zinc-200 dark:border-zinc-800 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <h4 className="text-sm font-medium text-zinc-900 dark:text-white mb-1 relative">Upgrade to Premium</h4>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
+            <button className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium py-2 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-sm active:scale-[0.98] relative">
+              Upgrade Now
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+        {/* Header */}
+        <header className="h-16 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-8 bg-white dark:bg-zinc-950 shrink-0">
+          <div className="flex-1 max-w-xl">
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-900 dark:group-focus-within:text-zinc-100 transition-colors" />
+              <input 
+                type="text" 
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search by name, industry, or keyword..." 
+                className="w-full bg-zinc-100/50 dark:bg-zinc-900/50 border border-transparent focus:bg-white dark:focus:bg-zinc-950 focus:border-zinc-200 dark:focus:border-zinc-800 focus:ring-4 focus:ring-zinc-100 dark:focus:ring-zinc-900/20 rounded-lg pl-10 pr-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 transition-all outline-none"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-4 pl-4">
+            <button className="p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors md:hidden">
+              <SlidersHorizontal className="w-5 h-5" />
+            </button>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-200 to-zinc-300 dark:from-zinc-800 dark:to-zinc-700 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center overflow-hidden">
+              <img src="https://i.pravatar.cc/150?u=user" alt="User" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </header>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight mb-1">Discover Angels</h1>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm">Showing {filteredInvestors.length} active angel investors matching your criteria.</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-zinc-500">Sort by:</span>
+                <button className="text-sm font-medium text-zinc-900 dark:text-zinc-100 flex items-center gap-1 hover:text-zinc-600 transition-colors">
+                  Relevance <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {loading ? (
+                <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-500">
+                  <Loader2 className="w-8 h-8 animate-spin mb-4" />
+                  <p>Loading investors...</p>
+                </div>
+              ) : error ? (
+                <div className="col-span-full flex flex-col items-center justify-center py-20 text-red-500">
+                  <p>Error loading investors: {error}</p>
+                </div>
+              ) : filteredInvestors.length === 0 ? (
+                <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-500">
+                  <p>No investors found matching your criteria.</p>
+                </div>
+              ) : (
+                filteredInvestors.map((investor, index) => {
+                  const isUnlocked = index < 3;
+                  
+                  const rawInd = investor.industry || investor.industries;
+                  const displayIndustries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
+                  const displayCheckSize = investor.checkSize || investor.check_size;
+                  
+                  let displayAvatar = investor.avatar_url || investor.avatar;
+                  if (!displayAvatar && investor.twitter_url) {
+                    const username = investor.twitter_url.split('/').pop().split('?')[0];
+                    if (username) displayAvatar = `https://unavatar.io/twitter/${username}?fallback=https://ui-avatars.com/api/?name=${encodeURIComponent(investor.name || 'User')}&background=random`;
+                  }
+                  if (!displayAvatar && investor.email) {
+                    displayAvatar = `https://unavatar.io/${investor.email}?fallback=https://ui-avatars.com/api/?name=${encodeURIComponent(investor.name || 'User')}&background=random`;
+                  }
+                  if (!displayAvatar) {
+                    displayAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(investor.name || 'User')}&background=random`;
+                  }
+
+                  return (
+                    <div key={investor.id} className="group flex flex-col bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">
+                      <div className="p-6 flex-1">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-4">
+                            <img 
+                              loading="lazy"
+                              src={displayAvatar} 
+                              alt={investor.name} 
+                              className="w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 object-cover bg-zinc-100 dark:bg-zinc-900" 
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(investor.name || 'User')}&background=random`;
+                              }}
+                            />
+                            <div>
+                              <h3 className="text-base font-semibold text-zinc-900 dark:text-white">{investor.name}</h3>
+                              <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                                <MapPin className="w-3 h-3" />
+                                {investor.location || 'Unknown Location'}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <p className="text-sm text-zinc-600 dark:text-zinc-300 mb-5 line-clamp-3 leading-relaxed">
+                          {investor.bio}
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {displayIndustries.map(tag => (
+                            <span key={tag} className="px-2.5 py-1 text-xs font-medium bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 rounded-md border border-zinc-200 dark:border-zinc-800">
+                              {tag}
+                            </span>
+                          ))}
+                          {displayCheckSize && (
+                            <span className="px-2.5 py-1 text-xs font-medium bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md border border-blue-100 dark:border-blue-900/30">
+                              {displayCheckSize}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Contact Section */}
+                      <div className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-200 dark:border-zinc-800 relative overflow-hidden">
+                        {isUnlocked ? (
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                {investor.email && (
+                                  <a href={`mailto:${investor.email}`} className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white flex items-center gap-2 transition-colors group/link">
+                                    <Mail className="w-4 h-4 group-hover/link:text-zinc-900 dark:group-hover/link:text-white transition-colors" />
+                                    <span className="underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-2">{investor.email}</span>
+                                  </a>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-3">
+                                {investor.website && (
+                                  <a href={investor.website.startsWith('http') ? investor.website : `https://${investor.website}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Website">
+                                    <Globe className="w-4 h-4" />
+                                  </a>
+                                )}
+                                {investor.twitter_url && (
+                                  <a href={investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-[#1DA1F2] transition-colors" title="Twitter">
+                                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                                  </a>
+                                )}
+                                {investor.linkedin_url && (
+                                  <a href={investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-[#0A66C2] transition-colors" title="LinkedIn">
+                                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                            <button className="w-full flex items-center justify-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-900 dark:text-white text-sm font-medium py-2 rounded-lg transition-all shadow-sm active:scale-[0.98]">
+                              <Sparkles className="w-4 h-4 text-amber-500" />
+                              AI Draft Email
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="relative space-y-3 h-[88px]">
+                            {/* Blurred background mock content */}
+                            <div className="flex items-center justify-between blur-[4px] opacity-40 select-none pointer-events-none">
+                              <div className="flex items-center gap-3">
+                                <div className="text-sm text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
+                                  <Mail className="w-4 h-4" />
+                                  <span>hidden@example.com</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <Globe className="w-4 h-4 text-zinc-400" />
+                                <svg viewBox="0 0 24 24" className="w-4 h-4 text-zinc-400" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                                <svg viewBox="0 0 24 24" className="w-4 h-4 text-zinc-400" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                              </div>
+                            </div>
+                            <div className="w-full flex items-center justify-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-sm font-medium py-2 rounded-lg blur-[4px] opacity-40 select-none pointer-events-none">
+                              <Sparkles className="w-4 h-4 text-amber-500" />
+                              AI Draft Email
+                            </div>
+
+                            {/* Overlay */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-[2px]">
+                              <button className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2 rounded-full text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn">
+                                <Lock className="w-3.5 h-3.5 group-hover/btn:rotate-12 transition-transform" />
+                                Unlock Premium
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+            
+            {/* Load More Mock */}
+            {!loading && !error && filteredInvestors.length > 0 && (
+              <div className="mt-12 text-center pb-12">
+                <button className="px-6 py-2.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-300 rounded-full hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors shadow-sm active:scale-[0.98]">
+                  Load More Investors
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
