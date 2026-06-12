@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
+import BackgroundAnimation from './BackgroundAnimation';
 
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
@@ -128,16 +129,18 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white dark:bg-zinc-950">
-      {/* Sidebar Filters */}
-      {isMobileFiltersOpen && (
+    <>
+      <BackgroundAnimation />
+      <div className="flex h-screen overflow-hidden relative z-10">
+        {/* Sidebar Filters */}
+        {isMobileFiltersOpen && (
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileFiltersOpen(false)} />
       )}
-      <aside className={cn(
-        "w-72 border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/20 flex-col",
-        isMobileFiltersOpen ? "fixed inset-y-0 left-0 z-50 flex bg-white dark:bg-zinc-950 shadow-2xl" : "hidden md:flex"
-      )}>
-        <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
+        <aside className={cn(
+          "w-72 border-r border-zinc-200/50 dark:border-zinc-800/50 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl flex-col",
+          isMobileFiltersOpen ? "fixed inset-y-0 left-0 z-50 flex shadow-2xl" : "hidden md:flex"
+        )}>
+          <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
           <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-semibold text-lg tracking-tight">
             <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center">
               <span className="text-white dark:text-zinc-900 text-sm font-bold">OA</span>
@@ -183,8 +186,8 @@ export default function Dashboard() {
           </div>
         </div>
         
-        <div className="p-6 border-t border-zinc-200 dark:border-zinc-800">
-          <div className="bg-zinc-100 dark:bg-zinc-900/80 rounded-xl p-4 border border-zinc-200 dark:border-zinc-800 relative overflow-hidden group">
+        <div className="p-6 border-t border-zinc-200/50 dark:border-zinc-800/50">
+          <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-4 border border-zinc-200/50 dark:border-zinc-800/50 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <h4 className="text-sm font-medium text-zinc-900 dark:text-white mb-1 relative">Upgrade to Premium</h4>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
@@ -196,9 +199,9 @@ export default function Dashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+      <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         {/* Header */}
-        <header className="h-16 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-8 bg-white dark:bg-zinc-950 shrink-0">
+        <header className="h-16 border-b border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between px-8 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shrink-0">
           <div className="flex-1 max-w-xl">
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-900 dark:group-focus-within:text-zinc-100 transition-colors" />
@@ -207,7 +210,7 @@ export default function Dashboard() {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search by name, industry, or keyword..." 
-                className="w-full bg-zinc-100/50 dark:bg-zinc-900/50 border border-transparent focus:bg-white dark:focus:bg-zinc-950 focus:border-zinc-200 dark:focus:border-zinc-800 focus:ring-4 focus:ring-zinc-100 dark:focus:ring-zinc-900/20 rounded-lg pl-10 pr-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 transition-all outline-none"
+                className="w-full bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 focus:bg-white dark:focus:bg-zinc-950 focus:border-zinc-300 dark:focus:border-zinc-700 focus:ring-4 focus:ring-zinc-100 dark:focus:ring-zinc-900/20 rounded-lg pl-10 pr-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 transition-all outline-none"
               />
             </div>
           </div>
@@ -266,7 +269,7 @@ export default function Dashboard() {
                   }
 
                   return (
-                    <div key={investor.id} className="group flex flex-col bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">
+                    <div key={investor.id} className="group flex flex-col bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:border-zinc-300 dark:hover:border-zinc-700 hover:-translate-y-0.5 transition-all duration-300">
                       <div className="p-6 flex-1">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center gap-4">
@@ -366,7 +369,7 @@ export default function Dashboard() {
                             </div>
 
                             {/* Overlay */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-[2px]">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-[3px]">
                               <button className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2 rounded-full text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn">
                                 <Lock className="w-3.5 h-3.5 group-hover/btn:rotate-12 transition-transform" />
                                 Unlock Premium
@@ -391,7 +394,7 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }
