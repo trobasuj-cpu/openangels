@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 """
 OpenAngels - Investor Enrichment via Hunter.io
-Gets professional email by name + company domain.
-Free tier: 25 searches/month per account.
+Email finder by name + company domain. Works on free plan!
+Free tier: 25 searches/month per account (create multiple accounts).
 
 Setup:
-1. Register at https://hunter.io
-2. Go to API -> Get API key
-3. Add to .env: HUNTER_API_KEY=your_key_here
+1. Go to https://hunter.io/users/sign_up
+2. API key: https://hunter.io/api-keys
+3. Add to .env: HUNTER_API_KEY=your_key
 """
-import os, time
+import os, time, sys
 import requests
 from dotenv import load_dotenv
 from supabase import create_client
+
+# Fix Windows encoding
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 load_dotenv()
 supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
@@ -56,6 +60,18 @@ DOMAIN_MAP = {
     "Precursor": "precursorvc.com",
     "Pear VC": "pear.vc",
     "Blackbird": "blackbird.vc",
+    "Foundry": "foundrygroup.com",
+    "NEA": "nea.com",
+    "Lightspeed": "lsvp.com",
+    "IVP": "ivp.com",
+    "Matrix Partners": "matrixpartners.com",
+    "Social Capital": "socialcapital.com",
+    "Revolution": "revolution.com",
+    "Founders Fund": "foundersfund.com",
+    "Khosla": "khoslaventures.com",
+    "General Atlantic": "generalatlantic.com",
+    "Tiger Global": "tigerglobal.com",
+    "Coatue": "coatue.com",
     "Stripe": "stripe.com",
     "Shopify": "shopify.com",
     "GitHub": "github.com",
@@ -75,24 +91,48 @@ DOMAIN_MAP = {
     "DoorDash": "doordash.com",
     "Lyft": "lyft.com",
     "Uber": "uber.com",
-    "Pinterest": "pinterest.com",
     "Twitter": "twitter.com",
     "Google": "google.com",
     "Microsoft": "microsoft.com",
-    "Facebook": "meta.com",
+    "Facebook": "meta.com", "Meta": "meta.com",
     "LinkedIn": "linkedin.com",
+    "Dropbox": "dropbox.com",
+    "Box": "box.com",
+    "Okta": "okta.com",
+    "Snowflake": "snowflake.com",
+    "Coinbase": "coinbase.com",
+    "Ripple": "ripple.com",
+    "PayPal": "paypal.com",
+    "Square": "squareup.com",
+    "Brex": "brex.com",
+    "Plaid": "plaid.com",
+    "Nubank": "nubank.com.br",
+    "Razorpay": "razorpay.com",
+    "Revolut": "revolut.com",
+    "Wise": "wise.com",
+    "Klarna": "klarna.com",
+    "Adyen": "adyen.com",
+    "Grab": "grab.com",
+    "Gojek": "gojek.com",
+    "Tokopedia": "tokopedia.com",
+    "Flipkart": "flipkart.com",
+    "Freshworks": "freshworks.com",
+    "Zoho": "zoho.com",
+    "Ola": "olacabs.com",
+    "Byju": "byjus.com",
+    "Paytm": "paytm.com",
+    "Zerodha": "zerodha.com",
 }
 
 def get_domain(bio):
-    """Find company domain from investor bio"""
     bio_lower = (bio or "").lower()
     for company, domain in DOMAIN_MAP.items():
         if company.lower() in bio_lower:
             return domain, company
     return None, None
 
-def find_email_hunter(first, last, domain):
-    """Call Hunter.io Email Finder API"""
+def find_email(first, last, domain):
+    """Hunter.io Email Finder API - works on free plan"""
     url = "https://api.hunter.io/v2/email-finder"
     params = {
         "domain": domain,
@@ -105,52 +145,80 @@ def find_email_hunter(first, last, domain):
         if r.status_code == 200:
             data = r.json().get("data", {})
             email = data.get("email")
-            confidence = data.get("score", 0)
-            if email and confidence >= 50:
+            score = data.get("score", 0)
+            if email and score >= 40:
                 return email
         elif r.status_code == 429:
-            print("Rate limited - wait 60s")
-            time.sleep(60)
+            print("Rate limited - waiting 30s")
+            time.sleep(30)
         elif r.status_code == 403:
-            print("Hunter quota exhausted for this account")
-            return "QUOTA_EXHAUSTED"
+            print("QUOTA EXHAUSTED - time to switch accounts!")
+            return "QUOTA"
+        elif r.status_code == 401:
+            print("Invalid API key!")
+            return "INVALID"
     except Exception as e:
         print(f"Error: {e}")
     return None
 
-def run(limit=25, skip_existing=True):
-    print(f"\n>>> Hunter.io Email Enrichment (limit={limit})\n")
+def check_quota():
+    """Check remaining Hunter.io credits"""
+    r = requests.get(
+        "https://api.hunter.io/v2/account",
+        params={"api_key": HUNTER_KEY},
+        timeout=10
+    )
+    if r.status_code == 200:
+        data = r.json().get("data", {})
+        requests_left = data.get("requests", {}).get("searches", {}).get("available", 0)
+        requests_used = data.get("requests", {}).get("searches", {}).get("used", 0)
+        print(f"Hunter.io quota: {requests_used} used, {requests_left} remaining")
+        return requests_left
+    return 0
 
-    query = supabase.table("investors").select("id,name,bio,email").eq("verified", True)
-    if skip_existing:
-        query = query.is_("email", "null")
-    investors = query.limit(200).execute().data
+def run(limit=25):
+    print("\n>>> Hunter.io Email Enrichment\n")
 
-    # Only process investors where we know the domain
+    # Check quota first
+    remaining = check_quota()
+    if remaining == 0:
+        print("No credits left - register new account at hunter.io")
+        return
+
+    actual_limit = min(limit, remaining)
+    print(f"Will enrich {actual_limit} investors\n")
+
+    # Get investors without email but with known company domain
+    investors = supabase.table("investors")\
+        .select("id,name,bio,email")\
+        .eq("verified", True)\
+        .is_("email", "null")\
+        .limit(300)\
+        .execute().data
+
+    # Filter to those where we know the domain
     enrichable = []
     for inv in investors:
         domain, company = get_domain(inv.get("bio",""))
         if domain:
             enrichable.append({**inv, "_domain": domain, "_company": company})
 
-    print(f"Found {len(enrichable)} investors with known company domains")
-    print(f"Processing first {min(limit, len(enrichable))}...\n")
+    print(f"Investors with known company domains: {len(enrichable)}")
+    print(f"Processing first {min(actual_limit, len(enrichable))}...\n")
 
-    ok, failed, quota = 0, 0, 0
-    for inv in enrichable[:limit]:
-        if quota > 0:
-            break
+    ok, failed = 0, 0
+    for inv in enrichable[:actual_limit]:
         parts = inv["name"].split()
         first = parts[0]
         last = " ".join(parts[1:]) if len(parts) > 1 else ""
 
-        print(f"  [{ok+1}] {inv['name']} @ {inv['_domain']} ...", end=" ", flush=True)
+        name_safe = inv["name"].encode("ascii","replace").decode("ascii")
+        print(f"  [{ok+failed+1}] {name_safe} @ {inv['_domain']} ... ", end="", flush=True)
 
-        email = find_email_hunter(first, last, inv["_domain"])
+        email = find_email(first, last, inv["_domain"])
 
-        if email == "QUOTA_EXHAUSTED":
-            print("QUOTA DONE - switch account!")
-            quota += 1
+        if email in ("QUOTA", "INVALID"):
+            print("STOPPING - switch Hunter account!")
             break
         elif email:
             supabase.table("investors").update({"email": email}).eq("id", inv["id"]).execute()
@@ -159,18 +227,15 @@ def run(limit=25, skip_existing=True):
         else:
             print("not found")
             failed += 1
-        time.sleep(1.0)
+        time.sleep(1.2)
 
     print(f"\nDone! Found={ok} Not found={failed}")
-    try:
-        total = supabase.table("investors").select("id", count="exact").not_.is_("email", "null").execute()
-        print(f"Total investors with email: {total.count}")
-    except:
-        pass
+    total = supabase.table("investors").select("id", count="exact").not_.is_("email", "null").execute()
+    print(f"Total investors with email in DB: {total.count}")
 
 if __name__ == "__main__":
     if not HUNTER_KEY:
-        print("ERROR: Add HUNTER_API_KEY to your .env file")
-        print("Get it from: https://hunter.io -> API -> Your API key")
+        print("ERROR: Add HUNTER_API_KEY to .env")
+        print("Get it at: https://hunter.io/api-keys")
     else:
         run(limit=25)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
 
@@ -7,6 +7,7 @@ export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const [search, setSearch] = useState('');
   const [selectedIndustries, setSelectedIndustries] = useState([]);
@@ -129,14 +130,23 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen overflow-hidden bg-white dark:bg-zinc-950">
       {/* Sidebar Filters */}
-      <aside className="w-72 border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/20 flex flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-zinc-200 dark:border-zinc-800">
+      {isMobileFiltersOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileFiltersOpen(false)} />
+      )}
+      <aside className={cn(
+        "w-72 border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/20 flex-col",
+        isMobileFiltersOpen ? "fixed inset-y-0 left-0 z-50 flex bg-white dark:bg-zinc-950 shadow-2xl" : "hidden md:flex"
+      )}>
+        <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
           <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-semibold text-lg tracking-tight">
             <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center">
               <span className="text-white dark:text-zinc-900 text-sm font-bold">OA</span>
             </div>
             OpenAngels
           </div>
+          <button onClick={() => setIsMobileFiltersOpen(false)} className="md:hidden p-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-white">
+            <X className="w-5 h-5" />
+          </button>
         </div>
         
         <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
@@ -202,7 +212,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex items-center gap-4 pl-4">
-            <button className="p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors md:hidden">
+            <button onClick={() => setIsMobileFiltersOpen(true)} className="p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors md:hidden">
               <SlidersHorizontal className="w-5 h-5" />
             </button>
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-200 to-zinc-300 dark:from-zinc-800 dark:to-zinc-700 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center overflow-hidden">
@@ -218,12 +228,6 @@ export default function Dashboard() {
               <div>
                 <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight mb-1">Discover Angels</h1>
                 <p className="text-zinc-500 dark:text-zinc-400 text-sm">Showing {filteredInvestors.length} active angel investors matching your criteria.</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-zinc-500">Sort by:</span>
-                <button className="text-sm font-medium text-zinc-900 dark:text-zinc-100 flex items-center gap-1 hover:text-zinc-600 transition-colors">
-                  Relevance <ChevronDown className="w-4 h-4" />
-                </button>
               </div>
             </div>
 
