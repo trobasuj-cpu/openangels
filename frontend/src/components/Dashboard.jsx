@@ -44,6 +44,17 @@ export default function Dashboard() {
     }
   }
 
+  const fetchProfile = async (userId) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('is_premium')
+      .eq('id', userId)
+      .single();
+    if (!error && data) {
+      setProfile(data);
+    }
+  };
+
   useEffect(() => {
     fetchInvestors();
 
