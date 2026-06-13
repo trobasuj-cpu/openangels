@@ -437,7 +437,7 @@ export default function Dashboard() {
                                 )}
                               </div>
                             </div>
-                            <button className="w-full flex items-center justify-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-900 dark:text-white text-sm font-medium py-2 rounded-lg transition-all shadow-sm active:scale-[0.98]">
+                            <button className="flex items-center justify-center gap-2 w-full py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm">
                               <Sparkles className="w-4 h-4 text-amber-500" />
                               AI Draft Email
                             </button>
@@ -464,7 +464,13 @@ export default function Dashboard() {
 
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-[3px]">
                               <button 
-                                onClick={() => setIsLoginModalOpen(true)}
+                                onClick={() => {
+                                  if (user) {
+                                    window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                                  } else {
+                                    setIsLoginModalOpen(true);
+                                  }
+                                }}
                                 className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2 rounded-full text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn"
                               >
                                 <Lock className="w-3.5 h-3.5 group-hover/btn:rotate-12 transition-transform" />
