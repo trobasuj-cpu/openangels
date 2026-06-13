@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
@@ -48,10 +49,18 @@ export default function Dashboard() {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      } else {
+        setProfile(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -274,11 +283,15 @@ export default function Dashboard() {
                             className="w-full text-left px-3 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors flex items-center justify-between group"
                             onClick={() => {
                               setIsProfileMenuOpen(false);
-                              // TODO: Open account settings
+                              if (!profile?.is_premium) {
+                                window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                              }
                             }}
                           >
                             <span>Subscription</span>
-                            <span className="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-2 py-0.5 rounded-full group-hover:bg-zinc-300 dark:group-hover:bg-zinc-700 transition-colors">Free</span>
+                            <span className="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-2 py-0.5 rounded-full group-hover:bg-zinc-300 dark:group-hover:bg-zinc-700 transition-colors">
+                              {profile?.is_premium ? 'Premium' : 'Free'}
+                            </span>
                           </button>
                         </div>
                         <div className="p-1 border-t border-zinc-200 dark:border-zinc-800">
@@ -333,7 +346,7 @@ export default function Dashboard() {
                 </div>
               ) : (
                 filteredInvestors.map((investor, index) => {
-                  const isUnlocked = index < 3;
+                  const isUnlocked = profile?.is_premium || index < 3;
                   
                   const rawInd = investor.industry || investor.industries;
                   const displayIndustries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
