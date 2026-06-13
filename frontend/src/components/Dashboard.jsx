@@ -3,45 +3,57 @@ import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, 
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
 import BackgroundAnimation from './BackgroundAnimation';
+import LoginModal from './LoginModal';
 
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-
   const [search, setSearch] = useState('');
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
   const [selectedStages, setSelectedStages] = useState([]);
 
-  useEffect(() => {
-    async function fetchInvestors() {
-      try {
-        const { data, error } = await supabase
-          .from('investors')
-          .select('*');
-        
-        if (error) throw error;
-        
-        // Sort so investors with emails appear first for the Freemium Teaser
-        const sortedData = (data || []).sort((a, b) => {
-          if (a.email && !b.email) return -1;
-          if (!a.email && b.email) return 1;
-          return 0;
-        });
-        
-        setInvestors(sortedData);
-      } catch (err) {
-        console.error('Error fetching investors:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchInvestors() {
+    try {
+      const { data, error } = await supabase
+        .from('investors')
+        .select('*');
+      
+      if (error) throw error;
+      
+      const sortedData = (data || []).sort((a, b) => {
+        if (a.email && !b.email) return -1;
+        if (!a.email && b.email) return 1;
+        return 0;
+      });
+      
+      setInvestors(sortedData);
+    } catch (err) {
+      console.error('Error fetching investors:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
     fetchInvestors();
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const uniqueIndustries = useMemo(() => {
@@ -132,7 +144,6 @@ export default function Dashboard() {
     <>
       <BackgroundAnimation />
       <div className="flex h-screen overflow-hidden relative z-10">
-        {/* Sidebar Filters */}
         {isMobileFiltersOpen && (
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileFiltersOpen(false)} />
       )}
@@ -198,9 +209,7 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
-        {/* Header */}
         <header className="h-16 border-b border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between px-8 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shrink-0">
           <div className="flex-1 max-w-xl">
             <div className="relative group">
@@ -214,17 +223,34 @@ export default function Dashboard() {
               />
             </div>
           </div>
-          <div className="flex items-center gap-4 pl-4">
-            <button onClick={() => setIsMobileFiltersOpen(true)} className="p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors md:hidden">
+          <div className="flex items-center gap-4">
+            <button 
+              className="md:hidden p-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+              onClick={() => setIsMobileFiltersOpen(true)}
+            >
               <SlidersHorizontal className="w-5 h-5" />
             </button>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-200 to-zinc-300 dark:from-zinc-800 dark:to-zinc-700 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center overflow-hidden">
-              <img src="https://i.pravatar.cc/150?u=user" alt="User" className="w-full h-full object-cover" />
+            <div className="flex items-center gap-3">
+              {user ? (
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium overflow-hidden border border-zinc-300 dark:border-zinc-700">
+                  {user.user_metadata?.avatar_url ? (
+                    <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    user.email?.[0].toUpperCase()
+                  )}
+                </div>
+              ) : (
+                <button 
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                >
+                  <Lock className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
         </header>
 
-        {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center justify-between mb-8">
@@ -311,7 +337,6 @@ export default function Dashboard() {
                         </div>
                       </div>
 
-                      {/* Contact Section */}
                       <div className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-200 dark:border-zinc-800 relative overflow-hidden">
                         {isUnlocked ? (
                           <div className="space-y-3">
@@ -349,7 +374,6 @@ export default function Dashboard() {
                           </div>
                         ) : (
                           <div className="relative space-y-3 h-[88px]">
-                            {/* Blurred background mock content */}
                             <div className="flex items-center justify-between blur-[4px] opacity-40 select-none pointer-events-none">
                               <div className="flex items-center gap-3">
                                 <div className="text-sm text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
@@ -368,9 +392,11 @@ export default function Dashboard() {
                               AI Draft Email
                             </div>
 
-                            {/* Overlay */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-[3px]">
-                              <button className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2 rounded-full text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn">
+                              <button 
+                                onClick={() => setIsLoginModalOpen(true)}
+                                className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2 rounded-full text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn"
+                              >
                                 <Lock className="w-3.5 h-3.5 group-hover/btn:rotate-12 transition-transform" />
                                 Unlock Premium
                               </button>
@@ -384,7 +410,6 @@ export default function Dashboard() {
               )}
             </div>
             
-            {/* Load More Mock */}
             {!loading && !error && filteredInvestors.length > 0 && (
               <div className="mt-12 text-center pb-12">
                 <button className="px-6 py-2.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-300 rounded-full hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors shadow-sm active:scale-[0.98]">
@@ -396,6 +421,11 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
+      
+      <LoginModal 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)} 
+      />
     </>
   );
 }
