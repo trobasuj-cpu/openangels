@@ -203,7 +203,16 @@ export default function Dashboard() {
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <h4 className="text-sm font-medium text-zinc-900 dark:text-white mb-1 relative">Upgrade to Premium</h4>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
-            <button className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium py-2 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-sm active:scale-[0.98] relative">
+            <button 
+              onClick={() => {
+                if (user) {
+                  window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                } else {
+                  setIsLoginModalOpen(true);
+                }
+              }}
+              className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium py-2 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-sm active:scale-[0.98] relative"
+            >
               Upgrade Now
             </button>
           </div>
