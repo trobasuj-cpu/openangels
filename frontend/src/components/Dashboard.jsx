@@ -211,7 +211,7 @@ export default function Dashboard() {
       </aside>
 
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
-        <header className="h-16 border-b border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between px-8 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shrink-0">
+        <header className="relative z-50 h-16 border-b border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between px-8 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shrink-0">
           <div className="flex-1 max-w-xl">
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-900 dark:group-focus-within:text-zinc-100 transition-colors" />
