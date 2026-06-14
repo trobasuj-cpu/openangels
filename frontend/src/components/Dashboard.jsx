@@ -50,14 +50,29 @@ export default function Dashboard() {
 
   async function fetchInvestors() {
     try {
-      const { data, error } = await supabase
-        .from('investors')
-        .select('*')
-        .limit(10000);
+      let allData = [];
+      let fetchMore = true;
+      let from = 0;
+      let limit = 1000;
       
-      if (error) throw error;
+      while (fetchMore) {
+        const { data, error } = await supabase
+          .from('investors')
+          .select('*')
+          .range(from, from + limit - 1);
+          
+        if (error) throw error;
+        
+        allData = [...allData, ...data];
+        
+        if (data.length < limit) {
+          fetchMore = false;
+        } else {
+          from += limit;
+        }
+      }
       
-      const sortedData = (data || []).sort((a, b) => {
+      const sortedData = (allData || []).sort((a, b) => {
         if (a.email && !b.email) return -1;
         if (!a.email && b.email) return 1;
         return 0;
@@ -390,41 +405,38 @@ export default function Dashboard() {
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center justify-between mb-8">
-              <div>
-                {/* Premium Marketing Header */}
-                <div className="mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-900 to-black border border-zinc-800 shadow-2xl overflow-hidden relative">
+              <div className="w-full">
+                {/* Premium Marketing Header - Horizontal Wide Layout */}
+                <div className="mb-8 p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
                   {/* Decorative glow effects */}
-                  <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500/10 blur-[100px] pointer-events-none"></div>
-                  <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-purple-500/10 blur-[100px] pointer-events-none"></div>
+                  <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500/5 blur-[100px] pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
                   
-                  <div className="relative z-10">
-                    <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+                  <div className="relative z-10 flex-1">
+                    <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
                       Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Angel Investor</span>
                     </h1>
-                    <p className="text-zinc-400 text-base md:text-lg max-w-2xl leading-relaxed mb-6">
-                      Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match for your startup. No warm introductions needed.
+                    <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
+                      Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match. No warm introductions needed.
                     </p>
-                    
-                    <div className="flex flex-wrap items-center gap-4">
-                      <div className="flex -space-x-3">
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1595060668897677314/pHMUc1Zb_400x400.jpg" alt="Investor" />
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1679538379070005248/jwGUle5U_400x400.jpg" alt="Investor" />
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1379817647139737600/YHL9uBk0_400x400.jpg" alt="Investor" />
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1587647097670467584/adWRdqQ6_400x400.jpg" alt="Investor" />
-                        <div className="w-10 h-10 rounded-full border-2 border-zinc-900 bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-300">
-                          +1K
-                        </div>
+                  </div>
+                  
+                  <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 bg-white/5 p-4 rounded-xl border border-white/10">
+                    <div className="flex -space-x-3">
+                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
+                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
+                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
+                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
+                    </div>
+                    <div className="flex flex-col text-left sm:text-right">
+                      <div className="text-sm font-medium text-zinc-300">
+                        <span className="text-white font-bold text-xl">{investors.length.toLocaleString()}</span> active
                       </div>
-                      <div className="flex flex-col">
-                        <div className="text-sm font-medium text-zinc-300">
-                          <span className="text-white font-bold text-lg">{investors.length.toLocaleString()}</span> active investors in database
+                      {investors.length !== filteredInvestors.length && (
+                        <div className="text-xs font-medium text-blue-400">
+                          {filteredInvestors.length.toLocaleString()} matching
                         </div>
-                        {investors.length !== filteredInvestors.length && (
-                          <div className="text-xs font-medium text-blue-400">
-                            {filteredInvestors.length.toLocaleString()} matching your current criteria
-                          </div>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
