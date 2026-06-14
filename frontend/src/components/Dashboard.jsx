@@ -251,7 +251,9 @@ export default function Dashboard() {
           <div className="p-6 border-t border-zinc-200/50 dark:border-zinc-800/50">
             <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-4 border border-zinc-200/50 dark:border-zinc-800/50 relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <h4 className="text-sm font-medium text-zinc-900 dark:text-white mb-1 relative">Upgrade to Premium</h4>
+              <h4 className="text-sm font-bold text-zinc-900 dark:text-white mb-1 relative flex items-center gap-2">
+                Premium (Lifetime Access)
+              </h4>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
               <button 
                 onClick={() => {
