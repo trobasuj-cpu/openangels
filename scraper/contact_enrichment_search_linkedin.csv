@@ -1,0 +1,1001 @@
+id,name,type,country,company_hint,domain,linkedin_candidate,linkedin_confidence,linkedin_source,email_candidate,email_confidence,email_source,action,notes
+8ace509a-2fdc-4519-9090-ee3b20abea3c,Charles Hudson,vc,USA,Precursor,precursorvc.com,,0.0,,,0.0,,none,skipped | skipped
+1374b546-8f01-4b1f-b25d-e336401fb9e0,Pieter Levels,angel,Netherlands,levels,levels.io,,0.0,,,0.0,,none,skipped
+c75d0de5-55da-4e83-9b83-ee14fa387935,Balaji Srinivasan,angel,Singapore,Coinbase,coinbase.com,,0.0,,,0.0,,none,skipped
+177e0616-222a-484f-864d-bce38cfc0e41,Ron Conway,angel,USA,SV Angel,svangel.com,https://www.linkedin.com/company/sv-angel,0.2,https://svangel.com,,0.0,,none,linkedin link found on public website | skipped
+9291e4c2-1ab8-4fc3-9af2-fee80c36f3ad,Elad Gil,angel,USA,Coinbase,coinbase.com,,0.0,,,0.0,,none,skipped
+554d9d94-182f-446f-bef7-60114d9fa85a,Garry Tan,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+8aff70f9-d8a4-4a45-9078-15678ef589fc,Alexis Ohanian,vc,USA,sevensevensix,sevensevensix.com,,0.0,,,0.0,,none,skipped
+7a57cd0d-6a08-4ea7-84ee-78b0bb15e679,Sahil Lavingia,angel,USA,sahillavingia,sahillavingia.com,,0.0,,,0.0,,none,skipped
+8b78e581-d607-4079-9bdb-e81d531329b4,Andrew Wilkinson,angel,Canada,tinycapital,tinycapital.com,,0.0,,,0.0,,none,skipped
+42129e96-3802-444c-a58e-f12c3d8656da,Sam Altman,angel,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+2b3bfe5e-2bea-4a2b-95d3-96f8aa3217b1,Greg Brockman,angel,USA,OpenAI,openai.com,https://www.linkedin.com/company/openai,0.2,https://openai.com,,0.0,,none,linkedin link found on public website | skipped
+485e6183-f062-4e10-b285-0c4499234512,Peter Thiel,angel,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+51f31063-aca1-4119-8a2b-97d6a304cdaa,Cyan Banister,angel,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+ba0d362b-1117-4169-826d-fd5225914626,Marc Andreessen,angel,USA,a16z,a16z.com,https://www.linkedin.com/in/immerman,0.45,https://a16z.com/team,,0.0,,none,linkedin link found on public website | skipped
+fa0d21c0-c2e7-47af-ace4-f9e45932ad3a,Nat Friedman,angel,USA,GitHub,github.com,https://www.linkedin.com/company/github,0.2,https://github.com,,0.0,,none,linkedin link found on public website | skipped
+f39c36e0-e66a-4989-903f-a760481bcd5e,Daniel Gross,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+648e867b-3f98-4fa8-8caf-7090c35d4e9e,Aileen Lee,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+7328c5b4-edfb-4c46-8297-0521e0eb98be,Jean de La Rochebrochard,vc,France,Kima Ventures,kimaventures.com,,0.0,,,0.0,,none,skipped
+c69fe0c4-2ac4-415a-80e2-26288ff32e40,Xavier Lorphelin,vc,France,Kima Ventures,kimaventures.com,,0.0,,,0.0,,none,skipped
+c281a89d-38db-4dc8-8dc2-693a23c07520,Cyril de Tournemire,vc,France,Kima Ventures,kimaventures.com,,0.0,,,0.0,,none,skipped
+2428bae8-40bc-4826-bc86-d499fb38c72d,David Cramer,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d2063df3-d8f3-4978-85db-4670bb38bc7e,Chris Jennings,vc,USA,Foresite Capital,,,0.0,,,0.0,,none,no domain | skipped
+09fa0c21-7e71-4341-bd0d-02267fc928ef,Brian Feinstein,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+cacdab9e-0a40-4dd2-9a5b-b444877517b6,Nicolas Dessaigne,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e387882e-d5c5-49e0-a63b-111e63f9e61f,Julien Lemoine,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+01de0530-2e40-45ea-a1b7-2c47ead565a6,Mike Preuss,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8003da1b-c814-4cab-8174-080df4ac45d8,Lukasz Gadowski,vc,Germany,Team Europe,,,0.0,,,0.0,,none,no domain | skipped
+4633f18e-42a6-41e9-af1d-99613bc1929a,Verena Pausder,angel,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+be5a12bc-5b53-4280-9f35-f37188183d0a,Juha Ruohonen,vc,Finland,Maki,,,0.0,,,0.0,,none,no domain | skipped
+d18ca473-45f4-49fe-81a0-f5bc847328fb,Mato Peric,vc,Croatia,South Central Ventures,,,0.0,,,0.0,,none,no domain | skipped
+ecb4022c-16bd-44f6-9111-892778ab462a,500 Global,accelerator,USA,500 Global,500.co,,0.0,,,0.0,,none,skipped | skipped
+2be42f6c-53b4-4d9c-b30b-156c5d1ef972,Angela Strange,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+eaa80cf2-963b-4101-a6ae-0ee19957959f,Antler,accelerator,Singapore,antler,antler.co,,0.0,,,0.0,,none,skipped | skipped
+f4df1800-8b2a-48d9-a560-e298d5e3a15b,Tim Draper,vc,USA,draper,draper.vc,,0.0,,,0.0,,none,skipped | skipped
+74d6ab55-d644-4e99-b504-9a79e862380b,Emerson Collective,vc,USA,emersoncollective,emersoncollective.com,,0.0,,,0.0,,none,skipped | skipped
+9cbb8380-2107-4fed-b06e-6376a40e8865,Romain Lavault,vc,France,Partech,partechpartners.com,,0.0,,,0.0,,none,skipped | skipped
+1960a177-26ed-4eb1-83cc-560ac400db2b,Seth Levine,vc,USA,Foundry Group,foundrygroup.com,,0.0,,,0.0,,none,skipped | skipped
+e66d28fe-775b-4e55-82e3-04ebf1f4e1f0,Startupbootcamp,accelerator,UK,startupbootcamp,startupbootcamp.org,,0.0,,,0.0,,none,skipped | skipped
+d1ad8084-2a90-4a62-b8ae-8b99a9cbbd76,Rockstart,accelerator,Netherlands,rockstart,rockstart.com,,0.0,,,0.0,,none,skipped | skipped
+313d7596-7606-4dbe-90c5-af0acbb1b37e,IndieBio,accelerator,USA,indiebio,indiebio.co,,0.0,,,0.0,,none,skipped | skipped
+bcc8dee0-acef-4695-a544-36e681b2e1bc,Anish Acharya,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+5081fcf0-a5ea-484f-ae16-c65522de7a8e,Eurie Kim,vc,USA,Forerunner,forerunnerventures.com,,0.0,,,0.0,,none,skipped | skipped
+a6c22858-666b-4d56-a952-231a93137a1d,Cyril Collon,vc,France,Partech,partechpartners.com,,0.0,,,0.0,,none,skipped | skipped
+a14179f4-5ee1-4161-b1c3-b9eb962a824d,Vlad Magdalin,angel,USA,Webflow,webflow.com,,0.0,,,0.0,,none,skipped | skipped
+0d714c56-a762-4919-b688-3755eeadb8e2,Jorge Conde,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+6e129fe3-7166-41e4-b61e-fb86e58d7c1a,Paul Graham,angel,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+af9bd808-001b-484b-969a-04d92ee30339,Arlan Hamilton,vc,USA,backstagecapital,backstagecapital.com,,0.0,,,0.0,,none,skipped
+b3fe6798-6541-43d7-ae4c-743688560b73,Niklas Zennström,vc,UK,Atomico,atomico.com,https://www.linkedin.com/company/atomico,0.55,https://atomico.com,,0.0,,none,linkedin link found on public website | skipped
+085453cf-d1bf-477c-b559-0f58464d0f5b,Daniel Ek,angel,Sweden,,,,0.0,,,0.0,,none,no domain | skipped
+6d792008-37dc-427d-af95-45e25562ec51,Camila Rioja,vc,Chile,Magma Partners,,,0.0,,,0.0,,none,no domain | skipped
+52bb7957-37c4-432a-90ac-e75ae4401b85,Chris Dixon,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+33cbe90b-71db-4155-b6ff-f7689a1e8ecf,Kirsten Green,vc,USA,Forerunner,forerunnerventures.com,,0.0,,,0.0,,none,skipped | skipped
+66a388a9-29e6-4e3a-84dc-501d2c6f4f6e,Brian Armstrong,angel,USA,Coinbase,coinbase.com,,0.0,,,0.0,,none,skipped
+8294fb1d-e78e-4634-b92a-cbff1bc7c73e,Max Levchin,angel,USA,PayPal,paypal.com,,0.0,,,0.0,,none,skipped
+ee0e6113-4b9d-4753-8423-855784b22779,Reid Hoffman,vc,USA,Greylock,greylock.com,https://www.linkedin.com/company/greylock-partners,0.55,https://greylock.com,,0.0,,none,linkedin link found on public website | skipped
+b6d0163a-089f-4943-9d57-f7785ba5d40a,Taavet Hinrikus,angel,UK,Wise,wise.com,https://www.linkedin.com/company/wiseaccount,0.2,https://wise.com,,0.0,,none,linkedin link found on public website | skipped
+b71b7b3a-cd01-4ebb-974e-c8eeab4cbd7a,Hiten Shah,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f00ad3c9-044c-462d-8250-5d91e99fc339,Jaan Tallinn,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+698b7164-2bb8-40f7-bf12-849f8d449c22,Patrick Collison,angel,USA,Stripe,stripe.com,https://www.linkedin.com/company/stripe,0.2,https://stripe.com,,0.0,,none,linkedin link found on public website | skipped
+00d26136-35aa-4a16-a2b0-7869cd4ccd01,John Collison,angel,USA,Stripe,stripe.com,https://www.linkedin.com/company/stripe,0.2,https://stripe.com,,0.0,,none,linkedin link found on public website | skipped
+25483730-9d8d-41a6-8c6f-01410b6f45de,Aaron Levie,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9fc6c81e-8407-4137-8280-f281cf562307,Sal Khan,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9c8065ec-29e2-447e-808d-8810ebc12db4,Anne Wojcicki,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9cc704ff-e368-4866-ab53-f48498bbb199,Bill Gates,angel,USA,Microsoft,microsoft.com,,0.0,,,0.0,,none,skipped
+7be6be3b-3b66-4ad4-aa04-93aec021facf,Roelof Botha,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+06929966-9856-473d-a220-39f876f2bc66,Dave McClure,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+682007aa-c6ab-47a6-8e0b-639e1713c823,Vinod Khosla,vc,USA,Khosla,khoslaventures.com,https://www.linkedin.com/company/khosla-ventures,0.78,https://khoslaventures.com,,0.0,,none,linkedin link found on public website | skipped
+93f0aba7-52aa-49ba-8604-0656e9792629,Michael Seibel,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+1686bf3b-b8a5-48c7-9e1e-9c4cb4a7d125,Josh Buckley,angel,USA,Buckley Ventures,,,0.0,,,0.0,,none,no domain | skipped
+773edd51-10eb-45ba-bd08-2a4ce7d1b9fa,Chamath Palihapitiya,vc,USA,Social Capital,socialcapital.com,,0.0,,,0.0,,none,skipped
+2669b08a-af73-47b0-8e85-7dbb49e94b66,Techstars,accelerator,USA,Techstars,techstars.com,,0.0,,,0.0,,none,skipped | skipped
+0b7a5177-a462-4ad2-8c97-7ff85b59d059,Keith Rabois,angel,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+34a319b2-a122-4aae-9721-b04dc5506a92,Y Combinator,accelerator,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+80449d95-1eb7-49ef-b13d-ef128135110e,Mikael Cho,angel,Canada,,,,0.0,,,0.0,,none,no domain | skipped
+3bde84d9-6ac0-4901-96ae-8b1fdf605a59,Tony Xu,angel,USA,DoorDash,doordash.com,https://www.linkedin.com/company/doordash,0.2,https://doordash.com/about,,0.0,,none,linkedin link found on public website | skipped
+ae313b4f-b861-462c-babb-7e2b5ee0f95e,Fred Wilson,vc,USA,Union Square Ventures,usv.com,https://www.linkedin.com/company/union-square-ventures,0.55,https://usv.com,,0.0,,none,linkedin link found on public website | skipped
+31673c08-6377-4461-a220-e6afa9b515b6,Anu Hariharan,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+6cb06ee1-5c50-45a6-8ad1-42bff47de08e,Nivi,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8e2a8c6a-cb50-4908-b031-f2b85be3f48e,Immad Akhund,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d6ff5070-f07e-4f3d-a275-e035cccc52e3,Jack Altman,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e30e98a2-4fdf-4aa2-b2c3-f9e4bfcbc6b8,Amjad Masad,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+417f020b-81ba-400f-920d-5dff15662134,Tom Blomfield,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+82c958a1-0bcf-46f6-bff4-9accfce70d3d,Ryan Hoover,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d266b89e-ad22-4187-a3b6-1238448a1c1d,Brad Feld,vc,USA,Foundry Group,foundrygroup.com,,0.0,,,0.0,,none,skipped | skipped
+fa7ae1f6-cc12-4f66-872d-4f6b0fc42662,Chris Sacca,angel,USA,Uber,uber.com,,0.0,,,0.0,,none,skipped
+d8457423-9521-43fe-bf3c-7cdd474a1b6b,Des Traynor,angel,Ireland,,,,0.0,,,0.0,,none,no domain | skipped
+0c8a3ae6-26f8-465d-8914-af3e74daab87,Lachy Groom,angel,USA,Stripe,stripe.com,https://www.linkedin.com/company/stripe,0.2,https://stripe.com,,0.0,,none,linkedin link found on public website | skipped
+0c87a080-1e87-4d39-a914-705ca8f7c552,Aydin Senkut,vc,USA,Shopify,shopify.com,https://www.linkedin.com/company/shopify,0.55,https://shopify.com,,0.0,,none,linkedin link found on public website | skipped
+6f69580b-8025-486f-997d-89fc1c07b684,Erik Torenberg,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8ff55a02-479d-4a78-80b6-f15c2533650d,Gokul Rajaram,angel,USA,DoorDash,doordash.com,https://www.linkedin.com/company/doordash,0.2,https://doordash.com/about,,0.0,,none,linkedin link found on public website | skipped
+8f880327-135c-41a0-b0fc-450ce3872911,Semil Shah,vc,USA,Haystack,haystack.vc,,0.0,,,0.0,,none,skipped | skipped
+d7a36443-d43a-44d4-8fb0-4a1fa370f301,Mark Suster,vc,USA,Upfront Ventures,upfront.com,,0.0,,,0.0,,none,skipped
+d229c9cd-7fd6-48ad-81a6-b96c78c9f657,Mamoon Hamid,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+0ffc4e47-5e3d-4de7-8427-456478adc456,Cristina Cordova,vc,USA,Benchmark,benchmark.com,,0.0,,,0.0,,none,skipped
+47ac8ce7-cdcb-4c86-bc61-b6266e2c8c24,Gustaf Alströmer,angel,USA,Airbnb,airbnb.com,https://www.linkedin.com/company/airbnb,0.2,https://airbnb.com/team,,0.0,,none,linkedin link found on public website | skipped
+9b1d364c-e995-4648-ad49-e0c1106f826f,Doug Leone,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+a66f0471-f0c8-4c60-95cb-d31c8ea8c03f,Alfred Lin,vc,USA,DoorDash,doordash.com,https://www.linkedin.com/company/doordash,0.78,https://doordash.com/about,,0.0,,none,linkedin link found on public website | skipped
+abb7a902-be96-4ddb-87b7-8025c513a61d,Mike Moritz,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+d66d8d00-5ded-4405-9b44-85e660241b4c,Konstantine Buhler,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+2fe90f83-7de6-4d90-9325-ec11d1155850,Jess Lee,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+f4aa3fdf-c85f-4148-a7e3-87b0fdcbf44c,Ben Horowitz,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.78,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+abd9a84c-93d2-4134-a407-bf3899e943bc,Sriram Krishnan,vc,USA,Microsoft,microsoft.com,,0.0,,,0.0,,none,skipped
+735807e8-a8fc-4f4b-989f-f7a2584cb1fe,David George,vc,USA,General Atlantic,generalatlantic.com,https://www.linkedin.com/company/general-atlantic,0.55,https://generalatlantic.com,,0.0,,none,linkedin link found on public website | skipped
+0bdb95f5-9212-4e67-b2e9-347e864df25c,Kevin Hale,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+ec99b5fc-cbba-4b3f-87e2-82a7d5c61bbe,Carlos Espinal,vc,UK,Seedcamp,seedcamp.com,,0.0,,,0.0,,none,skipped
+1e97f24d-558f-4ae4-ad2c-7de227ffb3d8,Index Ventures,vc,UK,Index Ventures,indexventures.com,,0.0,,,0.0,,none,skipped | skipped
+09cde23d-b23b-4e1b-b5b1-44da30571445,Reshma Sohoni,vc,UK,Seedcamp,seedcamp.com,,0.0,,,0.0,,none,skipped
+dadcf086-c687-4ef2-ac03-c897f03f736b,Christoph Janz,vc,Germany,Point Nine,pointninecap.com,,0.0,,,0.0,,none,skipped
+4de1a2b8-5ae1-40bb-91fa-ea91154e17a7,Martin Casado,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+0dd2c9d6-af2f-4e06-b789-bea4d5629475,Andrew Chen,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+f85a0e74-b4b0-4e6e-94b4-bc427d49c3d0,Bill Gurley,vc,USA,Benchmark,benchmark.com,,0.0,,,0.0,,none,skipped
+103d616f-6a42-4d3a-8429-a41180505275,Peter Fenton,vc,USA,Benchmark,benchmark.com,,0.0,,,0.0,,none,skipped
+f6aafb01-6acd-46f5-8a1a-bd723baee247,Sarah Tavel,vc,USA,Benchmark,benchmark.com,,0.0,,,0.0,,none,skipped
+6bd460ae-b2c3-4796-bf9e-7dd1b392f5e0,Eric Vishria,vc,USA,Benchmark,benchmark.com,,0.0,,,0.0,,none,skipped
+c3031a5b-81a9-42e7-af37-23a233f25011,Chetan Puttagunta,vc,USA,Benchmark,benchmark.com,,0.0,,,0.0,,none,skipped
+4602525c-af2b-4196-8649-7fe6ea83e3f7,Josh McFarland,vc,USA,Greylock,greylock.com,https://www.linkedin.com/company/greylock-partners,0.55,https://greylock.com,,0.0,,none,linkedin link found on public website | skipped
+04e5c896-ebcf-41c6-9b1a-91241c255017,Sridhar Ramaswamy,vc,USA,Greylock,greylock.com,https://www.linkedin.com/company/greylock-partners,0.55,https://greylock.com,,0.0,,none,linkedin link found on public website | skipped
+c1f976c4-82d3-4388-b81b-e005ec548359,Asheem Chandna,vc,USA,Greylock,greylock.com,https://www.linkedin.com/company/greylock-partners,0.55,https://greylock.com,,0.0,,none,linkedin link found on public website | skipped
+4fae6623-f662-4840-a7e3-b6d0582f4d94,David Sze,vc,USA,Greylock,greylock.com,https://www.linkedin.com/company/greylock-partners,0.55,https://greylock.com,,0.0,,none,linkedin link found on public website | skipped
+7fb38cd1-101c-4fc0-9717-36aa6b7f3a56,Mary Meeker,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+9ea187b8-0cf5-4df5-9f0b-40b8aafec9f2,Brian Singerman,vc,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+77dcd977-56ae-4037-9c2d-2e968c8dffaf,Napoleon Ta,vc,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+73d33feb-063d-43ba-8725-c1b037ea51f6,Trae Stephens,vc,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+08b1f830-f8cf-4eea-80fb-df4a31f3cb24,Andrew Braccia,vc,USA,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+41bdf009-af5a-4f6c-a188-6eb5fe0110b2,Sameer Gandhi,vc,USA,Freshworks,freshworks.com,https://linkedin.com/company/freshworks-inc,0.55,https://freshworks.com/about,,0.0,,none,linkedin link found on public website | skipped
+93157d07-7f4a-4c60-ac89-cb37635c0b35,Vas Natarajan,vc,USA,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+c3b2c78f-1dff-48d2-95d0-ee84c03e93bd,Rich Wong,vc,USA,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+a8e1eb80-f732-4f56-b5a5-871c1174ab66,Vijay Pande,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.55,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+f4297bc4-6dac-4912-99c1-7a153852a3e6,Ilya Fushman,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+c269e974-b815-49dc-afe5-08699a8601c3,Wen Hsieh,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+a7c8b306-6d3b-48a6-914f-d58291e5bc2f,Sonali De Rycker,vc,UK,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+3cb1ea88-fce4-4af1-b408-6d54426db8bd,Scott Shleifer,vc,USA,Tiger Global,tigerglobal.com,https://www.linkedin.com/company/tiger-global-management,0.55,https://tigerglobal.com,,0.0,,none,linkedin link found on public website | skipped
+da87de85-526e-40e8-ab2a-76653da68bfb,Josh Kopelman,vc,USA,First Round,firstround.com,https://www.linkedin.com/company/first-round-capital,0.55,https://firstround.com,,0.0,,none,linkedin link found on public website | skipped
+8761ffab-bc02-4e1d-b266-985d6e848f5e,Phin Barnes,vc,USA,First Round,firstround.com,https://www.linkedin.com/company/first-round-capital,0.55,https://firstround.com,,0.0,,none,linkedin link found on public website | skipped
+fe98ba15-5e04-4222-887c-814a83da01cc,Bill Trenchard,vc,USA,First Round,firstround.com,https://www.linkedin.com/company/first-round-capital,0.55,https://firstround.com,,0.0,,none,linkedin link found on public website | skipped
+b9b063b2-9eda-468f-9190-8276bd31e816,Hayley Barna,vc,USA,First Round,firstround.com,https://www.linkedin.com/company/first-round-capital,0.55,https://firstround.com,,0.0,,none,linkedin link found on public website | skipped
+1fe7f27c-0c48-415f-9a3a-3ddb4f5b5cef,Megan Quinn,vc,USA,Spark Capital,sparkcapital.com,,0.0,,,0.0,,none,skipped
+4d7f67b8-175f-4d2c-bfb3-d204c5997e33,Nabeel Hyatt,vc,USA,Spark Capital,sparkcapital.com,,0.0,,,0.0,,none,skipped
+9c722751-fa10-489a-8839-2d7b30989555,Alex Finkelstein,vc,USA,Spark Capital,sparkcapital.com,,0.0,,,0.0,,none,skipped
+26ab70ab-fcae-40b4-bd40-1a90edecb609,Byron Deeter,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+c7c08db6-8c96-4dcf-bf06-c6280b3ad56f,David Cowan,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+5b1d9e28-f70a-4e3e-a0b0-fc05306ac2ce,Jeremy Levine,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+b76a478f-fa43-49cd-96f5-e49ce144a9b8,Tomer Diari,vc,Israel,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+85bf4e04-cc5f-45fc-9865-c234ab6c8fee,Tony Florence,vc,USA,NEA,nea.com,https://www.linkedin.com/company/new-enterprise-associates,0.55,https://nea.com,,0.0,,none,linkedin link found on public website | skipped
+c3457f9f-3ae6-41c2-9bd2-540968722a47,David Krane,vc,USA,Google Ventures,gv.com,https://www.linkedin.com/company/gvteam,0.55,https://gv.com,,0.0,,none,linkedin link found on public website | skipped
+58073950-1468-4c6d-96fc-426f4dc58210,Andy Wheeler,vc,USA,GV,gv.com,https://www.linkedin.com/company/gvteam,0.55,https://gv.com,,0.0,,none,linkedin link found on public website | skipped
+c864af18-41f2-499a-adc9-c965d93b27a3,Tyson Clark,vc,USA,GV,gv.com,https://www.linkedin.com/company/gvteam,0.55,https://gv.com,,0.0,,none,linkedin link found on public website | skipped
+9ac5aef2-384e-494d-8f02-6f58702fe681,Jeremy Liew,vc,USA,Lightspeed,lsvp.com,https://www.linkedin.com/company/lightspeed-venture-partners,0.55,https://lsvp.com,,0.0,,none,linkedin link found on public website | skipped
+fa1668c0-18a8-4d97-833c-75126f59b6e3,Ravi Mhatre,vc,USA,Lightspeed,lsvp.com,https://www.linkedin.com/company/lightspeed-venture-partners,0.55,https://lsvp.com,,0.0,,none,linkedin link found on public website | skipped
+c01c46aa-7380-469f-9173-5040ddd2a01a,Gaurav Gupta,vc,USA,Lightspeed,lsvp.com,https://www.linkedin.com/company/lightspeed-venture-partners,0.55,https://lsvp.com,,0.0,,none,linkedin link found on public website | skipped
+0095bfff-b055-4bcb-ac23-940b26f2721f,Mercedes Bent,vc,USA,Lightspeed,lsvp.com,https://www.linkedin.com/company/lightspeed-venture-partners,0.55,https://lsvp.com,,0.0,,none,linkedin link found on public website | skipped
+749f5d03-1ceb-4874-b0f0-d930a72f6581,Albert Wenger,vc,USA,USV,usv.com,https://www.linkedin.com/company/union-square-ventures,0.55,https://usv.com,,0.0,,none,linkedin link found on public website | skipped
+59a798c4-bf23-4fdd-84d0-95ee63905678,Rebecca Kaden,vc,USA,USV,usv.com,https://www.linkedin.com/company/union-square-ventures,0.55,https://usv.com,,0.0,,none,linkedin link found on public website | skipped
+5dbb5eaf-438c-4adc-ac90-0636e9b0eab3,John Buttrick,vc,USA,USV,usv.com,https://www.linkedin.com/company/union-square-ventures,0.55,https://usv.com,,0.0,,none,linkedin link found on public website | skipped
+dc4e4614-d98e-4e85-86e7-9ddef7544e25,Deven Parekh,vc,USA,Insight Partners,,,0.0,,,0.0,,none,no domain | skipped
+9010dc59-c535-4b8b-ba9a-5cca2b3d10dc,Jeff Lieberman,vc,USA,Insight Partners,,,0.0,,,0.0,,none,no domain | skipped
+af869b03-14b5-4784-96a4-55537c701c99,Hemant Taneja,vc,USA,General Catalyst,generalcatalyst.com,https://www.linkedin.com/company/general-catalyst,0.55,https://generalcatalyst.com,,0.0,,none,linkedin link found on public website | skipped
+77807257-2924-44e6-9cdf-dfd9fdd4bf16,Joel Cutler,vc,USA,General Catalyst,generalcatalyst.com,https://www.linkedin.com/company/general-catalyst,0.55,https://generalcatalyst.com,,0.0,,none,linkedin link found on public website | skipped
+d248b48d-c867-4c77-b08c-23b2a4cd23bf,Deep Nishar,vc,USA,General Catalyst,generalcatalyst.com,https://www.linkedin.com/company/general-catalyst,0.55,https://generalcatalyst.com,,0.0,,none,linkedin link found on public website | skipped
+1f770dbf-529a-4c68-875f-07b92d864a46,Jules Maltz,vc,USA,IVP,ivp.com,https://www.linkedin.com/company/ivpvc,0.55,https://ivp.com,,0.0,,none,linkedin link found on public website | skipped
+23cb448e-fb40-4e13-b8f6-87031ec1188c,Cack Wilhelm,vc,USA,IVP,ivp.com,https://www.linkedin.com/company/ivpvc,0.55,https://ivp.com,,0.0,,none,linkedin link found on public website | skipped
+ab489644-077c-4f33-b9a8-46a9c78a7c02,Parker Conrad,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0a8e4001-04e1-47b8-8ba5-bc0deb6db63e,Apoorva Mehta,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c45b5263-d994-4861-9729-9dde918708b0,Tobias Lutke,angel,Canada,Shopify,shopify.com,https://www.linkedin.com/company/shopify,0.2,https://shopify.com,,0.0,,none,linkedin link found on public website | skipped
+d1a53eeb-7e32-44cc-b4ec-d06891bb84e5,Vlad Tenev,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1008721e-514d-4491-9859-8fba53beba5a,Nik Storonsky,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+45a9cf19-e854-485e-a7de-fc943fab44f1,Guillaume Pousaz,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+60f404dd-a352-4ce7-8b9d-924d6ecc4106,Alex Bouaziz,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+01349ef5-0f76-4e26-a4eb-ac6e328b4178,Pedro Franceschi,angel,USA,Brex,brex.com,https://www.linkedin.com/in/michaelkimsf,0.45,https://brex.com,,0.0,,none,linkedin link found on public website | skipped
+6647633e-9ec5-4589-a2e5-575f9e7584cd,Ivan Zhao,angel,USA,Notion,notion.so,https://www.linkedin.com/company/notionhq,0.2,https://notion.so,,0.0,,none,linkedin link found on public website | skipped
+326e51d4-7949-4413-9030-a6dfc9593f18,Fred Destin,vc,UK,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+5f010108-23ca-4b03-85f7-56182bc75691,Suranga Chandratillake,vc,UK,Balderton,balderton.com,https://www.linkedin.com/company/balderton-capital_2,0.55,https://balderton.com,,0.0,,none,linkedin link found on public website | skipped
+c4b56dcb-9d8c-43f6-b487-bde5b1c7f32b,Lars Fjeldsoe-Nielsen,vc,UK,Balderton,balderton.com,https://www.linkedin.com/company/balderton-capital_2,0.55,https://balderton.com,,0.0,,none,linkedin link found on public website | skipped
+850465e5-80e5-41c0-8670-101986858797,Sophia Bendz,vc,Sweden,Cherry Ventures,,,0.0,,,0.0,,none,no domain | skipped
+750174d9-393f-49e3-9873-61c49f6ed0d6,Filip Dames,vc,Germany,Zalando,,,0.0,,,0.0,,none,no domain | skipped
+7fa765a4-d790-4c9e-aa6a-3940a673405b,Jan Hammer,vc,UK,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+42ecfee9-18ab-4033-afaf-71ddb9258323,Martin Mignot,vc,UK,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+2f7c5c9b-7f7b-452c-acc3-b8343f31e6bd,Maximilian Tayenthal,angel,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+ce7c4569-de16-4523-837a-f226c073b9e4,Valentin Stalf,angel,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+85c483cf-e02f-4e79-ba68-39862982e023,Felix Haas,angel,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+5e66ed6b-ef7e-457b-9240-817477b0cb61,Klaus Hommels,vc,Switzerland,Klarna,klarna.com,,0.0,,,0.0,,none,skipped
+e88d2a24-4c3b-418d-818d-685b5fabff9c,Mikael Wintzell,vc,Sweden,Northzone,northzone.com,https://www.linkedin.com/company/northzone,0.55,https://northzone.com,,0.0,,none,linkedin link found on public website | skipped
+3c903740-d3f0-4b4c-a438-f3cbe21d7801,Pär-Jorgen Parson,vc,Sweden,Northzone,northzone.com,https://www.linkedin.com/company/northzone,0.55,https://northzone.com,,0.0,,none,linkedin link found on public website | skipped
+63c172a3-65fa-4d4c-b9d7-feeb05486bc6,Ariel Luedi,vc,Switzerland,,,,0.0,,,0.0,,none,no domain | skipped
+f6303219-2df5-4e63-8ec0-efa5a465ee15,Florian Heinemann,vc,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+1e956cf3-034a-430a-8025-a5ff9cab4ee3,Uwe Horstmann,vc,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+e1abbe55-1f89-40c3-abd0-b764a4a6850f,Koh Boon Hwee,angel,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+5761af88-6192-4ecc-a909-06e73a03e66c,Jeffrey Chan,vc,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+3c7e61cb-e139-4fb1-afc0-cc5d436dba35,Paul Santos,vc,Singapore,Wavemaker Partners,,,0.0,,,0.0,,none,no domain | skipped
+02262148-34e1-413b-8729-c4bf6f355fea,Hian Goh,vc,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+18a21cd8-0a70-469b-83d3-e0d8b21a58e0,Peng T. Ong,vc,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+aedcb14d-9552-458d-b260-18d844f4b6a8,Sheryl Sandberg,angel,USA,Meta,meta.com,,0.0,,,0.0,,none,skipped
+57b0ac88-e996-4f62-87a6-7a1937ecf9ed,Dick Costolo,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+555a6836-7174-4fd7-b4c8-11d664a9bb41,Jack Dorsey,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+88687fdc-efeb-4ab5-9f28-16df94f9fda6,Adam D'Angelo,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+3ff960b2-0a54-404e-bd7e-591d3c381889,Dustin Moskovitz,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+855598ea-f4ca-44f6-aa85-e0eb00474cc6,Joe Lonsdale,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f29a5820-1ca1-4901-9619-2e1c30fb6494,Drew Houston,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b8edcec8-bfb5-4c38-8095-c4d56232dcd0,Arash Ferdowsi,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+6273b5f7-9c4d-424b-8d51-f2d706186ea4,Brian Chesky,angel,USA,Airbnb,airbnb.com,https://www.linkedin.com/company/airbnb,0.2,https://airbnb.com/team,,0.0,,none,linkedin link found on public website | skipped
+9cc9d9b6-aed6-4695-92a5-20196956a9a2,Joe Gebbia,angel,USA,Airbnb,airbnb.com,https://www.linkedin.com/company/airbnb,0.2,https://airbnb.com/team,,0.0,,none,linkedin link found on public website | skipped
+0e453647-9bb9-481f-95ae-ffdc1235231a,Tony Hsieh,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+7b181c76-1ee5-4856-82a1-e933c1ad88e7,Kathryn Minshew,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9c83ba8c-c214-4b5b-a198-5d88d49f9f9b,Joelle Emerson,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d78c7101-eb43-40cd-afce-36c9c6c0d1c4,Sukhinder Singh Cassidy,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e70b128a-9980-4e90-9022-a2a07b4d3643,Leah Busque,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+91b3d109-0cee-4522-afe7-f03f2d49a8f6,Melanie Perkins,angel,Australia,Canva,canva.com,https://www.linkedin.com/company/canva,0.2,https://canva.com,,0.0,,none,linkedin link found on public website | skipped
+8e469c1a-5310-43aa-abaa-c304885087cc,Mike Cannon-Brookes,angel,Australia,,,,0.0,,,0.0,,none,no domain | skipped
+7447e0ec-7840-4b9f-a80d-1bbc57f95b5c,Scott Farquhar,angel,Australia,,,,0.0,,,0.0,,none,no domain | skipped
+07581d61-4f3b-4e2c-bf09-6f6e85ea9174,Stewart Butterfield,angel,USA,Slack,slack.com,https://www.linkedin.com/company/tiny-spec-inc,0.2,https://slack.com,,0.0,,none,linkedin link found on public website | skipped
+4721987c-e080-4263-9b9a-f5d0945a0f2b,Eric Yuan,angel,USA,Zoom,zoom.us,https://www.linkedin.com/company/zoom,0.65,https://zoom.us,,0.0,,none,linkedin link found on public website | skipped
+4d28a6b5-3563-47d4-8d16-066c62cce02e,Nisha Dua,vc,USA,BBG Ventures,,,0.0,,,0.0,,none,no domain | skipped
+85fbbcae-02f1-4a16-8304-a6c54d73262d,Anu Duggal,vc,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+a0d3bb1d-7215-4c10-ba3f-3e0b1a3232df,Serena Williams,vc,USA,Serena Ventures,,,0.0,,,0.0,,none,no domain | skipped
+1f63cbdd-0723-4212-a0db-da594d9b0857,Kim-Mai Cutler,vc,USA,Initialized Capital,,,0.0,,,0.0,,none,no domain | skipped
+6e97634f-76d4-4b89-93c0-686d32704674,Alexia Bonatsos,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4de7091f-1e09-46df-8696-15de78ce5b3d,Paige Craig,angel,USA,Arena VC,,,0.0,,,0.0,,none,no domain | skipped
+13951d43-4b29-4c64-8f3e-f7335d87ae1e,Mike Maples Jr,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+cd9d6692-b371-46d4-8276-46ca99dba723,Ann Miura-Ko,vc,USA,Stanford,,,0.0,,,0.0,,none,no domain | skipped
+90eed58d-d157-4138-980a-38ac8bcd96e9,Manu Kumar,angel,USA,Stanford,,,0.0,,,0.0,,none,no domain | skipped
+8445847e-2802-49aa-8293-cb3e59103212,Hadley Harris,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c0f325a2-c0c9-40b8-a139-9902f00f6b32,Nihal Mehta,vc,USA,Eniac Ventures,,,0.0,,,0.0,,none,no domain | skipped
+f0a0330e-9d04-4f5a-8ee0-8d0cadc90428,Phil Libin,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+46c74d7e-800c-4b3d-b80a-82b45d64df89,Josh Elman,angel,USA,Greylock,greylock.com,https://www.linkedin.com/company/greylock-partners,0.2,https://greylock.com,,0.0,,none,linkedin link found on public website | skipped
+33cb1d5d-bc6c-4662-ba87-46b1a5e94706,Turner Novak,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8fda1fc7-2a88-411c-859b-8ce1b2119cef,Harry Stebbings,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+ac604bab-7655-4751-b7d2-917a195f3708,Pioneer,accelerator,USA,pioneer,pioneer.app,https://www.linkedin.com/in/narangrishi,0.55,https://pioneer.app,,0.0,,none,linkedin link found on public website | skipped
+f5ac226e-82d3-4055-8e04-f170437f36fe,Plug and Play Tech Center,accelerator,USA,plugandplaytechcenter,plugandplaytechcenter.com,,0.0,,,0.0,,none,skipped
+90b8620a-a5c6-476d-b2d2-7d1ffbe05f20,Andreea Eftimie,vc,Mexico,ALLVP,,,0.0,,,0.0,,none,no domain | skipped
+4a5aec8e-a0b8-4335-8b8f-1f466dbff0f4,Entrepreneur First,accelerator,UK,joinef,joinef.com,,0.0,,,0.0,,none,skipped | skipped
+6d171413-27bd-4da1-b0e2-2e93c8884814,MassChallenge,accelerator,USA,masschallenge,masschallenge.org,,0.0,,,0.0,,none,skipped | skipped
+12e4d006-bcae-4f86-ae05-8cc83d490b96,Seedcamp,accelerator,UK,Seedcamp,seedcamp.com,,0.0,,,0.0,,none,skipped
+053b94c0-33ed-4ff2-adaa-1a58a3cf6c61,Fred Ehrsam,vc,USA,Coinbase,coinbase.com,,0.0,,,0.0,,none,skipped
+c15dfb6e-8ad4-4c1b-adc8-cf1e7f420ad8,Matt Huang,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+8d0cfac6-021e-4f47-9aa2-25fa39e5a16b,Olaf Carlson-Wee,vc,USA,Coinbase,coinbase.com,,0.0,,,0.0,,none,skipped
+a18f14df-4324-45c7-9228-c7038fcc66c0,Linda Xie,vc,USA,Coinbase,coinbase.com,,0.0,,,0.0,,none,skipped
+404176c6-ffbd-4941-8aa4-1ead480ff406,Sanjay Mehta,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+fdbe9790-5000-40e4-8d44-cecdd8ca311b,Anupam Mittal,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+a430660f-456e-4dae-9668-6c92292e768a,Vikram Malhotra,vc,India,Anthill Ventures,,,0.0,,,0.0,,none,no domain | skipped
+d2de521a-39e7-41ab-beaa-afab37cc1907,Mohandas Pai,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+c4d26c29-e2ff-4d27-8816-931e2e662765,Nicolas Szekasy,vc,Argentina,,,,0.0,,,0.0,,none,no domain | skipped
+f23c36d4-59bc-4913-afd0-885da0c97d2c,Nithin Kamath,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+0f1d5c0d-f1fa-444d-9cfb-040ae3f79074,Rajan Anandan,vc,India,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+5d98bbb0-fae1-46fc-be21-42ea217af358,Nandan Nilekani,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+e04369a2-c96e-4d67-8f10-64bb5ac16647,Bhavish Aggarwal,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+fde018cf-a8dc-4eb5-b723-362d9ed30ec3,Ritesh Agarwal,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+bef6c225-6b16-4619-ab0b-21c8824b5bc2,Hernan Kazah,vc,Argentina,,,,0.0,,,0.0,,none,no domain | skipped
+f326decc-1098-4802-afd6-a6a206a210ee,Peyush Bansal,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+42375c32-007a-4a7e-b56c-14b643472a74,Aman Gupta,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+5878b389-d306-4dc7-9eec-e280c77f17ef,Alchemist Accelerator,accelerator,USA,alchemistaccelerator,alchemistaccelerator.com,,0.0,,,0.0,,none,skipped | skipped
+61d53049-11fa-48cd-8b8c-ddc772fe9191,Paulo Passoni,vc,Brazil,SoftBank Latin America,,,0.0,,,0.0,,none,no domain | skipped
+4ffb6610-ab10-4ef7-8135-dd0ac1fa2eee,Mbwana Alliy,vc,Kenya,,,,0.0,,,0.0,,none,no domain | skipped
+1387c2ee-fbf2-4887-9299-2d422e69d6bb,Dotun Olowoporoku,vc,Nigeria,Venture Platform Nigeria,,,0.0,,,0.0,,none,no domain | skipped
+40c8773a-c682-4fff-8832-4e99179429b0,Yemi Lalude,angel,Nigeria,,,,0.0,,,0.0,,none,no domain | skipped
+9d1216e6-38cd-4233-82b8-8f6badbb87a0,Ahmad Takatkah,vc,Jordan,Jordan Valley Capital,,,0.0,,,0.0,,none,no domain | skipped
+d949b7ea-ed28-4412-a66b-b3eab115d263,Bob Nelsen,vc,USA,ARCH Venture Partners,,,0.0,,,0.0,,none,no domain | skipped
+be10c348-40b6-4e68-b15e-20abede6d448,Kevin Starr,vc,USA,Third Rock Ventures,,,0.0,,,0.0,,none,no domain | skipped
+ad0a6044-e43c-4b9f-8742-6b7d87b09781,Noubar Afeyan,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+df10cad6-568c-4bc5-a0c2-f95183edf50b,Simeon Simeonov,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c4ee9c56-b950-40d4-8b28-a9e424afd304,Unity Stoakes,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+39e81910-ef57-4e96-b0b1-3eb951743604,Patrick Chung,vc,USA,NEA,nea.com,https://www.linkedin.com/company/new-enterprise-associates,0.55,https://nea.com,,0.0,,none,linkedin link found on public website | skipped
+cfcdf509-379f-40fa-825f-073454c66edb,Tom Steyer,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+590734af-509f-45e3-a122-6916243c5fb1,Ryan Craig,vc,USA,Achieve Partners,,,0.0,,,0.0,,none,no domain | skipped
+ef2b57f6-7c48-4135-9007-04d4f44d1487,Cheryl Rosner,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+7f11385c-950d-4cff-b66c-f62c2839e726,Mike Vorhaus,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+37db83b2-a47c-468f-b300-be6b4004828e,Carmichael Roberts,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+227a19ba-8a5d-4343-9990-7e7af71cfe34,Deborah Quazzo,vc,USA,GSV Ventures,,,0.0,,,0.0,,none,no domain | skipped
+b50d8e31-e62e-4ea5-90d4-726e057b6a0d,Fadi Ghandour,angel,Jordan,,,,0.0,,,0.0,,none,no domain | skipped
+4a9a158d-202d-4914-97dd-5f5ba04c32e8,Jigar Shah,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f17e829a-1b94-47da-ab9c-9514c8d9f466,Abdulaziz Al Loughani,vc,Kuwait,,,,0.0,,,0.0,,none,no domain | skipped
+9d15d511-c403-4ee0-9ac3-8460c4bb59d5,Kola Aina,vc,Nigeria,,,,0.0,,,0.0,,none,no domain | skipped
+fa5656e9-9bc7-46e7-b2d2-ead50a0572b4,Strauss Zelnick,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0f8e8009-758a-4128-9490-2f6326598ab4,Renata Quintini,vc,USA,Lux Capital,,,0.0,,,0.0,,none,no domain | skipped
+c9e1cca9-f1dd-4695-be95-c3225c4b0297,Shahin Farshchi,vc,USA,Lux Capital,,,0.0,,,0.0,,none,no domain | skipped
+f08be61f-c411-4eba-9f91-829bd67970fe,William Santana Li,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f4cef881-9357-45dd-adb6-ea2189432618,Brad Hargreaves,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c51494fe-a084-4f43-adb0-6d3506e77068,Clelia Warburg Peters,vc,USA,Era Ventures,,,0.0,,,0.0,,none,no domain | skipped
+afd0bac0-25bc-496e-8495-c17cc5d85a74,Nik Milanovic,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4596bd82-22ea-4445-9d46-2f115ecced9b,Sheel Mohnot,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1d3f66af-96be-4b09-abd9-184139850928,Amias Gerety,vc,USA,QED Investors,,,0.0,,,0.0,,none,no domain | skipped
+890a0683-55e6-4e4f-a4ab-ef5c4cc8316d,Ash Fontana,vc,USA,Zetta Venture Partners,,,0.0,,,0.0,,none,no domain | skipped
+438603e0-9a90-41e4-9004-c1044160b768,James Cham,vc,USA,Bloomberg Beta,,,0.0,,,0.0,,none,no domain | skipped
+62b61acd-9f63-46fd-9868-d086e5100738,Rex Salisbury,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.55,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+30e07c1d-447d-4a9d-b182-afc6b1fae4c0,Jake Gibson,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+559c5bb5-e11f-426d-bc21-45ea008671ac,Ian Hogarth,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+09cd0671-eb32-4d41-b104-55d6e6c6308f,Nathan Benaich,vc,UK,Air Street Capital,,,0.0,,,0.0,,none,no domain | skipped
+065c6bdd-2a0f-44cd-9b71-1302dfc6db23,Josh Wolfe,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+2801c837-ed8f-461c-a539-65f5fd2e5603,Andrej Karpathy,angel,USA,OpenAI,openai.com,https://www.linkedin.com/company/openai,0.2,https://openai.com,,0.0,,none,linkedin link found on public website | skipped
+b25dfd2b-7ff1-4156-9f63-61c7e2367d5c,Frank Rotman,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+bda7670a-4ece-48a9-ab89-7b6f823e19cf,Roy Bahat,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e056c2ea-01c7-4d4c-a75b-31728f0c4cba,Joshua Kushner,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+44a4e0dc-6d92-4a4f-94a9-d90be2228095,Katrina Lake,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+df10e92f-b586-445f-8af5-1b0142fe0e54,Tim Ferriss,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+043990e8-555a-48ae-90ae-7d8c9bb24041,David Heinemeier Hansson,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+16691a9c-346e-47dd-bf45-66f64034d229,David Rusenko,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+75323f16-8ae6-4640-8ad3-7086936e6af8,George Kurtz,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+22b87368-2149-41fd-ab59-804572cf7bdd,Tomer Weingarten,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+3222d8ec-ec72-4f72-91b2-26399fcf5171,Greg Isenberg,angel,Canada,,,,0.0,,,0.0,,none,no domain | skipped
+f487e293-e62f-4c57-aaa1-392e8a4d9cb6,Sar Haribhakti,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5f96fad4-d62a-4516-8de4-ebaac054c6ff,David Teten,angel,USA,Columbia,,,0.0,,,0.0,,none,no domain | skipped
+b303ba3e-7b09-498e-b879-89ad37830b9b,Anthony Pompliano,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+13e7e691-a0e1-4d3d-831a-9dbedb6eb953,Packy McCormick,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5231f2ea-cbff-4873-84ae-2ce0fda65719,Neil Rimer,vc,Switzerland,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+4b0fe41c-9b5a-44ab-af71-96f021db3fd2,Danny Rimer,vc,UK,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+b86c93fd-1ca4-407f-92a3-2400802151e5,Kevin Rose,angel,USA,True Ventures,trueventures.com,https://www.linkedin.com/company/true-ventures,0.2,https://trueventures.com,,0.0,,none,linkedin link found on public website | skipped
+119f217f-d8ee-41fb-b74f-8560c4039d88,Kevin Systrom,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+bbd1f0d1-f4b1-4de9-8123-4be71500af0a,Mike Krieger,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4ad6ad55-a3c4-4945-b924-9a57730f2755,Dave Morin,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+08fdc483-f32c-4217-b4bb-daa88be6674a,Paul Buchheit,angel,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+cca60d35-991a-4dde-868a-94df182c12a7,Nir Zuk,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0ad3095a-d4e7-4e70-b278-98cff6dd48c7,Lenny Rachitsky,angel,USA,Airbnb,airbnb.com,https://www.linkedin.com/company/airbnb,0.2,https://airbnb.com/team,,0.0,,none,linkedin link found on public website | skipped
+3eccfe5c-157b-45bd-ab93-043b51b2cdd3,Mathias Ockenfels,vc,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+a6e0efd5-b810-4815-b729-cf9a184294be,Lorenzo Thione,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+147d9121-01fb-476f-804f-797d5d42ab23,Richard Kerby,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9c9f6be3-0f5e-48d0-8333-7d1384e53af8,Mariam Naficy,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+809a65c5-c3d7-4be6-9f3a-2434bfed5d64,Bryce Roberts,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1673a286-cc60-4c6c-88a1-532694894387,Nina Achadjian,vc,USA,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+b7941f93-49e5-4cad-a491-e857e284cc9c,Mark Goldberg,vc,USA,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+f14d9f3b-05c6-44ab-8b29-e166685ed5c4,Bernard Liautaud,vc,UK,Balderton,balderton.com,https://www.linkedin.com/company/balderton-capital_2,0.55,https://balderton.com,,0.0,,none,linkedin link found on public website | skipped
+0de48618-b948-4983-acc2-c837017adaee,James Wise,vc,UK,Balderton,balderton.com,https://www.linkedin.com/company/balderton-capital_2,0.55,https://balderton.com,,0.0,,none,linkedin link found on public website | skipped
+de5326e0-d2e7-4876-80f8-222a121458e2,Colin Hanna,vc,UK,Balderton,balderton.com,https://www.linkedin.com/company/balderton-capital_2,0.55,https://balderton.com,,0.0,,none,linkedin link found on public website | skipped
+232c8259-2bc0-46d3-b940-b9d9c709887e,Neeraj Agrawal,vc,USA,Battery Ventures,,,0.0,,,0.0,,none,no domain | skipped
+c5da2631-9fc3-408d-be10-e16b944cd965,Roger Lee,vc,USA,Battery Ventures,,,0.0,,,0.0,,none,no domain | skipped
+4099e0f3-c5f9-4e7d-b835-d0251bb57d34,Scott Tobin,vc,USA,Battery Ventures,,,0.0,,,0.0,,none,no domain | skipped
+f646f92c-c5fb-4468-bdae-3c45f0e52992,Dana Stalder,vc,USA,Matrix Partners,matrixpartners.com,https://www.linkedin.com/in/dcstalder,0.68,https://matrixpartners.com,,0.0,,none,linkedin link found on public website | skipped
+54d9fb55-90de-4cd1-adc9-8434e836effe,Josh Hannah,vc,USA,Matrix Partners,matrixpartners.com,https://www.linkedin.com/in/antrod,0.45,https://matrixpartners.com,,0.0,,none,linkedin link found on public website | skipped
+4c4b5fde-9f0e-492b-ba40-2cd147dbdc53,Patrick Malatack,vc,USA,Matrix Partners,matrixpartners.com,https://www.linkedin.com/in/antrod,0.45,https://matrixpartners.com,,0.0,,none,linkedin link found on public website | skipped
+25396007-1cc1-45b1-bf9c-8172226eeb9c,Philippe Laffont,vc,USA,Coatue,coatue.com,https://www.linkedin.com/company/coatue,0.55,https://coatue.com,,0.0,,none,linkedin link found on public website | skipped
+55f9d2b9-0e59-4dfd-ae3a-760cbfa6a4ba,Thomas Laffont,vc,USA,Coatue,coatue.com,https://www.linkedin.com/company/coatue,0.55,https://coatue.com,,0.0,,none,linkedin link found on public website | skipped
+b407830c-0fbb-4391-8abd-d6cfdd8502f2,Micky Malka,vc,USA,Coinbase,coinbase.com,,0.0,,,0.0,,none,skipped
+59819c00-e1de-4c45-a1e6-f97ba0f9be36,Nick Shalek,vc,USA,Ribbit Capital,,,0.0,,,0.0,,none,no domain | skipped
+467175e9-ea43-48e7-a325-3f509510a40d,Jill Soloway,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+7d392f76-0c6d-41b3-a4f2-fa82b9ce3586,Alda Leu Dennis,vc,USA,Initialized Capital,,,0.0,,,0.0,,none,no domain | skipped
+789b0c43-b64f-4ded-b3d6-0aefc3949d6a,Brett Gibson,vc,USA,Initialized Capital,,,0.0,,,0.0,,none,no domain | skipped
+dbba8f5f-0f35-4214-88e2-66201942ca95,Ev Williams,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+59bacc6a-4928-4b91-8cb4-979c1d564e05,Biz Stone,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+6e46c3f2-43a5-4e8d-a887-5cc84558aca7,Dror Berman,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f3647422-fddf-4dc0-b73f-f1063c768cf7,Eric Hippeau,vc,USA,Lerer Hippeau,,,0.0,,,0.0,,none,no domain | skipped
+83197189-8a4d-4a22-bb04-836e3721ae4c,Ben Lerer,vc,USA,Lerer Hippeau,,,0.0,,,0.0,,none,no domain | skipped
+fd09f5e7-f50c-4d9b-8588-4daf9c4235f8,Tom Tunguz,vc,USA,Theory Ventures,,,0.0,,,0.0,,none,no domain | skipped
+979fcadf-9b0c-4e6a-b471-7efb8b1da9e3,Satish Dharmaraj,vc,USA,Redpoint Ventures,,,0.0,,,0.0,,none,no domain | skipped
+f9f44633-6e75-4df2-9360-501acbdf721d,Joe Floyd,vc,USA,Emergence Capital,,,0.0,,,0.0,,none,no domain | skipped
+6f981ce8-daaf-4f63-a6a6-b47633726fb2,David Sacks,vc,USA,PayPal,paypal.com,,0.0,,,0.0,,none,skipped
+7281f2f1-daaf-400d-abff-41f2b35fd2ed,Bill Lee,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+77c05e6b-bcf3-40cc-b6d4-9aec1c27261c,Jos White,vc,UK,Notion,notion.so,https://www.linkedin.com/company/notionhq,0.55,https://notion.so,,0.0,,none,linkedin link found on public website | skipped
+8a89c6cd-7b65-4567-b03d-f164f0ce73f8,Stephan Morais,vc,Portugal,Indico Capital,,,0.0,,,0.0,,none,no domain | skipped
+bc112375-6be0-4b5a-836f-f1b4795d4223,Casper de Clercq,vc,USA,Norwest Venture Partners,,,0.0,,,0.0,,none,no domain | skipped
+5fc6d155-ba38-47e7-afd9-d976ade4dbbf,Bob Kocher,vc,USA,Venrock,,,0.0,,,0.0,,none,no domain | skipped
+8fcfab1d-03b2-45bc-b2c9-ceb700aead25,Krishna Yeshwant,vc,USA,GV,gv.com,https://www.linkedin.com/company/gvteam,0.55,https://gv.com,,0.0,,none,linkedin link found on public website | skipped
+5a6f0e96-8d4a-4367-b3be-cd06ff524b73,Alex Danco,angel,Canada,Social Capital,socialcapital.com,,0.0,,,0.0,,none,skipped
+a820098a-29f4-4c0b-8ff7-4468d5fb69bf,Santi Subotovsky,vc,USA,Emergence Capital,,,0.0,,,0.0,,none,no domain | skipped
+e18cebca-2fa4-4eb4-923d-9fcf534c90b1,Julie Yoo,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+ff06d8ef-6a41-4b0a-a9fb-4d419d012666,John Doerr,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+4d2e96eb-8cd3-476a-b332-4a76eb4274ec,David Danielson,vc,USA,Breakthrough Energy Ventures,,,0.0,,,0.0,,none,no domain | skipped
+1f22d0e9-b180-44d6-9319-b4a9ba4c9a3e,Shivani Siroya,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+ecd1dc89-38d7-4a25-972c-ab6b849b4f57,Jacqueline van den Ende,vc,Netherlands,,,,0.0,,,0.0,,none,no domain | skipped
+ada378f5-ef5c-4835-9706-b3a25ac4b55d,Vani Kola,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+7d2e416c-361f-4d68-bb08-aeec940f7699,Sanjay Nath,vc,India,Blume Ventures,,,0.0,,,0.0,,none,no domain | skipped
+33f959d2-1735-4f69-a4df-817d7e9f8d8c,Karthik Reddy,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+267deff1-8b16-4eee-a526-b717a1c9d14f,Rehan yar Khan,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+6b0fd896-4f2c-43ea-8c14-69baaf1a2d11,Alok Mittal,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+2044ae14-67aa-4834-9991-44b23ab99c8b,Shailesh Lakhani,vc,India,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+725544f1-e9f2-4a42-b10d-6f2cde29654b,Santiago Zavala,vc,Mexico,,,,0.0,,,0.0,,none,no domain | skipped
+9dbd2dd0-516f-4cf3-ba0a-27b0f0298dbe,Gonzalo Costa,vc,USA,Flourish Ventures,,,0.0,,,0.0,,none,no domain | skipped
+9e903fe0-04ae-411c-addd-837478f11401,Kyane Kassiri,vc,Nigeria,ARM HoldCo,,,0.0,,,0.0,,none,no domain | skipped
+0c269cf5-f91d-4ec1-9e5b-5886241be2ed,Eoghan McCabe,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5170044a-dc75-4d8d-8d7b-78ed403cfe87,Alex MacCaw,angel,USA,HubSpot,hubspot.com,https://www.linkedin.com/company/hubspot,0.2,https://hubspot.com,,0.0,,none,linkedin link found on public website | skipped
+68cc5af5-42b5-4751-8f0d-afcae6105068,Max Mullen,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d77defa3-8a60-4413-824a-da1199d7d4e4,Zachariah George,vc,Kenya,,,,0.0,,,0.0,,none,no domain | skipped
+9c5c05da-940d-4cf6-bd53-d05befccf79c,Tomi Davies,angel,Nigeria,,,,0.0,,,0.0,,none,no domain | skipped
+b02493cf-d07e-489e-a386-6866baf6e06c,Anand Lunia,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+8e641665-a644-4f1d-bfd4-5d3c5c0e2a46,Emmett Shear,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0838c921-3869-479f-a2a6-f4bf714f4a7a,Justin Kan,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c30e0734-d1e6-433e-885c-15c0ad0b94ea,Elias Torres,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+a8a9ff8f-3f04-475e-b669-d5379ca8009d,David Cancel,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0a18f718-a9f0-4497-af26-fc8b2a02aefc,Brian Balfour,angel,USA,HubSpot,hubspot.com,https://www.linkedin.com/company/hubspot,0.2,https://hubspot.com,,0.0,,none,linkedin link found on public website | skipped
+2d923e62-1e88-4cb5-b8bb-5182b4a3b49c,Andrew Gazdecki,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+75f194ce-87a6-407f-8a2c-7071cda1bcba,Steli Efti,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+aa9707f2-5802-4cc2-8526-eff1e0cb07f8,Josh Pigford,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+dceddfca-0588-4c45-843f-00200d0357dd,Patrick McKenzie,angel,Japan,Stripe,stripe.com,https://www.linkedin.com/company/stripe,0.2,https://stripe.com,,0.0,,none,linkedin link found on public website | skipped
+bc9f0f93-30a3-4f7d-afa1-a8d3027315af,Ben Tossell,angel,UK,Zapier,zapier.com,https://linkedin.com/company/zapier,0.2,https://zapier.com,,0.0,,none,linkedin link found on public website | skipped
+e5690f7b-af39-41fb-8563-e41157de55b4,Courtland Allen,angel,USA,Stripe,stripe.com,https://www.linkedin.com/company/stripe,0.2,https://stripe.com,,0.0,,none,linkedin link found on public website | skipped
+183196f4-f80b-494f-a0ed-11ea7b4fd698,Marc Köhlbrugge,angel,Netherlands,,,,0.0,,,0.0,,none,no domain | skipped
+b29813de-30b3-4ff3-9f8f-475ab4338d46,David Schmaier,angel,USA,Salesforce,salesforce.com,,0.0,,,0.0,,none,skipped
+54a082d0-9324-407c-ad5f-6c8474b1150a,Marc Benioff,angel,USA,Salesforce,salesforce.com,,0.0,,,0.0,,none,skipped
+b5cb8fb9-eaf8-4e29-9fad-6d0fb3c2b2cd,Sophie Bakalar,vc,USA,Collaborative Fund,,,0.0,,,0.0,,none,no domain | skipped
+4233372c-f610-47f3-a300-840bf7ce890d,Craig Shapiro,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8cc09d09-5edf-4215-ad32-86fed3b2a3f2,Brianne Kimmel,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b440cfb5-cc86-48c6-88f0-7c7b9831b85e,Ali Hamed,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c91e3ddc-2991-4544-8394-83dd53ce4d8e,Lo Toney,vc,USA,Plexo Capital,,,0.0,,,0.0,,none,no domain | skipped
+2fc7e49b-699c-4222-a638-f80a8dbc3ba7,Marlon Nichols,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+333ea1b6-0dc8-4760-8de3-71616300bcdc,Adeyemi Ajao,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+52ceb59d-58b3-490b-8674-6cec66930055,Maia Bittner,angel,USA,Chime,,,0.0,,,0.0,,none,no domain | skipped
+0b85d0ef-2105-4e02-adf7-900aded5129f,Gary Vaynerchuk,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+82ee9aa1-835a-47c7-89eb-8165aa55ce02,Mark Cuban,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+2ab0ff8a-17bd-4c3d-b223-8025059e2a4b,Ashton Kutcher,angel,USA,Airbnb,airbnb.com,https://www.linkedin.com/company/airbnb,0.2,https://airbnb.com/team,,0.0,,none,linkedin link found on public website | skipped
+a2c9294f-4825-4baa-86d9-c0fa3bd7ac50,Guy Oseary,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b768976b-09c9-4449-886c-5985dd5ba56a,Will Smith,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+908a9e6e-77c6-473f-b647-b8b007e9691f,Nas,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0caab399-b286-4506-bf37-9d039cd7738a,Joanna Siedlecka,vc,Poland,Inovo Venture Partners,,,0.0,,,0.0,,none,no domain | skipped
+fc8097ad-abd9-4f73-916a-27c5250c76a1,Andris Berzins,vc,Latvia,,,,0.0,,,0.0,,none,no domain | skipped
+19407d09-d946-4d18-a6ae-b917a2575312,Yrjo Ojasaar,vc,Estonia,Tera Ventures,,,0.0,,,0.0,,none,no domain | skipped
+bdceabef-0323-4bdd-8285-b219cf32a6ec,Priya Mohan,vc,UK,Notion,notion.so,https://www.linkedin.com/company/notionhq,0.55,https://notion.so,,0.0,,none,linkedin link found on public website | skipped
+a3d0983e-31ce-4cbd-9af3-7b3d82bba871,Mackenzie Burnett,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1dad718c-efa7-4a41-a9a2-a9acaf2f4b26,Elizabeth Yin,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+179102eb-81f6-4ede-a414-1d163a085716,Eric Bahn,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f3091acc-aee7-4fe5-b8de-e0e2d4cb35d0,Todd Jackson,vc,USA,First Round,firstround.com,https://www.linkedin.com/company/first-round-capital,0.55,https://firstround.com,,0.0,,none,linkedin link found on public website | skipped
+feba9916-57e0-4212-8098-0020ceadf60a,Nir Eyal,angel,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+1e79507a-be83-42b3-8460-68d258764bba,Eric Ries,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+bae1ba36-348e-4eaf-8943-1183b7d3eb17,Steve Blank,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c0f8e082-10c7-49b4-aa3a-fbdac46f17f1,Michael Dearing,vc,USA,Stanford d,,,0.0,,,0.0,,none,no domain | skipped
+4d102509-bc6f-4cb7-b97d-d415f0f49282,Esther Dyson,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1f654e20-26b4-4ef6-b8bd-7df1bf799aa1,Yury Mostovoy,vc,UK,,,,0.0,,,0.0,,none,no domain | skipped
+6a72f148-90c9-4bf3-9d10-19729ed2f57c,Alex Brunicki,vc,UK,Backed VC,,,0.0,,,0.0,,none,no domain | skipped
+fdb4cdb5-4aae-4e20-b281-5be5d1501419,Jerry Yang,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9dcda0d2-5a40-4345-9ffe-8510d59753cc,Samir Kaul,vc,USA,Khosla,khoslaventures.com,https://www.linkedin.com/company/khosla-ventures,0.55,https://khoslaventures.com,,0.0,,none,linkedin link found on public website | skipped
+247d6ec1-fcf4-4d46-b84c-b3d31430526e,David Weiden,vc,USA,Khosla,khoslaventures.com,https://www.linkedin.com/company/khosla-ventures,0.55,https://khoslaventures.com,,0.0,,none,linkedin link found on public website | skipped
+299a6a90-ed04-4bc5-8aee-ce423a7d574c,Villi Iltchev,vc,USA,Two Sigma Ventures,,,0.0,,,0.0,,none,no domain | skipped
+22081768-d627-4bf0-8781-a83e36d34501,Jake Saper,vc,USA,Emergence Capital,,,0.0,,,0.0,,none,no domain | skipped
+31a75ab3-de43-4512-a732-87deb5b08a32,Mohit Bhatnagar,vc,India,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+e3dacd8f-1e7d-4629-857b-e9db81c909ae,Pieter Kemps,vc,Singapore,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+587b3a97-3452-4690-a0c0-4ba40ac1a2d6,Griffin Schroeder,vc,USA,Tiger Global,tigerglobal.com,https://www.linkedin.com/company/tiger-global-management,0.55,https://tigerglobal.com,,0.0,,none,linkedin link found on public website | skipped
+76f1d8fe-6dc8-4580-86e0-862588f1c59b,John Curtius,vc,USA,Tiger Global,tigerglobal.com,https://www.linkedin.com/company/tiger-global-management,0.55,https://tigerglobal.com,,0.0,,none,linkedin link found on public website | skipped
+96024a5a-f97e-48aa-a47c-b6c0489b10fe,Sonya Brown,vc,USA,Norwest,,,0.0,,,0.0,,none,no domain | skipped
+0290f6f4-7f4d-424d-b0e2-266e7f5199a1,Tyler Sosin,vc,USA,Menlo Ventures,,,0.0,,,0.0,,none,no domain | skipped
+64147918-0e15-4b42-a2e0-bbcc5a93a02a,Brendan Dickinson,vc,USA,Canaan,,,0.0,,,0.0,,none,no domain | skipped
+d066a22f-3fd8-4e7e-a14a-77db9bb3ec77,Nina Kjellson,vc,USA,Canaan,,,0.0,,,0.0,,none,no domain | skipped
+120864b3-bed3-4925-be56-b391502b08aa,Matthew Granade,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+db1c9ed4-7ea3-41e2-a944-da8f6149905f,Lydia Jett,vc,USA,SoftBank Vision Fund,,,0.0,,,0.0,,none,no domain | skipped
+84722c14-4d44-4e62-9e54-abacecc5dbff,Bill Maris,vc,USA,Google Ventures,gv.com,https://www.linkedin.com/company/gvteam,0.55,https://gv.com,,0.0,,none,linkedin link found on public website | skipped
+646ec115-346f-4c43-9f9f-51c0c7ab7489,Erel Margalit,vc,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+1f4875c7-d1fd-441e-b623-c987b364fe86,Yoram Oron,vc,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+aa2627ce-661f-45f2-b1b1-a18feb99c417,Giora Yaron,vc,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+d243e9fe-5672-4ed3-a0b4-03db2152ec66,Yair Snir,vc,Israel,Dell Technologies Capital Israel,,,0.0,,,0.0,,none,no domain | skipped
+afbaf60a-8722-455c-95e3-b45093d63efc,Orna Berry,vc,Israel,Pitango,,,0.0,,,0.0,,none,no domain | skipped
+896a239b-1fdd-4fbb-bfde-cd37615593c3,Kirill Kozhevnikov,vc,Poland,Flashpoint,,,0.0,,,0.0,,none,no domain | skipped
+86b2910a-f9a0-47ad-8381-177adee36aa1,Shawn Carolan,vc,USA,Uber,uber.com,,0.0,,,0.0,,none,skipped
+29a2fab4-3332-4a64-b0bc-cadfb37adf07,Alexei Sorokin,vc,Luxembourg,Runa Capital,,,0.0,,,0.0,,none,no domain | skipped
+cbe994c1-4e1a-41ce-a2bc-eb9973e8d45b,Dmitry Chikhachev,vc,Luxembourg,,,,0.0,,,0.0,,none,no domain | skipped
+c3516d71-c605-4b11-8a3c-5fbd446f876c,Arseny Dabbakh,vc,USA,Almaz Capital,,,0.0,,,0.0,,none,no domain | skipped
+423c3a98-2717-4297-a5bf-b299c5a8205a,Alexander Galitsky,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+903c1177-f198-4738-94eb-54036c17c8a7,Katerina Shvetsova,vc,Ukraine,,,,0.0,,,0.0,,none,no domain | skipped
+6cb1e820-e078-4f29-8804-2336f1c0f9b1,Andriy Kolodiy,vc,Ukraine,Genesis Investments,,,0.0,,,0.0,,none,no domain | skipped
+ea719b21-7ba8-4950-9961-431f55a90536,Neil Shen,vc,China,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+cdcefe0d-52ca-4905-8101-ec218f8ca568,Hans Tung,vc,USA,GGV Capital,,,0.0,,,0.0,,none,no domain | skipped
+28c1e1e1-1d98-431e-a087-b5c5785aa2e8,Jixun Foo,vc,Singapore,GGV Capital Asia,,,0.0,,,0.0,,none,no domain | skipped
+57514f00-f53a-42c7-8953-299cfe12c40d,Kai-Fu Lee,vc,China,Google,google.com,,0.0,,,0.0,,none,skipped
+a6b894e8-4603-49b1-8223-dc6068439b77,James Riney,vc,Japan,,,,0.0,,,0.0,,none,no domain | skipped
+fa84b6f3-fe20-4790-9199-a25a99f4f7f6,Danny Gilligan,vc,Australia,,,,0.0,,,0.0,,none,no domain | skipped
+0876795e-50c3-4641-b142-a82f4dc0d82d,Robbie Hearn,vc,Australia,Square Peg Capital,,,0.0,,,0.0,,none,no domain | skipped
+809287f7-cdda-4fe1-b215-5f8d1ca6bca5,Paul Bassat,vc,Australia,,,,0.0,,,0.0,,none,no domain | skipped
+1d2ddb74-5163-417b-b97f-25a9b4d9dc12,Jan Lynn-Matern,vc,UK,,,,0.0,,,0.0,,none,no domain | skipped
+cedb0782-2d43-4374-964e-772a015cf1d7,John Appel,vc,USA,Cultivian Sandbox,,,0.0,,,0.0,,none,no domain | skipped
+2b4fbfdd-8690-4dcf-add5-397552d872b7,Sara Menker,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+ba0861a3-81b7-4f4b-ae73-f078aaaae24d,Mitch Lasky,vc,USA,Benchmark,benchmark.com,,0.0,,,0.0,,none,skipped
+128763f2-d8c4-40b4-9c62-94c17607927c,Josh Chapman,vc,USA,Konvoy Ventures,,,0.0,,,0.0,,none,no domain | skipped
+02980101-21c6-4ad7-bdf0-c85dde8e258b,Ryan Williams,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b0873935-d049-42f0-be86-2a05a8be8fc6,Kyle Samani,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+fb1170f5-8d05-45b3-9d92-efc8b27e51c9,Tushar Jain,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+da61a297-35f4-4b92-9391-8c0aab5524fa,Avichal Garg,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+170954b0-7615-48ce-aaa7-378b574f6d75,Placeholder VC,vc,USA,placeholder,placeholder.vc,,0.0,,,0.0,,none,skipped
+22dcfd6b-95b8-4b9a-87ac-db2e830b487b,Joel Monegro,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+df1167ab-686c-4c6d-92dd-74115a840889,Jessica Livingston,angel,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+f04898c3-8707-4d08-8b56-e3f31a42cf0c,Nils Timmermann,vc,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+437f790c-a47c-4174-82b7-0f9f1d3a75d2,Mons Lund,vc,Norway,Antler Norway,,,0.0,,,0.0,,none,no domain | skipped
+ed0cc8cd-f72f-4522-ba5f-f0c23ad1020a,Mikael Johnsson,vc,UK,,,,0.0,,,0.0,,none,no domain | skipped
+4e9ee8b9-4eec-4444-84bc-4bde354ca5ea,Mangrove Capital Partners,vc,Luxembourg,mangrove,mangrove.vc,,0.0,,,0.0,,none,skipped
+09d4183f-9465-4ea3-bc3d-5f5c48499e96,Mark Tluszcz,vc,Luxembourg,,,,0.0,,,0.0,,none,no domain | skipped
+94348b4b-aa43-4c0e-840c-3f2f5da4798b,Florian Schweitzer,vc,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+708a954b-7d26-471a-bbc8-609b1eeb706f,Jochem Cuppen,vc,Spain,Nauta Capital,,,0.0,,,0.0,,none,no domain | skipped
+acbfdf50-9cd6-4ef7-93e7-31752d6159c3,Siraj Khaliq,vc,UK,Atomico,atomico.com,https://www.linkedin.com/company/atomico,0.55,https://atomico.com,,0.0,,none,linkedin link found on public website | skipped
+27b3d76e-5369-4aac-84d8-26f4be642256,Hiro Tamura,vc,UK,Atomico,atomico.com,https://www.linkedin.com/company/atomico,0.55,https://atomico.com,,0.0,,none,linkedin link found on public website | skipped
+9309ab41-8428-4b0a-ae52-cd9373b2690b,Jonathan Hsu,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f3c74f59-c236-45f6-847d-74929e2b4779,Arjun Sethi,vc,USA,Social Capital,socialcapital.com,,0.0,,,0.0,,none,skipped
+c5a9ab4e-a7eb-485e-991a-2611b2996754,Elefund VC,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+a0860aa1-0f84-45e2-b7c6-44090304596c,Chris Farmer,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+986f2058-2db6-4a70-8ab0-3535d8002e84,Pave (Sheel Mohnot),vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f2f355e2-46f9-48b3-b8e9-023c71b17ecf,Finn Murphy,vc,UK,LocalGlobe,localglobe.vc,https://www.linkedin.com/company/localglobe,0.55,https://localglobe.vc,,0.0,,none,linkedin link found on public website | skipped
+f95420b6-543b-4f5b-ab8d-a1d00cbbe53c,Saul Klein,vc,UK,LocalGlobe,localglobe.vc,https://www.linkedin.com/company/localglobe,0.55,https://localglobe.vc,,0.0,,none,linkedin link found on public website | skipped
+0ca6eaeb-d7d9-4666-881c-a091da50012a,Robin Klein,vc,UK,LocalGlobe,localglobe.vc,https://www.linkedin.com/in/robin-bonduelle-6812a626,0.68,https://localglobe.vc,,0.0,,none,linkedin link found on public website | skipped
+de744247-aa2d-4f11-921d-22543fd8af44,Dominic Jacquesson,vc,UK,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+71a64ddb-e1df-450f-8d82-81fe0c32eebe,Andreessen Marc,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.78,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+ff49de2a-a017-4c56-a677-cc6e1d9d960a,Brit Morin,angel,USA,Offline Ventures,,,0.0,,,0.0,,none,no domain | skipped
+53fc659b-67f6-4a15-a580-b90728f3a5c7,Izhar Armony,vc,USA,CRV,,,0.0,,,0.0,,none,no domain | skipped
+06c30f94-5316-42e4-b0a1-800b48bbb17c,Wellington Management,vc,USA,wellington,wellington.com,,0.0,,,0.0,,none,skipped
+beb4be6e-32cc-4fd7-b903-0b844cc568d4,Fidelity Ventures,vc,USA,fidelity,fidelity.com,,0.0,,,0.0,,none,skipped
+1398b153-cacb-4720-bb27-c39830475073,Jacqueline Novogratz,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1040f8d2-0a77-4bc5-99ce-37de2438f92b,Leila Janah,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b60a164d-0b87-4cd9-908e-c3774731de03,Sriram Viswanathan,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4980aeaa-1659-4ca2-96fd-ff1e2094ba7f,Iconiq Capital,vc,USA,iconiqcapital,iconiqcapital.com,,0.0,,,0.0,,none,skipped
+fffe7edd-2732-4e6b-9075-f719d2921be2,Scott Kupor,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.55,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+54ba0cc7-e99b-43fa-9a8d-e1adee0e85f5,David Haber,vc,USA,a16z,a16z.com,https://www.linkedin.com/in/haber,0.68,https://a16z.com/team,,0.0,,none,linkedin link found on public website | skipped
+9a21059b-18bc-4233-818d-fb57f9288dd7,Stephanie Zhan,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+dba882d1-7e78-4740-a1a6-d894c790b950,Pat Grady,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+91ab6bbf-c843-4d64-95d8-2123182d8926,Lee Jacobs,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+630a71dd-070f-4dad-91d7-f0aba36b8533,Shrug Capital,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+735d7669-a646-41e4-8b50-11bb744c8f09,Obvious Ventures,vc,USA,obvious,obvious.com,,0.0,,,0.0,,none,skipped | skipped
+24bc8701-4db2-43c9-a0ca-e9275bef57b7,Jennifer Li,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+b5b5e55e-3558-4e2b-aaba-9fae6b2574f6,Jordan Cooper,vc,USA,Glade Brook Capital,,,0.0,,,0.0,,none,no domain | skipped
+df7c9d2f-d870-4fbc-9260-3340454141a8,Neil Draper,vc,UK,,,,0.0,,,0.0,,none,no domain | skipped
+aa4fbc04-ba2c-494b-904f-d065217cb63d,Shana Caro,vc,USA,Operator Collective,,,0.0,,,0.0,,none,no domain | skipped
+7012c64e-8f23-4c80-a924-ebc9fe7049ad,Nakul Mandan,vc,USA,Audacious Ventures,,,0.0,,,0.0,,none,no domain | skipped
+ea3aac2f-e597-4c36-aff9-6e42c80ef57e,Christoph Schuh,vc,Germany,Global Founders Capital,,,0.0,,,0.0,,none,no domain | skipped
+708f7437-5950-4be6-9066-5b578e38255e,Fabian Heilemann,vc,Germany,Earlybird,earlybird.com,https://www.linkedin.com/company/earlybird-venture-capital,0.55,https://earlybird.com,,0.0,,none,linkedin link found on public website | skipped
+f7fbdce2-724f-499c-8e63-c1cd9b515d94,Christian Nagel,vc,Germany,Earlybird,earlybird.com,https://www.linkedin.com/company/earlybird-venture-capital,0.55,https://earlybird.com,,0.0,,none,linkedin link found on public website | skipped
+98e65a55-ea35-49cb-8d7c-52c8a9537c19,Niki Pezeshki,vc,USA,Felicis Ventures,,,0.0,,,0.0,,none,no domain | skipped
+882c7a05-86ea-4d3d-9952-2a561987d440,David Karp,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9424f759-7ec2-4f59-9052-b220fddca037,Ben Silbermann,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c342673f-f687-499f-afd2-6c810f9e3579,Evan Spiegel,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+25c60495-430e-49a4-bd87-ebadc0cf1f57,Bobby Murphy,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+865322f8-17d5-42ff-a4d7-ffa8333158bd,Adam Mosseri,angel,USA,Meta,meta.com,,0.0,,,0.0,,none,skipped
+417410c3-7d48-473b-ba62-a121701adf1d,Omer Ismail,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8f66ff4e-97df-4ea3-8010-fb18b27f6891,Jeff Crowe,vc,USA,Salesforce,salesforce.com,,0.0,,,0.0,,none,skipped
+f58cbf7c-c5ab-4a9e-9dbc-b0b593b7da4e,Ross Fubini,vc,USA,XYZ Venture Capital,,,0.0,,,0.0,,none,no domain | skipped
+801dd61e-175a-4741-ab81-ba130ee4accd,Brad Svrluga,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8ba7fd1c-75a5-4f3f-8990-101f18352033,Ben Sun,vc,USA,Primary Venture Partners,,,0.0,,,0.0,,none,no domain | skipped
+df547ab6-fecf-4ab9-a1b3-a414a0e4f805,Bruno Crepon,vc,France,Partech,partechpartners.com,https://www.linkedin.com/in/bruno-cremel-08559a87,0.68,https://partechpartners.com/team,,0.0,,none,linkedin link found on public website | skipped
+bbc69e63-ff8d-4ed2-87d5-d178dbdb46a7,Marc Simoncini,angel,France,,,,0.0,,,0.0,,none,no domain | skipped
+099343e6-7906-43cf-be2a-3930d7cf44d6,Xavier Niel,angel,France,,,,0.0,,,0.0,,none,no domain | skipped
+ad3cadd8-b756-4eac-a21d-9f06e47ab21c,Nicolas Brusson,angel,France,,,,0.0,,,0.0,,none,no domain | skipped
+23ab2ed4-50fc-4f24-8181-c389cdc90d81,Thibaud Elziere,vc,France,,,,0.0,,,0.0,,none,no domain | skipped
+1ef8d0df-a914-435e-91c9-bff65fbf1aac,Mac Conwell,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5e8d5eed-f2c7-44c8-91f5-3c8d9e292172,Melissa Bradley,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+54972bf5-5141-4473-ae6c-5761b6e00893,Lolita Taub,vc,USA,The Community Fund,,,0.0,,,0.0,,none,no domain | skipped
+1e054dd1-cb58-4f80-8764-c02f13d34bdb,Sydney Thomas,vc,USA,Precursor,precursorvc.com,https://www.linkedin.com/company/precursor-ventures,0.55,https://precursorvc.com,,0.0,,none,linkedin link found on public website | skipped
+81a92a05-353d-43e9-a230-d8bf47bea35e,Paige Doherty,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1868e93e-2fac-4e46-9dff-74cf6a9e22dc,Lynne Chou O'Keefe,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+13d3dbf1-ab68-49b1-bfab-96f461b7e598,Brandon Farwell,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1e475815-10d2-48d2-9a9d-7cf2404d82f6,Mayank Singhal,vc,USA,DCVC Bio,,,0.0,,,0.0,,none,no domain | skipped
+527c59ba-6f6e-4735-88f5-7760dafed64f,Halle Tecco,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+dc4b3960-1ec7-4436-853e-7611304303dc,Katherine Boyle,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.55,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+2906a2b1-6740-4a3f-8dc2-c02aea3adb30,Raj Shah,vc,USA,Shield Capital,,,0.0,,,0.0,,none,no domain | skipped
+ec4a68a9-2977-4edf-ba60-25ab9a074ffe,Peter Hebert,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1e6a618e-8eb2-4749-9589-2c48dcd1f581,Chad Anderson,vc,USA,Space Capital,,,0.0,,,0.0,,none,no domain | skipped
+162960f2-4428-4208-91e4-fc0b9e28fa17,Meagan Crawford,vc,USA,SpaceFund,,,0.0,,,0.0,,none,no domain | skipped
+e31d4aa9-e335-41d3-b8b4-4dcd620ca6f6,Tony Wan,vc,USA,Learn Capital,,,0.0,,,0.0,,none,no domain | skipped
+fed7cae2-af5e-4ca6-b1d2-37ca1e864ff9,Jason Boehmig,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+825f2fe3-a948-4791-a8d6-88a1e4f083cd,Vitalik Buterin,angel,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+4f7a3e74-49a9-414e-8cae-0476b9817df9,Changpeng Zhao,angel,UAE,,,,0.0,,,0.0,,none,no domain | skipped
+d920f58e-98b3-45cc-b1d6-4844db1a17a3,Anatoly Yakovenko,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f112bcd9-9774-470c-b99e-ec8507b74ab0,Scott Belsky,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+31cf0ee3-67f2-4036-92b9-df0a4ccd3680,Louise Samet,vc,Denmark,Founders,,,0.0,,,0.0,,none,no domain | skipped
+129ec036-ebc4-4968-a725-e836237c3341,David Tisch,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+66e2e0b4-80cf-4e91-aa7c-147506d36e16,Adam Besvinick,vc,USA,Box Group,,,0.0,,,0.0,,none,no domain | skipped
+2bf52c98-20c6-45c9-8660-66e3fe7da345,Jeff Fagnan,vc,USA,Accomplice,,,0.0,,,0.0,,none,no domain | skipped
+a7adb88d-1817-44b4-b1bf-b92dda208191,Dharmesh Shah,angel,USA,HubSpot,hubspot.com,https://www.linkedin.com/company/hubspot,0.2,https://hubspot.com,,0.0,,none,linkedin link found on public website | skipped
+28ad1541-7e44-4369-a4b5-2b96f4ac15d2,Brian Halligan,angel,USA,HubSpot,hubspot.com,https://www.linkedin.com/company/hubspot,0.2,https://hubspot.com,,0.0,,none,linkedin link found on public website | skipped
+ce36579c-8407-4524-aa6a-f3d33fcc8581,Mikkel Svane,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b23108d8-9206-4905-ba67-2364cafb73a2,Steve Wozniak,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+cf6729bb-5097-4c66-a1b7-035073feeeaa,Vinny Lingham,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+245aaa6b-f8c9-425c-8f99-f8e3b6976316,Rob Walling,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f90b98c0-9329-4adf-95cb-6de3566eb1eb,Heaton Shaw,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1b35a638-2276-4afd-b0dc-12f94651bb30,Derrick Fung,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e866a080-a76e-4c92-b434-3568ffb5dfd5,Niklas Adalberth,angel,Sweden,Klarna,klarna.com,,0.0,,,0.0,,none,skipped
+cb6e2408-1538-4988-bd39-2c419f589a42,Sebastian Siemiatkowski,angel,Sweden,Klarna,klarna.com,,0.0,,,0.0,,none,skipped
+6528c287-2998-4b7b-802c-95ffe7662892,Victor Jacobsson,angel,Sweden,Klarna,klarna.com,,0.0,,,0.0,,none,skipped
+685ba1f6-fc3e-4736-b43d-234befb5af16,Lukas Biewald,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+7ace7f43-df21-47a6-9e5e-94b23a073f59,Alexandr Wang,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4bd6d472-c58d-49ab-8ad6-2ba509c879f0,Edith Yeung,vc,USA,Race Capital,,,0.0,,,0.0,,none,no domain | skipped
+7e74474b-02e3-4e21-bf16-e88b0907004f,Rui Ma,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+739210f1-6581-41e7-b7d9-48fc1f29b69e,Koh Hui Mien,vc,Singapore,Vertex Ventures SEA,,,0.0,,,0.0,,none,no domain | skipped
+f12222c4-15fe-4782-ade9-1a0294da2cc4,Dan Martell,angel,Canada,,,,0.0,,,0.0,,none,no domain | skipped
+7944984d-5770-469e-8a79-0df8d781116c,Wil Schroter,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+a536b482-be00-43f3-a62f-2fd9033fb0a2,Todd Garland,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+ac902d18-c275-4d06-a205-ccf26c10bfe1,Hilary Gosher,vc,Israel,Insight Partners,,,0.0,,,0.0,,none,no domain | skipped
+35485df8-68db-4880-b25c-64c3f72f8859,Teddie Wardi,vc,Finland,Insight Partners,,,0.0,,,0.0,,none,no domain | skipped
+c070cfec-2f37-4b86-b89d-a5353ddba657,Ilya Sutskever,angel,USA,OpenAI,openai.com,https://www.linkedin.com/company/openai,0.2,https://openai.com,,0.0,,none,linkedin link found on public website | skipped
+20edd56d-65d8-423e-b006-0c728c4a6f09,Dalton Caldwell,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+bc5634f3-1894-4ed6-9894-7d91d345fcf6,Adora Cheung,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+d746bd4a-3af9-4808-a932-62555afa41b3,Gustaf Alstromer,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+c91b5ca3-0d68-4c4b-8c78-82eb48e3a8b3,Tim Brady,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+9efc0236-cfc9-40af-a413-0b8bc14463f2,Hans Morris,vc,USA,Nyca Partners,,,0.0,,,0.0,,none,no domain | skipped
+80bf8ef7-17c6-42bf-97a5-983abfe2e036,Gali Ben-Joseph,vc,USA,QED Investors,,,0.0,,,0.0,,none,no domain | skipped
+c1ec60a0-c1e3-4ec1-9125-9be8c89581b3,Nigel Morris,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+813a8cc5-9475-420a-a3f4-b8cef189c20b,Evan Nisselson,vc,USA,LDV Capital,,,0.0,,,0.0,,none,no domain | skipped
+73a4da70-9530-435f-bb12-dc6eb19566a9,David Frankel,vc,USA,Founder Collective,,,0.0,,,0.0,,none,no domain | skipped
+9e03ffce-1f98-4fe9-8d83-c915a0c49fab,Eric Paley,vc,USA,Founder Collective,,,0.0,,,0.0,,none,no domain | skipped
+11fdb4a8-3466-451f-aad3-95ebe6819939,Micah Rosenbloom,vc,USA,Founder Collective,,,0.0,,,0.0,,none,no domain | skipped
+392c6cc9-c4a6-4808-95ef-4a39f25a8ee9,Ben Casnocha,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+2bb7891e-f1bf-4679-ba0f-d74cc26224b9,James Mitchell,vc,China,Tencent,,,0.0,,,0.0,,none,no domain | skipped
+5b7b861f-8611-48e3-b519-a529cd7a5963,David Wei,angel,China,,,,0.0,,,0.0,,none,no domain | skipped
+eb2b7f48-d7dc-4c20-a854-6ed3a291f70a,Omar Christidis,angel,UAE,,,,0.0,,,0.0,,none,no domain | skipped
+479e2799-e474-4664-9133-780a7017e190,Khaled Talhouni,vc,Jordan,Wamda Capital,,,0.0,,,0.0,,none,no domain | skipped
+81a2cdb1-1430-43d0-b135-30de47057d36,Walid Hanna,vc,Lebanon,,,,0.0,,,0.0,,none,no domain | skipped
+2aeb81b5-82db-4105-a237-216a57154d08,Hampus Jakobsson,vc,Sweden,,,,0.0,,,0.0,,none,no domain | skipped
+e582d26d-de84-48f0-a8a1-0063a6aebeed,Heidi Lindvall,vc,Sweden,,,,0.0,,,0.0,,none,no domain | skipped
+aa335e36-a18d-4c77-82ef-58a171d1b872,Lasse Skaarup Andersen,vc,Denmark,Heartcore Capital,,,0.0,,,0.0,,none,no domain | skipped
+bd3276c9-ac92-42af-8a74-8ef2dce8167d,Mads Jensen,vc,Denmark,Seed Capital,,,0.0,,,0.0,,none,no domain | skipped
+59934408-98a2-4ed0-a135-47d53ba83961,Rob Antoniades,vc,Canada,Information Venture Partners,,,0.0,,,0.0,,none,no domain | skipped
+9ac75e10-811c-400a-b8b3-d40f86861980,Bruce Croxon,angel,Canada,,,,0.0,,,0.0,,none,no domain | skipped
+bb8a6c7a-0ea3-4f67-8f17-3b3421281918,John Ruffolo,vc,Canada,,,,0.0,,,0.0,,none,no domain | skipped
+aaf05a93-14f4-4177-95de-4f63508e7d75,Roger Chabra,vc,Canada,Inovia Capital,,,0.0,,,0.0,,none,no domain | skipped
+57a5def6-08ea-42ca-9523-0445332fe79c,Patrick Pichette,vc,Canada,Google,google.com,,0.0,,,0.0,,none,skipped
+158c458c-0e28-4fbe-8ef6-ff33fd0c108b,Stefan Glaenzer,vc,UK,,,,0.0,,,0.0,,none,no domain | skipped
+b11440e9-31f3-4cc9-8bcd-462c7608c6a0,Eileen Burbidge,vc,UK,Passion Capital,,,0.0,,,0.0,,none,no domain | skipped
+56e15605-3139-425b-bdea-b9f0e2c117c1,Nicolas Wittenborn,vc,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+afc73da3-e70b-456c-9d9e-a2809d69d53d,Nico Goulet,vc,France,,,,0.0,,,0.0,,none,no domain | skipped
+42259b4b-7200-466d-bd47-10cd465c5b46,Tristan Walker,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5db4d532-8315-4c50-a650-122b57ec2248,Jason Goldberg,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+08ec5338-dad2-46d8-91e9-5881a2e4e207,Amir Shevat,angel,Israel,Slack,slack.com,https://www.linkedin.com/company/tiny-spec-inc,0.2,https://slack.com,,0.0,,none,linkedin link found on public website | skipped
+32741c7e-a66b-449e-a038-83f58e92e696,Ali Partovi,angel,USA,Airbnb,airbnb.com,https://www.linkedin.com/company/airbnb,0.2,https://airbnb.com/team,,0.0,,none,linkedin link found on public website | skipped
+5982303a-6b4a-44e2-94a5-7ce8a056b40e,Scott Banister,angel,USA,PayPal,paypal.com,,0.0,,,0.0,,none,skipped
+e7da8b02-cbb6-410a-b2c1-e636ad471da7,Owen Van Natta,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+261f3c41-94d2-4d7c-a2c1-af48d916db61,Amr Awadallah,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4fa0966a-deee-4400-bbfa-636b42992b8a,Antonio Garcia Martinez,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+acacc0ae-28ee-49dc-8064-ef53bc792cf4,Luke Nosek,angel,USA,Founders Fund,foundersfund.com,,0.0,,,0.0,,none,skipped
+be38fada-5f2a-4bf4-9746-f3116d71ee3d,Lars Dalgaard,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.55,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+8f5b5bba-da7b-449a-bf1b-aa69e4961ec7,Alex Kolicich,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b40a6774-3ef4-48ef-882f-e746e3cc0036,Zach Weinberg,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+159de74e-2d28-4638-a2dd-dc12970915e7,Nat Turner,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9812cba7-7e22-4698-8b2b-465274785c61,Stephanie Palmeri,vc,USA,Uncork Capital,,,0.0,,,0.0,,none,no domain | skipped
+caf6cf81-8988-4378-b28c-bfcb09f119ba,Jeff Clavier,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8951a98a-e733-45e6-9dcb-4d829928add7,Manu Rekhi,vc,USA,Inventus Capital,,,0.0,,,0.0,,none,no domain | skipped
+b7eb6f5b-6b4e-4515-8118-8dbc835efd8a,Venky Ganesan,vc,USA,Menlo Ventures,,,0.0,,,0.0,,none,no domain | skipped
+e4afd9cc-e5bc-4bf9-9b0c-96097e500e8b,Aaron Harris,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+ffe71263-40c1-4e38-9fab-743507c6b8c6,Geoff Ralston,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+68011efb-61ea-47f1-8f1a-5488976997ba,Harj Taggar,vc,USA,Y Combinator,ycombinator.com,,0.0,,,0.0,,none,skipped
+9149ecb1-8b47-457d-9620-a1a420100cf8,Justin Waldron,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+fc48e6ce-463d-4c30-9412-9f4d351e1636,Mark Pincus,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+40d84d9e-7a5b-49ad-99c0-8633c8183895,Brendan Iribe,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e5d36ead-bedc-4807-a584-6340fb159261,Dennis Crowley,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+cbbc7333-f540-49e7-a045-f78df0f8dccb,Naveen Selvadurai,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b452468e-966a-4b18-8684-fc28d51615c3,Shlomo Kramer,angel,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+39df682e-3415-46c2-8225-a160e1731fc1,Tony Conrad,vc,USA,True Ventures,trueventures.com,https://www.linkedin.com/company/true-ventures,0.55,https://trueventures.com,,0.0,,none,linkedin link found on public website | skipped
+94a493d0-f571-438f-9091-d95fa63a4095,Jon Callaghan,vc,USA,True Ventures,trueventures.com,https://www.linkedin.com/company/true-ventures,0.55,https://trueventures.com,,0.0,,none,linkedin link found on public website | skipped
+26a32584-1827-4ca7-8a9b-1c62ed98dfcd,Phil Black,vc,USA,True Ventures,trueventures.com,https://www.linkedin.com/company/true-ventures,0.55,https://trueventures.com,,0.0,,none,linkedin link found on public website | skipped
+609506da-4d0e-49ca-abd0-3ea4caadc5ef,Puneet Agarwal,vc,USA,True Ventures,trueventures.com,https://www.linkedin.com/company/true-ventures,0.55,https://trueventures.com,,0.0,,none,linkedin link found on public website | skipped
+e632c4dd-0318-4dfe-be81-a40fa0cf303f,David Beisel,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+21d79094-bff1-4b6c-ae4d-1b9f7b9e95c5,Rob Go,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+3f8007e6-324b-428b-8a43-43ae1726df40,Paige Decker,vc,USA,Maveron,,,0.0,,,0.0,,none,no domain | skipped
+91553615-1903-447e-9572-b5f6a0c90bf9,Howard Schultz,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+85935ca0-f71b-4e83-b616-2662d20d5971,Jason Mendelson,vc,USA,Foundry Group,foundrygroup.com,https://www.linkedin.com/in/sethjlevine,0.45,https://foundrygroup.com/team,,0.0,,none,linkedin link found on public website | skipped
+66069fe9-bcdb-426c-854c-043aa881c16e,David Cohen,vc,USA,Techstars,techstars.com,https://www.linkedin.com/company/techstars,0.98,https://techstars.com,,0.0,,review,linkedin link found on public website | skipped
+58bdda65-98fe-4133-ab45-c6b13387cbd3,Greg Bettinelli,vc,USA,Upfront Ventures,upfront.com,,0.0,,,0.0,,none,skipped
+51c1ac43-7af1-4583-bfb7-3dca7a665e63,Kara Nortman,vc,USA,Upfront Ventures,upfront.com,,0.0,,,0.0,,none,skipped
+aa3a42e4-6ffa-4c06-a01d-f019e187f1d8,Brian Lee,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c3fbf18c-5e3b-4205-bfbf-2ce477360b39,Jessica Alba,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+6d2b5055-1e9a-4661-9fd3-177021052a84,Scooter Braun,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+a2f95616-1b1b-41e0-a2ac-7fbedceb9f4e,Troy Carter,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1e383249-796b-4092-9afd-add2c13bca0b,Iñaki Arrola,vc,Spain,K Fund,,,0.0,,,0.0,,none,no domain | skipped
+dca574b7-534a-400e-aa06-a2dc3f13dacc,Aquilino Pena,vc,Spain,,,,0.0,,,0.0,,none,no domain | skipped
+aba1a3bb-fa41-49b1-81c7-b7b16c671ee0,Marek Fodor,angel,Spain,Antai Venture Builder,,,0.0,,,0.0,,none,no domain | skipped
+5de06b48-e2cd-4d8b-8efa-a4baaaa0145e,Carlos Blanco,angel,Spain,,,,0.0,,,0.0,,none,no domain | skipped
+7cb1ddab-7e61-46ae-9afe-3b3a39834dc5,Constantijn van Oranje,angel,Netherlands,Techleap,,,0.0,,,0.0,,none,no domain | skipped
+58fb0ad8-5752-4e2b-9516-ad19afb3f75c,Pieter van der Does,angel,Netherlands,Adyen,adyen.com,https://www.linkedin.com/company/adyen,0.31,https://adyen.com,,0.0,,none,linkedin link found on public website | skipped
+03510a4e-7973-4e61-b3e6-76678d71e0d2,Arnout Schuijff,angel,Netherlands,Adyen,adyen.com,https://www.linkedin.com/company/adyen,0.2,https://adyen.com,,0.0,,none,linkedin link found on public website | skipped
+078fa4a1-6c5b-437b-92c8-6a33ad804a32,Kees Koolen,angel,Netherlands,,,,0.0,,,0.0,,none,no domain | skipped
+1b7f684e-b444-4f04-9adf-3a11e56ea842,Rutger Schimmelpenninck,vc,Netherlands,Peak Capital,,,0.0,,,0.0,,none,no domain | skipped
+6450ed4e-2010-45ef-9348-e4779d6ac72b,Matteo Masserdotti,vc,Italy,,,,0.0,,,0.0,,none,no domain | skipped
+96db0466-5499-44b0-8abc-6e769c33ddc3,Carlo Castellano,vc,Italy,,,,0.0,,,0.0,,none,no domain | skipped
+b54c3f8f-3feb-49e7-a658-24d4901c94ec,Martin Pejsa,vc,Czech Republic,Reflex Capital,,,0.0,,,0.0,,none,no domain | skipped
+615c2b53-c479-4963-a245-fdabd1a59787,Ryan McIntyre,vc,USA,Foundry Group,foundrygroup.com,,0.0,,,0.0,,none,skipped | skipped
+a08e9818-9e3b-4b6d-8bd4-c7ad771deb2d,Peter Šimurka,vc,Slovakia,Neulogy Ventures,,,0.0,,,0.0,,none,no domain | skipped
+e232bece-1a1f-4c8a-a5bf-3afb89b9c530,Márton Tordai,vc,Hungary,PortfoLion,,,0.0,,,0.0,,none,no domain | skipped
+66b1ddfc-98f1-4f96-a3b9-0916caa15fab,Radu Georgescu,angel,Romania,,,,0.0,,,0.0,,none,no domain | skipped
+d832fe02-dbb2-4b3b-b2de-6b1fc1d47c57,Florin Talpes,angel,Romania,,,,0.0,,,0.0,,none,no domain | skipped
+31521a9a-2c37-4b09-8be7-47d7c5454837,Mikhail Lobanov,vc,Russia,Da Vinci Capital,,,0.0,,,0.0,,none,no domain | skipped
+dadbf36c-3006-4fa8-a4b6-57c39c43937c,Artem Inyutin,vc,USA,Fort Ross Ventures,,,0.0,,,0.0,,none,no domain | skipped
+0c1adb78-7eb2-442b-801a-d97650dfeef4,Munim Al Razzak,angel,Bangladesh,,,,0.0,,,0.0,,none,no domain | skipped
+e978a095-7e5b-4577-bade-b22c99c3444b,Jehan Ara,angel,Pakistan,,,,0.0,,,0.0,,none,no domain | skipped
+ef70371b-6b23-47fd-9c70-f51b05038a8c,Mbeke Waseme,vc,South Africa,,,,0.0,,,0.0,,none,no domain | skipped
+c5f3e941-e080-4f0d-9807-eef30c297570,Sangu Delle,angel,Ghana,,,,0.0,,,0.0,,none,no domain | skipped
+c4fb5414-b038-4692-bef6-d140dc996d4a,Jason Njoku,angel,Nigeria,,,,0.0,,,0.0,,none,no domain | skipped
+fcbfa9fd-20a8-4f3d-91b1-db410f6e975f,Bastian Gotter,angel,Nigeria,,,,0.0,,,0.0,,none,no domain | skipped
+77b6a782-984f-4fe1-b974-c8a1a0a67927,Kunal Shah,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+b9b0314f-d5f7-4093-88ef-6bb5a252678d,Sachin Bansal,angel,India,Flipkart,flipkart.com,https://in.linkedin.com/company/flipkart,0.2,https://flipkart.com,,0.0,,none,linkedin link found on public website | skipped
+9fc0cc6a-3758-4f0f-8532-850ea33c87de,Binny Bansal,angel,India,Flipkart,flipkart.com,https://in.linkedin.com/company/flipkart,0.2,https://flipkart.com,,0.0,,none,linkedin link found on public website | skipped
+87b72a20-0255-45c9-aa1c-f0da97941f1d,Deep Kalra,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+80760a64-7b56-4887-8a8c-bea3a7db8144,Vijay Shekhar Sharma,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+e31866e7-0285-4e48-81e5-8d4efdcb628a,Anthony Tan,angel,Singapore,Grab,grab.com,https://www.linkedin.com/company/grabapp,0.2,https://grab.com,,0.0,,none,linkedin link found on public website | skipped
+f8a2c60f-71af-41d5-b49f-9b6edb47646e,William Tanuwijaya,angel,Indonesia,,,,0.0,,,0.0,,none,no domain | skipped
+23b168cb-a2e8-467d-967c-2f327ccdae02,Ferry Unardi,angel,Indonesia,,,,0.0,,,0.0,,none,no domain | skipped
+66b84287-e0be-4551-94e6-a09cb9ee00f2,Hendra Kwik,angel,Indonesia,,,,0.0,,,0.0,,none,no domain | skipped
+6dd5d188-cc0d-4de4-85bd-4f6461bcf070,Tan Hooi Ling,angel,Singapore,Grab,grab.com,https://www.linkedin.com/company/grabapp,0.2,https://grab.com,,0.0,,none,linkedin link found on public website | skipped
+eab0fd7a-85ba-45d2-a11f-141b5f66bd02,David Velez,angel,Brazil,,,,0.0,,,0.0,,none,no domain | skipped
+1763ce42-c8e0-4e90-9669-136625bd61b9,Eduardo Saverin,vc,Singapore,B Capital,,,0.0,,,0.0,,none,no domain | skipped
+51a93404-fcb2-4160-8906-1d2479df1120,Sergio Furio,angel,Brazil,,,,0.0,,,0.0,,none,no domain | skipped
+a6c8e8cb-1ed5-4e3d-b399-182e86265c35,Patrick Sigrist,angel,Brazil,,,,0.0,,,0.0,,none,no domain | skipped
+da0cd4be-f08e-40fd-aff2-96ea39b162ac,Global Founders Capital,vc,Germany,globalfounderscapital,globalfounderscapital.com,https://www.linkedin.com/in/cedric-asselman-29362466,0.55,https://globalfounderscapital.com,,0.0,,none,linkedin link found on public website | skipped
+a37437e6-a87a-40ca-9fa6-6ded624ceb28,Ryan Selkis,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+85ac154a-429c-4321-85d9-7e0f759d3c99,Spencer Noon,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4aefa2de-dccf-4bac-9831-526cdafb0cd8,Meltem Demirors,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e589db39-29aa-46c9-8873-3270a0f31512,Arianna Simpson,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.55,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+611c7102-69a1-4ed6-90a9-28b532c5594d,Emily Kirsch,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+164ccfbd-afc9-490b-8b59-393ddf4a2918,Yusuf Latief,vc,USA,Breakthrough Energy Ventures,,,0.0,,,0.0,,none,no domain | skipped
+937604f7-a5b1-415d-ab43-2b0562dca397,Marco Trombetti,vc,Italy,,,,0.0,,,0.0,,none,no domain | skipped
+266cc1e9-3360-4250-9be3-f8854c0396cf,Dhruv Saxena,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9897a48f-62cd-41f0-b115-eb6c2c21ed70,Rand Fishkin,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+643db5e3-8711-4a56-bc8b-ae3d56021294,Wade Foster,angel,USA,Zapier,zapier.com,https://www.linkedin.com/company/zapier,0.65,https://zapier.com/about,,0.0,,none,linkedin link found on public website | skipped
+a7167125-318e-4f43-a461-640fd1c509b0,Bryan Helmig,angel,USA,Zapier,zapier.com,https://linkedin.com/company/zapier,0.65,https://zapier.com,,0.0,,none,linkedin link found on public website | skipped
+3b4625ed-dff6-43e5-a18b-2eb5238a1ced,Mike Knoop,angel,USA,Zapier,zapier.com,https://www.linkedin.com/company/zapier,0.65,https://zapier.com/about,,0.0,,none,linkedin link found on public website | skipped
+b025eaa9-9f48-4608-bb84-f36d613cafdc,Wayra,accelerator,Spain,wayra,wayra.com,,0.0,,,0.0,,none,skipped | skipped
+58b26e84-9ba7-4d83-a98c-ca748d8a9b19,SOSV,accelerator,USA,sosv,sosv.com,,0.0,,,0.0,,none,skipped | skipped
+fc916a2c-8750-4b6b-9a34-ab61c442078e,HAX,accelerator,China,hax,hax.co,,0.0,,,0.0,,none,skipped | skipped
+003a511e-ac58-4717-ab7f-caf42209d973,Tiffany Zhong,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+351d52f7-c58c-4820-acca-1ea8cf1e2054,Jack Conte,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+4da190be-6d9f-43b2-93bb-1ce8851e9480,Sam Yagan,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+ba00d923-a291-4880-bb53-ecaee4bb62ed,Eric Stein,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b1a4c1c2-2c36-4cab-a93d-c48495dbc7a0,Jeff Green,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d69e0f30-7e01-496c-89f3-a11bcaf098a3,Todd McKinnon,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+46f7bfd1-4636-4c89-99f7-fb0ed79e0939,Frederic Kerrest,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5b068f55-6239-4ff1-b7f7-9d66e96761a9,David Skok,vc,USA,Matrix Partners,matrixpartners.com,https://www.linkedin.com/in/dskok,0.68,https://matrixpartners.com,,0.0,,none,linkedin link found on public website | skipped
+650015b6-89dc-4042-8de6-8673dfe460b2,Alain Chuard,angel,Switzerland,,,,0.0,,,0.0,,none,no domain | skipped
+40d0333c-9efc-4edc-8a18-5b4b17d9158f,Nicolas Pelet,vc,Switzerland,Invest4Jets,,,0.0,,,0.0,,none,no domain | skipped
+b0130ee7-32f5-42ad-a8e9-57f613466b8b,Alex Macdonald,vc,USA,Torch Capital,,,0.0,,,0.0,,none,no domain | skipped
+9aefb248-43c0-458e-b257-0a6dbae204a7,Jonathan Abrams,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+42377739-4f77-4e49-9ff2-7aec2ea9c867,Michael Fertik,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+71ca627c-922f-4ad1-a761-8bf001f9ec86,Sunil Rajaraman,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1c879dca-3c1f-453e-8428-8e54d9cacb17,Aaron Patzer,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c2adfcef-2c57-4f62-94e4-c61a766c1198,Adam Nash,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5942d524-ace1-42f9-8eed-b2c106326778,Alex Rampell,vc,USA,a16z,a16z.com,https://www.linkedin.com/in/meganholstonalexander,0.68,https://a16z.com/team,,0.0,,none,linkedin link found on public website | skipped
+0437f468-2a78-493d-bf30-81cd346c2ed7,Peter Lauten,vc,USA,a16z,a16z.com,https://www.linkedin.com/in/peter-levine-681386172,0.68,https://a16z.com/team,,0.0,,none,linkedin link found on public website | skipped
+7b3b3137-d195-4b3e-98b6-e1e185d1a353,Kristina Shen,vc,USA,a16z,a16z.com,https://www.linkedin.com/company/a16z,0.55,https://a16z.com,,0.0,,none,linkedin link found on public website | skipped
+757e3e10-c125-4f19-b3c7-8ddc07e9e980,Sonia Arrison,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d8f82c94-8322-4489-8ea3-b03e5157358a,Lynda Weinman,angel,USA,LinkedIn,linkedin.com,https://www.linkedin.com/company/linkedin,0.2,https://linkedin.com,,0.0,,none,linkedin link found on public website | skipped
+40a7efd0-c207-456a-94fa-32e5a8f53828,Connie Chan,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+632fdf4a-4b31-4559-9902-33e4ae43b714,Lara Druyan,vc,USA,Builders VC,,,0.0,,,0.0,,none,no domain | skipped
+58225de7-4a67-4d4a-9334-82155a708f5e,Jason Lemkin,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+380071ea-57af-4d97-8a94-0e37e25af209,Pawel Chudzinski,vc,Germany,Point Nine,pointninecap.com,,0.0,,,0.0,,none,skipped
+09185e39-605e-4df5-ae22-8af01e583168,Robert Vis,angel,Netherlands,,,,0.0,,,0.0,,none,no domain | skipped
+dbcb4d63-98e9-41a3-adbf-d2132aa52641,Rob Stavis,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+43166702-66f7-4f77-a237-171f780d0e9a,Mike Droesch,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+7dc0f1e4-f5e4-4b60-a83f-3f868408097a,Ethan Kurzweil,vc,USA,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+62abf37e-0588-45ba-a89f-e13cc7836509,Adam Fisher,vc,Israel,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+a2216769-6609-48ec-9b9a-8709cc5b2874,Ilan Leibovich,vc,Israel,Bessemer,bvp.com,https://www.linkedin.com/company/bessemer-venture-partners,0.55,https://bvp.com,,0.0,,none,linkedin link found on public website | skipped
+eaacddfa-7921-4ee0-99ce-210393dd5806,Sammy Abdullah,vc,USA,Blossom Street Ventures,,,0.0,,,0.0,,none,no domain | skipped
+28561315-2072-4c9a-992c-08b7bd079761,Parker Thompson,vc,USA,Pear VC,pear.vc,,0.0,,,0.0,,none,skipped
+1190f1ae-99c5-4477-9580-c5a594671209,Mar Hershenson,vc,USA,Pear VC,pear.vc,,0.0,,,0.0,,none,skipped
+0b7db214-0b52-40fe-a9bc-ef14fd2f517b,Pejman Nozad,vc,USA,Pear VC,pear.vc,,0.0,,,0.0,,none,skipped
+29af905c-6042-46f5-8788-ec033faf481c,Matthew Bellows,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+dd367384-1117-4e3f-a891-8c45a614170d,Nick Mehta,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+28a6c535-8eb6-4a5e-9c9a-83f5e2b559c8,Andrius Sutas,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+0d4077cc-fe03-43be-8c15-2ec47e7c4099,Jas Panesar,vc,UK,Houghton Street Ventures,,,0.0,,,0.0,,none,no domain | skipped
+8201933d-791c-44c4-acf7-c92343dab3d5,George Henry,vc,UK,Backed VC,,,0.0,,,0.0,,none,no domain | skipped
+121cda9f-9085-4784-9287-cc1f2ab7d464,Hendrik Brandis,vc,Germany,Earlybird,earlybird.com,https://www.linkedin.com/company/earlybird-venture-capital,0.55,https://earlybird.com,,0.0,,none,linkedin link found on public website | skipped
+e8b71759-795a-43ef-b126-4aef5c69248d,Roland Manger,vc,Germany,Wellington Partners,,,0.0,,,0.0,,none,no domain | skipped
+6119ec5a-021b-4da5-b691-a53914a2b65b,Philipp Moehring,angel,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+876711c0-a84f-4500-8b4a-92b0dae569fc,Vesa Lauronen,vc,Finland,Superhero Capital,,,0.0,,,0.0,,none,no domain | skipped
+f061befe-435a-400f-a817-929b172290ef,Mikael Nylund,vc,Finland,Inventure,,,0.0,,,0.0,,none,no domain | skipped
+ad8a379a-c4ef-43e7-a09f-8c351fa5f566,Riku Salminen,vc,Finland,Voima Ventures,,,0.0,,,0.0,,none,no domain | skipped
+d7e27b44-62a1-4040-8081-ef1657365172,Jan Bednar,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+807d7e43-a88e-4d40-a97c-f942e6de1b05,Keval Desai,vc,USA,InterWest Partners,,,0.0,,,0.0,,none,no domain | skipped
+d58fa1b0-f0e0-48b3-9715-9da69b462654,Vinod Dham,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+dd692671-68ea-4e90-9f29-4838d4c39ae8,David Lee,vc,USA,SV Angel,svangel.com,https://www.linkedin.com/company/sv-angel,0.55,https://svangel.com,,0.0,,none,linkedin link found on public website | skipped
+0a3ea566-2578-493c-9b5f-0980522fd84f,Tina Sharkey,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0ae726f0-20fe-4355-8de0-82b830abc48d,Nihal Parthasarathi,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f34d658e-b1e6-418f-971b-095826693bde,Ali Rowghani,vc,USA,YC Continuity Fund,,,0.0,,,0.0,,none,no domain | skipped
+3dc0fd87-a02a-4156-a807-56d7225382b8,Ayesha Khanna,angel,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+e40b0315-7fe8-4d89-ada8-7ebbd3eaceaf,Min-Liang Tan,angel,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+aa73dd46-328a-4066-b48d-a5123c652b70,Darius Cheung,angel,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+ad6e263f-9bce-459b-87a7-cf01ed1e28b3,Vinnie Lauria,vc,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+d7cf0d6b-b3e1-40fb-8e81-7ae9e1351df5,Jeff Paine,vc,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+7c68ed38-58c7-4801-a5ea-77219aa97432,Deepak Malhotra,vc,India,Endiya Partners,,,0.0,,,0.0,,none,no domain | skipped
+bc480d8f-b686-4594-a743-d11b70360bbb,T.C. Mehra,vc,USA,Saama Capital,,,0.0,,,0.0,,none,no domain | skipped
+9577bd81-e23a-4b8d-85ae-1f51b699c5b1,Avnish Bajaj,vc,India,Matrix Partners,matrixpartners.com,https://www.linkedin.com/in/antrod,0.45,https://matrixpartners.com,,0.0,,none,linkedin link found on public website | skipped
+d4353318-30ef-483c-a5be-1c71877202e7,Tarun Davda,vc,India,Matrix Partners,matrixpartners.com,https://www.linkedin.com/in/antrod,0.45,https://matrixpartners.com,,0.0,,none,linkedin link found on public website | skipped
+37f1881a-91ba-404d-8a45-aa50c0ba018e,Shekhar Kirani,vc,India,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+c77de003-0506-4a02-bc12-22e8fa358426,Prashanth Prakash,vc,India,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+ce634021-fd96-41e4-a008-771c87c82d2d,Anand Daniel,vc,India,Accel,accel.com,https://www.linkedin.com/company/accel-vc,0.55,https://accel.com,,0.0,,none,linkedin link found on public website | skipped
+457bb364-26be-4638-9c45-c6d22c5e002e,Tejeshwi Sharma,vc,India,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+17291d3d-52cf-4f53-922a-38eb11d571ba,Abheek Anand,vc,India,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+034ac499-4000-40f5-890e-b2bfbee10a53,Sameer Nath,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+09f41a48-ea69-4347-940e-62946c6bb1d7,Ashish Gupta,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+48d3ed2e-81be-447c-b1d9-6ac7a798b60b,Taizo Son,angel,Japan,,,,0.0,,,0.0,,none,no domain | skipped
+5a4a9b0c-6a97-4aec-9c20-07372e0acc82,Yat Siu,vc,Hong Kong,,,,0.0,,,0.0,,none,no domain | skipped
+f50b39fa-9326-4891-8ff9-69e6c2643148,Robby Yung,vc,Hong Kong,,,,0.0,,,0.0,,none,no domain | skipped
+3cdf6071-67f1-48f7-bce1-3e0766fedcfd,Bernard Moon,vc,South Korea,,,,0.0,,,0.0,,none,no domain | skipped
+4f7a66ec-c40b-4def-bd0f-f3ad56c450fe,Jimmy Kim,vc,South Korea,,,,0.0,,,0.0,,none,no domain | skipped
+110e15c7-adbc-443f-8436-b1db173aaeba,Frank Rutten,vc,Netherlands,Newion Investments,,,0.0,,,0.0,,none,no domain | skipped
+ee658da3-6148-40fc-9038-7032ebaa0d81,Luciana Lixandru,vc,UK,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+9e946a45-9e0f-4c52-9173-1509d60880e0,Andrew Lee,vc,UK,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+6e19fc62-e532-47d1-af98-c1e5b7f2119a,Julien Bek,vc,UK,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+8b5dc28b-73ae-4c69-8e09-9089d0891168,Stephanie Ziadeh,vc,Singapore,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+b958ceca-66eb-426c-b8ae-2fee846a3aa0,Nandu Nandkishore,angel,Singapore,Nestle,,,0.0,,,0.0,,none,no domain | skipped
+b5e293ca-0a20-4700-b131-871308afce19,Nitesh Banta,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9b28babf-a755-4e45-ab0b-deed101fa12e,Lea von Bidder,angel,Switzerland,,,,0.0,,,0.0,,none,no domain | skipped
+a1e5e872-7a3d-44ce-985b-f1be281a620e,Ida Tin,angel,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+2350dccb-3557-4c9b-8b09-ae6591e126b5,Sarah Drinkwater,vc,UK,Common Magic,,,0.0,,,0.0,,none,no domain | skipped
+88a555f9-e612-4f3c-a37e-51437c138950,Aziz Abdel-Qader,vc,UAE,MEVP,,,0.0,,,0.0,,none,no domain | skipped
+b8bcb75e-88b1-4481-a419-6b75b31d41fc,Pule Taukobong,vc,USA,Base10 Partners,,,0.0,,,0.0,,none,no domain | skipped
+97c87292-7fe7-4eec-a405-340f5bd49132,Wen Lee,vc,USA,Translink Capital,,,0.0,,,0.0,,none,no domain | skipped
+1d80021e-66e8-45f2-994f-869bfc5389fc,Juliana Garaizar,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+bf2aa862-2076-411a-9cbf-7e7024f2f8af,Shirin Dehghan,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+e699f2ea-e76a-4d00-a491-2f7cea171d8a,Yael Elish,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+a8184f11-3160-4e44-9688-4af21084602a,Danny Lange,angel,USA,Unity,,,0.0,,,0.0,,none,no domain | skipped
+944c1f47-cc77-4746-af7d-36f430ae8870,Kelechi Nwosu,angel,Nigeria,,,,0.0,,,0.0,,none,no domain | skipped
+7d308274-c028-47d9-b7fc-887b192b8ee7,Dare Okoudjou,angel,South Africa,,,,0.0,,,0.0,,none,no domain | skipped
+0e497c59-125d-4103-be9e-be4a83f8572b,Kaidi Ruusalepp,angel,Estonia,,,,0.0,,,0.0,,none,no domain | skipped
+cb8bd4ca-a17a-43ee-8ece-9b693f25b3f6,Priit Salumaa,vc,Estonia,Tera Ventures,,,0.0,,,0.0,,none,no domain | skipped
+47177c86-ee46-44a1-b9cf-2af55d3b7eec,Ragnar Sass,angel,Estonia,,,,0.0,,,0.0,,none,no domain | skipped
+a7d85a13-e547-4e10-81ee-7025546becc4,Martin Henk,angel,Estonia,,,,0.0,,,0.0,,none,no domain | skipped
+99819320-bab4-47b2-8afe-561ccf738a9e,Kristo Kaarmann,angel,UK,Wise,wise.com,https://www.linkedin.com/company/wiseaccount,0.2,https://wise.com,,0.0,,none,linkedin link found on public website | skipped
+bb6bd660-52e9-4fcc-9673-c6a403a6fae6,Markus Villig,angel,Estonia,,,,0.0,,,0.0,,none,no domain | skipped
+516be7f0-e4c1-47ff-94b5-53c75551a5fc,Sten Tamkivi,angel,Estonia,,,,0.0,,,0.0,,none,no domain | skipped
+c33f5e2d-7949-4961-945b-aec21f14cad8,Carmen Alfonso Rico,vc,Spain,Antler Spain,,,0.0,,,0.0,,none,no domain | skipped
+13d70543-c455-400a-8180-77e9e57a5a2b,Pau Garcia-Mila,angel,Spain,,,,0.0,,,0.0,,none,no domain | skipped
+11721ce5-9b89-4866-9931-c8459ac1a65a,Cyril Bertrand,vc,France,Ventech,,,0.0,,,0.0,,none,no domain | skipped
+fcd1c16c-e20e-4ccd-a342-58cc0b65ea9d,Alexis Houssou,angel,Mauritius,,,,0.0,,,0.0,,none,no domain | skipped
+8052a70c-976e-4d5e-90d7-10ded722ad35,Hemi Zucker,angel,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+2045c5da-3964-45a7-b755-170fdf41e7cc,Maor Fridman,angel,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+409ff648-a6a6-4c41-a8a5-9a348dab4fef,Ariel Maislos,angel,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+e8399384-8a75-4e80-ad80-e5913c15110f,Kevin Carter,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d01e8bd2-d8a1-4233-bbe3-4e3c8932acc0,Erica Brescia,vc,USA,GitHub,github.com,https://www.linkedin.com/company/github,0.55,https://github.com,,0.0,,none,linkedin link found on public website | skipped
+e54a607f-886a-42b9-9890-5fb9167f9c78,Tomas Tunguz,vc,USA,Theory Ventures,,,0.0,,,0.0,,none,no domain | skipped
+d06a5ed6-be2d-4b12-a8d9-ece1c2001bd3,Mike Volpi,vc,USA,Index Ventures,indexventures.com,https://www.linkedin.com/company/index-ventures,0.55,https://indexventures.com,,0.0,,none,linkedin link found on public website | skipped
+7a352a16-15b2-4b27-9820-5a36d5335ada,Travis Kalanick,angel,USA,Uber,uber.com,,0.0,,,0.0,,none,skipped
+23c862de-e0e1-4b64-9001-5a8dfae4acbf,Garrett Camp,vc,USA,Uber,uber.com,,0.0,,,0.0,,none,skipped
+bcdecce8-08eb-42a4-b8ed-60f7b3da77e9,Logan Green,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c884887d-bef0-407f-afe4-646a68ed08f3,John Zimmer,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+b3fa806c-1927-4505-9b33-dd5b9acb883c,Stanley Tang,angel,USA,DoorDash,doordash.com,https://www.linkedin.com/company/doordash,0.2,https://doordash.com/about,,0.0,,none,linkedin link found on public website | skipped
+ca1ee8e6-3cb5-40b2-ba25-253c2337c509,Andy Fang,angel,USA,DoorDash,doordash.com,https://www.linkedin.com/company/doordash,0.2,https://doordash.com/about,,0.0,,none,linkedin link found on public website | skipped
+2d0e021c-c782-45fb-8eeb-c98717d7f5e0,Cliff Obrecht,angel,Australia,Canva,canva.com,https://www.linkedin.com/company/canva,0.2,https://canva.com,,0.0,,none,linkedin link found on public website | skipped
+677ef1d5-dab2-4052-82a5-50ec203171ce,Cameron Adams,angel,Australia,Canva,canva.com,https://www.linkedin.com/company/canva,0.2,https://canva.com,,0.0,,none,linkedin link found on public website | skipped
+76a6d4f3-966a-4ce6-acfc-3d814de8e83d,Nick Molnar,angel,Australia,,,,0.0,,,0.0,,none,no domain | skipped
+2fc94d02-05fc-40b1-8c00-d079bf7afc77,Anthony Eisen,angel,Australia,,,,0.0,,,0.0,,none,no domain | skipped
+53d1748e-0fa5-417b-bd59-ca6c3645cb5d,David Shein,angel,Australia,,,,0.0,,,0.0,,none,no domain | skipped
+1cb05cbd-c562-4b9a-af17-b83b221f8826,Niki Scevak,vc,Australia,Blackbird,blackbird.vc,https://www.linkedin.com/company/blackbirdvc,0.55,https://blackbird.vc,,0.0,,none,linkedin link found on public website | skipped
+8a42d9ec-057d-4695-bcb8-edec199bd52b,Rick Baker,vc,Australia,Blackbird,blackbird.vc,https://www.linkedin.com/company/blackbirdvc,0.55,https://blackbird.vc,,0.0,,none,linkedin link found on public website | skipped
+7fde1993-7528-4c82-ab2b-020122680a32,Sam Wong,vc,Australia,Blackbird,blackbird.vc,https://www.linkedin.com/company/blackbirdvc,0.55,https://blackbird.vc,,0.0,,none,linkedin link found on public website | skipped
+d8bb22b4-07e8-4a52-af8a-b6cc97ca8cc1,Brian Requarth,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+66c1913c-70d8-47a3-a131-4d9c840bfc67,Henrique Dubugras,angel,USA,Brex,brex.com,https://www.linkedin.com/in/michaelkimsf,0.45,https://brex.com,,0.0,,none,linkedin link found on public website | skipped
+f5240998-5b69-47c4-a451-f48a0d2713b3,Dylan Field,angel,USA,Figma,figma.com,https://www.linkedin.com/in/masaya-takizawa,0.45,https://figma.com,,0.0,,none,linkedin link found on public website | skipped
+596c945c-28f8-4458-94b8-793533d13e3b,Andrew Reed,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+811df783-3ea8-4fc5-b0f5-3d7f11afa1a1,Carl Fritjofsson,vc,Sweden,Creandum,creandum.com,https://www.linkedin.com/company/creandum,0.55,https://creandum.com,,0.0,,none,linkedin link found on public website | skipped
+b213a2a8-356a-4591-a276-4880dd2d04c3,Simon Schmincke,vc,Sweden,Creandum,creandum.com,https://www.linkedin.com/company/creandum,0.55,https://creandum.com,,0.0,,none,linkedin link found on public website | skipped
+844df0ab-9c44-463d-a648-fab8407b1917,Staffan Helgesson,vc,Sweden,Creandum,creandum.com,https://www.linkedin.com/company/creandum,0.55,https://creandum.com,,0.0,,none,linkedin link found on public website | skipped
+c089f53a-730c-4192-8b49-bd8de07f4e8d,Ted Persson,vc,Sweden,EQT Ventures,,,0.0,,,0.0,,none,no domain | skipped
+5f53670c-803c-4f6e-a84e-5ace444e0829,Lars Jornow,vc,Sweden,EQT Ventures,,,0.0,,,0.0,,none,no domain | skipped
+348a452b-35eb-4a19-b88f-cc082a8dbbe9,Lena Elkjær,vc,Czech Republic,Rockaway Capital,,,0.0,,,0.0,,none,no domain | skipped
+c2da1027-ac97-4843-93b6-87edfaadf33b,Jan Sambrook,vc,Czech Republic,Presto Ventures,,,0.0,,,0.0,,none,no domain | skipped
+fe89399b-d001-433b-9454-d43976f4e17e,Lejla Sadikovic,vc,Bosnia,,,,0.0,,,0.0,,none,no domain | skipped
+6e7813f4-6fd8-4455-aa50-c805dfd3d33d,Tomasz Czechowicz,vc,Poland,,,,0.0,,,0.0,,none,no domain | skipped
+a8870066-53cb-4472-8095-7eaa74d630ab,Michal Rokosz,vc,Poland,Inovo VC,,,0.0,,,0.0,,none,no domain | skipped
+3257be88-9fbd-43ef-b0d1-f5ef148bef34,Borys Musielak,vc,Poland,,,,0.0,,,0.0,,none,no domain | skipped
+3d032cf5-8914-46a6-b8f1-3db677faab02,Laurent Sichel,vc,France,Serena Capital,,,0.0,,,0.0,,none,no domain | skipped
+854b4de1-9328-4813-9fe6-35a651da3813,Alexis Bonte,vc,France,,,,0.0,,,0.0,,none,no domain | skipped
+675adcd6-746c-495a-8690-88c757e7b839,Christophe Chausson,vc,France,,,,0.0,,,0.0,,none,no domain | skipped
+16977b2d-e46d-4831-a32a-e92a20df3d6b,Antoine Freysz,vc,France,Newfund,,,0.0,,,0.0,,none,no domain | skipped
+e30eb9ee-8e45-4a8a-a965-5d30a7864748,Benedikt Lehnert,vc,USA,True Ventures,trueventures.com,https://www.linkedin.com/company/true-ventures,0.55,https://trueventures.com,,0.0,,none,linkedin link found on public website | skipped
+5cd8606f-aac6-49ae-bed2-a4a782af3299,Dan Levitan,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+6f871af8-249e-49b0-a9ee-cc7d702d88ac,Jonathan Sposato,angel,USA,Google,google.com,,0.0,,,0.0,,none,skipped
+cc7d09e8-df7d-4b98-b016-1f6e45743708,Chris Devore,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0107e556-ba63-464f-9c17-0455b5336034,Assaf Arkin,angel,Israel,,,,0.0,,,0.0,,none,no domain | skipped
+ba8380f8-cc9a-475f-8827-bedaa4fa594b,Oded Gal,angel,USA,CrowdStrike,,,0.0,,,0.0,,none,no domain | skipped
+46f2c073-4d7c-412d-8ee7-e15e6889b20b,Gal Levin,vc,UK,INREACH Ventures,,,0.0,,,0.0,,none,no domain | skipped
+00d1f176-e57f-48db-b748-27042100b285,Devansh Saxena,vc,India,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+3c7a5c00-c527-45b9-9c56-a1fcac54be3d,Amit Anand,vc,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+7d148d62-7b67-4387-bac0-c5148d77f4db,Jayesh Parekh,vc,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+f69ae9b8-bd1d-4c38-a54e-a084161e3692,Hsien-Hui Tong,vc,Singapore,SGInnovate,,,0.0,,,0.0,,none,no domain | skipped
+1032aad4-88da-4529-a527-8f673845436c,Khailee Ng,vc,Malaysia,,,,0.0,,,0.0,,none,no domain | skipped
+f1d81e2b-2d61-4443-82c7-d1d108546ab3,Chua Joo Hock,vc,Singapore,Vertex Ventures Southeast Asia,,,0.0,,,0.0,,none,no domain | skipped
+e1779ab4-db12-4fe7-9c2c-45552b9a7978,James Tan,vc,Singapore,Quest Ventures,,,0.0,,,0.0,,none,no domain | skipped
+55025ba0-c069-45c1-8f6d-40fe9f5a8096,Peng Ong,angel,Singapore,,,,0.0,,,0.0,,none,no domain | skipped
+137e5a6f-c363-489a-bf8a-3d7345e2bfc0,Masami Irisawa,vc,Japan,JAFCO Asia,,,0.0,,,0.0,,none,no domain | skipped
+e2a8a632-3860-4796-8482-a77bc2ca9657,Kenji Tomita,vc,Japan,,,,0.0,,,0.0,,none,no domain | skipped
+7bb2eea1-07a6-4519-b66c-1d05daadd28c,Akira Kurabayashi,vc,Japan,B Dash Ventures,,,0.0,,,0.0,,none,no domain | skipped
+cb488dc2-1136-4ae0-84af-1a759c8d50e5,Shuhei Morofuji,angel,Japan,,,,0.0,,,0.0,,none,no domain | skipped
+40fa341b-2725-416d-882b-4a21fe624018,Yoon Jeung,vc,South Korea,Kakao Ventures,,,0.0,,,0.0,,none,no domain | skipped
+76c598ed-0901-499a-a5a1-2404cbe0c4a2,YongJin Kwon,vc,South Korea,KB Investment,,,0.0,,,0.0,,none,no domain | skipped
+2efb5e8a-90ce-4de0-966e-3e7d95b0a261,Emeka Ajene,angel,France,,,,0.0,,,0.0,,none,no domain | skipped
+e96714cf-7f35-49dd-a306-c7c77adcc8f9,Olumide Soyombo,vc,Nigeria,,,,0.0,,,0.0,,none,no domain | skipped
+0acaf3a4-a919-4dab-afd4-d939e5a7230e,Noro Andriamihaja,vc,Kenya,Enza Capital,,,0.0,,,0.0,,none,no domain | skipped
+a8bb43ee-5b79-4785-8be5-62ac148ce323,Rebecca Enonchong,angel,Cameroon,,,,0.0,,,0.0,,none,no domain | skipped
+6d0c7f72-9f65-46d1-8078-6cd7b431b0f9,Rodrigo Teijeiro,angel,Argentina,,,,0.0,,,0.0,,none,no domain | skipped
+e9962b17-d51c-41bf-974f-a14d2b700aa0,Nico Berman,vc,Brazil,Kaszek Ventures,,,0.0,,,0.0,,none,no domain | skipped
+065b73a0-0d1c-4ef9-a70c-af0f6d606b8f,Fabrice Grinda,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1481b6f2-4b8c-464a-a271-631176bebc32,Jose Marin,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+defb7215-546a-430f-8194-b626a0f964a8,Andrew Gluck,vc,USA,Haystack,haystack.vc,https://www.linkedin.com/in/semilshah,0.45,https://haystack.vc/team,,0.0,,none,linkedin link found on public website | skipped
+df0b20ba-9ef9-4a94-ab7e-873554bdd20b,Saurabh Sharma,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+34ba4cbc-c1bf-44f2-a845-0d6de847d392,Apoorva Ranjan Sharma,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+490368af-358b-4cae-b859-5d9a43e996f1,Madhukar Sinha,vc,India,,,,0.0,,,0.0,,none,no domain | skipped
+b16cfe35-428e-4270-9292-251eda26ddaf,Tarun Mehta,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+45a9a79b-fc36-4e27-af52-4cc57319898a,Ghazal Alagh,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+43297b49-5445-46c0-b8da-206f2122a423,Varun Alagh,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+ef06ad03-42a6-467c-a5f2-87fc7f421532,Rohit Bansal,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+bf64657a-dcef-4091-af1a-0a5b98799587,Kunal Bahl,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+d2e7ed13-d3cc-44a7-9a9e-0956a75d158f,Sairee Chahal,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+4837a20b-bd17-4ee3-ac47-988360ed9d50,Aadit Palicha,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+f1ec9890-09f3-4cc2-ab31-2bc1edaed48d,Daniyar Seitkali,vc,Kazakhstan,Teal Partners,,,0.0,,,0.0,,none,no domain | skipped
+f22a0bff-c3fa-43d5-8fed-388ba8438882,Reza Malekzadeh,angel,UAE,,,,0.0,,,0.0,,none,no domain | skipped
+0929ee5b-27ef-4d70-8e58-0eaef1e65a40,Badr Ward,angel,Saudi Arabia,,,,0.0,,,0.0,,none,no domain | skipped
+2435dfa0-9fa6-49c5-b732-67da55bf7f3b,Naval Ravikant,angel,USA,nav,nav.al,,0.0,,,0.0,,none,skipped
+5b712ab5-85c7-4a67-a355-0e0790cb6ebf,Babak Nivi,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+c9eece8a-01ad-4756-b8a6-4bb301f23e7f,Cindy Bi,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+e51c8eb3-b338-416b-86b5-6e77a419f5df,Nikhil Kamath,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+447cdf59-6403-4583-85d1-7839044bca09,Girish Mathrubootham,angel,USA,Freshworks,freshworks.com,https://linkedin.com/company/freshworks-inc,0.2,https://freshworks.com/about,,0.0,,none,linkedin link found on public website | skipped
+18ef3922-e8d9-45d4-bb63-ca23fb97dad3,Sridhar Vembu,angel,India,Zoho,zoho.com,https://www.linkedin.com/company/zohocorp,0.65,https://zoho.com,,0.0,,none,linkedin link found on public website | skipped
+0262e9d0-992e-4199-8c4a-cd085c40cc78,Shashank Kumar,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+f3c3df4d-c8a7-4da6-8abc-dbd91ea0faf3,Harshil Mathur,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+89514227-abef-4abf-a1cf-83af949aacd1,Byju Raveendran,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+80b09147-aa88-4778-830a-eb51d621a360,Sujeet Kumar,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+2060400c-2e64-4e34-b629-22253e0aa86d,Yash Baid,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+ca2de24c-3e02-4fc8-b8a3-39fa01761cf6,Ashneer Grover,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+e3f6bd26-37b7-41ee-b845-ce7c0fe5115f,Vineeta Singh,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+6ad24b3f-1dc2-4569-a53f-9d4d5c9181a1,Radhika Gupta,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+97fddb96-5541-4fb2-a8a9-590be2a2c3dc,Srikanth Nadhamuni,angel,India,Khosla,khoslaventures.com,https://www.linkedin.com/company/khosla-ventures,0.2,https://khoslaventures.com,,0.0,,none,linkedin link found on public website | skipped
+1e51af72-422b-4e06-a43c-7c05e0e0957c,Sharad Sharma,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+6c2228c0-e3bb-4b43-8c95-503eefd040e6,Haresh Chawla,vc,India,True North,,,0.0,,,0.0,,none,no domain | skipped
+dfd5ea57-2106-49bc-843f-55e86444143b,Karan Bajaj,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+cfedce3f-7055-4885-946b-4ac4bf35ae43,Ronnie Screwvala,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+f8cd6cf9-80b3-433a-b6e5-427eb613a0e7,Mekin Maheshwari,angel,India,Flipkart,flipkart.com,https://in.linkedin.com/company/flipkart,0.2,https://flipkart.com,,0.0,,none,linkedin link found on public website | skipped
+922af938-2d68-4075-9665-5252a58e0dc8,Sanjeev Bikhchandani,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+e004137f-5898-4327-b9ae-47089facd4dd,Kittu Kolluri,vc,India,NEA,nea.com,https://www.linkedin.com/company/new-enterprise-associates,0.55,https://nea.com,,0.0,,none,linkedin link found on public website | skipped
+bbd04855-43a0-4338-be41-5af379a9ae96,Deepak Garg,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+4bc362fb-ba95-44c6-9b1e-0f9e694e2cc5,Pallav Nadhani,angel,India,,,,0.0,,,0.0,,none,no domain | skipped
+5e6fa9a6-313c-4f8e-8450-c4f02d91c7a0,Beerud Sheth,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f1c8c54a-77e2-4aef-93d7-0c0a15464a59,Prashant Malik,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+2697faf4-7a72-457e-b8e3-fcca2178b694,Sergie Magdalin,angel,USA,Webflow,webflow.com,https://www.linkedin.com/in/vladmagdalin,0.9,https://webflow.com,,0.0,,review,linkedin link found on public website | skipped
+8245eb98-3bc3-43a4-bb70-bc77b4a75796,Tom Preston-Werner,angel,USA,GitHub,github.com,https://www.linkedin.com/company/github,0.2,https://github.com,,0.0,,none,linkedin link found on public website | skipped
+62548dee-7e2e-443e-b8b0-7cfbc090904d,Chris Wanstrath,angel,USA,GitHub,github.com,https://www.linkedin.com/company/github,0.2,https://github.com,,0.0,,none,linkedin link found on public website | skipped
+89063b4f-e215-4147-851e-d75bbb3adef4,PJ Hyett,angel,USA,GitHub,github.com,https://www.linkedin.com/company/github,0.2,https://github.com,,0.0,,none,linkedin link found on public website | skipped
+b19ac003-31c3-4156-b8bf-209b30db73c6,Frank Slootman,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d993d80a-b0ef-4995-9054-3b1508fb3444,Jeff Lawson,angel,USA,Twilio,twilio.com,https://www.linkedin.com/company/twilio-inc-,0.2,https://twilio.com,,0.0,,none,linkedin link found on public website | skipped
+4aa6b10e-ce59-48cb-9f15-a6013ba94f20,Evan Cooke,angel,USA,Twilio,twilio.com,https://www.linkedin.com/company/twilio-inc-,0.2,https://twilio.com,,0.0,,none,linkedin link found on public website | skipped
+17386357-4f5c-49ec-83b4-41f48e09bf9a,John Wolthuis,angel,USA,Twilio,twilio.com,https://www.linkedin.com/company/twilio-inc-,0.2,https://twilio.com,,0.0,,none,linkedin link found on public website | skipped
+1b6df1b9-ee9f-4249-b856-8c0c254bd8fc,Nate Parker,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+3c6e69a4-94db-45fe-9ba8-9dc6671bdd30,Cal Henderson,angel,USA,Slack,slack.com,https://www.linkedin.com/company/tiny-spec-inc,0.2,https://slack.com,,0.0,,none,linkedin link found on public website | skipped
+099193d4-4615-4926-b990-8a102412338f,Frank Chen,vc,USA,a16z,a16z.com,,0.0,,,0.0,,none,skipped | skipped
+85384005-b5d4-45cd-adf6-717964e92262,Todd Goldberg,vc,USA,Emergence Capital,,,0.0,,,0.0,,none,no domain | skipped
+df385f7b-65a0-4e3a-b8b9-a33e5afcc1b4,Shomik Ghosh,vc,USA,Boldstart Ventures,,,0.0,,,0.0,,none,no domain | skipped
+41f79542-36c0-4f03-8bdf-de934852ce4d,Ed Sim,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+565c9bc4-b8b0-4e31-9c71-f966f0d59df6,Kanyi Maqubela,vc,USA,Kindred Ventures,,,0.0,,,0.0,,none,no domain | skipped
+cfc3fdae-a8f0-4363-89ae-6043e8c15502,Steve Jang,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+975fa9bd-a186-4ac0-af85-55721bb4c75d,Cyan Yeldell,vc,USA,Precursor,precursorvc.com,https://www.linkedin.com/company/precursor-ventures,0.55,https://precursorvc.com,,0.0,,none,linkedin link found on public website | skipped
+0fd4aceb-0642-4db5-acb4-cdda6ce86fea,Randy Komisar,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+568bff4d-2778-49f0-a394-e6cf8193684f,Mood Rowghani,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+684bd2b1-237d-4421-8318-530dc737cc06,Mike Abbott,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+a1a109af-3300-4271-9b90-ee4206b09741,Dave Munichiello,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+cd3e388f-6c73-4158-ae2f-0056b8f4a6dc,Annie Kadavy,vc,USA,Sequoia,sequoiacap.com,,0.0,,,0.0,,none,skipped
+1c8ce461-ced8-4957-ad3f-be65b2a85405,Devdutt Yellurkar,vc,USA,Charles River Ventures,,,0.0,,,0.0,,none,no domain | skipped
+ed5fa1b0-311d-421a-b879-510af6edb1c7,Kristin Baker Spohn,vc,USA,Charles River Ventures,,,0.0,,,0.0,,none,no domain | skipped
+412bce5a-a051-4d8e-919b-df9ca0b92500,Saar Gur,vc,USA,DoorDash,doordash.com,https://www.linkedin.com/company/doordash,0.55,https://doordash.com/about,,0.0,,none,linkedin link found on public website | skipped
+68e79dd2-8cbc-44d7-b0e4-dfe379555799,Jonas Falk,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+1fb51f22-3fa7-4f4f-b25d-3d1443a2d3d1,Bing Gordon,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+80bb8fa3-d45e-4599-84d7-d212b58e66f7,Ted Schlein,vc,USA,Kleiner Perkins,kleinerperkins.com,https://www.linkedin.com/company/waymo,0.55,https://kleinerperkins.com,,0.0,,none,linkedin link found on public website | skipped
+3c0cd062-38b8-42e6-8990-36098a0993ba,Mark Gorenberg,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+a7c67932-f85b-4b4c-8083-3364cc896a13,Jocelyn Goldfein,vc,USA,Zetta,,,0.0,,,0.0,,none,no domain | skipped
+a4fac0b9-654b-4245-9d50-0b9ba2dc1712,David Hornik,vc,USA,August Capital,,,0.0,,,0.0,,none,no domain | skipped
+029359e1-6682-4048-9ecf-ba81cdde9a64,Howard Hartenbaum,vc,USA,August Capital,,,0.0,,,0.0,,none,no domain | skipped
+d50c21e6-a1af-4433-a84b-a2923588c748,Omobola Johnson,vc,Nigeria,TLcom Capital,,,0.0,,,0.0,,none,no domain | skipped
+b8b8030c-e31f-4a39-bd19-7309e275765e,Scott Sandell,vc,USA,NEA,nea.com,https://www.linkedin.com/company/new-enterprise-associates,0.55,https://nea.com,,0.0,,none,linkedin link found on public website | skipped
+ded1ba7b-eb27-467a-b00a-fcf8b9bab39a,Rick Yang,vc,USA,NEA,nea.com,https://www.linkedin.com/company/new-enterprise-associates,0.55,https://nea.com,,0.0,,none,linkedin link found on public website | skipped
+ad5f2e3e-0db8-4f03-8cff-8a5ccf48531c,Mohamad Mrad,vc,Egypt,Flat6Labs,,,0.0,,,0.0,,none,no domain | skipped
+40e96535-bac7-42d2-a3da-f74e3f9536c0,Ahmed El Alfi,vc,Egypt,,,,0.0,,,0.0,,none,no domain | skipped
+8e6caeeb-200f-4ae9-8d04-9c11738c7657,Usama Fayyad,vc,Jordan,,,,0.0,,,0.0,,none,no domain | skipped
+39ccbcb9-218e-4f0a-8ffe-ea8ca92ee7e2,Omar Gabr,angel,Egypt,,,,0.0,,,0.0,,none,no domain | skipped
+6dc2f82d-6e08-401c-a2a6-e626c078a0a3,Ruslan Nazarov,angel,Ukraine,,,,0.0,,,0.0,,none,no domain | skipped
+f7cbc688-648a-44d4-850e-ed95f29b1c9b,Kirill Bigai,angel,Spain,,,,0.0,,,0.0,,none,no domain | skipped
+e77fbc4d-5caa-4f35-b178-f6f41468e7ea,Dmytro Voloshyn,angel,Ukraine,,,,0.0,,,0.0,,none,no domain | skipped
+3e2bc643-e3fa-45ad-b8a0-6cdb85f2beee,Misha Lyalin,angel,Cyprus,,,,0.0,,,0.0,,none,no domain | skipped
+273cbf4d-0c21-454b-850e-e1929f7dfcfb,Mark Perna,vc,USA,Revolution,revolution.com,https://www.linkedin.com/company/revolution-llc,0.55,https://revolution.com,,0.0,,none,linkedin link found on public website | skipped
+e562c1eb-6b68-4138-bfc6-19dcfbd694d6,David Golden,vc,USA,Revolution,revolution.com,https://www.linkedin.com/company/revolution-llc,0.55,https://revolution.com,,0.0,,none,linkedin link found on public website | skipped
+2ab4b79d-44dd-4ddb-b474-ec170a6958a2,Steve Case,vc,USA,Revolution,revolution.com,https://www.linkedin.com/company/revolution-llc,0.55,https://revolution.com,,0.0,,none,linkedin link found on public website | skipped
+ca911682-a2a7-44a6-a819-5e8cace9b41a,Clara Shih,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+6196fd62-dbc0-4745-a5ec-3a672cbd89e5,Nadia Boujarwah,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+00309a1c-4d6c-4e01-8de1-5c0e71e8ff04,Shreyas Doshi,angel,USA,Stripe,stripe.com,https://www.linkedin.com/company/stripe,0.2,https://stripe.com,,0.0,,none,linkedin link found on public website | skipped
+7b096034-4252-47c0-aeaf-4ba6a28470bf,John Coogan,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+9ddb65b8-a3a0-47ae-bad9-3562ea1f90e4,Kyle Vogt,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+79015b34-144f-4a41-b2c7-670a6eb36741,Daniel Kan,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+5a321a7d-b0d0-4759-9d0e-116644bce7cd,Rashid Naseem Khan,vc,Pakistan,Hummingbird Ventures,,,0.0,,,0.0,,none,no domain | skipped
+add3f0fe-7b47-425c-9fdf-8bba370dd5e4,Andreata Muforo,vc,Kenya,TLcom Capital,,,0.0,,,0.0,,none,no domain | skipped
+d52e69dc-ad4e-412c-adcf-086a30cc3dda,Laila Ahmadi,vc,UK,LocalGlobe,localglobe.vc,https://www.linkedin.com/company/localglobe,0.55,https://localglobe.vc,,0.0,,none,linkedin link found on public website | skipped
+a26c6331-c645-413f-9f8e-e004f5a11aa1,Jeff Ma,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+072d60d3-438e-4561-ba4a-aefef989b8d8,Ali Yahya,vc,USA,a16z,a16z.com,https://www.linkedin.com/in/ali01,0.68,https://a16z.com/team,,0.0,,none,linkedin link found on public website | skipped
+61b775a6-e993-419b-98d5-b77aef95098e,James Joaquin,vc,USA,,,,0.0,,,0.0,,none,no domain | skipped
+8fb143eb-21e5-46ef-8a88-0fb108d0c732,Tom Hulme,vc,UK,Google Ventures,gv.com,https://www.linkedin.com/company/gvteam,0.55,https://gv.com,,0.0,,none,linkedin link found on public website | skipped
+19c3ca49-f40d-47dc-9e0e-753bbad1652f,Rak Garg,vc,USA,Bain Capital Ventures,,,0.0,,,0.0,,none,no domain | skipped
+fa66c93e-c002-49d4-b162-d7b03dd2e2fe,Scott Friend,vc,USA,Bain Capital Ventures,,,0.0,,,0.0,,none,no domain | skipped
+c68e737b-73fd-4a80-9c34-e58d0bea9dfc,Enrique Salem,vc,USA,Bain Capital Ventures,,,0.0,,,0.0,,none,no domain | skipped
+c475217b-0466-4ae2-8bd7-4ab70bfc1246,Aaref Hilaly,vc,USA,Bain Capital Ventures,,,0.0,,,0.0,,none,no domain | skipped
+a49b49b7-51a5-4de5-ace3-50acf80a7ee0,Robert Hatta,vc,Japan,Deep Dive Ventures,,,0.0,,,0.0,,none,no domain | skipped
+c34bdd60-f945-42fa-8788-f5c98ed9108f,Joanna Coles,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+0a7ffc7c-9fc6-4c5c-85b6-84fd474fb014,Sherif Elsayed-Ali,angel,UK,,,,0.0,,,0.0,,none,no domain | skipped
+220497a6-b01a-4b4d-9e44-1fe403de3729,Christopher Steiner,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+3858260d-c125-4e1f-a0f3-beb110499e85,Erin Griffith,angel,USA,NY Times,,,0.0,,,0.0,,none,no domain | skipped
+97f626a5-1f3f-410d-aa5f-d952c4f29fab,Ott Kaukver,angel,Estonia,Twilio,twilio.com,https://www.linkedin.com/company/twilio-inc-,0.2,https://twilio.com,,0.0,,none,linkedin link found on public website | skipped
+4a23c8fa-bf86-424e-a4b3-85daafea99bb,Brad Bernthal,angel,USA,Techstars,techstars.com,https://www.linkedin.com/in/davidgcohen,0.45,https://techstars.com/team,,0.0,,none,linkedin link found on public website | skipped
+8112270f-f881-4fe3-840f-de74ceb7db8a,Elvis Saravia,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+f2abd01d-dbd3-4f05-a680-fb60aa967eb5,Angie Chang,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+3c7a92ae-cf90-4b71-b1bf-b1e1425537f7,Simon Sinek,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+d9bda5ac-8f1e-4c9f-a5e2-64a53d9c3ed2,Christoph Cemper,angel,Austria,,,,0.0,,,0.0,,none,no domain | skipped
+73550ab2-8e17-42a2-8c0d-0f2f24e27d76,Jennifer Brandel,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+11c5f5ba-2a74-4167-9819-f2a1ec34e6d6,Emmet Connolly,angel,USA,Intercom,,,0.0,,,0.0,,none,no domain | skipped
+f890ed86-622f-4886-8b88-43ef0a889980,Evan Armstrong,angel,USA,Not Boring,,,0.0,,,0.0,,none,no domain | skipped
+b02ad964-4fef-4a6e-bdd0-244c870bb486,Crystal Rose,angel,Canada,,,,0.0,,,0.0,,none,no domain | skipped
+45c13755-d8e9-41b3-8f1e-bd6b9fa9a427,Giselle Mota,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+848b6bf6-29bf-4b50-8078-764f79daebd9,Nate Kontny,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+070203f2-04d9-457a-935d-ce09d4d3c1f9,David Sandalow,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+01754b35-881a-4bb3-bcc9-88ce1f868f89,Joe Wiesenthal,angel,USA,Bloomberg,,,0.0,,,0.0,,none,no domain | skipped
+c6f2305e-35f6-4d44-86e2-e17de10dd89b,Neeraj Berry,vc,USA,MedMen Ventures,,,0.0,,,0.0,,none,no domain | skipped
+6a84b318-6946-4341-abb1-782897ed2b4a,Neil Hoyne,angel,USA,Google,google.com,,0.0,,,0.0,,none,skipped
+383ae4e3-43db-4825-986f-c46082a159d1,Cristina Mittermeier,angel,Canada,,,,0.0,,,0.0,,none,no domain | skipped
+85c67614-8a42-444f-9652-c4bfc4abd9b7,Batch.sh,accelerator,USA,batch,batch.sh,,0.0,,,0.0,,none,skipped
+44325b2a-b874-46db-9fb2-c3c2b4a04d6b,Erica Dhawan,angel,USA,,,,0.0,,,0.0,,none,no domain | skipped
+25f4daed-fd40-4aaf-b204-b2e575047d72,Alex Turnbull,angel,New Zealand,,,,0.0,,,0.0,,none,no domain | skipped
+3cdcc71d-c3c0-4f48-bc8d-fe22fe41ff74,Maximilian Fleitmann,angel,Germany,,,,0.0,,,0.0,,none,no domain | skipped
+1384c0fe-4b01-4dbf-b665-d5d7cf4887a5,Ashley Flucas,angel,USA,The RealReal,,,0.0,,,0.0,,none,no domain | skipped
+6973da40-75b9-414a-b4fc-600e357520d3,Sam Bankman-Fried,angel,Bahamas,,,,0.0,,,0.0,,none,no domain | skipped
+0adc5346-b012-439f-a81a-0df449054861,Javier Megias,angel,Spain,,,,0.0,,,0.0,,none,no domain | skipped
+66bf6590-c75c-4c8e-840a-628a5da81cb1,Sharifa Al Barwani,angel,Oman,,,,0.0,,,0.0,,none,no domain | skipped

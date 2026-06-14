@@ -1,0 +1,3 @@
+id,name,type,country,company_hint,domain,linkedin_candidate,linkedin_confidence,linkedin_source,email_candidate,email_confidence,email_source,action,notes
+9cbb8380-2107-4fed-b06e-6376a40e8865,Romain Lavault,vc,France,Partech,partechpartners.com,,0.0,,,0.0,,none,skipped | skipped
+1374b546-8f01-4b1f-b25d-e336401fb9e0,Pieter Levels,angel,Netherlands,levels,levels.io,,0.0,,,0.0,,none,skipped

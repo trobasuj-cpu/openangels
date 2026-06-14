@@ -4,6 +4,7 @@ import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
 import BackgroundAnimation from './BackgroundAnimation';
 import LoginModal from './LoginModal';
+import AIEmailModal from './AIEmailModal';
 
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
@@ -13,6 +14,7 @@ export default function Dashboard() {
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [selectedInvestorForAI, setSelectedInvestorForAI] = useState(null);
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
 
@@ -218,25 +220,27 @@ export default function Dashboard() {
           </div>
         </div>
         
-        <div className="p-6 border-t border-zinc-200/50 dark:border-zinc-800/50">
-          <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-4 border border-zinc-200/50 dark:border-zinc-800/50 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <h4 className="text-sm font-medium text-zinc-900 dark:text-white mb-1 relative">Upgrade to Premium</h4>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
-            <button 
-              onClick={() => {
-                if (user) {
-                  window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
-                } else {
-                  setIsLoginModalOpen(true);
-                }
-              }}
-              className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium py-2 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-sm active:scale-[0.98] relative"
-            >
-              Upgrade Now
-            </button>
+        {!profile?.is_premium && (
+          <div className="p-6 border-t border-zinc-200/50 dark:border-zinc-800/50">
+            <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-4 border border-zinc-200/50 dark:border-zinc-800/50 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <h4 className="text-sm font-medium text-zinc-900 dark:text-white mb-1 relative">Upgrade to Premium</h4>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
+              <button 
+                onClick={() => {
+                  if (user) {
+                    window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                  } else {
+                    setIsLoginModalOpen(true);
+                  }
+                }}
+                className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium py-2 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-sm active:scale-[0.98] relative"
+              >
+                Upgrade Now
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </aside>
 
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
@@ -448,7 +452,10 @@ export default function Dashboard() {
                                 )}
                               </div>
                             </div>
-                            <button className="flex items-center justify-center gap-2 w-full py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm">
+                            <button 
+                              onClick={() => setSelectedInvestorForAI(investor)}
+                              className="flex items-center justify-center gap-2 w-full py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm"
+                            >
                               <Sparkles className="w-4 h-4 text-amber-500" />
                               AI Draft Email
                             </button>
@@ -512,6 +519,13 @@ export default function Dashboard() {
       <LoginModal 
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)} 
+      />
+      <AIEmailModal
+        isOpen={!!selectedInvestorForAI}
+        onClose={() => setSelectedInvestorForAI(null)}
+        investor={selectedInvestorForAI}
+        profile={profile}
+        user={user}
       />
     </>
   );
