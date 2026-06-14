@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -176,6 +176,12 @@ export default function Dashboard() {
     );
   };
 
+  const deferredSearch = useDeferredValue(search);
+  const deferredIndustries = useDeferredValue(selectedIndustries);
+  const deferredLocations = useDeferredValue(selectedLocations);
+  const deferredCheckSizes = useDeferredValue(selectedCheckSizes);
+  const deferredStages = useDeferredValue(selectedStages);
+
   const filteredInvestors = useMemo(() => {
     return investors.filter(inv => {
       const invIndustries = (() => {
@@ -195,26 +201,26 @@ export default function Dashboard() {
       if ((max >= 500000 && min <= 1000000) || (!inv.check_max && min >= 500000 && min <= 1000000)) invCheckSizeBuckets.push("$500k - $1M");
       if (max >= 1000000 || min >= 1000000) invCheckSizeBuckets.push("$1M+");
 
-      const matchesSearch = search === '' || 
-        inv.name?.toLowerCase().includes(search.toLowerCase()) || 
-        inv.bio?.toLowerCase().includes(search.toLowerCase()) ||
-        invIndustries.some(ind => ind.toLowerCase().includes(search.toLowerCase()));
+      const matchesSearch = deferredSearch === '' || 
+        inv.name?.toLowerCase().includes(deferredSearch.toLowerCase()) || 
+        inv.bio?.toLowerCase().includes(deferredSearch.toLowerCase()) ||
+        invIndustries.some(i => i.toLowerCase().includes(deferredSearch.toLowerCase()));
 
-      const matchesIndustry = selectedIndustries.length === 0 || 
-        selectedIndustries.some(ind => invIndustries.includes(ind));
+      const matchesIndustry = deferredIndustries.length === 0 || 
+        deferredIndustries.some(ind => invIndustries.some(i => i.toLowerCase() === ind.toLowerCase()));
+        
+      const matchesLocation = deferredLocations.length === 0 || 
+        deferredLocations.includes(inv.location);
 
-      const matchesLocation = selectedLocations.length === 0 || 
-        selectedLocations.includes(inv.location);
+      const matchesCheckSize = deferredCheckSizes.length === 0 || 
+        deferredCheckSizes.some(size => invCheckSizeBuckets.includes(size));
 
-      const matchesCheckSize = selectedCheckSizes.length === 0 || 
-        selectedCheckSizes.some(size => invCheckSizeBuckets.includes(size));
-
-      const matchesStage = selectedStages.length === 0 || 
-        selectedStages.some(stage => invStages.includes(stage));
+      const matchesStage = deferredStages.length === 0 || 
+        deferredStages.some(stage => invStages.some(s => s.toLowerCase() === stage.toLowerCase()));
 
       return matchesSearch && matchesIndustry && matchesLocation && matchesCheckSize && matchesStage;
     });
-  }, [investors, search, selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages]);
+  }, [investors, deferredSearch, deferredIndustries, deferredLocations, deferredCheckSizes, deferredStages]);
 
   const renderFilterOptions = (options, selected, setter) => (
     <div className="space-y-2.5">
