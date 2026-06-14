@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Twitter, Linkedin, Github } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -20,14 +20,11 @@ export default function Footer() {
             A database of 3,500+ investors to raise your capital faster. Find the perfect angel investors and draft AI pitches instantly.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-zinc-800 transition-colors text-zinc-300 hover:text-white">
-              <Twitter className="w-4 h-4" />
+            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-zinc-800 transition-colors text-zinc-300 hover:text-white font-bold text-sm">
+              X
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-zinc-800 transition-colors text-zinc-300 hover:text-white">
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-zinc-800 transition-colors text-zinc-300 hover:text-white">
-              <Github className="w-4 h-4" />
+            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-zinc-800 transition-colors text-zinc-300 hover:text-white font-bold text-sm">
+              in
             </a>
           </div>
           <div className="flex w-full max-w-sm items-center space-x-2 pt-2">
