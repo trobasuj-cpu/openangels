@@ -52,7 +52,8 @@ export default function Dashboard() {
     try {
       const { data, error } = await supabase
         .from('investors')
-        .select('*');
+        .select('*')
+        .limit(10000);
       
       if (error) throw error;
       
@@ -390,8 +391,43 @@ export default function Dashboard() {
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight mb-1">Discover Angels</h1>
-                <p className="text-zinc-500 dark:text-zinc-400 text-sm">Showing {filteredInvestors.length} active angel investors matching your criteria.</p>
+                {/* Premium Marketing Header */}
+                <div className="mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-900 to-black border border-zinc-800 shadow-2xl overflow-hidden relative">
+                  {/* Decorative glow effects */}
+                  <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500/10 blur-[100px] pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-purple-500/10 blur-[100px] pointer-events-none"></div>
+                  
+                  <div className="relative z-10">
+                    <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+                      Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Angel Investor</span>
+                    </h1>
+                    <p className="text-zinc-400 text-base md:text-lg max-w-2xl leading-relaxed mb-6">
+                      Access the world's most comprehensive directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match for your startup. No warm introductions needed.
+                    </p>
+                    
+                    <div className="flex flex-wrap items-center gap-4">
+                      <div className="flex -space-x-3">
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1595060668897677314/pHMUc1Zb_400x400.jpg" alt="Investor" />
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1679538379070005248/jwGUle5U_400x400.jpg" alt="Investor" />
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1379817647139737600/YHL9uBk0_400x400.jpg" alt="Investor" />
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" src="https://pbs.twimg.com/profile_images/1587647097670467584/adWRdqQ6_400x400.jpg" alt="Investor" />
+                        <div className="w-10 h-10 rounded-full border-2 border-zinc-900 bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-300">
+                          +1K
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="text-sm font-medium text-zinc-300">
+                          <span className="text-white font-bold text-lg">{investors.length.toLocaleString()}</span> active investors in database
+                        </div>
+                        {investors.length !== filteredInvestors.length && (
+                          <div className="text-xs font-medium text-blue-400">
+                            {filteredInvestors.length.toLocaleString()} matching your current criteria
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
