@@ -402,7 +402,7 @@ export default function Dashboard() {
                       Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Angel Investor</span>
                     </h1>
                     <p className="text-zinc-400 text-base md:text-lg max-w-2xl leading-relaxed mb-6">
-                      Access the world's most comprehensive directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match for your startup. No warm introductions needed.
+                      Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match for your startup. No warm introductions needed.
                     </p>
                     
                     <div className="flex flex-wrap items-center gap-4">
