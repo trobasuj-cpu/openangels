@@ -17,6 +17,8 @@ export default function Dashboard() {
   const [selectedInvestorForAI, setSelectedInvestorForAI] = useState(null);
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [bccEmail, setBccEmail] = useState('');
+  const [isSavingBcc, setIsSavingBcc] = useState(false);
 
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
@@ -49,12 +51,26 @@ export default function Dashboard() {
   const fetchProfile = async (userId) => {
     const { data, error } = await supabase
       .from('profiles')
-      .select('is_premium')
+      .select('is_premium, startup_description, crm_bcc_email')
       .eq('id', userId)
       .single();
     if (!error && data) {
       setProfile(data);
+      if (data.crm_bcc_email) setBccEmail(data.crm_bcc_email);
     }
+  };
+
+  const handleSaveBcc = async () => {
+    if (!user) return;
+    setIsSavingBcc(true);
+    const { error } = await supabase
+      .from('profiles')
+      .update({ crm_bcc_email: bccEmail })
+      .eq('id', user.id);
+    if (!error) {
+      setProfile(prev => ({ ...prev, crm_bcc_email: bccEmail }));
+    }
+    setIsSavingBcc(false);
   };
 
   useEffect(() => {
@@ -308,6 +324,27 @@ export default function Dashboard() {
                               {profile?.is_premium ? 'Premium' : 'Free'}
                             </span>
                           </button>
+                        </div>
+                        <div className="p-3 border-t border-zinc-200 dark:border-zinc-800">
+                          <label className="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5">
+                            CRM BCC Email
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              type="email"
+                              value={bccEmail}
+                              onChange={(e) => setBccEmail(e.target.value)}
+                              placeholder="bcc@hubspot.com"
+                              className="flex-1 min-w-0 px-2 py-1.5 text-sm bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500"
+                            />
+                            <button
+                              onClick={handleSaveBcc}
+                              disabled={isSavingBcc || bccEmail === (profile?.crm_bcc_email || '')}
+                              className="px-3 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-medium rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-100 disabled:opacity-50 transition-colors"
+                            >
+                              {isSavingBcc ? '...' : 'Save'}
+                            </button>
+                          </div>
                         </div>
                         <div className="p-1 border-t border-zinc-200 dark:border-zinc-800">
                           <button 
