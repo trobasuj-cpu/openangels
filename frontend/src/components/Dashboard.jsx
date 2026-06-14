@@ -6,6 +6,29 @@ import BackgroundAnimation from './BackgroundAnimation';
 import LoginModal from './LoginModal';
 import AIEmailModal from './AIEmailModal';
 
+const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  return (
+    <div className="border-b border-zinc-200/50 dark:border-zinc-800/50 last:border-0 pb-6 mb-6 last:pb-0 last:mb-0">
+      <button 
+        onClick={() => setExpanded(!expanded)} 
+        className="flex items-center justify-between w-full text-left mb-2 group outline-none"
+      >
+        <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+          <Icon className="w-4 h-4 text-zinc-400 group-hover:text-amber-500 transition-colors" />
+          {title}
+        </h3>
+        <ChevronDown className={cn("w-4 h-4 text-zinc-400 transition-transform duration-200", expanded ? "rotate-180" : "")} />
+      </button>
+      {expanded && (
+        <div className="mt-4 animate-in slide-in-from-top-2 fade-in duration-200">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,10 +131,7 @@ export default function Dashboard() {
     return [...new Set(all)].filter(Boolean).sort();
   }, [investors]);
 
-  const uniqueCheckSizes = useMemo(() => {
-    const all = investors.map(inv => inv.checkSize || inv.check_size);
-    return [...new Set(all)].filter(Boolean).sort();
-  }, [investors]);
+  const uniqueCheckSizes = ["Up to $100k", "$100k - $500k", "$500k - $1M", "$1M+"];
 
   const uniqueStages = useMemo(() => {
     const all = investors.flatMap(inv => {
@@ -137,7 +157,14 @@ export default function Dashboard() {
         const raw = inv.stage || inv.stages;
         return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
       })();
-      const invCheckSize = inv.checkSize || inv.check_size;
+      const min = inv.check_min || 0;
+      const max = inv.check_max || Infinity;
+      
+      const invCheckSizeBuckets = [];
+      if (max <= 100000 || min <= 100000) invCheckSizeBuckets.push("Up to $100k");
+      if ((max >= 100000 && min <= 500000) || (!inv.check_max && min >= 100000 && min <= 500000)) invCheckSizeBuckets.push("$100k - $500k");
+      if ((max >= 500000 && min <= 1000000) || (!inv.check_max && min >= 500000 && min <= 1000000)) invCheckSizeBuckets.push("$500k - $1M");
+      if (max >= 1000000 || min >= 1000000) invCheckSizeBuckets.push("$1M+");
 
       const matchesSearch = search === '' || 
         inv.name?.toLowerCase().includes(search.toLowerCase()) || 
@@ -151,7 +178,7 @@ export default function Dashboard() {
         selectedLocations.includes(inv.location);
 
       const matchesCheckSize = selectedCheckSizes.length === 0 || 
-        selectedCheckSizes.includes(invCheckSize);
+        selectedCheckSizes.some(size => invCheckSizeBuckets.includes(size));
 
       const matchesStage = selectedStages.length === 0 || 
         selectedStages.some(stage => invStages.includes(stage));
@@ -202,38 +229,22 @@ export default function Dashboard() {
           </button>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
-          <div>
-            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
-              <Briefcase className="w-4 h-4 text-zinc-400" />
-              Industry
-            </h3>
+        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+          <FilterSection title="Industry" icon={Briefcase}>
             {renderFilterOptions(uniqueIndustries, selectedIndustries, setSelectedIndustries)}
-          </div>
+          </FilterSection>
 
-          <div>
-            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-zinc-400" />
-              Stage
-            </h3>
+          <FilterSection title="Stage" icon={Layers}>
             {renderFilterOptions(uniqueStages, selectedStages, setSelectedStages)}
-          </div>
+          </FilterSection>
 
-          <div>
-            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-zinc-400" />
-              Location
-            </h3>
+          <FilterSection title="Location" icon={MapPin} defaultExpanded={false}>
             {renderFilterOptions(uniqueLocations, selectedLocations, setSelectedLocations)}
-          </div>
+          </FilterSection>
 
-          <div>
-            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-zinc-400" />
-              Check Size
-            </h3>
+          <FilterSection title="Check Size" icon={DollarSign} defaultExpanded={false}>
             {renderFilterOptions(uniqueCheckSizes, selectedCheckSizes, setSelectedCheckSizes)}
-          </div>
+          </FilterSection>
         </div>
         
         {!profile?.is_premium && (
@@ -402,7 +413,19 @@ export default function Dashboard() {
                   
                   const rawInd = investor.industry || investor.industries;
                   const displayIndustries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
-                  const displayCheckSize = investor.checkSize || investor.check_size;
+                  const formatMoney = (val) => {
+                    if (!val) return '';
+                    if (val >= 1000000) return `$${val / 1000000}M`;
+                    if (val >= 1000) return `$${val / 1000}k`;
+                    return `$${val}`;
+                  };
+                  
+                  const minStr = formatMoney(investor.check_min);
+                  const maxStr = formatMoney(investor.check_max);
+                  let displayCheckSize = '';
+                  if (minStr && maxStr) displayCheckSize = `${minStr} - ${maxStr}`;
+                  else if (minStr) displayCheckSize = `${minStr}+`;
+                  else if (maxStr) displayCheckSize = `Up to ${maxStr}`;
                   
                   let displayAvatar = investor.avatar_url || investor.avatar;
                   if (!displayAvatar && investor.twitter_url) {
