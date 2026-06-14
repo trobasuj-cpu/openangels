@@ -136,17 +136,30 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
   const handleDownloadCSV = () => {
     if (!matchedInvestors || matchedInvestors.length === 0) return;
     
+    const escapeCSV = (str) => {
+      if (!str) return '""';
+      return '"' + String(str).replace(/"/g, '""').replace(/\n/g, ' ') + '"';
+    };
+
     const headers = ['Name', 'Email', 'Location', 'Industries', 'Bio', 'Check Min', 'Check Max'];
     const csvContent = [
       headers.join(','),
       ...matchedInvestors.map(inv => {
-        const inds = Array.isArray(inv.industries) ? inv.industries.join('; ') : (inv.industries || '');
-        const bio = (inv.bio || '').replace(/"/g, '""').replace(/\n/g, ' ');
-        return `"${inv.name || ''}","${inv.email || ''}","${inv.location || ''}","${inds}","${bio}","${inv.check_min || ''}","${inv.check_max || ''}"`;
+        const inds = Array.isArray(inv.industries) ? inv.industries.join(', ') : (inv.industries || '');
+        return [
+          escapeCSV(inv.name),
+          escapeCSV(inv.email),
+          escapeCSV(inv.location),
+          escapeCSV(inds),
+          escapeCSV(inv.bio),
+          escapeCSV(inv.check_min),
+          escapeCSV(inv.check_max)
+        ].join(',');
       })
     ].join('\n');
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    // Add BOM for proper UTF-8 handling in Excel
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `matched-investors-${new Date().toISOString().split('T')[0]}.csv`;
@@ -237,30 +250,8 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                  Subject Line
-                </label>
-                <input
-                  type="text"
-                  value={generatedSubject}
-                  onChange={(e) => setGeneratedSubject(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-shadow"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                  Email Body
-                </label>
-                <textarea
-                  value={generatedBody}
-                  onChange={(e) => setGeneratedBody(e.target.value)}
-                  className="w-full h-64 px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
-                />
-              </div>
-
               {matchedInvestors.length > 0 && (
-                <div className="mt-6 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden">
+                <div className="mb-6 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden">
                   <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-amber-500/20 blur-2xl pointer-events-none"></div>
                   
                   <div className="relative z-10">
@@ -296,6 +287,28 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                   </div>
                 </div>
               )}
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  Subject Line
+                </label>
+                <input
+                  type="text"
+                  value={generatedSubject}
+                  onChange={(e) => setGeneratedSubject(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-shadow"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  Email Body
+                </label>
+                <textarea
+                  value={generatedBody}
+                  onChange={(e) => setGeneratedBody(e.target.value)}
+                  className="w-full h-64 px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
+                />
+              </div>
             </div>
           )}
         </div>
