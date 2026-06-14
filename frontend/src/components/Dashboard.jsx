@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase.js';
 import BackgroundAnimation from './BackgroundAnimation';
 import LoginModal from './LoginModal';
 import AIEmailModal from './AIEmailModal';
+import Footer from './Footer';
 
 const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -634,6 +635,7 @@ export default function Dashboard() {
               </div>
             )}
           </div>
+          <Footer />
         </div>
       </main>
     </div>
