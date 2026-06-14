@@ -10,14 +10,16 @@ const supabase = createClient(
 export default function AIEmailModal({ isOpen, onClose, investor, profile, user }) {
   const [startupDescription, setStartupDescription] = useState('');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [generatedEmail, setGeneratedEmail] = useState('');
+  const [generatedSubject, setGeneratedSubject] = useState('');
+  const [generatedBody, setGeneratedBody] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (isOpen) {
-      setGeneratedEmail('');
+      setGeneratedSubject('');
+      setGeneratedBody('');
       setError(null);
       if (profile?.startup_description) {
         setStartupDescription(profile.startup_description);
@@ -83,7 +85,8 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
       
       if (!response.ok) throw new Error(data.error || 'Failed to generate email');
       
-      setGeneratedEmail(data.email);
+      setGeneratedSubject(data.subject || 'Investment Opportunity');
+      setGeneratedBody(data.body || data.email || 'Error: Could not parse response.');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -121,7 +124,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
             </div>
           )}
 
-          {!generatedEmail ? (
+          {!generatedBody ? (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
@@ -175,21 +178,34 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
             </div>
           ) : (
             <div className="space-y-4">
-              <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                Generated Draft
-              </label>
-              <textarea
-                value={generatedEmail}
-                onChange={(e) => setGeneratedEmail(e.target.value)}
-                className="w-full h-64 px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
-              />
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  Subject Line
+                </label>
+                <input
+                  type="text"
+                  value={generatedSubject}
+                  onChange={(e) => setGeneratedSubject(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-shadow"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  Email Body
+                </label>
+                <textarea
+                  value={generatedBody}
+                  onChange={(e) => setGeneratedBody(e.target.value)}
+                  className="w-full h-64 px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
+                />
+              </div>
             </div>
           )}
         </div>
 
         {/* Footer */}
         <div className="p-6 border-t border-zinc-200 dark:border-zinc-800 shrink-0 flex items-center justify-between">
-          {!generatedEmail ? (
+          {!generatedBody ? (
             <button
               onClick={handleGenerate}
               disabled={!startupDescription.trim() || isGenerating}
@@ -210,29 +226,46 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
           ) : (
             <div className="w-full flex items-center gap-3">
               <button
-                onClick={() => setGeneratedEmail('')}
-                className="px-4 py-2.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
+                onClick={() => {
+                  setGeneratedSubject('');
+                  setGeneratedBody('');
+                }}
+                className="px-4 py-2.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors shrink-0"
               >
                 Start Over
               </button>
-              <div className="flex-1 flex gap-3">
+              <div className="flex-1 flex gap-2 sm:gap-3 overflow-x-auto custom-scrollbar pb-1 sm:pb-0">
                 <button
-                  onClick={() => navigator.clipboard.writeText(generatedEmail)}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm font-medium rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+                  onClick={() => navigator.clipboard.writeText(generatedSubject + '\n\n' + generatedBody)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm font-medium rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors shrink-0"
                 >
                   <Copy className="w-4 h-4" />
-                  Copy Text
+                  Copy
                 </button>
                 <button
                   onClick={() => {
-                    const subject = encodeURIComponent(`Investment opportunity: ${user.user_metadata?.full_name || 'Startup'}`);
-                    const body = encodeURIComponent(generatedEmail);
-                    window.location.href = `mailto:${investor.email || ''}?subject=${subject}&body=${body}`;
+                    const subject = encodeURIComponent(generatedSubject);
+                    const body = encodeURIComponent(generatedBody);
+                    const bcc = profile?.crm_bcc_email ? `&bcc=${encodeURIComponent(profile.crm_bcc_email)}` : '';
+                    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${investor.email || ''}&su=${subject}&body=${body}${bcc}`, '_blank');
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#EA4335] text-white text-sm font-medium rounded-xl hover:bg-[#D33C30] transition-colors shadow-sm shrink-0"
                 >
                   <Mail className="w-4 h-4" />
-                  Open in Mail
+                  Open in Gmail
+                </button>
+                <button
+                  onClick={() => {
+                    const subject = encodeURIComponent(generatedSubject);
+                    const body = encodeURIComponent(generatedBody);
+                    const bcc = profile?.crm_bcc_email ? `&bcc=${encodeURIComponent(profile.crm_bcc_email)}` : '';
+                    window.location.href = `mailto:${investor.email || ''}?subject=${subject}&body=${body}${bcc}`;
+                  }}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm shrink-0"
+                  title="Open Default App (e.g. Superhuman, Apple Mail)"
+                >
+                  <Mail className="w-4 h-4" />
+                  Default App
                 </button>
               </div>
             </div>
