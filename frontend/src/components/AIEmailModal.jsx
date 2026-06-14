@@ -7,11 +7,12 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-export default function AIEmailModal({ isOpen, onClose, investor, profile, user }) {
+export default function AIEmailModal({ isOpen, onClose, investor, profile, user, allInvestors = [] }) {
   const [startupDescription, setStartupDescription] = useState('');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [generatedSubject, setGeneratedSubject] = useState('');
   const [generatedBody, setGeneratedBody] = useState('');
+  const [matchedInvestors, setMatchedInvestors] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -20,6 +21,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
     if (isOpen) {
       setGeneratedSubject('');
       setGeneratedBody('');
+      setMatchedInvestors([]);
       setError(null);
       if (profile?.startup_description) {
         setStartupDescription(profile.startup_description);
@@ -85,13 +87,70 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
       
       if (!response.ok) throw new Error(data.error || 'Failed to generate email');
       
+      
       setGeneratedSubject(data.subject || 'Investment Opportunity');
       setGeneratedBody(data.body || data.email || 'Error: Could not parse response.');
+
+      // Match other investors based on startup description keywords
+      if (startupDescription && allInvestors.length > 0) {
+        const descLower = startupDescription.toLowerCase();
+        // Common tech/startup keywords to look for
+        const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data'];
+        
+        const extractedTags = possibleTags.filter(tag => descLower.includes(tag));
+        // Fallback to the current investor's industries if we couldn't parse any tags
+        const searchTags = extractedTags.length > 0 ? extractedTags : industries;
+
+        const matches = allInvestors.filter(inv => {
+          if (inv.id === investor.id) return false;
+          
+          let score = 0;
+          // Match by extracted tags against investor industries
+          if (inv.industries) {
+            const invInds = Array.isArray(inv.industries) ? inv.industries : [inv.industries];
+            const hasMatch = invInds.some(ind => searchTags.includes(ind.toLowerCase()));
+            if (hasMatch) score += 2;
+          }
+          // Match by description keywords against investor bio
+          const words = descLower.split(/[\s,.-]+/).filter(w => w.length > 4);
+          if (inv.bio) {
+            const bioLower = inv.bio.toLowerCase();
+            const bioMatches = words.filter(w => bioLower.includes(w)).length;
+            if (bioMatches > 0) score += 1;
+          }
+          
+          return score > 0;
+        });
+
+        // Sort by check size relevance or just take top 250
+        setMatchedInvestors(matches.slice(0, 250));
+      }
+
     } catch (err) {
       setError(err.message);
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleDownloadCSV = () => {
+    if (!matchedInvestors || matchedInvestors.length === 0) return;
+    
+    const headers = ['Name', 'Email', 'Location', 'Industries', 'Bio', 'Check Min', 'Check Max'];
+    const csvContent = [
+      headers.join(','),
+      ...matchedInvestors.map(inv => {
+        const inds = Array.isArray(inv.industries) ? inv.industries.join('; ') : (inv.industries || '');
+        const bio = (inv.bio || '').replace(/"/g, '""').replace(/\n/g, ' ');
+        return `"${inv.name || ''}","${inv.email || ''}","${inv.location || ''}","${inds}","${bio}","${inv.check_min || ''}","${inv.check_max || ''}"`;
+      })
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `matched-investors-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
   };
 
   return (
@@ -199,6 +258,44 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
                   className="w-full h-64 px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
                 />
               </div>
+
+              {matchedInvestors.length > 0 && (
+                <div className="mt-6 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-amber-500/20 blur-2xl pointer-events-none"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Sparkles className="w-5 h-5 text-amber-500" />
+                      <h3 className="font-semibold text-amber-600 dark:text-amber-500">
+                        We found {matchedInvestors.length} suitable investors!
+                      </h3>
+                    </div>
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+                      Based on your startup description, we scanned our database and found highly relevant investors that match your profile.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <button 
+                        onClick={handleDownloadCSV}
+                        className="px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
+                      >
+                        Download CSV
+                      </button>
+                      <button 
+                        onClick={() => {
+                          const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data'];
+                          const descLower = startupDescription.toLowerCase();
+                          const extractedTags = possibleTags.filter(tag => descLower.includes(tag));
+                          const query = extractedTags.length > 0 ? extractedTags.join(',') : investor.industry || 'saas';
+                          window.open(`/?industries=${query}`, '_blank');
+                        }}
+                        className="px-4 py-2 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 text-sm font-medium rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-sm"
+                      >
+                        View List in New Tab
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -43,7 +43,19 @@ export default function Dashboard() {
   const [bccEmail, setBccEmail] = useState('');
   const [isSavingBcc, setIsSavingBcc] = useState(false);
 
-  const [selectedIndustries, setSelectedIndustries] = useState([]);
+  // Initialize selectedIndustries from URL if present
+  const initialIndustries = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const ind = params.get('industries');
+      if (ind) {
+        return ind.split(',').map(i => i.trim().toLowerCase()).filter(Boolean);
+      }
+    }
+    return [];
+  }, []);
+
+  const [selectedIndustries, setSelectedIndustries] = useState(initialIndustries);
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
   const [selectedStages, setSelectedStages] = useState([]);
@@ -636,6 +648,7 @@ export default function Dashboard() {
         investor={selectedInvestorForAI}
         profile={profile}
         user={user}
+        allInvestors={investors}
       />
     </>
   );
