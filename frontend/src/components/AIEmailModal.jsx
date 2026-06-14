@@ -27,7 +27,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user 
         setIsEditingDescription(true);
       }
     }
-  }, [isOpen, profile]);
+  }, [isOpen, investor?.id]);
 
   if (!isOpen) return null;
 
