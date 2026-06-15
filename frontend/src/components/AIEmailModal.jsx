@@ -142,6 +142,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
 
     const headers = ['Name', 'Email', 'Location', 'Industries', 'Bio', 'Check Min', 'Check Max'];
     const csvContent = [
+      'sep=,',
       headers.join(','),
       ...matchedInvestors.map(inv => {
         const inds = Array.isArray(inv.industries) ? inv.industries.join(', ') : (inv.industries || '');
