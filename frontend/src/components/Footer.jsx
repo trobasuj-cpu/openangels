@@ -56,11 +56,11 @@ export default function Footer() {
           <h3 className="text-white font-semibold mb-4">Products</h3>
           <ul className="space-y-3 text-sm">
             <li><Link to="/" className="hover:text-amber-500 transition-colors">Investor Database</Link></li>
-            <li><Link to="/?industries=ai" className="hover:text-amber-500 transition-colors">AI Investors List</Link></li>
-            <li><Link to="/?industries=saas" className="hover:text-amber-500 transition-colors">SaaS Investors List</Link></li>
-            <li><Link to="/?industries=fintech" className="hover:text-amber-500 transition-colors">Fintech Investors List</Link></li>
-            <li><a href="#" className="hover:text-amber-500 transition-colors">Pricing</a></li>
-            <li><a href="#" className="hover:text-amber-500 transition-colors">FAQ</a></li>
+            <li><Link to="/investors/ai" className="hover:text-amber-500 transition-colors">AI Investors List</Link></li>
+            <li><Link to="/investors/saas" className="hover:text-amber-500 transition-colors">SaaS Investors List</Link></li>
+            <li><Link to="/investors/fintech" className="hover:text-amber-500 transition-colors">Fintech Investors List</Link></li>
+            <li><Link to="/investors/consumer" className="hover:text-amber-500 transition-colors">Consumer Investors List</Link></li>
+            <li><Link to="/investors/b2b" className="hover:text-amber-500 transition-colors">B2B Investors List</Link></li>
           </ul>
         </div>
 
