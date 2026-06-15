@@ -101,17 +101,15 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
         // Fallback to the current investor's industries if we couldn't parse any tags
         const searchTags = extractedTags.length > 0 ? extractedTags : industries;
 
-        const matches = allInvestors.filter(inv => {
-          if (inv.id === investor.id) return false;
+        const scoredMatches = allInvestors.map(inv => {
+          if (inv.id === investor.id) return { inv, score: 0 };
           
           let score = 0;
-          // Match by extracted tags against investor industries
           if (inv.industries) {
             const invInds = Array.isArray(inv.industries) ? inv.industries : [inv.industries];
             const hasMatch = invInds.some(ind => searchTags.includes(ind.toLowerCase()));
             if (hasMatch) score += 2;
           }
-          // Match by description keywords against investor bio
           const words = descLower.split(/[\s,.-]+/).filter(w => w.length > 4);
           if (inv.bio) {
             const bioLower = inv.bio.toLowerCase();
@@ -119,11 +117,12 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
             if (bioMatches > 0) score += 1;
           }
           
-          return score > 0;
-        });
+          return { inv, score };
+        }).filter(m => m.score > 0);
 
-        // Sort by check size relevance or just take top 250
-        setMatchedInvestors(matches.slice(0, 250));
+        // Sort by highest score first, remove arbitrary limit to show true count
+        scoredMatches.sort((a, b) => b.score - a.score);
+        setMatchedInvestors(scoredMatches.map(m => m.inv));
       }
 
     } catch (err) {
