@@ -7,6 +7,7 @@ import Refund from './pages/Refund'
 import GDPR from './pages/GDPR'
 import Contact from './pages/Contact'
 import IndustryInvestors from './pages/IndustryInvestors'
+import KanbanBoard from './components/crm/KanbanBoard'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-900 dark:text-zinc-100 flex flex-col">
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/crm" element={<KanbanBoard />} />
             <Route path="/investors/:industry" element={<IndustryInvestors />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />

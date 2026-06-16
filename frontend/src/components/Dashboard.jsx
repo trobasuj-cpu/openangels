@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -60,6 +61,7 @@ export default function Dashboard() {
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
   const [selectedStages, setSelectedStages] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(24);
 
   async function fetchInvestors() {
     try {
@@ -221,6 +223,10 @@ export default function Dashboard() {
       return matchesSearch && matchesIndustry && matchesLocation && matchesCheckSize && matchesStage;
     });
   }, [investors, deferredSearch, deferredIndustries, deferredLocations, deferredCheckSizes, deferredStages]);
+
+  useEffect(() => {
+    setVisibleCount(24);
+  }, [filteredInvestors]);
 
   const renderFilterOptions = (options, selected, setter) => (
     <div className="space-y-2.5">
@@ -425,6 +431,32 @@ export default function Dashboard() {
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <div className="w-full">
+                {/* Product Hunt Welcome Banner */}
+                <div className="mb-6 w-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between text-white relative overflow-hidden">
+                  <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                  <div className="flex items-center gap-4 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
+                      P
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt community! 👋</h3>
+                      <p className="text-white/90 text-sm mt-0.5">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      if (user) {
+                        window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                      } else {
+                        setIsLoginModalOpen(true);
+                      }
+                    }}
+                    className="mt-4 sm:mt-0 px-5 py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10 whitespace-nowrap"
+                  >
+                    Claim Discount
+                  </button>
+                </div>
+
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
                 <div className="mb-8 p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
                   {/* Decorative glow effects */}
@@ -477,8 +509,9 @@ export default function Dashboard() {
                   <p>No investors found matching your criteria.</p>
                 </div>
               ) : (
-                filteredInvestors.map((investor, index) => {
-                  const isUnlocked = profile?.is_premium || index < 3;
+                <>
+                  {filteredInvestors.slice(0, visibleCount).map((investor, index) => {
+                    const isUnlocked = profile?.is_premium || index < 6;
                   
                   const rawInd = investor.industry || investor.industries;
                   const displayIndustries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
@@ -629,13 +662,17 @@ export default function Dashboard() {
                       </div>
                     </div>
                   );
-                })
+                })}
+                </>
               )}
             </div>
             
-            {!loading && !error && filteredInvestors.length > 0 && (
+            {!loading && !error && visibleCount < filteredInvestors.length && (
               <div className="mt-12 text-center pb-12">
-                <button className="px-6 py-2.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-300 rounded-full hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors shadow-sm active:scale-[0.98]">
+                <button 
+                  onClick={() => setVisibleCount(prev => prev + 24)}
+                  className="px-6 py-2.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-300 rounded-full hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors shadow-sm active:scale-[0.98]"
+                >
                   Load More Investors
                 </button>
               </div>
