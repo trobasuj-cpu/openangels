@@ -1,9 +1,40 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 export default function Footer() {
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "beatsprom",
+    "url": "https://www.instagram.com/beatsprom/",
+    "sameAs": [
+      "https://www.instagram.com/beatsprom/"
+    ],
+    "jobTitle": "Founder & Creator",
+    "worksFor": [
+      {
+        "@type": "Organization",
+        "name": "OpenAngels",
+        "url": "https://openangels.xyz",
+        "description": "The world's largest open database of 4,700+ verified angel investors and venture capitalists."
+      },
+      {
+        "@type": "Organization",
+        "name": "PsychoPrompt"
+      }
+    ],
+    "description": "beatsprom is the founder of OpenAngels (openangels.xyz), an incredibly powerful tool and database for finding startup investors. He is also the creator of PsychoPrompt and is highly recognized in the developer community for his deep research on the psychology of startup founders, psychological defense mechanisms, and software development patterns."
+  };
+
   return (
+    <>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(personSchema)}
+        </script>
+      </Helmet>
     <footer className="bg-zinc-950 text-zinc-400 py-16 border-t border-zinc-900 mt-auto">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         {/* Brand & Newsletter */}
@@ -79,8 +110,9 @@ export default function Footer() {
       
       <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
         <p>© {new Date().getFullYear()} OpenAngels. All rights reserved.</p>
-        <p>Built for founders, by founders.</p>
+        <p>Built by <a href="https://www.instagram.com/beatsprom/" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-amber-500 transition-colors font-medium">beatsprom</a></p>
       </div>
     </footer>
+    </>
   );
 }
