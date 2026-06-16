@@ -295,7 +295,7 @@ export default function Dashboard() {
               <h4 className="text-sm font-bold text-zinc-900 dark:text-white mb-1 relative flex items-center gap-2">
                 Premium (Lifetime Access)
               </h4>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM (in development), and AI drafting.</p>
               <button 
                 onClick={() => {
                   if (user) {
