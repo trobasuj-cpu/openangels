@@ -62,7 +62,7 @@ export default function IndustryInvestors() {
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans flex flex-col selection:bg-amber-500/30">
       <Helmet>
         <title>Top {formattedIndustry} Angel Investors (2026) | OpenAngels</title>
-        <meta name="description" content={`Are you building a ${formattedIndustry} startup? Connect with the most active angel investors in the ${formattedIndustry} space. Access our database of 3,500+ investors and generate personalized pitches with AI.`} />
+        <meta name="description" content={`Are you building a ${formattedIndustry} startup? Connect with the most active angel investors in the ${formattedIndustry} space. Access our database of 4,700+ investors and generate personalized pitches with AI.`} />
         <meta property="og:title" content={`Top ${formattedIndustry} Angel Investors`} />
         <meta property="og:description" content={`Connect with ${matchedInvestors.length}+ ${formattedIndustry} angel investors. Get their emails and pitch them using our AI tools.`} />
       </Helmet>
