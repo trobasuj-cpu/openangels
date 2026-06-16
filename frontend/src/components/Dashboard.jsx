@@ -446,7 +446,7 @@ export default function Dashboard() {
                   <button 
                     onClick={() => {
                       if (user) {
-                        window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                        window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}&discount_code=PHLAUNCH`, '_blank');
                       } else {
                         setIsLoginModalOpen(true);
                       }
