@@ -27,7 +27,7 @@ export default function KanbanBoard() {
   useEffect(() => {
     async function fetchLeads() {
       const { data, error } = await supabase
-        .from('investors')
+        .from('investors_secure')
         .select('id, name, bio, linkedin_url, email, linkedin_source, type')
         .eq('type', 'lead');
       

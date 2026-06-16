@@ -23,7 +23,7 @@ export default function IndustryInvestors() {
       setLoading(true);
       try {
         const { data, error } = await supabase
-          .from('investors')
+          .from('investors_secure')
           .select('*')
           // We filter in JS because industries are sometimes arrays, sometimes strings, sometimes JSON in Supabase
         if (data) {
