@@ -74,6 +74,7 @@ const FAQ = () => {
   };
 
   const [openIndex, setOpenIndex] = useState(0);
+  const [showAll, setShowAll] = useState(false);
 
   return (
     <>
@@ -82,49 +83,60 @@ const FAQ = () => {
           {JSON.stringify(faqSchema)}
         </script>
       </Helmet>
-      <section className="py-24 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+      <section className="py-6 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-4xl">
-              Startup Fundraising & Investor FAQ
-            </h2>
-            <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
-              Everything you need to know about finding investors, sending cold emails, and raising capital.
-            </p>
+          
+          <div className="flex justify-center">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors flex items-center gap-2"
+            >
+              📚 Startup Fundraising & Investor FAQ
+              <ChevronDown className={cn("w-4 h-4 transition-transform", showAll && "rotate-180")} />
+            </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {faqs.map((faq, index) => (
-              <div 
-                key={index} 
-                className="bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800/50 overflow-hidden transition-all duration-200"
-              >
-                <button
-                  onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
-                  className="w-full flex items-center justify-between p-5 text-left focus:outline-none"
-                >
-                  <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 pr-4">
-                    {faq.question}
-                  </h3>
-                  <ChevronDown 
-                    className={cn(
-                      "w-4 h-4 text-zinc-500 flex-shrink-0 transition-transform duration-200",
-                      openIndex === index ? "rotate-180" : ""
-                    )} 
-                  />
-                </button>
+
+          <div 
+            className={cn(
+              "transition-all duration-500 ease-in-out overflow-hidden",
+              showAll ? "max-h-[10000px] opacity-100 mt-10" : "max-h-0 opacity-0"
+            )}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12">
+              {faqs.map((faq, index) => (
                 <div 
-                  className={cn(
-                    "overflow-hidden transition-all duration-200",
-                    openIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-                  )}
+                  key={index} 
+                  className="bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800/50 overflow-hidden transition-all duration-200"
                 >
-                  <p className="p-5 pt-0 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                    {faq.answer}
-                  </p>
+                  <button
+                    onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
+                    className="w-full flex items-center justify-between p-4 text-left focus:outline-none"
+                  >
+                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 pr-4">
+                      {faq.question}
+                    </h3>
+                    <ChevronDown 
+                      className={cn(
+                        "w-4 h-4 text-zinc-500 flex-shrink-0 transition-transform duration-200",
+                        openIndex === index ? "rotate-180" : ""
+                      )} 
+                    />
+                  </button>
+                  <div 
+                    className={cn(
+                      "overflow-hidden transition-all duration-200",
+                      openIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                    )}
+                  >
+                    <p className="p-4 pt-0 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
         </div>
       </section>
     </>
