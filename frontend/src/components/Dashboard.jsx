@@ -365,6 +365,25 @@ export default function Dashboard() {
             <div className="flex items-center gap-3 relative">
               {user ? (
                 <>
+                  {/* CRM Button in Header */}
+                  <Link
+                    to="/crm"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-sm font-medium rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200 dark:border-zinc-700"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="7" height="7" rx="1"/>
+                      <rect x="14" y="3" width="7" height="7" rx="1"/>
+                      <rect x="3" y="14" width="7" height="7" rx="1"/>
+                      <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    My CRM
+                    {crmLeadIds.size > 0 && (
+                      <span className="bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                        {crmLeadIds.size}
+                      </span>
+                    )}
+                  </Link>
+
                   <button 
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                     className="flex items-center justify-center w-9 h-9 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium overflow-hidden border border-zinc-300 dark:border-zinc-700 hover:ring-2 ring-zinc-400 dark:ring-zinc-600 transition-all focus:outline-none"
@@ -392,6 +411,18 @@ export default function Dashboard() {
                           </p>
                         </div>
                         <div className="p-1">
+                          <Link
+                            to="/crm"
+                            onClick={() => setIsProfileMenuOpen(false)}
+                            className="w-full text-left px-3 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors flex items-center justify-between group"
+                          >
+                            <span>📋 My CRM Pipeline</span>
+                            {crmLeadIds.size > 0 && (
+                              <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                                {crmLeadIds.size}
+                              </span>
+                            )}
+                          </Link>
                           <button 
                             className="w-full text-left px-3 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors flex items-center justify-between group"
                             onClick={() => {
