@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X } from 'lucide-react';
+import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X, UserPlus, CheckCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
 import BackgroundAnimation from './BackgroundAnimation';
@@ -45,6 +45,8 @@ export default function Dashboard() {
   const [profile, setProfile] = useState(null);
   const [bccEmail, setBccEmail] = useState('');
   const [isSavingBcc, setIsSavingBcc] = useState(false);
+  const [crmLeadIds, setCrmLeadIds] = useState(new Set()); // investor IDs already in CRM
+  const [addingToCrm, setAddingToCrm] = useState(null); // investor ID currently being added
 
   // Initialize selectedIndustries from URL if present
   const initialIndustries = useMemo(() => {
@@ -128,6 +130,28 @@ export default function Dashboard() {
     setIsSavingBcc(false);
   };
 
+  const fetchCrmLeads = async (userId) => {
+    const { data } = await supabase
+      .from('crm_leads')
+      .select('investor_id')
+      .eq('user_id', userId);
+    if (data) {
+      setCrmLeadIds(new Set(data.map(d => d.investor_id)));
+    }
+  };
+
+  const addToCrm = async (investorId) => {
+    if (!user || crmLeadIds.has(investorId)) return;
+    setAddingToCrm(investorId);
+    const { error } = await supabase
+      .from('crm_leads')
+      .insert({ user_id: user.id, investor_id: investorId, status: 'inbox' });
+    if (!error) {
+      setCrmLeadIds(prev => new Set([...prev, investorId]));
+    }
+    setAddingToCrm(null);
+  };
+
   useEffect(() => {
     fetchInvestors();
 
@@ -135,6 +159,7 @@ export default function Dashboard() {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
+        fetchCrmLeads(session.user.id);
       }
     });
 
@@ -142,8 +167,10 @@ export default function Dashboard() {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
+        fetchCrmLeads(session.user.id);
       } else {
         setProfile(null);
+        setCrmLeadIds(new Set());
       }
     });
 
@@ -617,13 +644,34 @@ export default function Dashboard() {
                                 )}
                               </div>
                             </div>
+                            <div className="flex items-center gap-2">
                             <button 
                               onClick={() => setSelectedInvestorForAI(investor)}
-                              className="flex items-center justify-center gap-2 w-full py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm"
+                              className="flex items-center justify-center gap-2 flex-1 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm"
                             >
                               <Sparkles className="w-4 h-4 text-amber-500" />
                               AI Draft Email
                             </button>
+                            <button 
+                              onClick={() => addToCrm(investor.id)}
+                              disabled={crmLeadIds.has(investor.id) || addingToCrm === investor.id}
+                              className={cn(
+                                "flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-medium rounded-xl transition-colors shadow-sm",
+                                crmLeadIds.has(investor.id)
+                                  ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900/30 cursor-default"
+                                  : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
+                              )}
+                              title={crmLeadIds.has(investor.id) ? "Already in CRM" : "Add to CRM"}
+                            >
+                              {addingToCrm === investor.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : crmLeadIds.has(investor.id) ? (
+                                <CheckCircle className="w-4 h-4" />
+                              ) : (
+                                <UserPlus className="w-4 h-4" />
+                              )}
+                            </button>
+                            </div>
                           </div>
                         ) : (
                           <div className="relative space-y-3 h-[88px]">
