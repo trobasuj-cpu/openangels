@@ -433,30 +433,32 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-8">
               <div className="w-full">
                 {/* Product Hunt Welcome Banner */}
-                <div className="mb-6 w-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between text-white relative overflow-hidden">
-                  <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
-                  <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
-                      P
+                {!profile?.is_premium && (
+                  <div className="mb-6 w-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between text-white relative overflow-hidden">
+                    <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div className="flex items-center gap-4 relative z-10">
+                      <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
+                        P
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt community! 👋</h3>
+                        <p className="text-white/90 text-sm mt-0.5">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt community! 👋</h3>
-                      <p className="text-white/90 text-sm mt-0.5">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
-                    </div>
+                    <button 
+                      onClick={() => {
+                        if (user) {
+                          window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}&discount_code=PHLAUNCH`, '_blank');
+                        } else {
+                          setIsLoginModalOpen(true);
+                        }
+                      }}
+                      className="mt-4 sm:mt-0 px-5 py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10 whitespace-nowrap"
+                    >
+                      Claim Discount
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => {
-                      if (user) {
-                        window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}&discount_code=PHLAUNCH`, '_blank');
-                      } else {
-                        setIsLoginModalOpen(true);
-                      }
-                    }}
-                    className="mt-4 sm:mt-0 px-5 py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10 whitespace-nowrap"
-                  >
-                    Claim Discount
-                  </button>
-                </div>
+                )}
 
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
                 <div className="mb-8 p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
