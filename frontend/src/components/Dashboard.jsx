@@ -32,6 +32,183 @@ const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) 
   );
 };
 
+const MarketingShowcase = ({ isPremium }) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isDismissed, setIsDismissed] = useState(false);
+
+  if (isPremium || isDismissed) return null;
+
+  const slides = [
+    {
+      id: 'ai',
+      badge: 'Preview the Magic',
+      icon: Sparkles,
+      title: 'Personalized pitches in 2 seconds.',
+      desc: "Stop writing generic cold emails. Our AI analyzes the investor's background and crafts a highly personalized, compelling pitch based on your startup.",
+      features: ['Matches investor thesis', 'Short, punchy, and readable', 'Opens straight in Gmail'],
+      content: (
+        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col shadow-inner">
+            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Your Context</span>
+            <p className="text-sm text-zinc-700 dark:text-zinc-300 italic mb-4 leading-relaxed bg-white dark:bg-zinc-950 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
+              "We are building an AI-powered code reviewer. We have 10k MRR, growing 20% MoM, and are raising a $500k pre-seed round."
+            </p>
+            <div className="mt-auto flex items-center justify-between text-xs text-zinc-500">
+              <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> Target: San Francisco</span>
+              <span className="bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 px-2 py-0.5 rounded">SaaS</span>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-zinc-900 to-black p-4 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden group">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div className="absolute top-0 right-0 p-2 opacity-50"><Sparkles className="w-5 h-5 text-amber-500" /></div>
+            <span className="relative z-10 text-xs font-semibold text-zinc-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5" /> AI Draft
+            </span>
+            <div className="relative z-10 mt-2 space-y-3">
+              <p className="text-sm font-medium text-white border-b border-zinc-800 pb-2">Subj: Highly-efficient AI Code Reviews — $10k MRR</p>
+              <p className="text-sm text-zinc-300 leading-relaxed">
+                Hi Jason,<br/><br/>
+                Saw your recent investments in developer tools and thought this would be right up your alley.
+                <br/><br/>
+                We're building an AI-powered code reviewer. We've hit $10k MRR (growing 20% MoM) and are currently raising a $500k pre-seed.
+                <br/><br/>
+                Would love to share our deck. Open to a quick chat next week?
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'match',
+      badge: 'Smart Matching',
+      icon: Search,
+      title: 'Find the exact right investor.',
+      desc: "When you generate a pitch, our AI automatically searches all 4,700+ investors to find others with the exact same investment thesis and background.",
+      features: ['Discovers hidden angels', 'Ranks by relevance score', 'Download CSV for bulk outreach'],
+      content: (
+        <div className="flex-1 w-full flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"></div>
+            <div className="relative z-10">
+               <div className="flex items-center justify-between mb-4">
+                 <div className="flex items-center gap-2">
+                   <Search className="w-4 h-4 text-blue-500" />
+                   <span className="font-semibold text-sm text-zinc-900 dark:text-white">Smart Match</span>
+                 </div>
+                 <span className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 px-2 py-0.5 rounded-full">12 found</span>
+               </div>
+               <div className="space-y-3">
+                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                     <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"></div>
+                     <div className="space-y-1">
+                       <div className="w-24 h-3 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+                       <div className="w-16 h-2 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
+                     </div>
+                   </div>
+                   <span className="text-xs font-medium text-green-500">98% Match</span>
+                 </div>
+                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                     <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"></div>
+                     <div className="space-y-1">
+                       <div className="w-20 h-3 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+                       <div className="w-24 h-2 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
+                     </div>
+                   </div>
+                   <span className="text-xs font-medium text-green-500 opacity-80">92% Match</span>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'crm',
+      badge: 'Personal CRM',
+      icon: Layers,
+      title: 'Track your fundraising pipeline.',
+      desc: "Stop using messy spreadsheets. Move investors through your pipeline from 'Saved' to 'Committed' with a beautiful Kanban board designed for fundraising.",
+      features: ['Drag and drop interface', 'Add private notes', 'Automated inbox routing (soon)'],
+      content: (
+        <div className="flex-1 w-full bg-zinc-950 rounded-xl border border-zinc-800 p-4 overflow-hidden relative shadow-2xl">
+           <div className="flex gap-4 opacity-80">
+             <div className="w-1/3 shrink-0">
+               <div className="text-[10px] font-bold text-zinc-500 mb-2 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500"></div> SAVED</div>
+               <div className="bg-zinc-900 border border-zinc-800 p-3 rounded-lg mb-2 shadow-sm"><div className="w-1/2 h-3 bg-zinc-700 rounded mb-2"></div><div className="w-full h-2 bg-zinc-800 rounded"></div></div>
+             </div>
+             <div className="w-1/3 shrink-0">
+               <div className="text-[10px] font-bold text-zinc-500 mb-2 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-purple-500"></div> CONTACTED</div>
+               <div className="bg-zinc-900 border border-zinc-800 p-3 rounded-lg shadow-sm transform -rotate-1 scale-105 border-amber-500/30 z-10 relative"><div className="w-2/3 h-3 bg-zinc-700 rounded mb-2"></div><div className="w-5/6 h-2 bg-zinc-800 rounded"></div></div>
+             </div>
+             <div className="w-1/3 shrink-0">
+               <div className="text-[10px] font-bold text-zinc-500 mb-2 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-amber-500"></div> MEETING</div>
+             </div>
+           </div>
+        </div>
+      )
+    }
+  ];
+
+  const current = slides[activeSlide];
+
+  return (
+    <div className="mb-12 relative animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <button 
+        onClick={() => setIsDismissed(true)}
+        className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-white shadow-lg z-20 transition-transform hover:scale-110"
+        title="Dismiss showcase"
+      >
+        <X className="w-4 h-4" />
+      </button>
+      <div className="p-1 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 shadow-xl relative overflow-hidden">
+        <div className="bg-white dark:bg-zinc-950 rounded-2xl p-6 md:p-8 border border-amber-500/10">
+          <div className="flex gap-2 mb-8 overflow-x-auto custom-scrollbar pb-2">
+            {slides.map((s, i) => (
+              <button
+                key={s.id}
+                onClick={() => setActiveSlide(i)}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 border",
+                  activeSlide === i 
+                    ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-500" 
+                    : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+                )}
+              >
+                <s.icon className="w-4 h-4" />
+                {s.badge}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8 items-center min-h-[320px]">
+            <div className="flex-1 space-y-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white leading-tight">
+                {current.title.split(' ').map((word, i, arr) => 
+                  i === arr.length - 2 || i === arr.length - 3 ? <span key={i} className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">{word} </span> : word + ' '
+                )}
+              </h2>
+              <p className="text-zinc-600 dark:text-zinc-400 max-w-md">
+                {current.desc}
+              </p>
+              <ul className="space-y-2 mt-4">
+                {current.features.map(f => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                    <CheckCircle className="w-4 h-4 text-green-500" /> {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {current.content}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -141,7 +318,11 @@ export default function Dashboard() {
   };
 
   const addToCrm = async (investorId) => {
-    if (!user || crmLeadIds.has(investorId)) return;
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+    if (crmLeadIds.has(investorId)) return;
     setAddingToCrm(investorId);
     const { error } = await supabase
       .from('crm_leads')
@@ -323,7 +504,7 @@ export default function Dashboard() {
               <h4 className="text-sm font-bold text-zinc-900 dark:text-white mb-1 relative flex items-center gap-2">
                 Premium (Lifetime Access)
               </h4>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM (in development), and AI drafting.</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
               <button 
                 onClick={() => {
                   if (user) {
@@ -555,73 +736,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* AI Feature Showcase for Product Hunt */}
-            <div className="mb-12 p-1 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 p-[1px] shadow-xl">
-              <div className="bg-white dark:bg-zinc-950 rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-center border border-amber-500/10">
-                <div className="flex-1 space-y-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-500 rounded-full text-xs font-bold uppercase tracking-wide">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    Preview the Magic
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white leading-tight">
-                    Personalized pitches <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">in 2 seconds.</span>
-                  </h2>
-                  <p className="text-zinc-600 dark:text-zinc-400 max-w-md">
-                    Stop writing generic cold emails. Our AI analyzes the investor's background and crafts a highly personalized, compelling pitch based on your startup.
-                  </p>
-                  <ul className="space-y-2 mt-4">
-                    <li className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
-                      <CheckCircle className="w-4 h-4 text-green-500" /> Matches investor thesis
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
-                      <CheckCircle className="w-4 h-4 text-green-500" /> Short, punchy, and readable
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
-                      <CheckCircle className="w-4 h-4 text-green-500" /> Opens straight in Gmail
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="flex-[1.5] w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Input Simulation */}
-                  <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col shadow-inner">
-                    <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Your Context</span>
-                    <p className="text-sm text-zinc-700 dark:text-zinc-300 italic mb-4 leading-relaxed bg-white dark:bg-zinc-950 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                      "We are building an AI-powered code reviewer. We have 10k MRR, growing 20% MoM, and are raising a $500k pre-seed round."
-                    </p>
-                    <div className="mt-auto flex items-center justify-between text-xs text-zinc-500">
-                      <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> Target: San Francisco</span>
-                      <span className="bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 px-2 py-0.5 rounded">SaaS</span>
-                    </div>
-                  </div>
-
-                  {/* Output Simulation */}
-                  <div className="bg-gradient-to-br from-zinc-900 to-black p-4 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                    <div className="absolute top-0 right-0 p-2 opacity-50"><Sparkles className="w-5 h-5 text-amber-500" /></div>
-                    <span className="relative z-10 text-xs font-semibold text-zinc-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5" /> AI Draft
-                    </span>
-                    <div className="relative z-10 mt-2 space-y-3">
-                      <p className="text-sm font-medium text-white border-b border-zinc-800 pb-2">
-                        Subj: Highly-efficient AI Code Reviews — $10k MRR
-                      </p>
-                      <p className="text-sm text-zinc-300 leading-relaxed">
-                        Hi Jason,<br/><br/>
-                        Saw your recent investments in developer tools and thought this would be right up your alley.
-                        <br/><br/>
-                        We're building an AI-powered code reviewer. We've hit $10k MRR (growing 20% MoM) and are currently raising a $500k pre-seed.
-                        <br/><br/>
-                        Would love to share our deck. Open to a quick chat next week?
-                      </p>
-                      <button className="w-full mt-2 bg-white text-black py-2 rounded-lg text-xs font-bold hover:bg-zinc-200 transition-colors shadow-lg">
-                        Open in Gmail
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <MarketingShowcase isPremium={profile?.is_premium} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {loading ? (
@@ -787,9 +902,14 @@ export default function Dashboard() {
                                 <svg viewBox="0 0 24 24" className="w-4 h-4 text-zinc-400" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                               </div>
                             </div>
-                            <div className="w-full flex items-center justify-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-sm font-medium py-2 rounded-lg blur-[4px] opacity-40 select-none pointer-events-none">
-                              <Sparkles className="w-4 h-4 text-amber-500" />
-                              AI Draft Email
+                            <div className="flex gap-2 w-full blur-[4px] opacity-40 select-none pointer-events-none">
+                              <div className="flex-1 flex items-center justify-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-sm font-medium py-2 rounded-xl">
+                                <Sparkles className="w-4 h-4 text-amber-500" />
+                                AI Draft Email
+                              </div>
+                              <div className="w-[52px] flex items-center justify-center bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl">
+                                <UserPlus className="w-4 h-4" />
+                              </div>
                             </div>
 
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-[3px]">
