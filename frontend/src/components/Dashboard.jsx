@@ -56,32 +56,30 @@ const MarketingShowcase = ({ isPremium }) => {
       desc: "Generic templates get ignored. Our AI context-matches your startup with the investor's past deals to generate emails that actually get replies.",
       features: ['Matches investor thesis', 'Reply rate: +42%', 'Opens straight in Gmail'],
       content: (
-        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col shadow-inner">
-            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Your Context</span>
-            <p className="text-sm text-zinc-700 dark:text-zinc-300 italic mb-4 leading-relaxed bg-white dark:bg-zinc-950 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
+        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl flex flex-col shadow-inner">
+            <span className="text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Context</span>
+            <p className="text-xs text-zinc-700 dark:text-zinc-300 italic mb-2 leading-relaxed bg-white dark:bg-zinc-950 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800">
               "We are building an AI-powered code reviewer. We have 10k MRR, growing 20% MoM, and are raising a $500k pre-seed round."
             </p>
-            <div className="mt-auto flex items-center justify-between text-xs text-zinc-500">
-              <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> Target: San Francisco</span>
-              <span className="bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 px-2 py-0.5 rounded">SaaS</span>
+            <div className="mt-auto flex items-center justify-between text-[10px] text-zinc-500">
+              <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> San Francisco</span>
+              <span className="bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 px-1.5 py-0.5 rounded">SaaS</span>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-zinc-900 to-black p-4 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden group">
+          <div className="bg-gradient-to-br from-zinc-900 to-black p-3 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden group">
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <div className="absolute top-0 right-0 p-2 opacity-50"><Sparkles className="w-5 h-5 text-amber-500" /></div>
-            <span className="relative z-10 text-xs font-semibold text-zinc-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5" /> AI Draft
+            <div className="absolute top-0 right-0 p-1.5 opacity-50"><Sparkles className="w-4 h-4 text-amber-500" /></div>
+            <span className="relative z-10 text-[10px] font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider flex items-center gap-1">
+              <Mail className="w-3 h-3" /> AI Draft
             </span>
-            <div className="relative z-10 mt-2 space-y-3">
-              <p className="text-sm font-medium text-white border-b border-zinc-800 pb-2">Subj: Highly-efficient AI Code Reviews — $10k MRR</p>
-              <p className="text-sm text-zinc-300 leading-relaxed">
+            <div className="relative z-10 mt-1 space-y-2">
+              <p className="text-xs font-medium text-white border-b border-zinc-800 pb-1.5">Subj: Highly-efficient AI Code Reviews — $10k MRR</p>
+              <p className="text-[11px] text-zinc-300 leading-snug">
                 Hi Jason,<br/><br/>
-                Saw your recent investments in developer tools and thought this would be right up your alley.
+                Saw your recent investments in developer tools. We're building an AI-powered code reviewer. We've hit $10k MRR and are raising a $500k pre-seed.
                 <br/><br/>
-                We're building an AI-powered code reviewer. We've hit $10k MRR and are currently raising a $500k pre-seed.
-                <br/><br/>
-                Would love to share our deck. Open to a quick chat next week?
+                Open to a quick chat next week?
               </p>
             </div>
           </div>
@@ -96,41 +94,41 @@ const MarketingShowcase = ({ isPremium }) => {
       desc: "Don't manually scroll through 4,700+ (and constantly growing) profiles. Give us your pitch, and we'll instantly surface the exact angels actively investing in your specific niche right now.",
       features: ['Discovers hidden angels', 'Ranks by relevance score', 'Download CSV for bulk outreach'],
       content: (
-        <div className="flex-1 w-full flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"></div>
+        <div className="flex-1 w-full flex items-center justify-center p-2">
+          <div className="w-full max-w-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"></div>
             <div className="relative z-10">
-               <div className="flex items-center justify-between mb-4">
-                 <div className="flex items-center gap-2">
-                   <Search className="w-4 h-4 text-blue-500" />
-                   <span className="font-semibold text-sm text-zinc-900 dark:text-white">Smart Match</span>
+               <div className="flex items-center justify-between mb-3">
+                 <div className="flex items-center gap-1.5">
+                   <Search className="w-3.5 h-3.5 text-blue-500" />
+                   <span className="font-semibold text-xs text-zinc-900 dark:text-white">Smart Match</span>
                  </div>
-                 <span className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 px-2 py-0.5 rounded-full relative overflow-hidden">
+                 <span className="text-[10px] bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 px-1.5 py-0.5 rounded-full relative overflow-hidden">
                    <span className="absolute inset-0 bg-blue-400/20 animate-pulse"></span>
                    <span className="relative z-10">AI Scanning...</span>
                  </span>
                </div>
-               <div className="space-y-3 relative">
+               <div className="space-y-2 relative">
                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white dark:to-zinc-900 z-10 pointer-events-none"></div>
-                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-                   <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"></div>
+                 <div className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                   <div className="flex items-center gap-2">
+                     <div className="w-6 h-6 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"></div>
                      <div className="space-y-1">
-                       <div className="w-24 h-3 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
-                       <div className="w-16 h-2 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
+                       <div className="w-20 h-2 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+                       <div className="w-12 h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
                      </div>
                    </div>
-                   <span className="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-0.5 rounded">98% Match</span>
+                   <span className="text-[10px] font-bold text-green-500 bg-green-500/10 px-1.5 py-0.5 rounded">98% Match</span>
                  </div>
-                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-                   <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"></div>
+                 <div className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                   <div className="flex items-center gap-2">
+                     <div className="w-6 h-6 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"></div>
                      <div className="space-y-1">
-                       <div className="w-20 h-3 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
-                       <div className="w-24 h-2 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
+                       <div className="w-16 h-2 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+                       <div className="w-20 h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
                      </div>
                    </div>
-                   <span className="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-0.5 rounded opacity-80">92% Match</span>
+                   <span className="text-[10px] font-bold text-green-500 bg-green-500/10 px-1.5 py-0.5 rounded opacity-80">92% Match</span>
                  </div>
                </div>
             </div>
@@ -146,18 +144,18 @@ const MarketingShowcase = ({ isPremium }) => {
       desc: "Ditch the messy Notion boards and spreadsheets. Track every conversation, follow-up, and commitment in one beautiful, integrated Kanban workspace.",
       features: ['Drag and drop interface', 'Add private notes', 'Automated inbox routing (soon)'],
       content: (
-        <div className="flex-1 w-full bg-zinc-950 rounded-xl border border-zinc-800 p-4 overflow-hidden relative shadow-2xl">
-           <div className="flex gap-4 opacity-80">
+        <div className="flex-1 w-full bg-zinc-950 rounded-xl border border-zinc-800 p-3 overflow-hidden relative shadow-2xl">
+           <div className="flex gap-3 opacity-80">
              <div className="w-1/3 shrink-0">
-               <div className="text-[10px] font-bold text-zinc-500 mb-2 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500"></div> SAVED</div>
-               <div className="bg-zinc-900 border border-zinc-800 p-3 rounded-lg mb-2 shadow-sm"><div className="w-1/2 h-3 bg-zinc-700 rounded mb-2"></div><div className="w-full h-2 bg-zinc-800 rounded"></div></div>
+               <div className="text-[9px] font-bold text-zinc-500 mb-1.5 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div> SAVED</div>
+               <div className="bg-zinc-900 border border-zinc-800 p-2 rounded-md mb-1.5 shadow-sm"><div className="w-1/2 h-2 bg-zinc-700 rounded mb-1.5"></div><div className="w-full h-1.5 bg-zinc-800 rounded"></div></div>
              </div>
              <div className="w-1/3 shrink-0">
-               <div className="text-[10px] font-bold text-zinc-500 mb-2 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-purple-500"></div> CONTACTED</div>
-               <div className="bg-zinc-900 border border-zinc-800 p-3 rounded-lg shadow-sm transform -rotate-1 scale-105 border-amber-500/30 z-10 relative"><div className="w-2/3 h-3 bg-zinc-700 rounded mb-2"></div><div className="w-5/6 h-2 bg-zinc-800 rounded"></div></div>
+               <div className="text-[9px] font-bold text-zinc-500 mb-1.5 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div> CONTACTED</div>
+               <div className="bg-zinc-900 border border-zinc-800 p-2 rounded-md shadow-sm transform -rotate-1 scale-105 border-amber-500/30 z-10 relative"><div className="w-2/3 h-2 bg-zinc-700 rounded mb-1.5"></div><div className="w-5/6 h-1.5 bg-zinc-800 rounded"></div></div>
              </div>
              <div className="w-1/3 shrink-0">
-               <div className="text-[10px] font-bold text-zinc-500 mb-2 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-amber-500"></div> MEETING</div>
+               <div className="text-[9px] font-bold text-zinc-500 mb-1.5 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div> MEETING</div>
              </div>
            </div>
         </div>
@@ -169,20 +167,20 @@ const MarketingShowcase = ({ isPremium }) => {
 
   return (
     <div 
-      className="mb-12 relative animate-in fade-in slide-in-from-bottom-4 duration-500"
+      className="mb-6 relative animate-in fade-in slide-in-from-bottom-4 duration-500"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <button 
         onClick={() => setIsDismissed(true)}
-        className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-white shadow-lg z-20 transition-transform hover:scale-110"
+        className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-white shadow-lg z-20 transition-transform hover:scale-110"
         title="Dismiss showcase"
       >
-        <X className="w-4 h-4" />
+        <X className="w-3 h-3" />
       </button>
-      <div className="p-1 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 shadow-xl relative overflow-hidden">
-        <div className="bg-white dark:bg-zinc-950 rounded-2xl p-6 md:p-8 border border-amber-500/10">
-          <div className="flex gap-2 mb-8 overflow-x-auto custom-scrollbar pb-2 relative">
+      <div className="p-0.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 shadow-lg relative overflow-hidden">
+        <div className="bg-white dark:bg-zinc-950 rounded-[10px] p-4 md:p-5 border border-amber-500/10">
+          <div className="flex gap-2 mb-4 overflow-x-auto custom-scrollbar pb-1 relative">
             {slides.map((s, i) => (
               <button
                 key={s.id}
@@ -191,35 +189,35 @@ const MarketingShowcase = ({ isPremium }) => {
                   setIsPaused(true);
                 }}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 border relative overflow-hidden",
+                  "px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 border relative overflow-hidden",
                   activeSlide === i 
                     ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-500" 
                     : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
                 )}
               >
                 {activeSlide === i && !isPaused && (
-                   <div className="absolute bottom-0 left-0 h-0.5 bg-amber-500/40 animate-[progress_4s_linear]" style={{ width: '100%' }}></div>
+                   <div className="absolute bottom-0 left-0 h-[1.5px] bg-amber-500/40 animate-[progress_4s_linear]" style={{ width: '100%' }}></div>
                 )}
-                <s.icon className="w-4 h-4 relative z-10" />
+                <s.icon className="w-3.5 h-3.5 relative z-10" />
                 <span className="relative z-10">{s.badge}</span>
               </button>
             ))}
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 items-center min-h-[320px]">
-            <div className="flex-1 space-y-4">
-              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white leading-tight">
+          <div className="flex flex-col lg:flex-row gap-6 items-center">
+            <div className="flex-1 space-y-3">
+              <h2 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white leading-tight">
                 {current.title.split(' ').map((word, i, arr) => 
                   i === arr.length - 2 || i === arr.length - 3 ? <span key={i} className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">{word} </span> : word + ' '
                 )}
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 max-w-md">
+              <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md">
                 {current.desc}
               </p>
-              <ul className="space-y-2 mt-4">
+              <ul className="space-y-1.5 mt-2">
                 {current.features.map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
-                    <CheckCircle className="w-4 h-4 text-green-500" /> {f}
+                  <li key={f} className="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300">
+                    <CheckCircle className="w-3.5 h-3.5 text-green-500" /> {f}
                   </li>
                 ))}
               </ul>
