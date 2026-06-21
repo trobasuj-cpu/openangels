@@ -555,6 +555,74 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* AI Feature Showcase for Product Hunt */}
+            <div className="mb-12 p-1 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 p-[1px] shadow-xl">
+              <div className="bg-white dark:bg-zinc-950 rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-center border border-amber-500/10">
+                <div className="flex-1 space-y-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-500 rounded-full text-xs font-bold uppercase tracking-wide">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Preview the Magic
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white leading-tight">
+                    Personalized pitches <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">in 2 seconds.</span>
+                  </h2>
+                  <p className="text-zinc-600 dark:text-zinc-400 max-w-md">
+                    Stop writing generic cold emails. Our AI analyzes the investor's background and crafts a highly personalized, compelling pitch based on your startup.
+                  </p>
+                  <ul className="space-y-2 mt-4">
+                    <li className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                      <CheckCircle className="w-4 h-4 text-green-500" /> Matches investor thesis
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                      <CheckCircle className="w-4 h-4 text-green-500" /> Short, punchy, and readable
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                      <CheckCircle className="w-4 h-4 text-green-500" /> Opens straight in Gmail
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="flex-[1.5] w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Input Simulation */}
+                  <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col shadow-inner">
+                    <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Your Context</span>
+                    <p className="text-sm text-zinc-700 dark:text-zinc-300 italic mb-4 leading-relaxed bg-white dark:bg-zinc-950 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                      "We are building an AI-powered code reviewer. We have 10k MRR, growing 20% MoM, and are raising a $500k pre-seed round."
+                    </p>
+                    <div className="mt-auto flex items-center justify-between text-xs text-zinc-500">
+                      <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> Target: San Francisco</span>
+                      <span className="bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 px-2 py-0.5 rounded">SaaS</span>
+                    </div>
+                  </div>
+
+                  {/* Output Simulation */}
+                  <div className="bg-gradient-to-br from-zinc-900 to-black p-4 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                    <div className="absolute top-0 right-0 p-2 opacity-50"><Sparkles className="w-5 h-5 text-amber-500" /></div>
+                    <span className="relative z-10 text-xs font-semibold text-zinc-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5" /> AI Draft
+                    </span>
+                    <div className="relative z-10 mt-2 space-y-3">
+                      <p className="text-sm font-medium text-white border-b border-zinc-800 pb-2">
+                        Subj: Highly-efficient AI Code Reviews — $10k MRR
+                      </p>
+                      <p className="text-sm text-zinc-300 leading-relaxed">
+                        Hi Jason,<br/><br/>
+                        Saw your recent investments in developer tools and thought this would be right up your alley.
+                        <br/><br/>
+                        We're building an AI-powered code reviewer. We've hit $10k MRR (growing 20% MoM) and are currently raising a $500k pre-seed.
+                        <br/><br/>
+                        Would love to share our deck. Open to a quick chat next week?
+                      </p>
+                      <button className="w-full mt-2 bg-white text-black py-2 rounded-lg text-xs font-bold hover:bg-zinc-200 transition-colors shadow-lg">
+                        Open in Gmail
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {loading ? (
                 <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-500">
