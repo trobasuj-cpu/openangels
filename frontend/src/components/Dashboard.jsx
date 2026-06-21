@@ -985,6 +985,25 @@ export default function Dashboard() {
                 </button>
               </div>
             )}
+            
+            <div className="mt-16 mb-8 border-t border-zinc-200 dark:border-zinc-800 pt-16">
+              <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-6">Browse Angel Investors by Industry</h2>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-8 text-sm max-w-3xl leading-relaxed">
+                Discover the most active venture capitalists and angel investors across top industries. Filter by sector to find the perfect match for your startup's niche. Our database is continuously updated with the latest investment data.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {['ai', 'saas', 'fintech', 'consumer', 'b2b', 'healthtech', 'edtech', 'ecommerce', 'web3', 'crypto', 'biotech', 'cleantech', 'proptech', 'deeptech', 'hardware', 'marketplace', 'gaming', 'social', 'enterprise', 'mobile', 'robotics', 'space', 'agtech', 'foodtech', 'logistics', 'cybersecurity', 'insurtech', 'hrtech', 'legaltech', 'sportstech', 'fashion', 'media', 'entertainment', 'travel', 'mobility', 'analytics', 'dev-tools', 'productivity', 'sales', 'marketing'].map(cat => (
+                  <Link
+                    key={cat}
+                    to={`/investors/${cat}`}
+                    className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-500/30 hover:shadow-sm transition-all"
+                  >
+                    {['ai', 'saas', 'api', 'b2b', 'hrtech', 'edtech', 'fintech', 'healthtech', 'cleantech', 'proptech', 'deeptech', 'agtech', 'foodtech', 'insurtech', 'legaltech', 'sportstech'].includes(cat) ? cat.toUpperCase() : cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ')}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
           </div>
           <FAQ />
           <Footer />

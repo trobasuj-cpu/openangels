@@ -139,7 +139,7 @@ export default function IndustryInvestors() {
             ))}
             
             {matchedInvestors.length > displayInvestors.length && (
-              <div className="pt-8 text-center">
+              <div className="pt-8 text-center mb-16">
                 <Link to="/" className="inline-flex items-center gap-2 px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 font-bold rounded-xl transition-colors shadow-lg">
                   <Sparkles className="w-5 h-5" />
                   View all {matchedInvestors.length} Investors
@@ -148,6 +148,27 @@ export default function IndustryInvestors() {
             )}
           </div>
         )}
+
+        <div className="mt-12 pt-12 border-t border-zinc-200 dark:border-zinc-800">
+          <h2 className="text-2xl font-bold mb-6">How to find and pitch {formattedIndustry} Angel Investors</h2>
+          <div className="space-y-6 text-zinc-600 dark:text-zinc-400">
+            <p>
+              Securing funding for a {formattedIndustry} startup requires targeting the right investors who understand your specific market dynamics, business model, and growth potential. 
+              Generalist investors often pass on niche deals because they lack the necessary domain expertise. By focusing on angels and VCs who have previously invested in {formattedIndustry}, you significantly increase your chances of getting a response.
+            </p>
+            <h3 className="text-xl font-semibold text-zinc-800 dark:text-zinc-200 mt-8 mb-4">What do {formattedIndustry} investors look for?</h3>
+            <ul className="list-disc pl-6 space-y-2">
+              <li><strong>Traction & Metrics:</strong> Unlike consumer apps, {formattedIndustry} startups are often judged on specific unit economics. Make sure your pitch deck highlights these numbers clearly.</li>
+              <li><strong>Founder-Market Fit:</strong> Investors want to know why <em>you</em> are the right team to build this product. Highlight your industry experience.</li>
+              <li><strong>Clear Go-To-Market Strategy:</strong> Having a product is only half the battle. Your ability to acquire customers in the {formattedIndustry} space is what ultimately secures the check.</li>
+            </ul>
+            <h3 className="text-xl font-semibold text-zinc-800 dark:text-zinc-200 mt-8 mb-4">Using OpenAngels to accelerate your fundraise</h3>
+            <p>
+              Manually searching for {formattedIndustry} venture capitalists on LinkedIn or Crunchbase is incredibly time-consuming. 
+              OpenAngels provides a curated, constantly updated database of {formattedIndustry} investors. More importantly, our built-in AI Pitch Generator analyzes both your startup context and the investor's past portfolio to draft highly personalized cold emails that actually convert.
+            </p>
+          </div>
+        </div>
 
       </main>
       <Footer />
