@@ -41,7 +41,7 @@ const MarketingShowcase = ({ isPremium }) => {
   const slides = [
     {
       id: 'ai',
-      badge: 'Preview the Magic',
+      badge: 'AI Pitching',
       icon: Sparkles,
       title: 'Personalized pitches in 2 seconds.',
       desc: "Stop writing generic cold emails. Our AI analyzes the investor's background and crafts a highly personalized, compelling pitch based on your startup.",
