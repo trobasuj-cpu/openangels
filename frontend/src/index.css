@@ -88,3 +88,8 @@
     @apply bg-zinc-300 dark:bg-zinc-700;
   }
 }
+
+@keyframes progress_4s_linear {
+  from { width: 0%; }
+  to { width: 100%; }
+}

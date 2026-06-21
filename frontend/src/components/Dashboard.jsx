@@ -35,6 +35,15 @@ const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) 
 const MarketingShowcase = ({ isPremium }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isDismissed, setIsDismissed] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPremium || isDismissed || isPaused) return;
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [isPremium, isDismissed, isPaused]);
 
   if (isPremium || isDismissed) return null;
 
@@ -43,9 +52,9 @@ const MarketingShowcase = ({ isPremium }) => {
       id: 'ai',
       badge: 'AI Pitching',
       icon: Sparkles,
-      title: 'Personalized pitches in 2 seconds.',
-      desc: "Stop writing generic cold emails. Our AI analyzes the investor's background and crafts a highly personalized, compelling pitch based on your startup.",
-      features: ['Matches investor thesis', 'Short, punchy, and readable', 'Opens straight in Gmail'],
+      title: 'Craft hyper-personalized pitches in 2 seconds.',
+      desc: "Generic templates get ignored. Our AI context-matches your startup with the investor's past deals to generate emails that actually get replies.",
+      features: ['Matches investor thesis', 'Reply rate: +42%', 'Opens straight in Gmail'],
       content: (
         <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col shadow-inner">
@@ -70,7 +79,7 @@ const MarketingShowcase = ({ isPremium }) => {
                 Hi Jason,<br/><br/>
                 Saw your recent investments in developer tools and thought this would be right up your alley.
                 <br/><br/>
-                We're building an AI-powered code reviewer. We've hit $10k MRR (growing 20% MoM) and are currently raising a $500k pre-seed.
+                We're building an AI-powered code reviewer. We've hit $10k MRR and are currently raising a $500k pre-seed.
                 <br/><br/>
                 Would love to share our deck. Open to a quick chat next week?
               </p>
@@ -83,8 +92,8 @@ const MarketingShowcase = ({ isPremium }) => {
       id: 'match',
       badge: 'Smart Matching',
       icon: Search,
-      title: 'Find the exact right investor.',
-      desc: "When you generate a pitch, our AI automatically searches all 4,700+ investors to find others with the exact same investment thesis and background.",
+      title: 'Discover active angels you didn\'t know existed.',
+      desc: "Don't manually scroll through 4,700+ (and constantly growing) profiles. Give us your pitch, and we'll instantly surface the exact angels actively investing in your specific niche right now.",
       features: ['Discovers hidden angels', 'Ranks by relevance score', 'Download CSV for bulk outreach'],
       content: (
         <div className="flex-1 w-full flex items-center justify-center p-4">
@@ -96,9 +105,13 @@ const MarketingShowcase = ({ isPremium }) => {
                    <Search className="w-4 h-4 text-blue-500" />
                    <span className="font-semibold text-sm text-zinc-900 dark:text-white">Smart Match</span>
                  </div>
-                 <span className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 px-2 py-0.5 rounded-full">12 found</span>
+                 <span className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 px-2 py-0.5 rounded-full relative overflow-hidden">
+                   <span className="absolute inset-0 bg-blue-400/20 animate-pulse"></span>
+                   <span className="relative z-10">AI Scanning...</span>
+                 </span>
                </div>
-               <div className="space-y-3">
+               <div className="space-y-3 relative">
+                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white dark:to-zinc-900 z-10 pointer-events-none"></div>
                  <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                    <div className="flex items-center gap-3">
                      <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"></div>
@@ -107,7 +120,7 @@ const MarketingShowcase = ({ isPremium }) => {
                        <div className="w-16 h-2 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
                      </div>
                    </div>
-                   <span className="text-xs font-medium text-green-500">98% Match</span>
+                   <span className="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-0.5 rounded">98% Match</span>
                  </div>
                  <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                    <div className="flex items-center gap-3">
@@ -117,7 +130,7 @@ const MarketingShowcase = ({ isPremium }) => {
                        <div className="w-24 h-2 bg-zinc-100 dark:bg-zinc-800 rounded"></div>
                      </div>
                    </div>
-                   <span className="text-xs font-medium text-green-500 opacity-80">92% Match</span>
+                   <span className="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-0.5 rounded opacity-80">92% Match</span>
                  </div>
                </div>
             </div>
@@ -129,8 +142,8 @@ const MarketingShowcase = ({ isPremium }) => {
       id: 'crm',
       badge: 'Personal CRM',
       icon: Layers,
-      title: 'Track your fundraising pipeline.',
-      desc: "Stop using messy spreadsheets. Move investors through your pipeline from 'Saved' to 'Committed' with a beautiful Kanban board designed for fundraising.",
+      title: 'The only CRM built specifically for fundraising.',
+      desc: "Ditch the messy Notion boards and spreadsheets. Track every conversation, follow-up, and commitment in one beautiful, integrated Kanban workspace.",
       features: ['Drag and drop interface', 'Add private notes', 'Automated inbox routing (soon)'],
       content: (
         <div className="flex-1 w-full bg-zinc-950 rounded-xl border border-zinc-800 p-4 overflow-hidden relative shadow-2xl">
@@ -155,7 +168,11 @@ const MarketingShowcase = ({ isPremium }) => {
   const current = slides[activeSlide];
 
   return (
-    <div className="mb-12 relative animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div 
+      className="mb-12 relative animate-in fade-in slide-in-from-bottom-4 duration-500"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <button 
         onClick={() => setIsDismissed(true)}
         className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-white shadow-lg z-20 transition-transform hover:scale-110"
@@ -165,20 +182,26 @@ const MarketingShowcase = ({ isPremium }) => {
       </button>
       <div className="p-1 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 shadow-xl relative overflow-hidden">
         <div className="bg-white dark:bg-zinc-950 rounded-2xl p-6 md:p-8 border border-amber-500/10">
-          <div className="flex gap-2 mb-8 overflow-x-auto custom-scrollbar pb-2">
+          <div className="flex gap-2 mb-8 overflow-x-auto custom-scrollbar pb-2 relative">
             {slides.map((s, i) => (
               <button
                 key={s.id}
-                onClick={() => setActiveSlide(i)}
+                onClick={() => {
+                  setActiveSlide(i);
+                  setIsPaused(true);
+                }}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 border",
+                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 border relative overflow-hidden",
                   activeSlide === i 
                     ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-500" 
                     : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
                 )}
               >
-                <s.icon className="w-4 h-4" />
-                {s.badge}
+                {activeSlide === i && !isPaused && (
+                   <div className="absolute bottom-0 left-0 h-0.5 bg-amber-500/40 animate-[progress_4s_linear]" style={{ width: '100%' }}></div>
+                )}
+                <s.icon className="w-4 h-4 relative z-10" />
+                <span className="relative z-10">{s.badge}</span>
               </button>
             ))}
           </div>
@@ -669,38 +692,12 @@ export default function Dashboard() {
 
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           <div className="max-w-6xl mx-auto">
-            <div className="flex items-center justify-between mb-8">
-              <div className="w-full">
-                {/* Product Hunt Welcome Banner */}
-                {!profile?.is_premium && (
-                  <div className="mb-6 w-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between text-white relative overflow-hidden">
-                    <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div className="flex items-center gap-4 relative z-10">
-                      <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
-                        P
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt community! 👋</h3>
-                        <p className="text-white/90 text-sm mt-0.5">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
-                      </div>
-                    </div>
-                    <button 
-                      onClick={() => {
-                        if (user) {
-                          window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}&discount_code=PHLAUNCH`, '_blank');
-                        } else {
-                          setIsLoginModalOpen(true);
-                        }
-                      }}
-                      className="mt-4 sm:mt-0 px-5 py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10 whitespace-nowrap"
-                    >
-                      Claim Discount
-                    </button>
-                  </div>
-                )}
+            <MarketingShowcase isPremium={profile?.is_premium} />
 
+            <div className="flex flex-col xl:flex-row gap-6 mb-8">
+              <div className="flex-1">
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
-                <div className="mb-8 p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="h-full p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
                   {/* Decorative glow effects */}
                   <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500/5 blur-[100px] pointer-events-none"></div>
                   <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
@@ -734,9 +731,37 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-            </div>
 
-            <MarketingShowcase isPremium={profile?.is_premium} />
+              {!profile?.is_premium && (
+                <div className="w-full xl:w-1/3 shrink-0">
+                  {/* Product Hunt Welcome Banner */}
+                  <div className="h-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-5 shadow-lg flex flex-col justify-center text-white relative overflow-hidden">
+                    <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div className="flex items-center gap-4 relative z-10 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
+                        P
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt!</h3>
+                      </div>
+                    </div>
+                    <p className="text-white/90 text-sm mb-4 relative z-10">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
+                    <button 
+                      onClick={() => {
+                        if (user) {
+                          window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}&discount_code=PHLAUNCH`, '_blank');
+                        } else {
+                          setIsLoginModalOpen(true);
+                        }
+                      }}
+                      className="w-full py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10"
+                    >
+                      Claim Discount
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {loading ? (
