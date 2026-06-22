@@ -74,7 +74,7 @@ const FAQ = () => {
   };
 
   const [openIndex, setOpenIndex] = useState(0);
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
 
   return (
     <>

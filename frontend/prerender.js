@@ -8,63 +8,69 @@ import { getSitemapRoutes } from './get-routes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distPath = path.resolve(__dirname, 'dist');
-const port = 3000;
+
+async function listen(server) {
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const address = server.address();
+  return typeof address === 'object' && address ? address.port : 3000;
+}
 
 async function run() {
   console.log('Starting prerender...');
-  
-  // 1. Start a static server for the SPA
+
   const app = express();
   app.use(express.static(distPath));
-  // SPA fallback
   app.use((req, res) => {
     res.sendFile(path.resolve(distPath, 'index.html'));
   });
-  
-  const server = app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-  });
 
-  // 2. Launch Puppeteer
-  const browser = await puppeteer.launch({ headless: 'new' });
+  const server = await listen(app);
+  const port = server;
+  console.log(`Server running on http://127.0.0.1:${port}`);
+
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const page = await browser.newPage();
-  
-  const routes = getSitemapRoutes();
-  
-  // 3. Render each route
+  await page.setViewport({ width: 1366, height: 900, deviceScaleFactor: 1 });
+
+  const routes = [...new Set(getSitemapRoutes())];
+
   for (const route of routes) {
-    const url = `http://localhost:${port}${route}`;
+    const url = `http://127.0.0.1:${port}${route}`;
     console.log(`Prerendering ${route}...`);
-    
+
     try {
-      await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
-      
-      // Get the rendered HTML
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+      await page.waitForSelector('h1, main', { timeout: 15000 }).catch(() => {});
+      // Extra wait for Supabase async data to load and render
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+
       const html = await page.content();
-      
-      // Determine where to save it
       let filePath = path.join(distPath, route);
       if (!filePath.endsWith('.html')) {
         filePath = path.join(filePath, 'index.html');
       }
-      
-      // Create directories if they don't exist
+
       const dir = path.dirname(filePath);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
-      
-      // Save the file
-      fs.writeFileSync(filePath, html);
+
+      fs.writeFileSync(filePath, html, 'utf8');
     } catch (err) {
       console.error(`Failed to prerender ${route}:`, err.message);
     }
   }
 
-  // 4. Cleanup
   await browser.close();
-  server.close();
+  await new Promise((resolve) => server.close(resolve));
   console.log('Prerender complete!');
 }
 
-run();
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
+

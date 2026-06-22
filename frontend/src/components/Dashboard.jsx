@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X, UserPlus, CheckCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -8,6 +9,7 @@ import LoginModal from './LoginModal';
 import AIEmailModal from './AIEmailModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
+import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL } from '../seo.js';
 
 const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -54,7 +56,7 @@ const MarketingShowcase = ({ isPremium }) => {
       icon: Sparkles,
       title: 'Craft hyper-personalized pitches in 2 seconds.',
       desc: "Generic templates get ignored. Our AI context-matches your startup with the investor's past deals to generate emails that actually get replies.",
-      features: ['Matches investor thesis', 'Reply rate: +42%', 'Opens straight in Gmail'],
+      features: ['Matches investor thesis', 'Personalized from your context', 'Opens straight in Gmail'],
       content: (
         <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl flex flex-col shadow-inner">
@@ -92,7 +94,7 @@ const MarketingShowcase = ({ isPremium }) => {
       icon: Search,
       title: 'Discover active angels you didn\'t know existed.',
       desc: "Don't manually scroll through 4,700+ (and constantly growing) profiles. Give us your pitch, and we'll instantly surface the exact angels actively investing in your specific niche right now.",
-      features: ['Discovers hidden angels', 'Ranks by relevance score', 'Download CSV for bulk outreach'],
+      features: ['Discovers hidden angels', 'Ranks by relevance score', 'Exports matched shortlists'],
       content: (
         <div className="flex-1 w-full flex items-center justify-center p-2">
           <div className="w-full max-w-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xl relative overflow-hidden">
@@ -229,6 +231,36 @@ const MarketingShowcase = ({ isPremium }) => {
     </div>
   );
 };
+
+const dashboardSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": PRODUCT_NAME,
+    "url": SITE_URL,
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description": "Search a curated database of 4,700+ angel investors and VCs, filter by industry and stage, manage outreach in a fundraising CRM, and draft personalized investor emails with AI.",
+    "offers": {
+      "@type": "Offer",
+      "price": "49.00",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": PRODUCT_NAME,
+    "url": SITE_URL,
+    "logo": absoluteUrl('/favicon.svg'),
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "support@openangels.xyz",
+      "contactType": "customer support"
+    }
+  }
+];
 
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
@@ -479,6 +511,22 @@ export default function Dashboard() {
 
   return (
     <>
+      <Helmet>
+        <title>Find Angel Investors for Your Startup — 4,700+ Verified VCs &amp; Angels | OpenAngels</title>
+        <meta name="description" content="Search 4,700+ verified angel investors and VCs. Filter by industry, check size, and stage. Draft personalized cold emails with AI. One-time $49 — no subscription." />
+        <link rel="canonical" href={absoluteUrl('/')} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={PRODUCT_NAME} />
+        <meta property="og:url" content={absoluteUrl('/')} />
+        <meta property="og:title" content="OpenAngels | Find Angel Investors for Your Startup" />
+        <meta property="og:description" content="Search 4,700+ curated angel investors and VCs, manage your fundraising pipeline, and draft AI-personalized outreach." />
+        <meta property="og:image" content={absoluteUrl('/og-image.png')} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="OpenAngels | Angel Investor Database" />
+        <meta name="twitter:description" content="Find startup investors, filter by thesis, and draft personalized investor emails with AI." />
+        <meta name="twitter:image" content={absoluteUrl('/og-image.png')} />
+        <script type="application/ld+json">{JSON.stringify(dashboardSchema)}</script>
+      </Helmet>
       <BackgroundAnimation />
       <div className="flex h-screen overflow-hidden relative z-10">
         {isMobileFiltersOpen && (
@@ -733,7 +781,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-col text-left sm:text-right">
                       <div className="text-sm font-medium text-zinc-300">
-                        <span className="text-white font-bold text-xl">{investors.length.toLocaleString()}</span> active
+                        <span className="text-white font-bold text-xl">{loading ? INVESTOR_COUNT : investors.length.toLocaleString()}</span> active
                       </div>
                       {investors.length !== filteredInvestors.length && (
                         <div className="text-xs font-medium text-blue-400">
@@ -992,13 +1040,13 @@ export default function Dashboard() {
                 Discover the most active venture capitalists and angel investors across top industries. Filter by sector to find the perfect match for your startup's niche. Our database is continuously updated with the latest investment data.
               </p>
               <div className="flex flex-wrap gap-2">
-                {['ai', 'saas', 'fintech', 'consumer', 'b2b', 'healthtech', 'edtech', 'ecommerce', 'web3', 'crypto', 'biotech', 'cleantech', 'proptech', 'deeptech', 'hardware', 'marketplace', 'gaming', 'social', 'enterprise', 'mobile', 'robotics', 'space', 'agtech', 'foodtech', 'logistics', 'cybersecurity', 'insurtech', 'hrtech', 'legaltech', 'sportstech', 'fashion', 'media', 'entertainment', 'travel', 'mobility', 'analytics', 'dev-tools', 'productivity', 'sales', 'marketing'].map(cat => (
+                {INDUSTRY_PAGES.map((page) => (
                   <Link
-                    key={cat}
-                    to={`/investors/${cat}`}
+                    key={page.slug}
+                    to={`/investors/${page.slug}`}
                     className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-500/30 hover:shadow-sm transition-all"
                   >
-                    {['ai', 'saas', 'api', 'b2b', 'hrtech', 'edtech', 'fintech', 'healthtech', 'cleantech', 'proptech', 'deeptech', 'agtech', 'foodtech', 'insurtech', 'legaltech', 'sportstech'].includes(cat) ? cat.toUpperCase() : cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ')}
+                    {page.label}
                   </Link>
                 ))}
               </div>
