@@ -9,10 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distPath = path.resolve(__dirname, 'dist');
 
-async function listen(server) {
-  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
-  const address = server.address();
-  return typeof address === 'object' && address ? address.port : 3000;
+async function listen(app) {
+  return new Promise((resolve) => {
+    const server = app.listen(0, '127.0.0.1', () => {
+      resolve(server);
+    });
+  });
 }
 
 async function run() {
@@ -25,7 +27,7 @@ async function run() {
   });
 
   const server = await listen(app);
-  const port = server;
+  const port = server.address().port;
   console.log(`Server running on http://127.0.0.1:${port}`);
 
   const browser = await puppeteer.launch({
