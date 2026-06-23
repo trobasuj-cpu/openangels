@@ -93,3 +93,37 @@
   from { width: 0%; }
   to { width: 100%; }
 }
+
+@keyframes oil-slick {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.crm-btn-oil {
+  background: linear-gradient(
+    135deg,
+    #1a1a2e 0%,
+    #16213e 10%,
+    #0f3460 20%,
+    #533483 30%,
+    #e94560 40%,
+    #f38181 45%,
+    #fce38a 50%,
+    #95e1d3 55%,
+    #3490de 60%,
+    #6c5ce7 70%,
+    #a29bfe 75%,
+    #fd79a8 80%,
+    #e17055 85%,
+    #00b894 90%,
+    #1a1a2e 100%
+  );
+  background-size: 400% 400%;
+  animation: oil-slick 6s ease infinite;
+}
+
+.crm-btn-oil:hover {
+  animation-duration: 2s;
+  filter: brightness(1.15);
+}

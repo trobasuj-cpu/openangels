@@ -617,7 +617,7 @@ export default function Dashboard() {
               {user ? (
                 <Link
                   to="/crm"
-                  className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-sm font-medium rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200 dark:border-zinc-700"
+                  className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10 shadow-lg"
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -635,7 +635,7 @@ export default function Dashboard() {
               ) : (
                 <button
                   onClick={() => setIsLoginModalOpen(true)}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-sm font-medium rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200 dark:border-zinc-700"
+                  className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10 shadow-lg"
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"/>
