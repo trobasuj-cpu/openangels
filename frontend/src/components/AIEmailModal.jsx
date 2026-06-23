@@ -356,7 +356,8 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                   onClick={() => {
                     const subject = encodeURIComponent(generatedSubject);
                     const body = encodeURIComponent(generatedBody);
-                    window.open(`https://mail.google.com/mail/?view=cm&to=${investor.email || ''}&su=${subject}&body=${body}`, '_blank');
+                    const authuser = encodeURIComponent(user?.email || '');
+                    window.open(`https://mail.google.com/mail/?authuser=${authuser}&view=cm&to=${investor.email || ''}&su=${subject}&body=${body}`, '_blank');
                   }}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#EA4335] text-white text-sm font-medium rounded-xl hover:bg-[#D33C30] transition-colors shadow-sm shrink-0"
                 >
