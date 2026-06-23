@@ -1049,6 +1049,8 @@ export default function Dashboard() {
         profile={profile}
         user={user}
         allInvestors={investors}
+        crmLeadIds={crmLeadIds}
+        setCrmLeadIds={setCrmLeadIds}
       />
     </>
   );

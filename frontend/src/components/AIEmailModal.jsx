@@ -7,7 +7,7 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-export default function AIEmailModal({ isOpen, onClose, investor, profile, user, allInvestors = [] }) {
+export default function AIEmailModal({ isOpen, onClose, investor, profile, user, allInvestors = [], crmLeadIds, setCrmLeadIds }) {
   const [startupDescription, setStartupDescription] = useState('');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [generatedSubject, setGeneratedSubject] = useState('');
@@ -15,6 +15,8 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
   const [matchedInvestors, setMatchedInvestors] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isAddingToCrm, setIsAddingToCrm] = useState(false);
+  const [addedToCrmCount, setAddedToCrmCount] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -95,34 +97,41 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
       if (startupDescription && allInvestors.length > 0) {
         const descLower = startupDescription.toLowerCase();
         // Common tech/startup keywords to look for
-        const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data'];
+        const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data', 'climate', 'media', 'infrastructure', 'deep-tech', 'creator-economy', 'impact', 'ar-vr', 'autonomous', 'robotics', 'iot', 'machine-learning', 'cloud', 'mobile', 'social', 'food', 'real-estate', 'insurance', 'legal', 'hr', 'logistics', 'travel'];
         
         const extractedTags = possibleTags.filter(tag => descLower.includes(tag));
-        // Fallback to the current investor's industries if we couldn't parse any tags
         const searchTags = extractedTags.length > 0 ? extractedTags : industries;
+
+        // Extract meaningful words from description for bio matching
+        const stopWords = new Set(['the', 'and', 'our', 'are', 'for', 'with', 'that', 'this', 'from', 'have', 'has', 'been', 'will', 'can', 'not', 'but', 'also', 'into', 'about', 'over', 'more', 'than', 'just', 'very', 'what', 'when', 'where', 'which', 'their', 'there', 'being', 'were', 'would', 'could', 'should', 'does', 'doing', 'during', 'each', 'other']);
+        const descWords = descLower.split(/[\s,.\-:;!?()]+/).filter(w => w.length > 4 && !stopWords.has(w));
 
         const scoredMatches = allInvestors.map(inv => {
           if (inv.id === investor.id) return { inv, score: 0 };
           
           let score = 0;
+          
+          // Industry match: +3 per matching industry tag
           if (inv.industries) {
             const invInds = Array.isArray(inv.industries) ? inv.industries : [inv.industries];
-            const hasMatch = invInds.some(ind => searchTags.includes(ind.toLowerCase()));
-            if (hasMatch) score += 2;
+            const matchCount = invInds.filter(ind => searchTags.includes(ind.toLowerCase())).length;
+            score += matchCount * 3;
           }
-          const words = descLower.split(/[\s,.-]+/).filter(w => w.length > 4);
-          if (inv.bio) {
+          
+          // Bio keyword match: +1 per keyword found in bio
+          if (inv.bio && descWords.length > 0) {
             const bioLower = inv.bio.toLowerCase();
-            const bioMatches = words.filter(w => bioLower.includes(w)).length;
-            if (bioMatches > 0) score += 1;
+            const bioMatches = descWords.filter(w => bioLower.includes(w)).length;
+            score += bioMatches;
           }
           
           return { inv, score };
-        }).filter(m => m.score > 0);
+        }).filter(m => m.score >= 3); // Only truly relevant matches
 
-        // Sort by highest score first, remove arbitrary limit to show true count
+        // Sort by highest score first, cap at top 25
         scoredMatches.sort((a, b) => b.score - a.score);
-        setMatchedInvestors(scoredMatches.map(m => m.inv));
+        const topMatches = scoredMatches.slice(0, 25);
+        setMatchedInvestors(topMatches.map(m => m.inv));
       }
 
     } catch (err) {
@@ -265,6 +274,37 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                       Based on your startup description, we scanned our database and found highly relevant investors that match your profile.
                     </p>
                     <div className="flex flex-wrap gap-3">
+                      <button 
+                        onClick={async () => {
+                          if (!user || !setCrmLeadIds || !crmLeadIds) return;
+                          setIsAddingToCrm(true);
+                          setAddedToCrmCount(0);
+                          let added = 0;
+                          const newIds = new Set([...crmLeadIds]);
+                          for (const inv of matchedInvestors) {
+                            if (newIds.has(inv.id)) continue;
+                            const { error } = await supabase
+                              .from('crm_leads')
+                              .insert({ user_id: user.id, investor_id: inv.id, status: 'inbox' });
+                            if (!error) {
+                              newIds.add(inv.id);
+                              added++;
+                              setAddedToCrmCount(added);
+                            }
+                          }
+                          setCrmLeadIds(newIds);
+                          setIsAddingToCrm(false);
+                        }}
+                        disabled={isAddingToCrm || (crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)))}
+                        className="px-4 py-2 crm-btn-oil text-white text-sm font-medium rounded-lg transition-all shadow-sm border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isAddingToCrm 
+                          ? `Adding... (${addedToCrmCount}/${matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
+                          : (crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)))
+                            ? '✓ All in CRM'
+                            : `Add All to CRM (${matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
+                        }
+                      </button>
                       <button 
                         onClick={handleDownloadCSV}
                         className="px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
