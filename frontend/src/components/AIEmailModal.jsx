@@ -16,7 +16,6 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [gmailAccountIndex, setGmailAccountIndex] = useState(0);
 
   useEffect(() => {
     if (isOpen) {
@@ -353,32 +352,17 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                   <Copy className="w-4 h-4" />
                   Copy
                 </button>
-                <div className="flex-1 flex bg-[#EA4335] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                  <div className="relative">
-                    <select
-                      value={gmailAccountIndex}
-                      onChange={(e) => setGmailAccountIndex(Number(e.target.value))}
-                      className="h-full bg-black/10 text-white text-xs font-medium px-2 border-r border-white/20 outline-none appearance-none cursor-pointer hover:bg-black/20 transition-colors text-center w-12"
-                      title="Select Google Account (1 is primary, 2 is secondary, etc.)"
-                    >
-                      <option value={0} className="text-black">1</option>
-                      <option value={1} className="text-black">2</option>
-                      <option value={2} className="text-black">3</option>
-                      <option value={3} className="text-black">4</option>
-                    </select>
-                  </div>
-                  <button
-                    onClick={() => {
-                      const subject = encodeURIComponent(generatedSubject);
-                      const body = encodeURIComponent(generatedBody);
-                      window.open(`https://mail.google.com/mail/u/${gmailAccountIndex}/?view=cm&fs=1&to=${investor.email || ''}&su=${subject}&body=${body}`, '_blank');
-                    }}
-                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 text-white text-sm font-medium hover:bg-black/10 transition-colors shrink-0"
-                  >
-                    <Mail className="w-4 h-4" />
-                    Open in Gmail
-                  </button>
-                </div>
+                <button
+                  onClick={() => {
+                    const subject = encodeURIComponent(generatedSubject);
+                    const body = encodeURIComponent(generatedBody);
+                    window.open(`https://mail.google.com/mail/?view=cm&to=${investor.email || ''}&su=${subject}&body=${body}`, '_blank');
+                  }}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#EA4335] text-white text-sm font-medium rounded-xl hover:bg-[#D33C30] transition-colors shadow-sm shrink-0"
+                >
+                  <Mail className="w-4 h-4" />
+                  Open in Gmail
+                </button>
                 <button
                   onClick={() => {
                     const subject = encodeURIComponent(generatedSubject);
