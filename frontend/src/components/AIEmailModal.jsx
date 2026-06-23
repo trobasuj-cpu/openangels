@@ -181,8 +181,8 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-amber-500" />
+            <div className="w-10 h-10 rounded-xl bg-zinc-900 dark:bg-white flex items-center justify-center">
+              <span className="text-white dark:text-zinc-900 text-sm font-bold">OA</span>
             </div>
             <div>
               <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">AI Draft Email</h2>
@@ -265,7 +265,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                   
                   <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="w-5 h-5 text-amber-500" />
+                      <span className="text-amber-500 text-sm font-bold">OA</span>
                       <h3 className="font-semibold text-amber-600 dark:text-amber-500">
                         We found {matchedInvestors.length} suitable investors!
                       </h3>
@@ -278,11 +278,11 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                         onClick={async () => {
                           if (!user || !setCrmLeadIds || !crmLeadIds) return;
                           setIsAddingToCrm(true);
+                          const toAdd = matchedInvestors.filter(inv => !crmLeadIds.has(inv.id));
                           setAddedToCrmCount(0);
                           let added = 0;
                           const newIds = new Set([...crmLeadIds]);
-                          for (const inv of matchedInvestors) {
-                            if (newIds.has(inv.id)) continue;
+                          for (const inv of toAdd) {
                             const { error } = await supabase
                               .from('crm_leads')
                               .insert({ user_id: user.id, investor_id: inv.id, status: 'inbox' });
@@ -299,7 +299,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                         className="px-4 py-2 crm-btn-oil text-white text-sm font-medium rounded-lg transition-all shadow-sm border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isAddingToCrm 
-                          ? `Adding... (${addedToCrmCount}/${matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
+                          ? `Adding... (${addedToCrmCount}/${addedToCrmCount + matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
                           : (crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)))
                             ? '✓ All in CRM'
                             : `Add All to CRM (${matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
@@ -368,7 +368,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-5 h-5" />
+                  <span className="text-sm font-bold">OA</span>
                   Generate Pitch
                 </>
               )}
