@@ -357,7 +357,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                     const subject = encodeURIComponent(generatedSubject);
                     const body = encodeURIComponent(generatedBody);
                     const bcc = profile?.crm_bcc_email ? `&bcc=${encodeURIComponent(profile.crm_bcc_email)}` : '';
-                    window.open(`https://mail.google.com/mail/u/${encodeURIComponent(user?.email || 0)}/?view=cm&fs=1&to=${investor.email || ''}&su=${subject}&body=${body}${bcc}`, '_blank');
+                    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${investor.email || ''}&su=${subject}&body=${body}${bcc}`, '_blank');
                   }}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#EA4335] text-white text-sm font-medium rounded-xl hover:bg-[#D33C30] transition-colors shadow-sm shrink-0"
                 >

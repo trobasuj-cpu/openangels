@@ -703,27 +703,6 @@ export default function Dashboard() {
                             </span>
                           </button>
                         </div>
-                        <div className="p-3 border-t border-zinc-200 dark:border-zinc-800">
-                          <label className="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5">
-                            CRM BCC Email
-                          </label>
-                          <div className="flex gap-2">
-                            <input
-                              type="email"
-                              value={bccEmail}
-                              onChange={(e) => setBccEmail(e.target.value)}
-                              placeholder="bcc@hubspot.com"
-                              className="flex-1 min-w-0 px-2 py-1.5 text-sm bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500"
-                            />
-                            <button
-                              onClick={handleSaveBcc}
-                              disabled={isSavingBcc || bccEmail === (profile?.crm_bcc_email || '')}
-                              className="px-3 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-medium rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-100 disabled:opacity-50 transition-colors"
-                            >
-                              {isSavingBcc ? '...' : 'Save'}
-                            </button>
-                          </div>
-                        </div>
                         <div className="p-1 border-t border-zinc-200 dark:border-zinc-800">
                           <button 
                             onClick={async () => {
