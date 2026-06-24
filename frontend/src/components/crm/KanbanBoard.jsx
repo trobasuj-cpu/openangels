@@ -26,6 +26,16 @@ export default function KanbanBoard() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [editingNotes, setEditingNotes] = useState(null);
+  const [expandedCards, setExpandedCards] = useState(new Set());
+
+  const toggleCard = (id) => {
+    setExpandedCards(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
   const [notesText, setNotesText] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
 
@@ -142,33 +152,35 @@ export default function KanbanBoard() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-200 flex flex-col font-sans">
+    <div className="h-screen bg-zinc-950 text-zinc-200 flex flex-col font-sans overflow-hidden">
       {/* Header */}
-      <header className="h-16 border-b border-zinc-800/50 flex items-center justify-between px-6 bg-zinc-950/80 backdrop-blur-xl shrink-0">
-        <div className="flex items-center gap-4">
+      <header className="border-b border-zinc-800/50 flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-0 sm:h-16 bg-zinc-950/80 backdrop-blur-xl shrink-0 gap-3 sm:gap-0">
+        <div className="flex items-center gap-3 sm:gap-4 justify-between sm:justify-start">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
               <span className="text-zinc-900 text-sm font-bold">OA</span>
             </div>
-            <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400">
+            <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400 truncate">
               OpenAngels
             </span>
           </Link>
-          <span className="text-zinc-600 text-lg font-light">/</span>
-          <span className="text-sm font-semibold text-zinc-300">Investor CRM</span>
-          <span className="text-xs bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full border border-zinc-700">
-            {leads.length} investor{leads.length !== 1 ? 's' : ''}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="hidden sm:inline text-zinc-600 text-lg font-light">/</span>
+            <span className="text-sm font-semibold text-zinc-300 whitespace-nowrap">Investor CRM</span>
+            <span className="text-xs bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full border border-zinc-700 whitespace-nowrap">
+              {leads.length} <span className="hidden sm:inline">investor{leads.length !== 1 ? 's' : ''}</span>
+            </span>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="relative">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:flex-none">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
             <input 
               type="text" 
-              placeholder="Search pipeline..." 
+              placeholder="Search..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-zinc-700 text-sm w-56 transition-all text-zinc-200 placeholder:text-zinc-500"
+              className="pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-zinc-700 text-sm w-full sm:w-56 transition-all text-zinc-200 placeholder:text-zinc-500"
             />
           </div>
           {leads.length > 0 && (
@@ -181,10 +193,10 @@ export default function KanbanBoard() {
                   .eq('user_id', user.id);
                 if (!error) setLeads([]);
               }}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-colors"
+              className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-colors shrink-0"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              Clear All
+              <span className="hidden sm:inline">Clear All</span>
             </button>
           )}
         </div>
@@ -212,9 +224,9 @@ export default function KanbanBoard() {
           </div>
         ) : (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex sm:grid sm:grid-cols-6 gap-3 h-full overflow-x-auto pb-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex flex-col sm:grid sm:grid-cols-6 gap-3 sm:gap-3 h-full overflow-y-auto sm:overflow-hidden pb-20 sm:pb-0">
               {columns.map(col => (
-                <div key={col.id} className="flex flex-col min-w-[85vw] sm:min-w-0 h-full snap-center">
+                <div key={col.id} className="flex flex-col min-w-0 sm:h-full">
                   <div className={cn("flex items-center justify-between pb-2 mb-3 border-b-2", col.color)}>
                     <div className="flex items-center gap-2">
                       <div className={cn("w-2 h-2 rounded-full", col.dot)} />
@@ -231,7 +243,7 @@ export default function KanbanBoard() {
                         {...provided.droppableProps} 
                         ref={provided.innerRef}
                         className={cn(
-                          "flex-1 rounded-xl transition-colors p-1.5 -mx-1.5 overflow-y-auto custom-scrollbar",
+                          "rounded-xl transition-colors p-1.5 sm:-mx-1.5 sm:flex-1 sm:overflow-y-auto custom-scrollbar min-h-[60px]",
                           snapshot.isDraggingOver ? "bg-zinc-900/60 ring-1 ring-zinc-700/50" : ""
                         )}
                       >
@@ -240,79 +252,92 @@ export default function KanbanBoard() {
                           if (!inv) return null;
                           return (
                             <Draggable key={lead.id} draggableId={lead.id} index={index}>
-                              {(provided, snapshot) => (
+                              {(provided, snapshot) => {
+                                const isExpanded = expandedCards.has(lead.id);
+                                return (
                                 <div
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
+                                  onClick={(e) => {
+                                    if (window.innerWidth < 640 && !e.defaultPrevented) {
+                                      toggleCard(lead.id);
+                                    }
+                                  }}
                                   className={cn(
-                                    "group bg-zinc-900/70 border border-zinc-800/80 rounded-xl p-3 mb-2 hover:shadow-lg transition-all",
-                                    snapshot.isDragging ? "ring-2 ring-amber-500/30 rotate-1 scale-105 shadow-xl" : "hover:border-zinc-700"
+                                    "group bg-zinc-900/70 border border-zinc-800/80 rounded-xl mb-2 transition-all cursor-pointer sm:cursor-grab",
+                                    snapshot.isDragging ? "ring-2 ring-amber-500/30 rotate-1 scale-105 shadow-xl cursor-grabbing" : "hover:border-zinc-700",
+                                    isExpanded ? "p-3" : "p-2 sm:p-3"
                                   )}
                                   style={provided.draggableProps.style}
                                 >
-                                  <div className="flex justify-between items-start mb-1.5">
-                                    <div className="flex-1 min-w-0">
-                                      <h3 className="font-semibold text-zinc-100 text-sm truncate">{inv.name}</h3>
-                                      {inv.location && (
+                                  <div className={cn("flex justify-between items-start", (isExpanded || window.innerWidth >= 640) ? "mb-1.5" : "")}>
+                                    <div className="flex-1 min-w-0 pr-2">
+                                      <h3 className="font-semibold text-zinc-100 text-sm truncate leading-tight">{inv.name}</h3>
+                                      {(isExpanded || window.innerWidth >= 640) && inv.location && (
                                         <p className="text-[11px] text-zinc-500 truncate mt-0.5">{inv.location}</p>
                                       )}
                                     </div>
-                                    <div className="flex items-center gap-0.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex items-center gap-0.5 ml-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                       <button 
-                                        onClick={() => { setEditingNotes(lead.id); setNotesText(lead.notes || ''); }}
+                                        onClick={(e) => { e.preventDefault(); setEditingNotes(lead.id); setNotesText(lead.notes || ''); }}
                                         className="p-1 hover:bg-zinc-800 rounded transition-colors"
                                         title="Notes"
                                       >
-                                        <StickyNote className="w-3 h-3 text-zinc-500 hover:text-amber-400" />
+                                        <StickyNote className="w-3.5 h-3.5 text-zinc-500 hover:text-amber-400" />
                                       </button>
                                       <button 
-                                        onClick={() => removeLead(lead.id)}
+                                        onClick={(e) => { e.preventDefault(); removeLead(lead.id); }}
                                         className="p-1 hover:bg-red-950/50 rounded transition-colors"
                                         title="Remove"
                                       >
-                                        <Trash2 className="w-3 h-3 text-zinc-500 hover:text-red-400" />
+                                        <Trash2 className="w-3.5 h-3.5 text-zinc-500 hover:text-red-400" />
                                       </button>
                                     </div>
                                   </div>
 
-                                  {inv.bio && (
-                                    <p className="text-[11px] text-zinc-500 mb-2 line-clamp-2 leading-relaxed">
-                                      {inv.bio}
-                                    </p>
-                                  )}
+                                  {(isExpanded || window.innerWidth >= 640) && (
+                                    <>
+                                      {inv.bio && (
+                                        <p className="text-[11px] text-zinc-500 mb-2 line-clamp-2 leading-relaxed">
+                                          {inv.bio}
+                                        </p>
+                                      )}
 
-                                  {lead.notes && (
-                                    <div className="mb-2 px-2 py-1.5 bg-amber-500/5 border border-amber-500/10 rounded-lg">
-                                      <p className="text-[11px] text-amber-300/70 line-clamp-2">{lead.notes}</p>
-                                    </div>
-                                  )}
+                                      {lead.notes && (
+                                        <div className="mb-2 px-2 py-1.5 bg-amber-500/5 border border-amber-500/10 rounded-lg">
+                                          <p className="text-[11px] text-amber-300/70 line-clamp-2">{lead.notes}</p>
+                                        </div>
+                                      )}
 
-                                  <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    {inv.email && (
-                                      <button 
-                                        onClick={() => copyEmail(inv.email)}
-                                        className="flex-1 flex items-center justify-center gap-1 py-1 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-[11px] transition-colors text-zinc-400 hover:text-zinc-200"
-                                        title="Copy Email"
-                                      >
-                                        <Mail className="w-3 h-3" />
-                                        Email
-                                      </button>
-                                    )}
-                                    {inv.linkedin_url && (
-                                      <a 
-                                        href={inv.linkedin_url.startsWith('http') ? inv.linkedin_url : `https://${inv.linkedin_url}`}
-                                        target="_blank" 
-                                        rel="noreferrer"
-                                        className="flex-1 flex items-center justify-center gap-1 py-1 bg-zinc-800/80 hover:bg-blue-600/20 hover:text-blue-400 rounded-lg text-[11px] transition-colors text-zinc-400"
-                                      >
-                                        <LinkIcon className="w-3 h-3" />
-                                        LinkedIn
-                                      </a>
-                                    )}
-                                  </div>
+                                      <div className="flex gap-1.5 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                        {inv.email && (
+                                          <button 
+                                            onClick={(e) => { e.preventDefault(); copyEmail(inv.email); }}
+                                            className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-[11px] transition-colors text-zinc-400 hover:text-zinc-200"
+                                            title="Copy Email"
+                                          >
+                                            <Mail className="w-3 h-3" />
+                                            Email
+                                          </button>
+                                        )}
+                                        {inv.linkedin_url && (
+                                          <a 
+                                            href={inv.linkedin_url.startsWith('http') ? inv.linkedin_url : `https://${inv.linkedin_url}`}
+                                            target="_blank" 
+                                            rel="noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-zinc-800/80 hover:bg-blue-600/20 hover:text-blue-400 rounded-lg text-[11px] transition-colors text-zinc-400"
+                                          >
+                                            <LinkIcon className="w-3 h-3" />
+                                            LinkedIn
+                                          </a>
+                                        )}
+                                      </div>
+                                    </>
+                                  )}
                                 </div>
-                              )}
+                              )}}
                             </Draggable>
                           );
                         })}
