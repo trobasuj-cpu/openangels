@@ -28,6 +28,14 @@ export default function KanbanBoard() {
   const [editingNotes, setEditingNotes] = useState(null);
   const [notesText, setNotesText] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -194,7 +202,8 @@ export default function KanbanBoard() {
         </div>
 
         {/* Mobile Tab Bar */}
-        <div className="sm:hidden overflow-x-auto flex border-t border-zinc-800/50">
+        {isMobile && (
+        <div className="overflow-x-auto flex border-t border-zinc-800/50">
           {columns.map(col => (
             <button
               key={col.id}
@@ -217,6 +226,7 @@ export default function KanbanBoard() {
             </button>
           ))}
         </div>
+        )}
       </header>
 
       {/* Content */}
@@ -242,7 +252,8 @@ export default function KanbanBoard() {
         ) : (
           <DragDropContext onDragEnd={onDragEnd}>
             {/* Desktop: horizontal kanban */}
-            <div className="hidden sm:grid grid-cols-6 gap-3 h-full">
+            {!isMobile && (
+            <div className="grid grid-cols-6 gap-3 h-full">
               {columns.map(col => (
                 <div key={col.id} className="flex flex-col min-w-0 h-full">
                   <div className={cn("flex items-center justify-between pb-2 mb-3 border-b-2", col.color)}>
@@ -353,9 +364,10 @@ export default function KanbanBoard() {
                 </div>
               ))}
             </div>
+            )}
 
-            {/* Mobile: single column with tabs */}
-            <div className="sm:hidden">
+            {isMobile && (
+            <div>
               {columns.filter(col => col.id === mobileTab).map(col => (
                 <Droppable key={col.id} droppableId={col.id}>
                   {(provided) => (
@@ -471,6 +483,7 @@ export default function KanbanBoard() {
                 </Droppable>
               ))}
             </div>
+            )}
           </DragDropContext>
         )}
       </div>
