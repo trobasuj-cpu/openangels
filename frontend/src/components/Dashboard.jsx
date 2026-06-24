@@ -206,7 +206,7 @@ const MarketingShowcase = ({ isPremium }) => {
             ))}
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-6 items-center">
+          <div key={activeSlide} className="flex flex-col lg:flex-row gap-6 items-center animate-in fade-in duration-300">
             <div className="flex-1 space-y-3">
               <h2 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white leading-tight">
                 {current.title.split(' ').map((word, i, arr) => 
