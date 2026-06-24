@@ -249,10 +249,111 @@ export default function KanbanBoard() {
               Browse Investors →
             </Link>
           </div>
+        ) : isMobile ? (
+          /* Mobile: plain cards, no drag-and-drop */
+          <div>
+            {columns.filter(col => col.id === mobileTab).map(col => (
+              <div key={col.id} className="space-y-3">
+                {col.items.length === 0 ? (
+                  <div className="text-center py-16 text-zinc-500 text-sm">
+                    No investors in "{col.name}" stage
+                  </div>
+                ) : col.items.map((lead) => {
+                  const inv = lead.investors;
+                  if (!inv) return null;
+                  return (
+                    <div
+                      key={lead.id}
+                      className="bg-zinc-900/70 border border-zinc-800/80 rounded-xl p-4"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-zinc-100 text-base">{inv.name}</h3>
+                          {inv.location && (
+                            <p className="text-xs text-zinc-500 mt-0.5">{inv.location}</p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1 ml-2">
+                          <button 
+                            onClick={() => { setEditingNotes(lead.id); setNotesText(lead.notes || ''); }}
+                            className="p-1.5 hover:bg-zinc-800 rounded-lg transition-colors"
+                          >
+                            <StickyNote className="w-4 h-4 text-zinc-500" />
+                          </button>
+                          <button 
+                            onClick={() => removeLead(lead.id)}
+                            className="p-1.5 hover:bg-red-950/50 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4 text-zinc-500" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {inv.bio && (
+                        <p className="text-xs text-zinc-400 mb-3 line-clamp-3 leading-relaxed">
+                          {inv.bio}
+                        </p>
+                      )}
+
+                      {lead.notes && (
+                        <div className="mb-3 px-3 py-2 bg-amber-500/5 border border-amber-500/10 rounded-lg">
+                          <p className="text-xs text-amber-300/70 line-clamp-3">{lead.notes}</p>
+                        </div>
+                      )}
+
+                      {/* Move to stage selector */}
+                      <div className="flex gap-1 mb-3 overflow-x-auto pb-1">
+                        {Object.entries(COLUMNS).map(([key, colDef]) => (
+                          <button
+                            key={key}
+                            onClick={async () => {
+                              if (key === lead.status) return;
+                              setLeads(prev => prev.map(l => l.id === lead.id ? { ...l, status: key } : l));
+                              await supabase.from('crm_leads').update({ status: key }).eq('id', lead.id).eq('user_id', user.id);
+                            }}
+                            className={cn(
+                              "px-2 py-1 rounded-md text-[10px] font-medium whitespace-nowrap transition-colors border",
+                              lead.status === key
+                                ? "bg-zinc-700 text-white border-zinc-600"
+                                : "bg-zinc-900 text-zinc-500 border-zinc-800 active:bg-zinc-700"
+                            )}
+                          >
+                            {colDef.name}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-2">
+                        {inv.email && (
+                          <button 
+                            onClick={() => copyEmail(inv.email)}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-zinc-800 active:bg-zinc-700 rounded-lg text-xs transition-colors text-zinc-300"
+                          >
+                            <Mail className="w-3.5 h-3.5" />
+                            Copy Email
+                          </button>
+                        )}
+                        {inv.linkedin_url && (
+                          <a 
+                            href={inv.linkedin_url.startsWith('http') ? inv.linkedin_url : `https://${inv.linkedin_url}`}
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-zinc-800 active:bg-blue-600/20 active:text-blue-400 rounded-lg text-xs transition-colors text-zinc-300"
+                          >
+                            <LinkIcon className="w-3.5 h-3.5" />
+                            LinkedIn
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         ) : (
           <DragDropContext onDragEnd={onDragEnd}>
             {/* Desktop: horizontal kanban */}
-            {!isMobile && (
             <div className="grid grid-cols-6 gap-3 h-full">
               {columns.map(col => (
                 <div key={col.id} className="flex flex-col min-w-0 h-full">
@@ -364,126 +465,6 @@ export default function KanbanBoard() {
                 </div>
               ))}
             </div>
-            )}
-
-            {isMobile && (
-            <div>
-              {columns.filter(col => col.id === mobileTab).map(col => (
-                <Droppable key={col.id} droppableId={col.id}>
-                  {(provided) => (
-                    <div 
-                      {...provided.droppableProps} 
-                      ref={provided.innerRef}
-                      className="space-y-3"
-                    >
-                      {col.items.length === 0 ? (
-                        <div className="text-center py-16 text-zinc-500 text-sm">
-                          No investors in "{col.name}" stage
-                        </div>
-                      ) : col.items.map((lead, index) => {
-                        const inv = lead.investors;
-                        if (!inv) return null;
-                        return (
-                          <Draggable key={lead.id} draggableId={lead.id} index={index}>
-                            {(provided) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className="bg-zinc-900/70 border border-zinc-800/80 rounded-xl p-4"
-                                style={provided.draggableProps.style}
-                              >
-                                <div className="flex justify-between items-start mb-2">
-                                  <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-zinc-100 text-base">{inv.name}</h3>
-                                    {inv.location && (
-                                      <p className="text-xs text-zinc-500 mt-0.5">{inv.location}</p>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center gap-1 ml-2">
-                                    <button 
-                                      onClick={() => { setEditingNotes(lead.id); setNotesText(lead.notes || ''); }}
-                                      className="p-1.5 hover:bg-zinc-800 rounded-lg transition-colors"
-                                    >
-                                      <StickyNote className="w-4 h-4 text-zinc-500" />
-                                    </button>
-                                    <button 
-                                      onClick={() => removeLead(lead.id)}
-                                      className="p-1.5 hover:bg-red-950/50 rounded-lg transition-colors"
-                                    >
-                                      <Trash2 className="w-4 h-4 text-zinc-500" />
-                                    </button>
-                                  </div>
-                                </div>
-
-                                {inv.bio && (
-                                  <p className="text-xs text-zinc-400 mb-3 line-clamp-3 leading-relaxed">
-                                    {inv.bio}
-                                  </p>
-                                )}
-
-                                {lead.notes && (
-                                  <div className="mb-3 px-3 py-2 bg-amber-500/5 border border-amber-500/10 rounded-lg">
-                                    <p className="text-xs text-amber-300/70 line-clamp-3">{lead.notes}</p>
-                                  </div>
-                                )}
-
-                                {/* Mobile: move to stage selector */}
-                                <div className="flex gap-1 mb-3 overflow-x-auto pb-1">
-                                  {Object.entries(COLUMNS).map(([key, colDef]) => (
-                                    <button
-                                      key={key}
-                                      onClick={async () => {
-                                        if (key === lead.status) return;
-                                        setLeads(prev => prev.map(l => l.id === lead.id ? { ...l, status: key } : l));
-                                        await supabase.from('crm_leads').update({ status: key }).eq('id', lead.id).eq('user_id', user.id);
-                                      }}
-                                      className={cn(
-                                        "px-2 py-1 rounded-md text-[10px] font-medium whitespace-nowrap transition-colors border",
-                                        lead.status === key
-                                          ? "bg-zinc-700 text-white border-zinc-600"
-                                          : "bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-zinc-300"
-                                      )}
-                                    >
-                                      {colDef.name}
-                                    </button>
-                                  ))}
-                                </div>
-
-                                <div className="flex gap-2">
-                                  {inv.email && (
-                                    <button 
-                                      onClick={() => copyEmail(inv.email)}
-                                      className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-xs transition-colors text-zinc-300"
-                                    >
-                                      <Mail className="w-3.5 h-3.5" />
-                                      Copy Email
-                                    </button>
-                                  )}
-                                  {inv.linkedin_url && (
-                                    <a 
-                                      href={inv.linkedin_url.startsWith('http') ? inv.linkedin_url : `https://${inv.linkedin_url}`}
-                                      target="_blank" 
-                                      rel="noreferrer"
-                                      className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-zinc-800 hover:bg-blue-600/20 hover:text-blue-400 rounded-lg text-xs transition-colors text-zinc-300"
-                                    >
-                                      <LinkIcon className="w-3.5 h-3.5" />
-                                      LinkedIn
-                                    </a>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        );
-                      })}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              ))}
-            </div>
-            )}
           </DragDropContext>
         )}
       </div>
