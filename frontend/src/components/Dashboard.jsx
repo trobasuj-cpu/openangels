@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect, useMemo, useDeferredValue, useRef } from 'react';
 // helmet removed
+import React, { useState, useEffect, useMemo, useDeferredValue, useRef } from 'react';
+// helmet removed
 import Link from 'next/link';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X, UserPlus, CheckCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
 import BackgroundAnimation from './BackgroundAnimation';
 import LoginModal from './LoginModal';
-import AIEmailModal from './AIEmailModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL } from '@/seo.js';
@@ -233,36 +234,6 @@ const MarketingShowcase = ({ isPremium }) => {
   );
 };
 
-const dashboardSchema = [
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": PRODUCT_NAME,
-    "url": SITE_URL,
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "description": "Search a curated database of 4,700+ angel investors and VCs, filter by industry and stage, manage outreach in a fundraising CRM, and draft personalized investor emails with AI.",
-    "offers": {
-      "@type": "Offer",
-      "price": "49.00",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
-    }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": PRODUCT_NAME,
-    "url": SITE_URL,
-    "logo": absoluteUrl('/favicon.svg'),
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": "support@openangels.xyz",
-      "contactType": "customer support"
-    }
-  }
-];
-
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -271,7 +242,6 @@ export default function Dashboard() {
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [selectedInvestorForAI, setSelectedInvestorForAI] = useState(null);
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [bccEmail, setBccEmail] = useState('');
@@ -354,19 +324,6 @@ export default function Dashboard() {
       setProfile(data);
       if (data.crm_bcc_email) setBccEmail(data.crm_bcc_email);
     }
-  };
-
-  const handleSaveBcc = async () => {
-    if (!user) return;
-    setIsSavingBcc(true);
-    const { error } = await supabase
-      .from('profiles')
-      .update({ crm_bcc_email: bccEmail })
-      .eq('id', user.id);
-    if (!error) {
-      setProfile(prev => ({ ...prev, crm_bcc_email: bccEmail }));
-    }
-    setIsSavingBcc(false);
   };
 
   const fetchCrmLeads = async (userId) => {
@@ -917,13 +874,13 @@ export default function Dashboard() {
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                            <button 
-                              onClick={() => setSelectedInvestorForAI(investor)}
+                            <Link 
+                              href={`/investor/${investor.slug || investor.id}`}
                               className="flex items-center justify-center gap-2 flex-1 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm"
                             >
                               <Sparkles className="w-4 h-4 text-amber-500" />
                               AI Draft Email
-                            </button>
+                            </Link>
                             <button 
                               onClick={() => addToCrm(investor.id)}
                               disabled={crmLeadIds.has(investor.id) || addingToCrm === investor.id}
@@ -1034,16 +991,6 @@ export default function Dashboard() {
       <LoginModal 
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)} 
-      />
-      <AIEmailModal
-        isOpen={!!selectedInvestorForAI}
-        onClose={() => setSelectedInvestorForAI(null)}
-        investor={selectedInvestorForAI}
-        profile={profile}
-        user={user}
-        allInvestors={investors}
-        crmLeadIds={crmLeadIds}
-        setCrmLeadIds={setCrmLeadIds}
       />
     </>
   );

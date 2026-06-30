@@ -145,6 +145,17 @@ export default async function IndustryInvestors({ params }) {
                       </p>
                     )}
                   </div>
+                  
+                  {/* Right Column - Actions */}
+                  <div className="flex flex-col sm:items-end gap-3 shrink-0">
+                    <Link
+                      href={`/investor/${investor.slug || investor.id}`}
+                      className="inline-flex items-center justify-center h-10 px-6 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium transition-transform hover:scale-105 shadow-sm"
+                    >
+                      <Sparkles className="w-4 h-4 mr-2 text-amber-500" />
+                      View Profile
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

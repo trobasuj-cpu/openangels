@@ -28,7 +28,7 @@ export const viewport = {
   themeColor: "#09090b",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children, modal }) {
   return (
     <html lang="en">
       <head>
@@ -57,6 +57,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="antialiased min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-900 dark:text-zinc-100 flex flex-col">
         {children}
+        {modal}
       </body>
     </html>
   );
