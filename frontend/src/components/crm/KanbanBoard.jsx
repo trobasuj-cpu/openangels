@@ -225,11 +225,10 @@ export default function KanbanBoard() {
           </div>
         ) : (
           <DragDropContext onDragEnd={onDragEnd}>
-            {/* Sticky column headers */}
-            <div className="sticky top-0 z-10 bg-zinc-950 px-5 pt-5 pb-0">
-              <div className="grid grid-cols-1 sm:grid-cols-6 gap-3">
-                {columns.map(col => (
-                  <div key={col.id} className={cn("flex items-center justify-between pb-2 border-b-2", col.color)}>
+            <div className="grid grid-cols-1 sm:grid-cols-6 gap-3 px-5 pt-5 pb-20 sm:pb-5">
+              {columns.map(col => (
+                <div key={col.id} className="flex flex-col min-w-0">
+                  <div className={cn("flex items-center justify-between pb-2 mb-3 border-b-2 sticky top-0 bg-zinc-950 z-10 pt-1", col.color)}>
                     <div className="flex items-center gap-2">
                       <div className={cn("w-2 h-2 rounded-full", col.dot)} />
                       <h2 className="font-semibold text-zinc-400 text-xs uppercase tracking-wider">{col.name}</h2>
@@ -238,14 +237,6 @@ export default function KanbanBoard() {
                       {col.items.length}
                     </span>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Card columns */}
-            <div className="grid grid-cols-1 sm:grid-cols-6 gap-3 px-5 pt-3 pb-20 sm:pb-5">
-              {columns.map(col => (
-                <div key={col.id} className="flex flex-col min-w-0">
                   <Droppable droppableId={col.id}>
                     {(provided, snapshot) => (
                       <div 
