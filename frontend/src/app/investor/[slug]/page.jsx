@@ -6,11 +6,13 @@ import { notFound } from 'next/navigation';
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   
-  const { data: investor } = await supabase
+  const { data: investors } = await supabase
     .from('investors_secure')
     .select('name, bio, industry, firm')
     .eq('slug', slug)
-    .single();
+    .limit(1);
+
+  const investor = investors?.[0];
 
   if (!investor) return {};
 
@@ -28,16 +30,20 @@ export default async function StandaloneInvestorPage({ params }) {
   const { slug } = await params;
   
   // Try to fetch by slug, if it fails try by id
-  const { data: investor, error } = await supabase
+  const { data: investorsData, error } = await supabase
     .from('investors_secure')
     .select('*')
     .eq('slug', slug)
-    .single();
+    .limit(1);
+    
+  const investor = investorsData?.[0];
 
   // Fallback for UUID if slug is missing or not used
-  const { data: investorById } = !investor && slug.length > 20 
-    ? await supabase.from('investors_secure').select('*').eq('id', slug).single()
+  const { data: investorByIds } = !investor && slug.length > 20 
+    ? await supabase.from('investors_secure').select('*').eq('id', slug).limit(1)
     : { data: null };
+    
+  const investorById = investorByIds?.[0];
     
   const finalInvestor = investor || investorById;
 
