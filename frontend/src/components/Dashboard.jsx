@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo, useDeferredValue, useRef } from 'react';
 // helmet removed
-import React, { useState, useEffect, useMemo, useDeferredValue, useRef } from 'react';
 // helmet removed
 import Link from 'next/link';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X, UserPlus, CheckCircle } from 'lucide-react';
@@ -816,7 +815,9 @@ export default function Dashboard() {
                               }}
                             />
                             <div>
-                              <h3 className="text-base font-semibold text-zinc-900 dark:text-white">{investor.name}</h3>
+                              <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
+                                <h3 className="text-base font-semibold text-zinc-900 dark:text-white">{investor.name}</h3>
+                              </Link>
                               <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                                 <MapPin className="w-3 h-3" />
                                 {investor.location || 'Unknown Location'}

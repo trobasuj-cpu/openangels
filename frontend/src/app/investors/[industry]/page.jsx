@@ -126,7 +126,9 @@ export default async function IndustryInvestors({ params }) {
                     <div className="flex items-start justify-between gap-4 mb-2">
                       <div>
                         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                          {investor.name}
+                          <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
+                            {investor.name}
+                          </Link>
                           {(investor.linkedin_url || investor.twitter_url) && (
                             <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
                           )}

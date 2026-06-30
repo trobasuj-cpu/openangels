@@ -462,7 +462,6 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           )}
         </div>
       </div>
-    </div>
   );
 
   if (isStandalone) {
