@@ -243,7 +243,7 @@ export default function KanbanBoard() {
                         {...provided.droppableProps} 
                         ref={provided.innerRef}
                         className={cn(
-                          "rounded-xl transition-colors p-1.5 sm:-mx-1.5 custom-scrollbar min-h-[60px]",
+                          "rounded-xl transition-colors p-1.5 sm:-mx-1.5 custom-scrollbar min-h-[60px] h-full flex-1",
                           snapshot.isDraggingOver ? "bg-zinc-900/60 ring-1 ring-zinc-700/50" : ""
                         )}
                       >
