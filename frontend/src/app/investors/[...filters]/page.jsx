@@ -51,6 +51,60 @@ function buildQuery(parsed, selectClause = '*', countOnly = false) {
   };
 }
 
+function ConversationalFAQ({ industryLabel, stageLabel, geoLabel, totalMatches }) {
+  // Safe defaults if filters are missing
+  const i = industryLabel || "early-stage";
+  const s = stageLabel ? `${stageLabel} ` : "";
+  const g = geoLabel ? ` in ${geoLabel}` : "";
+  const c = totalMatches > 0 ? totalMatches : "many";
+
+  const questions = [
+    {
+      q: `How to find ${s}${i} angel investors${g}?`,
+      a: `If you are raising a ${s}round for your ${i} startup${g}, you can use the OpenAngels database to access ${c} verified active investors. We provide direct emails and LinkedIn profiles to help you pitch directly.`
+    },
+    {
+      q: `Who are the top ${i} investors for early-stage startups right now?`,
+      a: `Currently, our database tracks ${c} highly active ${i} investors. The list includes prominent angels and micro-VCs actively deploying capital this year.`
+    },
+    {
+      q: `Where can I get verified contact details for ${i} VCs?`,
+      a: `OpenAngels aggregates and verifies contact information, including direct emails, for ${c} ${i} investors, saving founders hundreds of hours of manual research.`
+    }
+  ];
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": questions.map(q => ({
+      "@type": "Question",
+      "name": q.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": q.a
+      }
+    }))
+  };
+
+  return (
+    <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">Frequently Asked Questions</h2>
+      <div className="space-y-4">
+        {questions.map((q, idx) => (
+          <div key={idx} className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5">
+            <h3 className="text-base font-semibold text-zinc-900 dark:text-white mb-2">{q.q}</h3>
+            <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">{q.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export async function generateMetadata({ params }) {
   const { filters } = await params;
   const parsed = parseFilters(filters);
@@ -347,6 +401,13 @@ export default async function FilteredInvestorsPage({ params }) {
             </div>
           </div>
         )}
+
+        <ConversationalFAQ 
+          industryLabel={industryLabel} 
+          stageLabel={stageLabel} 
+          geoLabel={geoLabel} 
+          totalMatches={totalMatches} 
+        />
       </main>
 
       <Footer />
