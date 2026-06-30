@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Sparkles, X, Copy, Mail, Loader2, Save } from 'lucide-react';
+import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -275,37 +276,45 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                       Based on your startup description, we scanned our database and found highly relevant investors that match your profile.
                     </p>
                     <div className="flex flex-wrap gap-3">
-                      <button 
-                        onClick={async () => {
-                          if (!user || !setCrmLeadIds || !crmLeadIds) return;
-                          setIsAddingToCrm(true);
-                          const toAdd = matchedInvestors.filter(inv => !crmLeadIds.has(inv.id));
-                          setAddedToCrmCount(0);
-                          let added = 0;
-                          const newIds = new Set([...crmLeadIds]);
-                          for (const inv of toAdd) {
-                            const { error } = await supabase
-                              .from('crm_leads')
-                              .insert({ user_id: user.id, investor_id: inv.id, status: 'inbox' });
-                            if (!error) {
-                              newIds.add(inv.id);
-                              added++;
-                              setAddedToCrmCount(added);
+                      {crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)) ? (
+                        <Link 
+                          href="/crm"
+                          onClick={onClose}
+                          className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-medium rounded-lg transition-all shadow-sm border border-zinc-700 flex items-center justify-center gap-2"
+                        >
+                          Go to CRM →
+                        </Link>
+                      ) : (
+                        <button 
+                          onClick={async () => {
+                            if (!user || !setCrmLeadIds || !crmLeadIds) return;
+                            setIsAddingToCrm(true);
+                            const toAdd = matchedInvestors.filter(inv => !crmLeadIds.has(inv.id));
+                            setAddedToCrmCount(0);
+                            let added = 0;
+                            const newIds = new Set([...crmLeadIds]);
+                            for (const inv of toAdd) {
+                              const { error } = await supabase
+                                .from('crm_leads')
+                                .insert({ user_id: user.id, investor_id: inv.id, status: 'inbox' });
+                              if (!error) {
+                                newIds.add(inv.id);
+                                added++;
+                                setAddedToCrmCount(added);
+                              }
                             }
-                          }
-                          setCrmLeadIds(newIds);
-                          setIsAddingToCrm(false);
-                        }}
-                        disabled={isAddingToCrm || (crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)))}
-                        className="px-4 py-2 crm-btn-oil text-white text-sm font-medium rounded-lg transition-all shadow-sm border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isAddingToCrm 
-                          ? `Adding... (${addedToCrmCount}/${addedToCrmCount + matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
-                          : (crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)))
-                            ? '✓ All in CRM'
+                            setCrmLeadIds(newIds);
+                            setIsAddingToCrm(false);
+                          }}
+                          disabled={isAddingToCrm}
+                          className="px-4 py-2 crm-btn-oil text-white text-sm font-medium rounded-lg transition-all shadow-sm border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isAddingToCrm 
+                            ? `Adding... (${addedToCrmCount}/${addedToCrmCount + matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
                             : `Add All to CRM (${matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
-                        }
-                      </button>
+                          }
+                        </button>
+                      )}
                       <button 
                         onClick={handleDownloadCSV}
                         className="px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
