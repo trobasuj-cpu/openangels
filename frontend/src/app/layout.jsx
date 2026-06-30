@@ -22,6 +22,9 @@ export const metadata = {
     description: "The largest open investor database. Filter by 90+ industries, get verified contacts, and draft AI pitches instantly.",
     images: ["https://openangels.xyz/og-image.png"],
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export const viewport = {
@@ -32,7 +35,6 @@ export default function RootLayout({ children, modal }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
