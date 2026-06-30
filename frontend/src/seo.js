@@ -4,6 +4,105 @@ export const INVESTOR_COUNT = '4,700+';
 export const LEGAL_UPDATED_LABEL = 'June 21, 2026';
 export const SEO_LASTMOD = '2026-06-21';
 
+// Stage slugs for catch-all routes
+export const STAGE_SLUGS = {
+  'pre-seed': { label: 'Pre-Seed', dbValue: 'pre-seed' },
+  'seed': { label: 'Seed', dbValue: 'seed' },
+  'series-a': { label: 'Series A', dbValue: 'series-a' },
+  'series-b': { label: 'Series B', dbValue: 'series-b' },
+  'angel': { label: 'Angel', dbValue: 'angel' },
+};
+
+// Geo regions for catch-all routes — each maps to an array of DB location prefixes
+export const GEO_REGIONS = {
+  'usa': { label: 'the USA', locations: null, countryMatch: true },
+  'europe': { label: 'Europe', locations: ['London', 'Berlin', 'Paris', 'Amsterdam', 'Stockholm', 'Barcelona', 'Madrid', 'Munich', 'Helsinki', 'Copenhagen', 'Oslo', 'Milan', 'Rome', 'Zurich', 'Geneva', 'Basel', 'Lisbon', 'Dublin', 'Prague', 'Warsaw', 'Vienna', 'Budapest', 'Bucharest', 'Bratislava', 'Tallinn', 'Riga', 'Brussels', 'Luxembourg', 'Hamburg', 'Genoa', 'Malmo', 'Sarajevo', 'Newcastle Upon Tyne', 'Limassol', 'St. Gallen', 'Valencia', 'Liège'] },
+  'asia': { label: 'Asia', locations: ['Singapore', 'Tokyo', 'Seoul', 'Hong Kong', 'Beijing', 'Shenzhen', 'Hangzhou', 'Bangalore', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Noida', 'Gurugram', 'Kolkata', 'Jakarta', 'Kuala Lumpur', 'Osaka', 'Bangkok'] },
+  'san-francisco': { label: 'San Francisco', locations: ['San Francisco, CA'] },
+  'new-york': { label: 'New York', locations: ['New York, NY'] },
+  'london': { label: 'London', locations: ['London'] },
+  'los-angeles': { label: 'Los Angeles', locations: ['Los Angeles, CA', 'Santa Monica, CA'] },
+  'silicon-valley': { label: 'Silicon Valley', locations: ['San Francisco, CA', 'Palo Alto, CA', 'Menlo Park, CA', 'Mountain View, CA', 'Sunnyvale, CA', 'San Jose, CA', 'San Mateo, CA', 'Redwood City, CA', 'Los Altos, CA', 'Atherton, CA', 'Portola Valley, CA', 'Pescadero, CA'] },
+  'india': { label: 'India', locations: ['Bangalore', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Noida', 'Gurugram', 'Kolkata'] },
+  'middle-east': { label: 'the Middle East', locations: ['Dubai', 'Riyadh', 'Amman', 'Beirut', 'Kuwait City', 'Manama', 'Muscat', 'Jerusalem', 'Tel Aviv'] },
+  'africa': { label: 'Africa', locations: ['Lagos', 'Nairobi', 'Cape Town', 'Johannesburg', 'Accra', 'Cairo', 'Abuja', 'Yaounde'] },
+  'latam': { label: 'Latin America', locations: ['Sao Paulo', 'Buenos Aires', 'Mexico City', 'Santiago', 'Bogota'] },
+  'canada': { label: 'Canada', locations: ['Toronto', 'Montreal', 'Ottawa', 'Victoria, BC', 'Moncton'] },
+  'boston': { label: 'Boston', locations: ['Boston, MA', 'Cambridge, MA', 'Northampton, MA'] },
+  'miami': { label: 'Miami', locations: ['Miami, FL', 'Fort Lauderdale, FL'] },
+  'austin': { label: 'Austin', locations: ['Austin, TX'] },
+  'seattle': { label: 'Seattle', locations: ['Seattle, WA', 'Medina, WA'] },
+  'chicago': { label: 'Chicago', locations: ['Chicago, IL'] },
+};
+
+// USA state abbreviations for matching US-based investors
+const US_STATE_CODES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'];
+
+export function isUSLocation(location) {
+  if (!location) return false;
+  // Match "City, ST" pattern where ST is a US state code
+  const match = location.match(/,\s*([A-Z]{2})$/);
+  if (match && US_STATE_CODES.includes(match[1])) return true;
+  // Also match "Washington DC" / "Washington, DC"
+  if (location.includes('Washington')) return true;
+  return false;
+}
+
+export function getStageInfo(slug) {
+  return STAGE_SLUGS[slug] || null;
+}
+
+export function getGeoInfo(slug) {
+  return GEO_REGIONS[slug] || null;
+}
+
+/**
+ * Parse a catch-all filters array from the URL.
+ * Returns { industry, stage, geo } with null for missing segments.
+ * Uses known STAGE_SLUGS and GEO_REGIONS to disambiguate.
+ */
+export function parseFilters(filtersArray) {
+  const result = { industry: null, stage: null, geo: null };
+  if (!filtersArray || filtersArray.length === 0) return result;
+  
+  for (const segment of filtersArray) {
+    const lower = segment.toLowerCase();
+    if (!result.stage && STAGE_SLUGS[lower]) {
+      result.stage = lower;
+    } else if (!result.geo && GEO_REGIONS[lower]) {
+      result.geo = lower;
+    } else if (!result.industry) {
+      result.industry = lower;
+    }
+  }
+  
+  return result;
+}
+
+// Popular cross-filter hubs for internal linking
+export const POPULAR_HUBS = [
+  { filters: ['saas', 'pre-seed'], label: 'SaaS Pre-Seed' },
+  { filters: ['ai', 'seed'], label: 'AI Seed' },
+  { filters: ['fintech', 'seed'], label: 'Fintech Seed' },
+  { filters: ['saas', 'silicon-valley'], label: 'SaaS in Silicon Valley' },
+  { filters: ['ai', 'san-francisco'], label: 'AI in San Francisco' },
+  { filters: ['fintech', 'europe'], label: 'Fintech in Europe' },
+  { filters: ['b2b', 'pre-seed'], label: 'B2B Pre-Seed' },
+  { filters: ['consumer', 'seed'], label: 'Consumer Seed' },
+  { filters: ['health', 'usa'], label: 'Health in the USA' },
+  { filters: ['crypto', 'seed'], label: 'Crypto Seed' },
+  { filters: ['marketplace', 'pre-seed'], label: 'Marketplace Pre-Seed' },
+  { filters: ['enterprise', 'series-a'], label: 'Enterprise Series A' },
+  { filters: ['deep-tech', 'europe'], label: 'Deep Tech in Europe' },
+  { filters: ['developer-tools', 'seed'], label: 'Developer Tools Seed' },
+  { filters: ['ai', 'pre-seed', 'new-york'], label: 'AI Pre-Seed in New York' },
+  { filters: ['saas', 'seed', 'europe'], label: 'SaaS Seed in Europe' },
+  { filters: ['climate', 'seed'], label: 'Climate Seed' },
+  { filters: ['edtech', 'pre-seed'], label: 'EdTech Pre-Seed' },
+  { filters: ['biotech', 'seed'], label: 'Biotech Seed' },
+  { filters: ['gaming', 'angel'], label: 'Gaming Angel' },
+];
+
 export const INDUSTRY_PAGES = [
   {
     slug: 'saas',

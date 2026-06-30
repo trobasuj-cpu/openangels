@@ -10,7 +10,7 @@ import BackgroundAnimation from './BackgroundAnimation';
 import LoginModal from './LoginModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
-import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL } from '@/seo.js';
+import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 
 const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -977,6 +977,24 @@ export default function Dashboard() {
                     className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-500/30 hover:shadow-sm transition-all"
                   >
                     {page.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-10 mb-8">
+              <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-6">Popular Investor Hubs</h2>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-8 text-sm max-w-3xl leading-relaxed">
+                Explore curated lists of angel investors and VCs by combining industry, stage, and location filters. Find the perfect niche match for your fundraise.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {POPULAR_HUBS.map((hub) => (
+                  <Link
+                    key={hub.filters.join('/')}
+                    href={`/investors/${hub.filters.join('/')}`}
+                    className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-500/30 hover:shadow-sm transition-all"
+                  >
+                    {hub.label}
                   </Link>
                 ))}
               </div>
