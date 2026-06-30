@@ -10,11 +10,19 @@ export async function generateMetadata({ params }) {
   const { industry } = await params;
   const formattedIndustry = formatIndustryLabel(industry);
   const isKnownIndustry = Boolean(getIndustryPage(industry));
-  const description = `Find ${formattedIndustry} angel investors and VCs from OpenAngels, a curated ${INVESTOR_COUNT} investor database with outreach tools for founders.`;
+  
+  // Fetch exact count for SEO metadata
+  const { count } = await supabase
+    .from('investors_secure')
+    .select('*', { count: 'exact', head: true })
+    .contains('industries', [industry]);
+    
+  const numInvestors = count || '100+';
+  const description = `Looking for funding? Get our verified list of ${numInvestors} active ${formattedIndustry} angel investors and VC funds. Access emails, LinkedIn profiles, and investment focus to pitch your startup.`;
   const canonicalUrl = absoluteUrl(`/investors/${industry}`);
 
   return {
-    title: `${formattedIndustry} Angel Investors and VCs (${CURRENT_YEAR}) | OpenAngels`,
+    title: `Top ${numInvestors} ${formattedIndustry} Angel Investors & VCs (${CURRENT_YEAR}) | OpenAngels`,
     description,
     alternates: { canonical: canonicalUrl },
     robots: {
