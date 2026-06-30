@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
+import React, { useState, useEffect, useMemo, useDeferredValue, useRef } from 'react';
 // helmet removed
 import Link from 'next/link';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X, UserPlus, CheckCircle } from 'lucide-react';
@@ -296,6 +296,14 @@ export default function Dashboard() {
   const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
   const [selectedStages, setSelectedStages] = useState([]);
   const [visibleCount, setVisibleCount] = useState(24);
+  const mainScrollRef = useRef(null);
+
+  // Scroll back to top when filters change
+  useEffect(() => {
+    if (mainScrollRef.current) {
+      mainScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages]);
 
   async function fetchInvestors() {
     try {
@@ -715,7 +723,7 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <div ref={mainScrollRef} className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           <div className="max-w-6xl mx-auto">
             <MarketingShowcase isPremium={profile?.is_premium} />
 
