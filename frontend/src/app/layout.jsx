@@ -22,9 +22,6 @@ export const metadata = {
     description: "The largest open investor database. Filter by 90+ industries, get verified contacts, and draft AI pitches instantly.",
     images: ["https://openangels.xyz/og-image.png"],
   },
-  icons: {
-    icon: "/favicon.svg",
-  },
 };
 
 export const viewport = {
