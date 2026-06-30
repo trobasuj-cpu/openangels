@@ -1,10 +1,11 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Sparkles, X, Copy, Mail, Loader2, Save } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
 export default function AIEmailModal({ isOpen, onClose, investor, profile, user, allInvestors = [], crmLeadIds, setCrmLeadIds }) {
@@ -72,7 +73,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
 
       const { data: { session } } = await supabase.auth.getSession();
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-email`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/generate-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

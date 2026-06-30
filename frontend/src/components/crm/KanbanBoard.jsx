@@ -1,9 +1,10 @@
+"use client";
 import React, { useState, useEffect, useCallback } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Mail, Link as LinkIcon, Search, ArrowLeft, Trash2, StickyNote, X, Loader2, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -142,7 +143,7 @@ export default function KanbanBoard() {
         <h1 className="text-3xl font-bold text-white mb-4">Investor CRM</h1>
         <p className="text-zinc-400 mb-8">Sign in to access your personal investor pipeline.</p>
         <Link 
-          to="/"
+          href="/"
           className="px-6 py-3 bg-white text-zinc-900 font-medium rounded-xl hover:bg-zinc-100 transition-colors"
         >
           ← Back to Dashboard
@@ -156,7 +157,7 @@ export default function KanbanBoard() {
       {/* Header */}
       <header className="border-b border-zinc-800/50 flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-0 sm:h-16 bg-zinc-950/80 backdrop-blur-xl shrink-0 gap-3 sm:gap-0">
         <div className="flex items-center gap-3 sm:gap-4 justify-between sm:justify-start">
-          <Link to="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
               <span className="text-zinc-900 text-sm font-bold">OA</span>
             </div>
@@ -216,7 +217,7 @@ export default function KanbanBoard() {
               Go to the investor database and click <strong>+ Add to CRM</strong> on any investor card to start building your outreach pipeline.
             </p>
             <Link 
-              to="/"
+              href="/"
               className="px-6 py-3 bg-white text-zinc-900 font-medium rounded-xl hover:bg-zinc-100 transition-colors"
             >
               Browse Investors →

@@ -1,6 +1,7 @@
+"use client";
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+// helmet removed
+import Link from 'next/link';
 import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X, UserPlus, CheckCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -9,7 +10,7 @@ import LoginModal from './LoginModal';
 import AIEmailModal from './AIEmailModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
-import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL } from '../seo.js';
+import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL } from '@/seo.js';
 
 const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -511,22 +512,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <Helmet>
-        <title>Find Angel Investors for Your Startup — 4,700+ Verified VCs &amp; Angels | OpenAngels</title>
-        <meta name="description" content="Search 4,700+ verified angel investors and VCs. Filter by industry, check size, and stage. Draft personalized cold emails with AI. One-time $49 — no subscription." />
-        <link rel="canonical" href={absoluteUrl('/')} />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content={PRODUCT_NAME} />
-        <meta property="og:url" content={absoluteUrl('/')} />
-        <meta property="og:title" content="OpenAngels | Find Angel Investors for Your Startup" />
-        <meta property="og:description" content="Search 4,700+ curated angel investors and VCs, manage your fundraising pipeline, and draft AI-personalized outreach." />
-        <meta property="og:image" content={absoluteUrl('/og-image.png')} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="OpenAngels | Angel Investor Database" />
-        <meta name="twitter:description" content="Find startup investors, filter by thesis, and draft personalized investor emails with AI." />
-        <meta name="twitter:image" content={absoluteUrl('/og-image.png')} />
-        <script type="application/ld+json">{JSON.stringify(dashboardSchema)}</script>
-      </Helmet>
       <BackgroundAnimation />
       <div className="flex h-screen overflow-hidden relative z-10">
         {isMobileFiltersOpen && (
@@ -616,7 +601,7 @@ export default function Dashboard() {
               {/* CRM Button in Header (Always Visible) */}
               {user ? (
                 <Link
-                  to="/crm"
+                  href="/crm"
                   className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10 shadow-lg"
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -677,7 +662,7 @@ export default function Dashboard() {
                         </div>
                         <div className="p-1">
                           <Link
-                            to="/crm"
+                            href="/crm"
                             onClick={() => setIsProfileMenuOpen(false)}
                             className="w-full text-left px-3 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors flex items-center justify-between group"
                           >
@@ -1022,7 +1007,7 @@ export default function Dashboard() {
                 {INDUSTRY_PAGES.map((page) => (
                   <Link
                     key={page.slug}
-                    to={`/investors/${page.slug}`}
+                    href={`/investors/${page.slug}`}
                     className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-500/30 hover:shadow-sm transition-all"
                   >
                     {page.label}

@@ -9,3 +9,5 @@ scraper/contact_enrichment_report_*.csv
 frontend/.env
 scraper/.env
 node_modules/
+api 10.txt
+frontend_old/audit.js

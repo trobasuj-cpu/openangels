@@ -1,5 +1,6 @@
+"use client";
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+// helmet removed
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -78,11 +79,6 @@ const FAQ = () => {
 
   return (
     <>
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(faqSchema)}
-        </script>
-      </Helmet>
       <section className="py-6 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           

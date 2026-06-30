@@ -6,9 +6,9 @@ Run: python import_to_supabase.py
 
 import os
 import sys
+import json
 from dotenv import load_dotenv
 from supabase import create_client, Client
-from seed_investors import INVESTORS
 from tqdm import tqdm
 
 load_dotenv()
@@ -32,13 +32,15 @@ def clean_investor(inv: dict) -> dict:
 
 
 def import_investors():
-    print(f"\n>>> Starting import of {len(INVESTORS)} investors...\n")
+    with open("massive_investors.json", "r") as f:
+        investors_data = json.load(f)
+    print(f"\n>>> Starting import of {len(investors_data)} investors...\n")
 
     success = 0
     skipped = 0
     errors  = 0
 
-    for inv in tqdm(INVESTORS, desc="Importing"):
+    for inv in tqdm(investors_data, desc="Importing"):
         try:
             data = clean_investor(inv)
             supabase.table("investors").upsert(

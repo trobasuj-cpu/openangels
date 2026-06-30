@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+// helmet removed
 
 export default function Footer() {
   const personSchema = {
@@ -30,16 +30,11 @@ export default function Footer() {
 
   return (
     <>
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(personSchema)}
-        </script>
-      </Helmet>
     <footer className="bg-zinc-950 text-zinc-400 py-16 border-t border-zinc-900 mt-auto">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         {/* Brand & Newsletter */}
         <div className="space-y-6">
-          <Link to="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
@@ -74,11 +69,11 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold mb-4">Company and Legal</h3>
           <ul className="space-y-3 text-sm">
-            <li><Link to="/terms" className="hover:text-amber-500 transition-colors">Terms of service</Link></li>
-            <li><Link to="/refund" className="hover:text-amber-500 transition-colors">Refund policy</Link></li>
-            <li><Link to="/privacy" className="hover:text-amber-500 transition-colors">Privacy policy</Link></li>
-            <li><Link to="/gdpr" className="hover:text-amber-500 transition-colors">GDPR</Link></li>
-            <li><Link to="/contact" className="hover:text-amber-500 transition-colors">Contact Us</Link></li>
+            <li><Link href="/terms" className="hover:text-amber-500 transition-colors">Terms of service</Link></li>
+            <li><Link href="/refund" className="hover:text-amber-500 transition-colors">Refund policy</Link></li>
+            <li><Link href="/privacy" className="hover:text-amber-500 transition-colors">Privacy policy</Link></li>
+            <li><Link href="/gdpr" className="hover:text-amber-500 transition-colors">GDPR</Link></li>
+            <li><Link href="/contact" className="hover:text-amber-500 transition-colors">Contact Us</Link></li>
           </ul>
         </div>
 
@@ -86,12 +81,12 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold mb-4">Products</h3>
           <ul className="space-y-3 text-sm">
-            <li><Link to="/" className="hover:text-amber-500 transition-colors">Investor Database</Link></li>
-            <li><Link to="/investors/ai" className="hover:text-amber-500 transition-colors">AI Investors List</Link></li>
-            <li><Link to="/investors/saas" className="hover:text-amber-500 transition-colors">SaaS Investors List</Link></li>
-            <li><Link to="/investors/fintech" className="hover:text-amber-500 transition-colors">Fintech Investors List</Link></li>
-            <li><Link to="/investors/consumer" className="hover:text-amber-500 transition-colors">Consumer Investors List</Link></li>
-            <li><Link to="/investors/b2b" className="hover:text-amber-500 transition-colors">B2B Investors List</Link></li>
+            <li><Link href="/" className="hover:text-amber-500 transition-colors">Investor Database</Link></li>
+            <li><Link href="/investors/ai" className="hover:text-amber-500 transition-colors">AI Investors List</Link></li>
+            <li><Link href="/investors/saas" className="hover:text-amber-500 transition-colors">SaaS Investors List</Link></li>
+            <li><Link href="/investors/fintech" className="hover:text-amber-500 transition-colors">Fintech Investors List</Link></li>
+            <li><Link href="/investors/consumer" className="hover:text-amber-500 transition-colors">Consumer Investors List</Link></li>
+            <li><Link href="/investors/b2b" className="hover:text-amber-500 transition-colors">B2B Investors List</Link></li>
           </ul>
         </div>
 
@@ -99,9 +94,9 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold mb-4">Free Fundraising Tools</h3>
           <ul className="space-y-3 text-sm">
-            <li><Link to="/" className="hover:text-amber-500 transition-colors">Investor Outreach AI Email Generator</Link></li>
-            <li><Link to="/" className="hover:text-amber-500 transition-colors">VC Search Tool</Link></li>
-            <li><Link to="/" className="hover:text-amber-500 transition-colors">Investor Matcher</Link></li>
+            <li><Link href="/" className="hover:text-amber-500 transition-colors">Investor Outreach AI Email Generator</Link></li>
+            <li><Link href="/" className="hover:text-amber-500 transition-colors">VC Search Tool</Link></li>
+            <li><Link href="/" className="hover:text-amber-500 transition-colors">Investor Matcher</Link></li>
             <li className="pt-4 pb-2"><h3 className="text-white font-semibold">For Investors</h3></li>
             <li><a href="mailto:support@openangels.xyz" className="hover:text-amber-500 transition-colors">Join investor database</a></li>
           </ul>
