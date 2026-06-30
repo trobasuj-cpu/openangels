@@ -153,7 +153,7 @@ export default function KanbanBoard() {
   }
 
   return (
-    <div className="h-screen bg-zinc-950 text-zinc-200 flex flex-col font-sans overflow-hidden">
+    <div className="h-screen bg-zinc-950 text-zinc-200 flex flex-col font-sans">
       {/* Header */}
       <header className="border-b border-zinc-800/50 flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-0 sm:h-16 bg-zinc-950/80 backdrop-blur-xl shrink-0 gap-3 sm:gap-0">
         <div className="flex items-center gap-3 sm:gap-4 justify-between sm:justify-start">
@@ -203,8 +203,8 @@ export default function KanbanBoard() {
         </div>
       </header>
 
-      {/* Content */}
-      <div className="flex-1 p-5 overflow-hidden">
+      {/* Content — scrollable area */}
+      <div className="flex-1 overflow-y-auto">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <Loader2 className="w-8 h-8 text-zinc-500 animate-spin" />
@@ -225,10 +225,11 @@ export default function KanbanBoard() {
           </div>
         ) : (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex flex-col sm:grid sm:grid-cols-6 gap-3 sm:gap-3 h-full overflow-y-auto sm:overflow-hidden pb-20 sm:pb-0">
-              {columns.map(col => (
-                <div key={col.id} className="flex flex-col min-w-0 sm:h-full">
-                  <div className={cn("flex items-center justify-between pb-2 mb-3 border-b-2", col.color)}>
+            {/* Sticky column headers */}
+            <div className="sticky top-0 z-10 bg-zinc-950 px-5 pt-5 pb-0">
+              <div className="grid grid-cols-1 sm:grid-cols-6 gap-3">
+                {columns.map(col => (
+                  <div key={col.id} className={cn("flex items-center justify-between pb-2 border-b-2", col.color)}>
                     <div className="flex items-center gap-2">
                       <div className={cn("w-2 h-2 rounded-full", col.dot)} />
                       <h2 className="font-semibold text-zinc-400 text-xs uppercase tracking-wider">{col.name}</h2>
@@ -237,14 +238,21 @@ export default function KanbanBoard() {
                       {col.items.length}
                     </span>
                   </div>
-                  
+                ))}
+              </div>
+            </div>
+
+            {/* Card columns */}
+            <div className="grid grid-cols-1 sm:grid-cols-6 gap-3 px-5 pt-3 pb-20 sm:pb-5">
+              {columns.map(col => (
+                <div key={col.id} className="flex flex-col min-w-0">
                   <Droppable droppableId={col.id}>
                     {(provided, snapshot) => (
                       <div 
                         {...provided.droppableProps} 
                         ref={provided.innerRef}
                         className={cn(
-                          "rounded-xl transition-colors p-1.5 sm:-mx-1.5 sm:flex-1 sm:overflow-y-auto custom-scrollbar min-h-[60px]",
+                          "rounded-xl transition-colors p-1.5 sm:-mx-1.5 custom-scrollbar min-h-[60px]",
                           snapshot.isDraggingOver ? "bg-zinc-900/60 ring-1 ring-zinc-700/50" : ""
                         )}
                       >
