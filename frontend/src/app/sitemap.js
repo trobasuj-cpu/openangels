@@ -47,22 +47,33 @@ export default async function sitemap() {
     });
   }
 
-  // Fetch all investors to include in sitemap
+  // Fetch ALL investors with pagination (Supabase default limit is 1000)
   let allInvestors = [];
   try {
-    const { data } = await supabase
-      .from('investors')
-      .select('slug, updated_at')
-      .not('slug', 'is', null);
-    
-    if (data) {
-      allInvestors = data.map((inv) => ({
-        url: absoluteUrl(`/investor/${inv.slug}`),
-        lastModified: inv.updated_at ? new Date(inv.updated_at) : new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.7,
-      }));
+    let allData = [];
+    let from = 0;
+    const pageSize = 1000;
+
+    while (true) {
+      const { data, error } = await supabase
+        .from('investors_secure')
+        .select('slug, updated_at')
+        .not('slug', 'is', null)
+        .range(from, from + pageSize - 1);
+
+      if (error) throw error;
+      if (!data || data.length === 0) break;
+      allData = allData.concat(data);
+      if (data.length < pageSize) break;
+      from += pageSize;
     }
+
+    allInvestors = allData.map((inv) => ({
+      url: absoluteUrl(`/investor/${inv.slug}`),
+      lastModified: inv.updated_at ? new Date(inv.updated_at) : new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    }));
   } catch (error) {
     console.error('Sitemap investor fetch error:', error);
   }
