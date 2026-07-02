@@ -51,15 +51,16 @@ export default async function sitemap() {
   let allInvestors = [];
   try {
     const { data } = await supabase
-      .from('investors_secure')
-      .select('id, slug, updated_at');
+      .from('investors')
+      .select('slug, updated_at')
+      .not('slug', 'is', null);
     
     if (data) {
       allInvestors = data.map((inv) => ({
-        url: absoluteUrl(`/investor/${inv.slug || inv.id}`),
+        url: absoluteUrl(`/investor/${inv.slug}`),
         lastModified: inv.updated_at ? new Date(inv.updated_at) : new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.6,
+        changeFrequency: 'monthly',
+        priority: 0.7,
       }));
     }
   } catch (error) {
