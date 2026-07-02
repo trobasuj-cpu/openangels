@@ -57,7 +57,7 @@ export default async function sitemap() {
     while (true) {
       const { data, error } = await supabase
         .from('investors_secure')
-        .select('slug, updated_at')
+        .select('slug, created_at')
         .not('slug', 'is', null)
         .range(from, from + pageSize - 1);
 
@@ -70,7 +70,7 @@ export default async function sitemap() {
 
     allInvestors = allData.map((inv) => ({
       url: absoluteUrl(`/investor/${inv.slug}`),
-      lastModified: inv.updated_at ? new Date(inv.updated_at) : new Date(),
+      lastModified: inv.created_at ? new Date(inv.created_at) : new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     }));
