@@ -6,12 +6,10 @@ Allow: /
 Disallow: /api/
 Disallow: /crm/
 
-Sitemap: https://openangels.xyz/sitemap-static.xml
-Sitemap: https://openangels.xyz/sitemap-investors-1.xml
-Sitemap: https://openangels.xyz/sitemap-investors-2.xml
-Sitemap: https://openangels.xyz/sitemap-investors-3.xml
-Sitemap: https://openangels.xyz/sitemap-investors-4.xml
-Sitemap: https://openangels.xyz/sitemap-investors-5.xml
+Sitemap: https://openangels.xyz/sitemap-1.xml
+Sitemap: https://openangels.xyz/sitemap-2.xml
+Sitemap: https://openangels.xyz/sitemap-3.xml
+Sitemap: https://openangels.xyz/sitemap-4.xml
 `;
 
   return new Response(robotsTxt, {

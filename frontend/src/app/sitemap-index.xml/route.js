@@ -1,11 +1,9 @@
 export async function GET() {
   const sitemaps = [
-    'https://openangels.xyz/sitemap-static.xml',
-    'https://openangels.xyz/sitemap-investors-1.xml',
-    'https://openangels.xyz/sitemap-investors-2.xml',
-    'https://openangels.xyz/sitemap-investors-3.xml',
-    'https://openangels.xyz/sitemap-investors-4.xml',
-    'https://openangels.xyz/sitemap-investors-5.xml',
+    'https://openangels.xyz/sitemap-1.xml',
+    'https://openangels.xyz/sitemap-2.xml',
+    'https://openangels.xyz/sitemap-3.xml',
+    'https://openangels.xyz/sitemap-4.xml',
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
