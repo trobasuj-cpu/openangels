@@ -3,80 +3,88 @@ import { supabase } from '@/lib/supabase';
 
 export const revalidate = 86400; // Cache for 24 hours
 
-export default async function sitemap() {
-  const staticRoutes = INDEXABLE_ROUTES.map((route) => ({
-    url: absoluteUrl(route.path),
-    lastModified: new Date(route.lastmod),
-    changeFrequency: route.changefreq,
-    priority: parseFloat(route.priority),
-  }));
+// Step 1: Declare sitemap parts (numeric IDs required by Next.js)
+// 0 = static + hubs, 1-5 = investor pages (1000 each)
+export async function generateSitemaps() {
+  return [
+    { id: 0 },  // Static routes + SEO hubs
+    { id: 1 },  // Investors 0-999
+    { id: 2 },  // Investors 1000-1999
+    { id: 3 },  // Investors 2000-2999
+    { id: 4 },  // Investors 3000-3999
+    { id: 5 },  // Investors 4000+
+  ];
+}
 
-  // Programmatic SEO hub routes (industry x stage, industry x geo)
-  const hubRoutes = [];
-  const stages = Object.keys(STAGE_SLUGS);
-  const geos = Object.keys(GEO_REGIONS);
+// Step 2: Generate URLs for each part
+export default async function sitemap({ id }) {
+  // Part 0: Static routes + SEO hubs
+  if (id === 0) {
+    const staticRoutes = INDEXABLE_ROUTES.map((route) => ({
+      url: absoluteUrl(route.path),
+      lastModified: new Date(route.lastmod),
+      changeFrequency: route.changefreq,
+      priority: parseFloat(route.priority),
+    }));
 
-  for (const industry of INDUSTRY_PAGES) {
-    // Industry + Stage
-    for (const stage of stages) {
+    const hubRoutes = [];
+    const stages = Object.keys(STAGE_SLUGS);
+    const geos = Object.keys(GEO_REGIONS);
+
+    for (const industry of INDUSTRY_PAGES) {
+      for (const stage of stages) {
+        hubRoutes.push({
+          url: absoluteUrl(`/investors/${industry.slug}/${stage}`),
+          lastModified: new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        });
+      }
+      for (const geo of geos.slice(0, 8)) {
+        hubRoutes.push({
+          url: absoluteUrl(`/investors/${industry.slug}/${geo}`),
+          lastModified: new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.6,
+        });
+      }
+    }
+
+    for (const hub of POPULAR_HUBS) {
       hubRoutes.push({
-        url: absoluteUrl(`/investors/${industry.slug}/${stage}`),
+        url: absoluteUrl(`/investors/${hub.filters.join('/')}`),
         lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: 0.7,
       });
     }
-    // Industry + Top Geos (limit to avoid sitemap bloat)
-    for (const geo of geos.slice(0, 8)) {
-      hubRoutes.push({
-        url: absoluteUrl(`/investors/${industry.slug}/${geo}`),
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.6,
-      });
-    }
+
+    return [...staticRoutes, ...hubRoutes];
   }
 
-  // Popular Hubs (3-segment cross-filters)
-  for (const hub of POPULAR_HUBS) {
-    hubRoutes.push({
-      url: absoluteUrl(`/investors/${hub.filters.join('/')}`),
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    });
-  }
+  // Parts 1-5: Investor pages (1000 per chunk)
+  const page = id - 1; // id=1 → offset 0, id=2 → offset 1000, etc.
+  const limit = 1000;
+  const offset = page * limit;
 
-  // Fetch ALL investors with pagination (Supabase default limit is 1000)
-  let allInvestors = [];
   try {
-    let allData = [];
-    let from = 0;
-    const pageSize = 1000;
+    const { data, error } = await supabase
+      .from('investors_secure')
+      .select('slug, created_at')
+      .not('slug', 'is', null)
+      .range(offset, offset + limit - 1);
 
-    while (true) {
-      const { data, error } = await supabase
-        .from('investors_secure')
-        .select('slug, created_at')
-        .not('slug', 'is', null)
-        .range(from, from + pageSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) return [];
 
-      if (error) throw error;
-      if (!data || data.length === 0) break;
-      allData = allData.concat(data);
-      if (data.length < pageSize) break;
-      from += pageSize;
-    }
-
-    allInvestors = allData.map((inv) => ({
+    return data.map((inv) => ({
       url: absoluteUrl(`/investor/${inv.slug}`),
       lastModified: inv.created_at ? new Date(inv.created_at) : new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     }));
   } catch (error) {
-    console.error('Sitemap investor fetch error:', error);
+    console.error(`Sitemap investor fetch error (part ${id}):`, error);
+    return [];
   }
-
-  return [...staticRoutes, ...hubRoutes, ...allInvestors];
 }
