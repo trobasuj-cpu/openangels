@@ -1,7 +1,5 @@
 export async function GET() {
   const sitemaps = [
-    'https://openangels.xyz/sitemap-1.xml',
-    'https://openangels.xyz/sitemap-2.xml',
     'https://openangels.xyz/sitemap-3.xml',
     'https://openangels.xyz/sitemap-4.xml',
   ];
