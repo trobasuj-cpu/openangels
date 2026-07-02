@@ -1,8 +1,8 @@
-export const SITE_URL = 'https://openangels.xyz';
+﻿export const SITE_URL = 'https://openangels.xyz';
 export const PRODUCT_NAME = 'OpenAngels';
 export const INVESTOR_COUNT = '4,700+';
-export const LEGAL_UPDATED_LABEL = 'June 21, 2026';
-export const SEO_LASTMOD = '2026-06-21';
+export const LEGAL_UPDATED_LABEL = 'July 1, 2026';
+export const SEO_LASTMOD = '2026-07-01';
 
 // Stage slugs for catch-all routes
 export const STAGE_SLUGS = {
@@ -13,10 +13,10 @@ export const STAGE_SLUGS = {
   'angel': { label: 'Angel', dbValue: 'angel' },
 };
 
-// Geo regions for catch-all routes — each maps to an array of DB location prefixes
+// Geo regions for catch-all routes вЂ” each maps to an array of DB location prefixes
 export const GEO_REGIONS = {
   'usa': { label: 'the USA', locations: null, countryMatch: true },
-  'europe': { label: 'Europe', locations: ['London', 'Berlin', 'Paris', 'Amsterdam', 'Stockholm', 'Barcelona', 'Madrid', 'Munich', 'Helsinki', 'Copenhagen', 'Oslo', 'Milan', 'Rome', 'Zurich', 'Geneva', 'Basel', 'Lisbon', 'Dublin', 'Prague', 'Warsaw', 'Vienna', 'Budapest', 'Bucharest', 'Bratislava', 'Tallinn', 'Riga', 'Brussels', 'Luxembourg', 'Hamburg', 'Genoa', 'Malmo', 'Sarajevo', 'Newcastle Upon Tyne', 'Limassol', 'St. Gallen', 'Valencia', 'Liège'] },
+  'europe': { label: 'Europe', locations: ['London', 'Berlin', 'Paris', 'Amsterdam', 'Stockholm', 'Barcelona', 'Madrid', 'Munich', 'Helsinki', 'Copenhagen', 'Oslo', 'Milan', 'Rome', 'Zurich', 'Geneva', 'Basel', 'Lisbon', 'Dublin', 'Prague', 'Warsaw', 'Vienna', 'Budapest', 'Bucharest', 'Bratislava', 'Tallinn', 'Riga', 'Brussels', 'Luxembourg', 'Hamburg', 'Genoa', 'Malmo', 'Sarajevo', 'Newcastle Upon Tyne', 'Limassol', 'St. Gallen', 'Valencia', 'LiГЁge'] },
   'asia': { label: 'Asia', locations: ['Singapore', 'Tokyo', 'Seoul', 'Hong Kong', 'Beijing', 'Shenzhen', 'Hangzhou', 'Bangalore', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Noida', 'Gurugram', 'Kolkata', 'Jakarta', 'Kuala Lumpur', 'Osaka', 'Bangkok'] },
   'san-francisco': { label: 'San Francisco', locations: ['San Francisco, CA'] },
   'new-york': { label: 'New York', locations: ['New York, NY'] },
@@ -290,3 +290,4 @@ export function formatIndustryLabel(slug = '') {
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
 }
+
