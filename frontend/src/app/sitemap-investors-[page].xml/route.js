@@ -46,7 +46,7 @@ export async function GET(request, { params }) {
       },
     });
   } catch (error) {
-    console.error(\`Sitemap investors \${pageNum} fetch error:\`, error);
+    console.error(`Sitemap investors ${pageNum} fetch error:`, error);
     return new Response('Error generating sitemap', { status: 500 });
   }
 }
