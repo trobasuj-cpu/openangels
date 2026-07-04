@@ -3,7 +3,7 @@ import re
 import json
 import urllib.request
 from dotenv import load_dotenv
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 import concurrent.futures
 from pathlib import Path
 # Load .env absolutely

@@ -10,7 +10,7 @@ import concurrent.futures
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 
 load_dotenv('frontend/.env')
 

@@ -6,7 +6,7 @@ import urllib.parse
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from pathlib import Path
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 import concurrent.futures
 
 # Load .env absolutely
