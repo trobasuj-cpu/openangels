@@ -4,6 +4,8 @@ import json
 import urllib.request
 import xml.etree.ElementTree as ET
 from dotenv import load_dotenv
+import requests
+import time
 
 # Load .env relative to script location
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend', '.env')
@@ -72,19 +74,31 @@ def extract_names_with_gemini(text):
     }
     
     headers = {'Content-Type': 'application/json'}
-    req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')
-    
-    try:
-        with urllib.request.urlopen(req) as res:
-            data = json.loads(res.read().decode('utf-8'))
-            response_text = data['candidates'][0]['content']['parts'][0]['text']
-            # Clean up markdown if Gemini ignored instructions
-            response_text = response_text.replace('```json', '').replace('```', '').strip()
-            names = json.loads(response_text)
-            return [n for n in names if isinstance(n, str) and len(n.split()) >= 2]
-    except Exception as e:
-        print(f"Gemini API Error: {e}")
-        return []
+    for attempt in range(3):
+        try:
+            res = requests.post(url, headers=headers, data=json.dumps(payload), timeout=15)
+            res.raise_for_status()
+            response_data = res.json()
+            
+            try:
+                text_result = response_data['candidates'][0]['content']['parts'][0]['text']
+                # Clean up markdown if Gemini ignored instructions
+                response_text = text_result.replace('```json', '').replace('```', '').strip()
+                names = json.loads(response_text)
+                return [n for n in names if isinstance(n, str) and len(n.split()) >= 2]
+            except (KeyError, IndexError, json.JSONDecodeError):
+                return []
+        except requests.exceptions.HTTPError as e:
+            if res.status_code == 429:
+                print(f"Gemini API Rate Limit (429). Retrying in 10s... (Attempt {attempt+1}/3)")
+                time.sleep(10)
+            else:
+                print(f"Gemini API Error: {e}")
+                break
+        except Exception as e:
+            print(f"Gemini API Exception: {e}")
+            break
+    return []
 
 def scrape_rss(feed_url):
     print(f"Fetching RSS: {feed_url}")
