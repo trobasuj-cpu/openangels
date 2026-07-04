@@ -71,7 +71,7 @@ def is_junk_email(email, name=None):
             'office@', 'billing@', 'privacy@', 'legal@', 'abuse@', 'webmaster@',
             'postmaster@', 'marketing@', 'feedback@', 'newsletter@', 'enquiries@',
             'corrections@', 'editor@', 'tips@', 'news@', 'media@', 'pr@',
-            'careers@', 'recruiting@', 'hr@', 'donate@', 'mail@']
+            'careers@', 'recruiting@', 'hr@', 'donate@', 'mail@', 'folks@']
     junk_domains = ['forbes.com', 'nytimes.com', 'wsj.com', 'techcrunch.com',
             'bloomberg.com', 'reuters.com', 'bbc.com', 'cnn.com', 'example.com',
             'sentry.io', 'github.com', 'google.com', 'facebook.com', 'wired.com']
@@ -159,7 +159,7 @@ def extract_personal_url(bio):
         domain = match.group(1)
         skip = ['twitter.com', 'linkedin.com', 'google.com', 'facebook.com',
                 'instagram.com', 'youtube.com', 'medium.com', 'github.com',
-                'crunchbase.com', 'angel.co', 'substack.com']
+                'crunchbase.com', 'angel.co', 'substack.com', 'folk.app', 'techcrunch.com', 'sifted.eu']
         if domain not in skip and not any(domain.endswith(ext) for ext in ['.png', '.jpg', '.pdf']):
             return 'http://' + domain
     return None
