@@ -14,7 +14,7 @@ from ddgs import DDGS
 
 load_dotenv('frontend/.env')
 
-url = os.environ.get("VITE_SUPABASE_URL")
+url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("VITE_SUPABASE_URL")
 key = os.environ.get("VITE_SUPABASE_SERVICE_ROLE_KEY")
 github_token = os.environ.get("GITHUB_TOKEN")
 
