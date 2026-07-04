@@ -167,3 +167,5 @@ def run_lists_scraper():
 
 if __name__ == "__main__":
     run_lists_scraper()
+    import os
+    os._exit(0)

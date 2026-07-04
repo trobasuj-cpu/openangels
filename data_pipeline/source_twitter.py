@@ -132,3 +132,5 @@ def run_twitter_scraper():
 
 if __name__ == "__main__":
     run_twitter_scraper()
+    import os
+    os._exit(0)
