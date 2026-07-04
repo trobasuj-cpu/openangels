@@ -93,12 +93,15 @@ def ddg_search(query, max_results=3, timeout=10):
             return list(DDGS().text(query, max_results=max_results))
         except Exception:
             return []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-        fut = pool.submit(_run)
-        try:
-            return fut.result(timeout=timeout)
-        except (concurrent.futures.TimeoutError, Exception):
-            return []
+    pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    fut = pool.submit(_run)
+    try:
+        res = fut.result(timeout=timeout)
+        pool.shutdown(wait=False)
+        return res
+    except (concurrent.futures.TimeoutError, Exception):
+        pool.shutdown(wait=False)
+        return []
 
 def scrape_page_text(url):
     try:
