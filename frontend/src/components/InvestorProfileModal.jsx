@@ -142,7 +142,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
     setError(null);
     try {
       const rawInd = investor.industry || investor.industries;
-      const industries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
+      const industries = Array.isArray(rawInd) ? rawInd.map(i => i.toLowerCase()) : (typeof rawInd === 'string' ? rawInd.split(',').map(i => i.trim().toLowerCase()) : []);
 
       const { data: { session } } = await supabase.auth.getSession();
 
