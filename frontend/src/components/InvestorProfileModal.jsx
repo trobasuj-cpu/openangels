@@ -45,6 +45,36 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
       });
     }
   }, [initialUser]);
+
+  const [allInvestors, setAllInvestors] = useState([]);
+
+  useEffect(() => {
+    const fetchAllInvestors = async () => {
+      try {
+        let allData = [];
+        let fetchMore = true;
+        let from = 0;
+        let limit = 1000;
+        
+        while (fetchMore) {
+          const { data, error } = await supabase
+            .from('investors_secure')
+            .select('*')
+            .range(from, from + limit - 1);
+            
+          if (error) throw error;
+          
+          allData = [...allData, ...data];
+          if (data.length < limit) fetchMore = false;
+          else from += limit;
+        }
+        setAllInvestors(allData);
+      } catch (err) {
+        console.error('Failed to fetch all investors:', err);
+      }
+    };
+    fetchAllInvestors();
+  }, []);
   const [matchedInvestors, setMatchedInvestors] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
