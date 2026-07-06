@@ -206,7 +206,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           }
           
           return { inv, score };
-        }).filter(m => m.score >= 3); // Only truly relevant matches
+        }).filter(m => m.score > 0); // Include any partial match for larger numbers
 
         // Sort by highest score first, cap at top 25
         scoredMatches.sort((a, b) => b.score - a.score);
@@ -345,20 +345,43 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-red-500/20 blur-2xl pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-red-500 text-sm font-bold">OA</span>
-                      <h3 className="font-semibold text-red-500">
-                        We found {matchedInvestors.length} suitable investors!
-                      </h3>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-red-500 text-sm font-bold">OA</span>
+                          <h3 className="font-semibold text-red-500">
+                            Your AI Matched Investors
+                          </h3>
+                        </div>
+                        <p className="text-sm text-zinc-400">
+                          Based on your startup description, we scanned our database and found highly relevant investors.
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 bg-black/40 backdrop-blur-md p-3 rounded-xl border border-red-500/20 shrink-0">
+                        <div className="hidden sm:flex -space-x-3">
+                          <img src="https://i.pravatar.cc/100?img=33" className="w-8 h-8 rounded-full border-2 border-zinc-900" alt="Investor" />
+                          <img src="https://i.pravatar.cc/100?img=47" className="w-8 h-8 rounded-full border-2 border-zinc-900" alt="Investor" />
+                          <img src="https://i.pravatar.cc/100?img=12" className="w-8 h-8 rounded-full border-2 border-zinc-900" alt="Investor" />
+                        </div>
+                        <div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-lg font-bold text-white">{allInvestors.length || 4744}</span>
+                            <span className="text-xs text-zinc-400">active</span>
+                          </div>
+                          <div className="flex items-baseline gap-1 mt-0.5">
+                            <span className="text-sm font-bold text-red-500">{totalMatchCount}</span>
+                            <span className="text-xs text-red-500/80">matching</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-sm text-zinc-400 mb-4">
-                      Based on your startup description, we scanned our database and found highly relevant investors that match your profile.
-                    </p>
-                    <div className="flex flex-wrap gap-3">
+                    
+                    <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
                       {crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)) ? (
                         <button 
                           onClick={() => router.push('/crm')}
-                          className="px-4 py-2 bg-black hover:bg-zinc-900 text-white text-sm font-medium rounded-lg transition-all border border-white/10 flex items-center justify-center gap-2"
+                          className="px-4 py-2 shrink-0 bg-black hover:bg-zinc-900 text-white text-sm font-medium rounded-lg transition-all border border-white/10 flex items-center justify-center gap-2"
                         >
                           Go to CRM →
                         </button>
@@ -385,7 +408,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                             setIsAddingToCrm(false);
                           }}
                           disabled={isAddingToCrm}
-                          className="px-4 py-2 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/20 transition-all border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-4 py-2 shrink-0 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/20 transition-all border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isAddingToCrm 
                             ? `Adding... (${addedToCrmCount}/${addedToCrmCount + matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
@@ -395,7 +418,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       )}
                       <button 
                         onClick={handleDownloadCSV}
-                        className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors"
+                        className="px-4 py-2 shrink-0 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors"
                       >
                         Download CSV
                       </button>
@@ -407,7 +430,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                           const query = extractedTags.length > 0 ? extractedTags.join(',') : investor.industry || 'saas';
                           window.open(`/?industries=${query}`, '_blank');
                         }}
-                        className="px-4 py-2 bg-black text-white border border-white/10 text-sm font-medium rounded-lg hover:bg-white/5 transition-colors"
+                        className="px-4 py-2 shrink-0 bg-black text-white border border-white/10 text-sm font-medium rounded-lg hover:bg-white/5 transition-colors"
                       >
                         View List in New Tab
                       </button>
@@ -417,7 +440,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                             window.localStorage.setItem('ai_matched_investor_ids', JSON.stringify(allMatchedIds));
                             window.open(`/?ai_match=true`, '_blank');
                           }}
-                          className="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/30 text-sm font-medium rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
+                          className="px-4 py-2 shrink-0 bg-red-500/10 text-red-500 border border-red-500/30 text-sm font-medium rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
                         >
                           View All {totalMatchCount} Matches
                         </button>
