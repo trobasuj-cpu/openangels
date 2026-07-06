@@ -142,7 +142,12 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
     setError(null);
     try {
       const rawInd = investor.industry || investor.industries;
-      const industries = Array.isArray(rawInd) ? rawInd.map(i => i.toLowerCase()) : (typeof rawInd === 'string' ? rawInd.split(',').map(i => i.trim().toLowerCase()) : []);
+      let industries = [];
+      if (Array.isArray(rawInd)) {
+        industries = rawInd.map(i => i.toLowerCase());
+      } else if (typeof rawInd === 'string') {
+        industries = rawInd.replace(/[\[\]"']/g, '').split(',').map(i => i.trim().toLowerCase()).filter(Boolean);
+      }
 
       const { data: { session } } = await supabase.auth.getSession();
 
@@ -191,10 +196,10 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           
           let score = 0;
           
-          // Industry match: +3 per matching industry tag
           if (inv.industry) {
-            const invInds = Array.isArray(inv.industry) ? inv.industry : inv.industry.split(',').map(i => i.trim());
-            const matchCount = invInds.filter(ind => searchTags.includes(ind.toLowerCase())).length;
+            const invIndStr = Array.isArray(inv.industry) ? inv.industry.join(' ') : String(inv.industry);
+            const invIndLower = invIndStr.toLowerCase();
+            const matchCount = searchTags.filter(tag => invIndLower.includes(tag)).length;
             score += matchCount * 3;
           }
           
@@ -427,7 +432,15 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                           const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data'];
                           const descLower = startupDescription.toLowerCase();
                           const extractedTags = possibleTags.filter(tag => descLower.includes(tag));
-                          const query = extractedTags.length > 0 ? extractedTags.join(',') : investor.industry || 'saas';
+                          
+                          let query = 'saas';
+                          if (extractedTags.length > 0) {
+                            query = extractedTags.join(',');
+                          } else {
+                            const rawInd = investor.industry || investor.industries;
+                            if (Array.isArray(rawInd)) query = rawInd.join(',');
+                            else if (typeof rawInd === 'string') query = rawInd.replace(/[\[\]"']/g, '');
+                          }
                           window.open(`/?industries=${query}`, '_blank');
                         }}
                         className="px-3 py-2 shrink-0 bg-black text-white border border-white/10 text-xs font-medium rounded-lg hover:bg-white/5 transition-colors"
