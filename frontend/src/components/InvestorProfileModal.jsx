@@ -196,10 +196,10 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           
           let score = 0;
           
-          if (inv.industry) {
-            const invIndStr = Array.isArray(inv.industry) ? inv.industry.join(' ') : String(inv.industry);
-            const invIndLower = invIndStr.toLowerCase();
-            const matchCount = searchTags.filter(tag => invIndLower.includes(tag)).length;
+          // Industry match: +3 per matching industry tag
+          if (inv.industries) {
+            const invInds = Array.isArray(inv.industries) ? inv.industries : [inv.industries];
+            const matchCount = invInds.filter(ind => searchTags.includes(ind.toLowerCase())).length;
             score += matchCount * 3;
           }
           
@@ -241,7 +241,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
       'sep=,',
       headers.join(','),
       ...matchedInvestors.map(inv => {
-        const inds = Array.isArray(inv.industry) ? inv.industry.join(', ') : (inv.industry || '');
+        const inds = Array.isArray(inv.industries) ? inv.industries.join(', ') : (inv.industries || '');
         return [
           escapeCSV(inv.name),
           escapeCSV(inv.email),
