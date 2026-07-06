@@ -385,7 +385,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                     <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
                       {crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)) ? (
                         <button 
-                          onClick={() => router.push('/crm')}
+                          onClick={() => window.open('/crm', '_blank')}
                           className="px-3 py-2 shrink-0 bg-black hover:bg-zinc-900 text-white text-xs font-medium rounded-lg transition-all border border-white/10 flex items-center justify-center gap-2"
                         >
                           Go to CRM →
