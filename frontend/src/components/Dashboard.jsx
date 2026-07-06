@@ -514,12 +514,12 @@ export default function Dashboard() {
           isMobileFiltersOpen ? "fixed inset-y-0 left-0 z-50 flex shadow-2xl" : "hidden md:flex"
         )}>
           <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
-          <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-semibold text-lg tracking-tight">
+          <a href="/" className="flex items-center gap-2 text-zinc-900 dark:text-white font-semibold text-lg tracking-tight hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center">
               <span className="text-white dark:text-zinc-900 text-sm font-bold">OA</span>
             </div>
             OpenAngels
-          </div>
+          </a>
           <button onClick={() => setIsMobileFiltersOpen(false)} className="md:hidden p-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-white">
             <X className="w-5 h-5" />
           </button>
