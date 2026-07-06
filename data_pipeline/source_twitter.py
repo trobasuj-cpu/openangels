@@ -107,14 +107,31 @@ def run_twitter_scraper():
             title = r.get('title', '')
             body = r.get('body', '')
             
-            # Skip if it's not a profile (e.g. a status update)
-            if '/status/' in url:
+            # Only accept actual Twitter/X profile URLs
+            is_twitter = ('x.com/' in url or 'twitter.com/' in url)
+            is_ad = 'bing.com' in url or 'aclick' in url or 'google.com/aclick' in url
+            is_status = '/status/' in url
+            is_hashtag = '/hashtag/' in url
+            is_event = '/i/events/' in url or '/i/lists/' in url
+            
+            if not is_twitter or is_ad or is_status or is_hashtag or is_event:
                 continue
             
             name = extract_name_from_twitter_title(title)
             
+            # Validate name quality
             if len(name.split()) < 2:
                 continue # Skip single words
+            if len(name) > 40:
+                continue # Too long to be a real name
+            junk_words = ['results', 'connect with', 'get funded', 'list of', 
+                         'top angel', 'best investors', 'how to', 'what is',
+                         'the seed', 'angel investors', 'stock', 'invest in']
+            if any(jw in name.lower() for jw in junk_words):
+                continue
+            # Name should not contain special chars typical of page titles
+            if any(c in name for c in ['|', '#', '→', '—', ':', '®', '™']):
+                continue
                 
             slug = generate_slug(name)
             

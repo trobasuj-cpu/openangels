@@ -373,7 +373,7 @@ def method_ddg_scrape_contact(name):
 # ============================================================
 
 def update_supabase(investor_id, email):
-    update_url = f"{url}/rest/v1/investors?id=eq.{investor_id}"
+    update_url = f"{url}/rest/v1/investors_secure?id=eq.{investor_id}"
     req = urllib.request.Request(
         update_url,
         data=json.dumps({"email": email}).encode('utf-8'),
@@ -412,7 +412,7 @@ def run_pipeline():
     targets = []
     limit, offset = 1000, 0
     while True:
-        req_url = f"{url}/rest/v1/investors?select=id,name,bio,email,linkedin_url,twitter_url&limit={limit}&offset={offset}"
+        req_url = f"{url}/rest/v1/investors_secure?select=id,name,bio,email,linkedin_url,twitter_url&limit={limit}&offset={offset}"
         req = urllib.request.Request(req_url, headers=HEADERS)
         try:
             with urllib.request.urlopen(req) as res:
@@ -535,8 +535,7 @@ def run_pipeline():
             continue
         
         print(" X (NOT FOUND)")
-        # Mark as NOT_FOUND in database to avoid re-checking tomorrow
-        update_supabase(item['id'], "NOT_FOUND")
+        # Just mark as checked so we don't re-check tomorrow
         mark_checked(item['id'])
         time.sleep(1)
     
