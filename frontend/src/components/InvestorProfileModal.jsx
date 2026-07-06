@@ -206,7 +206,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           }
           
           return { inv, score };
-        }).filter(m => m.score > 0); // Include any partial match for larger numbers
+        }).filter(m => m.score >= 3); // Only truly relevant matches
 
         // Sort by highest score first, cap at top 25
         scoredMatches.sort((a, b) => b.score - a.score);
@@ -350,11 +350,11 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-red-500 text-sm font-bold">OA</span>
                           <h3 className="font-semibold text-red-500">
-                            Your AI Matched Investors
+                            Top {matchedInvestors.length} AI Matched Investors
                           </h3>
                         </div>
-                        <p className="text-sm text-zinc-400">
-                          Based on your startup description, we scanned our database and found highly relevant investors.
+                        <p className="text-sm text-zinc-400 max-w-sm">
+                          We scanned our database and selected the top {matchedInvestors.length} most relevant investors for your startup.
                         </p>
                       </div>
                       
@@ -381,7 +381,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       {crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)) ? (
                         <button 
                           onClick={() => router.push('/crm')}
-                          className="px-4 py-2 shrink-0 bg-black hover:bg-zinc-900 text-white text-sm font-medium rounded-lg transition-all border border-white/10 flex items-center justify-center gap-2"
+                          className="px-3 py-2 shrink-0 bg-black hover:bg-zinc-900 text-white text-xs font-medium rounded-lg transition-all border border-white/10 flex items-center justify-center gap-2"
                         >
                           Go to CRM →
                         </button>
@@ -408,19 +408,19 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                             setIsAddingToCrm(false);
                           }}
                           disabled={isAddingToCrm}
-                          className="px-4 py-2 shrink-0 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/20 transition-all border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-3 py-2 shrink-0 bg-white/10 text-white text-xs font-medium rounded-lg hover:bg-white/20 transition-all border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isAddingToCrm 
                             ? `Adding... (${addedToCrmCount}/${addedToCrmCount + matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
-                            : `Add All to CRM (${matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
+                            : `Add to CRM (${matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
                           }
                         </button>
                       )}
                       <button 
                         onClick={handleDownloadCSV}
-                        className="px-4 py-2 shrink-0 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors"
+                        className="px-3 py-2 shrink-0 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition-colors"
                       >
-                        Download CSV
+                        Export CSV
                       </button>
                       <button 
                         onClick={() => {
@@ -430,9 +430,9 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                           const query = extractedTags.length > 0 ? extractedTags.join(',') : investor.industry || 'saas';
                           window.open(`/?industries=${query}`, '_blank');
                         }}
-                        className="px-4 py-2 shrink-0 bg-black text-white border border-white/10 text-sm font-medium rounded-lg hover:bg-white/5 transition-colors"
+                        className="px-3 py-2 shrink-0 bg-black text-white border border-white/10 text-xs font-medium rounded-lg hover:bg-white/5 transition-colors"
                       >
-                        View List in New Tab
+                        Open List
                       </button>
                       {totalMatchCount > 25 && (
                         <button 
@@ -440,9 +440,9 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                             window.localStorage.setItem('ai_matched_investor_ids', JSON.stringify(allMatchedIds));
                             window.open(`/?ai_match=true`, '_blank');
                           }}
-                          className="px-4 py-2 shrink-0 bg-red-500/10 text-red-500 border border-red-500/30 text-sm font-medium rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
+                          className="px-3 py-2 shrink-0 bg-red-500/10 text-red-500 border border-red-500/30 text-xs font-medium rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
                         >
-                          View All {totalMatchCount} Matches
+                          View All ({totalMatchCount})
                         </button>
                       )}
                     </div>
