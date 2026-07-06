@@ -558,7 +558,7 @@ export default function Dashboard() {
                     setIsLoginModalOpen(true);
                   }
                 }}
-                className="w-full bg-white text-black text-sm font-medium py-2 rounded-lg hover:bg-zinc-200 transition-all active:scale-[0.98] relative"
+                className="crm-btn-oil w-full text-white border border-white/10 text-sm font-medium py-2 rounded-lg transition-all active:scale-[0.98] relative"
               >
                 Upgrade Now
               </button>
@@ -930,9 +930,9 @@ export default function Dashboard() {
                             <div className="flex items-center gap-2">
                             <Link 
                               href={`/investor/${investor.slug || investor.id}`}
-                              className="flex items-center justify-center gap-2 flex-1 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm"
+                              className="crm-btn-oil flex items-center justify-center gap-2 flex-1 py-2.5 border border-white/10 text-white text-sm font-medium rounded-xl transition-colors shadow-sm"
                             >
-                              <Sparkles className="w-4 h-4 text-red-500" />
+                              <Sparkles className="w-4 h-4 text-white" />
                               AI Draft Email
                             </Link>
                             <button 
@@ -972,8 +972,8 @@ export default function Dashboard() {
                               </div>
                             </div>
                             <div className="flex gap-2 w-full blur-[4px] opacity-40 select-none pointer-events-none">
-                              <div className="flex-1 flex items-center justify-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-sm font-medium py-2 rounded-xl">
-                                <Sparkles className="w-4 h-4 text-red-500" />
+                              <div className="crm-btn-oil flex-1 flex items-center justify-center gap-2 border border-white/10 text-white text-sm font-medium py-2 rounded-xl">
+                                <Sparkles className="w-4 h-4 text-white" />
                                 AI Draft Email
                               </div>
                               <div className="w-[52px] flex items-center justify-center bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl">
