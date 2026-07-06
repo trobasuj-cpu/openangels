@@ -256,6 +256,21 @@ export default function Dashboard() {
     return false;
   }, []);
 
+  const [aiMatchedIds, setAiMatchedIds] = useState(null);
+
+  useEffect(() => {
+    if (isAiMatch) {
+      try {
+        const stored = window.localStorage.getItem('ai_matched_investor_ids');
+        if (stored) {
+          setAiMatchedIds(new Set(JSON.parse(stored)));
+        }
+      } catch (e) {
+        console.error('Failed to parse ai_matched_investor_ids', e);
+      }
+    }
+  }, [isAiMatch]);
+
   // Initialize selectedIndustries from URL if present
   const initialIndustries = useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -455,9 +470,14 @@ export default function Dashboard() {
       const matchesStage = deferredStages.length === 0 || 
         deferredStages.some(stage => invStages.some(s => s.toLowerCase() === stage.toLowerCase()));
 
-      return matchesSearch && matchesIndustry && matchesLocation && matchesCheckSize && matchesStage;
+      let matchesAi = true;
+      if (isAiMatch && aiMatchedIds) {
+        matchesAi = aiMatchedIds.has(inv.id);
+      }
+
+      return matchesSearch && matchesIndustry && matchesLocation && matchesCheckSize && matchesStage && matchesAi;
     });
-  }, [investors, deferredSearch, deferredIndustries, deferredLocations, deferredCheckSizes, deferredStages]);
+  }, [investors, deferredSearch, deferredIndustries, deferredLocations, deferredCheckSizes, deferredStages, isAiMatch, aiMatchedIds]);
 
   useEffect(() => {
     setVisibleCount(24);
@@ -721,24 +741,35 @@ export default function Dashboard() {
                     )}
                   </div>
                   
-                  <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 bg-white/5 p-4 rounded-xl border border-white/10">
-                    <div className="flex -space-x-3">
-                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
-                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
-                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
-                      <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
-                    </div>
-                    <div className="flex flex-col text-left sm:text-right">
-                      <div className="text-sm font-medium text-zinc-300">
-                        <span className="text-white font-bold text-xl">{loading ? INVESTOR_COUNT : investors.length.toLocaleString()}</span> active
+                  {isAiMatch ? (
+                    <div className="relative z-10 flex flex-col items-center justify-center shrink-0 bg-amber-500/10 px-8 py-4 rounded-2xl border border-amber-500/30 shadow-[0_0_30px_rgba(245,158,11,0.15)] animate-in fade-in zoom-in duration-500">
+                      <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 tracking-tighter mb-1 filter drop-shadow-sm">
+                        {filteredInvestors.length}
                       </div>
-                      {investors.length !== filteredInvestors.length && (
-                        <div className="text-xs font-medium text-blue-400">
-                          {filteredInvestors.length.toLocaleString()} matching
-                        </div>
-                      )}
+                      <div className="text-xs md:text-sm font-bold text-amber-500/90 uppercase tracking-[0.2em]">
+                        Perfect Matches
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 bg-white/5 p-4 rounded-xl border border-white/10">
+                      <div className="flex -space-x-3">
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
+                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
+                      </div>
+                      <div className="flex flex-col text-left sm:text-right">
+                        <div className="text-sm font-medium text-zinc-300">
+                          <span className="text-white font-bold text-xl">{loading ? INVESTOR_COUNT : investors.length.toLocaleString()}</span> active
+                        </div>
+                        {investors.length !== filteredInvestors.length && (
+                          <div className="text-xs font-medium text-blue-400">
+                            {filteredInvestors.length.toLocaleString()} matching
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -77,6 +77,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
   }, []);
   const [matchedInvestors, setMatchedInvestors] = useState([]);
   const [totalMatchCount, setTotalMatchCount] = useState(0);
+  const [allMatchedIds, setAllMatchedIds] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isAddingToCrm, setIsAddingToCrm] = useState(false);
@@ -197,6 +198,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         const topMatches = scoredMatches.slice(0, 25);
         setMatchedInvestors(topMatches.map(m => m.inv));
         setTotalMatchCount(scoredMatches.length);
+        setAllMatchedIds(scoredMatches.map(m => m.inv.id));
       }
 
     } catch (err) {
@@ -398,11 +400,8 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       {totalMatchCount > 25 && (
                         <button 
                           onClick={() => {
-                            const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data'];
-                            const descLower = startupDescription.toLowerCase();
-                            const extractedTags = possibleTags.filter(tag => descLower.includes(tag));
-                            const query = extractedTags.length > 0 ? extractedTags.join(',') : investor.industry || 'saas';
-                            window.open(`/?industries=${query}&ai_match=true`, '_blank');
+                            window.localStorage.setItem('ai_matched_investor_ids', JSON.stringify(allMatchedIds));
+                            window.open(`/?ai_match=true`, '_blank');
                           }}
                           className="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-900/30 text-sm font-medium rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors shadow-sm flex items-center gap-2"
                         >
