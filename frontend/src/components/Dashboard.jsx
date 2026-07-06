@@ -248,6 +248,14 @@ export default function Dashboard() {
   const [crmLeadIds, setCrmLeadIds] = useState(new Set()); // investor IDs already in CRM
   const [addingToCrm, setAddingToCrm] = useState(null); // investor ID currently being added
 
+  const isAiMatch = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('ai_match') === 'true';
+    }
+    return false;
+  }, []);
+
   // Initialize selectedIndustries from URL if present
   const initialIndustries = useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -692,12 +700,25 @@ export default function Dashboard() {
                   <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
                   
                   <div className="relative z-10 flex-1">
-                    <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                      Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Angel Investor</span>
-                    </h1>
-                    <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
-                      Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match. No warm introductions needed.
-                    </p>
+                    {isAiMatch ? (
+                      <>
+                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                          Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">AI Matched</span> Investors
+                        </h1>
+                        <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
+                          Based on your startup's context, we've filtered the directory to show the most relevant investors. Add them to your CRM to start pitching.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                          Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Angel Investor</span>
+                        </h1>
+                        <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
+                          Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match. No warm introductions needed.
+                        </p>
+                      </>
+                    )}
                   </div>
                   
                   <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 bg-white/5 p-4 rounded-xl border border-white/10">
