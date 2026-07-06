@@ -717,8 +717,8 @@ export default function Dashboard() {
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
                 <div className="h-full p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
                   {/* Decorative glow effects */}
-                  <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500/5 blur-[100px] pointer-events-none"></div>
-                  <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
+                  <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-red-500/5 blur-[100px] pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-rose-500/5 blur-[100px] pointer-events-none"></div>
                   
                   <div className="relative z-10 flex-1">
                     {isAiMatch ? (
@@ -733,7 +733,7 @@ export default function Dashboard() {
                     ) : (
                       <>
                         <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                          Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Angel Investor</span>
+                          Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">Angel Investor</span>
                         </h1>
                         <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
                           Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match. No warm introductions needed.

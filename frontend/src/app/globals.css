@@ -131,13 +131,13 @@
 .crm-btn-oil {
   background: linear-gradient(
     135deg,
-    #1a1a2e 0%,
-    #0f3460 20%,
-    #533483 40%,
-    #d4a017 55%,
-    #533483 70%,
-    #0f3460 85%,
-    #1a1a2e 100%
+    #18181b 0%,
+    #450a0a 20%,
+    #7f1d1d 40%,
+    #ef4444 55%,
+    #7f1d1d 70%,
+    #450a0a 85%,
+    #18181b 100%
   );
   background-size: 400% 400%;
   animation: oil-slick 6s ease infinite;
