@@ -90,15 +90,21 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
       setGeneratedBody('');
       setMatchedInvestors([]);
       setError(null);
+    }
+  }, [isOpen, investor?.id]);
+
+  useEffect(() => {
+    if (isOpen) {
       if (profile?.startup_description) {
         setStartupDescription(profile.startup_description);
         setIsEditingDescription(false);
-      } else {
+      } else if (profile !== undefined) {
+        // Only show empty state if profile has loaded (or if there is no profile)
         setStartupDescription('');
         setIsEditingDescription(true);
       }
     }
-  }, [isOpen, investor?.id]);
+  }, [isOpen, profile]);
 
   if (!isOpen) return null;
 
