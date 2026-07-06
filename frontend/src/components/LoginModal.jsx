@@ -31,33 +31,32 @@ export default function LoginModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div 
-        className="absolute inset-0 bg-zinc-950/40 dark:bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
       
-      <div className="relative w-full max-w-md bg-white dark:bg-zinc-950 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-md bg-black border border-white/10 rounded-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-full transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="px-8 pt-10 pb-8 text-center">
-          <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
-            <Lock className="w-8 h-8 text-zinc-900 dark:text-zinc-100 relative z-10" />
+          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 relative overflow-hidden">
+            <span className="text-black text-2xl font-bold relative z-10">OA</span>
           </div>
           
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">
-            Unlock Full Access
+          <h2 className="text-2xl font-bold text-center text-white mb-2">
+            Welcome to OpenAngels
           </h2>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed mb-8">
-            Join OpenAngels to view verified investor emails, social profiles, and generate AI cold outreach drafts.
+          <p className="text-center text-zinc-400 mb-8 max-w-[280px] mx-auto">
+            Sign in to unlock unlimited investor data and CRM features.
           </p>
 
           {error && (
-            <div className="mb-6 p-3 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-900/50">
+            <div className="mb-6 p-3 text-sm text-red-400 bg-red-900/20 rounded-lg border border-red-900/50">
               {error}
             </div>
           )}
@@ -65,7 +64,7 @@ export default function LoginModal({ isOpen, onClose }) {
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white px-4 py-3 rounded-xl font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white px-4 py-3 rounded-xl font-medium hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin text-zinc-400" />

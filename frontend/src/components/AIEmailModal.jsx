@@ -178,22 +178,22 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-zinc-950 w-full max-w-2xl rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-black w-full max-w-2xl rounded-2xl border border-white/10 flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
+        <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-zinc-900 dark:bg-white flex items-center justify-center">
-              <span className="text-white dark:text-zinc-900 text-sm font-bold">OA</span>
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
+              <span className="text-black text-sm font-bold">OA</span>
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">AI Draft Email</h2>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">Pitching {investor?.name}</p>
+              <h2 className="text-lg font-semibold text-white">AI Draft Email</h2>
+              <p className="text-sm text-zinc-400">Pitching {investor?.name}</p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+            className="p-2 text-zinc-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -202,7 +202,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-6">
           {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm border border-red-100 dark:border-red-900/30">
+            <div className="p-4 bg-red-900/20 text-red-400 rounded-xl text-sm border border-red-900/30">
               {error}
             </div>
           )}
@@ -210,13 +210,13 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
           {!generatedBody ? (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                <label className="text-sm font-medium text-white">
                   Your Startup Description
                 </label>
                 {!isEditingDescription && (
                   <button 
                     onClick={() => setIsEditingDescription(true)}
-                    className="text-xs text-amber-600 dark:text-amber-500 hover:underline font-medium"
+                    className="text-xs text-rose-500 hover:underline font-medium"
                   >
                     Edit Context
                   </button>
@@ -229,7 +229,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                     value={startupDescription}
                     onChange={(e) => setStartupDescription(e.target.value)}
                     placeholder="E.g. We are building an AI assistant for lawyers. We have $10k MRR and are raising a $500k pre-seed round."
-                    className="w-full h-32 px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
+                    className="w-full h-32 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500/50 resize-none transition-colors"
                   />
                   <div className="flex justify-end gap-2">
                     {profile?.startup_description && (
@@ -238,7 +238,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                           setStartupDescription(profile.startup_description);
                           setIsEditingDescription(false);
                         }}
-                        className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+                        className="px-4 py-2 text-sm font-medium text-zinc-400 hover:bg-white/5 rounded-lg transition-colors"
                       >
                         Cancel
                       </button>
@@ -246,7 +246,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                     <button 
                       onClick={handleSaveDescription}
                       disabled={!startupDescription.trim() || isSaving}
-                      className="flex items-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-2 px-4 py-2 bg-white text-black text-sm font-medium rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                       Save Context
@@ -254,7 +254,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                   </div>
                 </div>
               ) : (
-                <div className="p-4 bg-zinc-50 dark:bg-zinc-900 rounded-xl text-sm text-zinc-600 dark:text-zinc-400 italic border border-zinc-200 dark:border-zinc-800">
+                <div className="p-4 bg-white/5 rounded-xl text-sm text-zinc-400 italic border border-white/5">
                   "{startupDescription}"
                 </div>
               )}
@@ -262,17 +262,17 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
           ) : (
             <div className="space-y-4">
               {matchedInvestors.length > 0 && (
-                <div className="mb-6 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-amber-500/20 blur-2xl pointer-events-none"></div>
+                <div className="mb-6 p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-rose-500/20 blur-2xl pointer-events-none"></div>
                   
                   <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-amber-500 text-sm font-bold">OA</span>
-                      <h3 className="font-semibold text-amber-600 dark:text-amber-500">
+                      <span className="text-rose-500 text-sm font-bold">OA</span>
+                      <h3 className="font-semibold text-rose-500">
                         We found {matchedInvestors.length} suitable investors!
                       </h3>
                     </div>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+                    <p className="text-sm text-zinc-400 mb-4">
                       Based on your startup description, we scanned our database and found highly relevant investors that match your profile.
                     </p>
                     <div className="flex flex-wrap gap-3">
@@ -280,7 +280,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                         <Link 
                           href="/crm"
                           onClick={onClose}
-                          className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-medium rounded-lg transition-all shadow-sm border border-zinc-700 flex items-center justify-center gap-2"
+                          className="px-4 py-2 bg-black hover:bg-zinc-900 text-white text-sm font-medium rounded-lg transition-all border border-white/10 flex items-center justify-center gap-2"
                         >
                           Go to CRM →
                         </Link>
@@ -307,7 +307,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                             setIsAddingToCrm(false);
                           }}
                           disabled={isAddingToCrm}
-                          className="px-4 py-2 crm-btn-oil text-white text-sm font-medium rounded-lg transition-all shadow-sm border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-4 py-2 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/20 transition-all border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isAddingToCrm 
                             ? `Adding... (${addedToCrmCount}/${addedToCrmCount + matchedInvestors.filter(inv => !crmLeadIds?.has(inv.id)).length})`
@@ -317,7 +317,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                       )}
                       <button 
                         onClick={handleDownloadCSV}
-                        className="px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
+                        className="px-4 py-2 bg-rose-500 text-white text-sm font-medium rounded-lg hover:bg-rose-600 transition-colors"
                       >
                         Download CSV
                       </button>
@@ -329,7 +329,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                           const query = extractedTags.length > 0 ? extractedTags.join(',') : investor.industry || 'saas';
                           window.open(`/?industries=${query}`, '_blank');
                         }}
-                        className="px-4 py-2 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 text-sm font-medium rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-sm"
+                        className="px-4 py-2 bg-rose-500/10 text-rose-500 border border-rose-500/30 text-sm font-medium rounded-lg hover:bg-rose-500/20 transition-colors flex items-center gap-2"
                       >
                         View List in New Tab
                       </button>
@@ -339,24 +339,24 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
               )}
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                <label className="text-sm font-medium text-white">
                   Subject Line
                 </label>
                 <input
                   type="text"
                   value={generatedSubject}
                   onChange={(e) => setGeneratedSubject(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-shadow"
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-red-500/50 transition-colors"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                <label className="text-sm font-medium text-white">
                   Email Body
                 </label>
                 <textarea
                   value={generatedBody}
                   onChange={(e) => setGeneratedBody(e.target.value)}
-                  className="w-full h-64 px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
+                  className="w-full h-64 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-red-500/50 resize-none transition-colors"
                 />
               </div>
             </div>
@@ -364,12 +364,12 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-zinc-200 dark:border-zinc-800 shrink-0 flex items-center justify-between">
+        <div className="p-6 border-t border-white/5 shrink-0 flex items-center justify-between bg-black rounded-b-2xl">
           {!generatedBody ? (
             <button
               onClick={handleGenerate}
               disabled={!startupDescription.trim() || isGenerating}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-medium rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-medium rounded-xl hover:from-red-600 hover:to-rose-700 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isGenerating ? (
                 <>
@@ -397,7 +397,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
               <div className="flex-1 flex gap-2 sm:gap-3 overflow-x-auto custom-scrollbar pb-1 sm:pb-0">
                 <button
                   onClick={() => navigator.clipboard.writeText(generatedSubject + '\n\n' + generatedBody)}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm font-medium rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors shrink-0"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/5 text-white border border-white/10 text-sm font-medium rounded-xl hover:bg-white/10 transition-colors shrink-0"
                 >
                   <Copy className="w-4 h-4" />
                   Copy
@@ -409,7 +409,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                     const authuser = encodeURIComponent(user?.email || '');
                     window.open(`https://mail.google.com/mail/?authuser=${authuser}&view=cm&to=${investor.email || ''}&su=${subject}&body=${body}`, '_blank');
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#EA4335] text-white text-sm font-medium rounded-xl hover:bg-[#D33C30] transition-colors shadow-sm shrink-0"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#EA4335] text-white text-sm font-medium rounded-xl hover:bg-[#D33C30] transition-colors shrink-0"
                 >
                   <Mail className="w-4 h-4" />
                   Open in Gmail
@@ -421,7 +421,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
                     const bcc = profile?.crm_bcc_email ? `&bcc=${encodeURIComponent(profile.crm_bcc_email)}` : '';
                     window.location.href = `mailto:${investor.email || ''}?subject=${subject}&body=${body}${bcc}`;
                   }}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm shrink-0"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-black text-sm font-medium rounded-xl hover:bg-zinc-200 transition-colors shrink-0"
                   title="Open Default App (e.g. Superhuman, Apple Mail)"
                 >
                   <Mail className="w-4 h-4" />

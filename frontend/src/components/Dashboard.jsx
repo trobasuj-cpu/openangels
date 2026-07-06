@@ -21,7 +21,7 @@ const FilterSection = ({ title, icon: Icon, defaultExpanded = true, children }) 
         className="flex items-center justify-between w-full text-left mb-2 group outline-none"
       >
         <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Icon className="w-4 h-4 text-zinc-400 group-hover:text-amber-500 transition-colors" />
+          <Icon className="w-4 h-4 text-zinc-400 group-hover:text-red-500 transition-colors" />
           {title}
         </h3>
         <ChevronDown className={cn("w-4 h-4 text-zinc-400 transition-transform duration-200", expanded ? "rotate-180" : "")} />
@@ -72,7 +72,7 @@ const MarketingShowcase = ({ isPremium }) => {
           </div>
           <div className="bg-gradient-to-br from-zinc-900 to-black p-3 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden group">
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <div className="absolute top-0 right-0 p-1.5 opacity-50"><Sparkles className="w-4 h-4 text-amber-500" /></div>
+            <div className="absolute top-0 right-0 p-1.5 opacity-50"><Sparkles className="w-4 h-4 text-red-500" /></div>
             <span className="relative z-10 text-[10px] font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider flex items-center gap-1">
               <Mail className="w-3 h-3" /> AI Draft
             </span>
@@ -147,7 +147,7 @@ const MarketingShowcase = ({ isPremium }) => {
       desc: "Ditch the messy Notion boards and spreadsheets. Track every conversation, follow-up, and commitment in one beautiful, integrated Kanban workspace.",
       features: ['Drag and drop interface', 'Add private notes', 'Automated inbox routing (soon)'],
       content: (
-        <div className="flex-1 w-full bg-zinc-950 rounded-xl border border-zinc-800 p-3 overflow-hidden relative shadow-2xl">
+        <div className="flex-1 w-full bg-black rounded-2xl border border-white/10 p-3 overflow-hidden relative">
            <div className="flex gap-3 opacity-80">
              <div className="w-1/3 shrink-0">
                <div className="text-[9px] font-bold text-zinc-500 mb-1.5 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div> SAVED</div>
@@ -155,10 +155,10 @@ const MarketingShowcase = ({ isPremium }) => {
              </div>
              <div className="w-1/3 shrink-0">
                <div className="text-[9px] font-bold text-zinc-500 mb-1.5 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div> CONTACTED</div>
-               <div className="bg-zinc-900 border border-zinc-800 p-2 rounded-md shadow-sm transform -rotate-1 scale-105 border-amber-500/30 z-10 relative"><div className="w-2/3 h-2 bg-zinc-700 rounded mb-1.5"></div><div className="w-5/6 h-1.5 bg-zinc-800 rounded"></div></div>
+               <div className="bg-zinc-900 border border-white/10 p-2 rounded-md transform -rotate-1 scale-105 border-red-500/30 z-10 relative"><div className="w-2/3 h-2 bg-zinc-700 rounded mb-1.5"></div><div className="w-5/6 h-1.5 bg-zinc-800 rounded"></div></div>
              </div>
              <div className="w-1/3 shrink-0">
-               <div className="text-[9px] font-bold text-zinc-500 mb-1.5 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div> MEETING</div>
+               <div className="text-[9px] font-bold text-zinc-500 mb-1.5 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-red-500"></div> MEETING</div>
              </div>
            </div>
         </div>
@@ -176,13 +176,13 @@ const MarketingShowcase = ({ isPremium }) => {
     >
       <button 
         onClick={() => setIsDismissed(true)}
-        className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-white shadow-lg z-20 transition-transform hover:scale-110"
+        className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-white z-20 transition-transform hover:scale-110"
         title="Dismiss showcase"
       >
         <X className="w-3 h-3" />
       </button>
-      <div className="p-0.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 shadow-lg relative overflow-hidden">
-        <div className="bg-white dark:bg-zinc-950 rounded-[10px] p-4 md:p-5 border border-amber-500/10">
+      <div className="p-[1px] rounded-[24px] bg-gradient-to-r from-red-500/20 via-rose-500/20 to-red-500/20 relative overflow-hidden flex-1 group">
+        <div className="bg-black/80 rounded-[23px] p-4 md:p-5 border border-white/5 h-full backdrop-blur-xl">
           <div className="flex gap-2 mb-4 overflow-x-auto custom-scrollbar pb-1 relative">
             {slides.map((s, i) => (
               <button
@@ -194,12 +194,12 @@ const MarketingShowcase = ({ isPremium }) => {
                 className={cn(
                   "px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 border relative overflow-hidden",
                   activeSlide === i 
-                    ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-500" 
-                    : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+                    ? "bg-red-500/10 border-red-500/20 text-red-500" 
+                    : "bg-black border-zinc-800 text-zinc-500 hover:text-zinc-300"
                 )}
               >
                 {activeSlide === i && !isPaused && (
-                   <div className="absolute bottom-0 left-0 h-[1.5px] bg-amber-500/40 animate-[progress_4s_linear]" style={{ width: '100%' }}></div>
+                   <div className="absolute bottom-0 left-0 h-[1.5px] bg-red-500/40 animate-[progress_4s_linear]" style={{ width: '100%' }}></div>
                 )}
                 <s.icon className="w-3.5 h-3.5 relative z-10" />
                 <span className="relative z-10">{s.badge}</span>
@@ -209,18 +209,18 @@ const MarketingShowcase = ({ isPremium }) => {
 
           <div key={activeSlide} className="flex flex-col lg:flex-row gap-6 items-center animate-in fade-in duration-300">
             <div className="flex-1 space-y-3">
-              <h2 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white leading-tight">
+              <h2 className="text-xl md:text-2xl font-bold text-white leading-tight">
                 {current.title.split(' ').map((word, i, arr) => 
-                  i === arr.length - 2 || i === arr.length - 3 ? <span key={i} className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">{word} </span> : word + ' '
+                  i === arr.length - 2 || i === arr.length - 3 ? <span key={i} className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">{word} </span> : word + ' '
                 )}
               </h2>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md">
+              <p className="text-sm text-zinc-400 max-w-md">
                 {current.desc}
               </p>
               <ul className="space-y-1.5 mt-2">
                 {current.features.map(f => (
-                  <li key={f} className="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300">
-                    <CheckCircle className="w-3.5 h-3.5 text-green-500" /> {f}
+                  <li key={f} className="flex items-center gap-1.5 text-xs text-zinc-300">
+                    <CheckCircle className="w-3.5 h-3.5 text-red-500" /> {f}
                   </li>
                 ))}
               </ul>
@@ -491,12 +491,12 @@ export default function Dashboard() {
           <div className={cn(
             "w-4 h-4 rounded border flex items-center justify-center transition-colors",
             selected.includes(item) 
-              ? "bg-zinc-900 border-zinc-900 dark:bg-white dark:border-white" 
-              : "border-zinc-300 dark:border-zinc-700 group-hover:border-zinc-400 dark:group-hover:border-zinc-600"
+              ? "bg-red-500 border-red-500" 
+              : "border-zinc-700 group-hover:border-zinc-600"
           )}>
-            {selected.includes(item) && <Check className="w-3 h-3 text-white dark:text-zinc-900" />}
+            {selected.includes(item) && <Check className="w-3 h-3 text-white" />}
           </div>
-          <span className="text-sm text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors">{item}</span>
+          <span className="text-sm text-zinc-400 group-hover:text-zinc-200 transition-colors">{item}</span>
         </div>
       ))}
     </div>
@@ -510,17 +510,17 @@ export default function Dashboard() {
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileFiltersOpen(false)} />
       )}
         <aside className={cn(
-          "w-72 border-r border-zinc-200/50 dark:border-zinc-800/50 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl flex-col",
+          "w-72 border-r border-white/5 bg-black flex-col",
           isMobileFiltersOpen ? "fixed inset-y-0 left-0 z-50 flex shadow-2xl" : "hidden md:flex"
         )}>
-          <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
-          <a href="/" className="flex items-center gap-2 text-zinc-900 dark:text-white font-semibold text-lg tracking-tight hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center">
-              <span className="text-white dark:text-zinc-900 text-sm font-bold">OA</span>
+          <div className="h-16 flex items-center justify-between px-6 border-b border-white/5 shrink-0">
+          <a href="/" className="flex items-center gap-2 text-white font-semibold text-lg tracking-tight hover:opacity-80 transition-opacity">
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+              <span className="text-black text-sm font-bold">OA</span>
             </div>
             OpenAngels
           </a>
-          <button onClick={() => setIsMobileFiltersOpen(false)} className="md:hidden p-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-white">
+          <button onClick={() => setIsMobileFiltersOpen(false)} className="md:hidden p-2 text-zinc-500 hover:text-white">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -544,13 +544,12 @@ export default function Dashboard() {
         </div>
         
         {!profile?.is_premium && (
-          <div className="p-6 border-t border-zinc-200/50 dark:border-zinc-800/50">
-            <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-4 border border-zinc-200/50 dark:border-zinc-800/50 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <h4 className="text-sm font-bold text-zinc-900 dark:text-white mb-1 relative flex items-center gap-2">
+          <div className="p-6 border-t border-white/5">
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5 relative overflow-hidden group">
+              <h4 className="text-sm font-bold text-white mb-1 relative flex items-center gap-2">
                 Premium (Lifetime Access)
               </h4>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
+              <p className="text-xs text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
               <button 
                 onClick={() => {
                   if (user) {
@@ -559,7 +558,7 @@ export default function Dashboard() {
                     setIsLoginModalOpen(true);
                   }
                 }}
-                className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium py-2 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-sm active:scale-[0.98] relative"
+                className="w-full bg-white text-black text-sm font-medium py-2 rounded-lg hover:bg-zinc-200 transition-all active:scale-[0.98] relative"
               >
                 Upgrade Now
               </button>
@@ -569,22 +568,23 @@ export default function Dashboard() {
       </aside>
 
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
-        <header className="relative z-50 h-16 border-b border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between px-8 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shrink-0">
+        <header className="relative z-50 h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/60 backdrop-blur-xl shrink-0">
+          <div className="absolute inset-0 bg-red-500/5 [mask-image:radial-gradient(circle_at_top,white,transparent_70%)] pointer-events-none"></div>
           <div className="flex-1 max-w-xl">
             <div className="relative group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-900 dark:group-focus-within:text-zinc-100 transition-colors" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-white transition-colors" />
               <input 
                 type="text" 
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search by name, industry, or keyword..." 
-                className="w-full bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 focus:bg-white dark:focus:bg-zinc-950 focus:border-zinc-300 dark:focus:border-zinc-700 focus:ring-4 focus:ring-zinc-100 dark:focus:ring-zinc-900/20 rounded-lg pl-10 pr-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 transition-all outline-none"
+                className="w-full bg-black/50 border border-white/5 focus:bg-black focus:border-red-500/50 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder:text-zinc-500 transition-all outline-none"
               />
             </div>
           </div>
           <div className="flex items-center gap-4">
             <button 
-              className="md:hidden p-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+              className="md:hidden p-2 text-zinc-500 hover:text-white transition-colors"
               onClick={() => setIsMobileFiltersOpen(true)}
             >
               <SlidersHorizontal className="w-5 h-5" />
@@ -594,7 +594,7 @@ export default function Dashboard() {
               {user ? (
                 <Link
                   href="/crm"
-                  className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10 shadow-lg"
+                  className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10"
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -604,7 +604,7 @@ export default function Dashboard() {
                   </svg>
                   My CRM
                   {crmLeadIds.size > 0 && (
-                    <span className="bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
                       {crmLeadIds.size}
                     </span>
                   )}
@@ -612,7 +612,7 @@ export default function Dashboard() {
               ) : (
                 <button
                   onClick={() => setIsLoginModalOpen(true)}
-                  className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10 shadow-lg"
+                  className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10"
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -628,7 +628,7 @@ export default function Dashboard() {
                 <>
                   <button 
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                    className="flex items-center justify-center w-9 h-9 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium overflow-hidden border border-zinc-300 dark:border-zinc-700 hover:ring-2 ring-zinc-400 dark:ring-zinc-600 transition-all focus:outline-none"
+                    className="flex items-center justify-center w-9 h-9 rounded-full bg-zinc-800 text-zinc-300 font-medium overflow-hidden border border-zinc-700 transition-all focus:outline-none"
                   >
                     {user.user_metadata?.avatar_url ? (
                       <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
@@ -643,12 +643,12 @@ export default function Dashboard() {
                         className="fixed inset-0 z-40" 
                         onClick={() => setIsProfileMenuOpen(false)}
                       />
-                      <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                        <div className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-800">
-                          <p className="text-sm font-medium text-zinc-900 dark:text-white truncate">
+                      <div className="absolute top-full right-0 mt-2 w-56 bg-black border border-white/5 rounded-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="px-4 py-3 border-b border-white/5">
+                          <p className="text-sm font-medium text-white truncate">
                             {user.user_metadata?.full_name || 'My Account'}
                           </p>
-                          <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
+                          <p className="text-xs text-zinc-500 truncate">
                             {user.email}
                           </p>
                         </div>
@@ -656,17 +656,17 @@ export default function Dashboard() {
                           <Link
                             href="/crm"
                             onClick={() => setIsProfileMenuOpen(false)}
-                            className="w-full text-left px-3 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors flex items-center justify-between group"
+                            className="w-full text-left px-3 py-2 text-sm text-zinc-300 hover:bg-white/5 rounded-lg transition-colors flex items-center justify-between group"
                           >
                             <span>📋 My CRM Pipeline</span>
                             {crmLeadIds.size > 0 && (
-                              <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                              <span className="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full">
                                 {crmLeadIds.size}
                               </span>
                             )}
                           </Link>
                           <button 
-                            className="w-full text-left px-3 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors flex items-center justify-between group"
+                            className="w-full text-left px-3 py-2 text-sm text-zinc-300 hover:bg-white/5 rounded-lg transition-colors flex items-center justify-between group"
                             onClick={() => {
                               setIsProfileMenuOpen(false);
                               if (!profile?.is_premium) {
@@ -707,8 +707,9 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div ref={mainScrollRef} className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-          <div className="max-w-6xl mx-auto">
+        <div ref={mainScrollRef} className="flex-1 overflow-y-auto p-6 md:p-8 relative custom-scrollbar">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+          <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
             <MarketingShowcase isPremium={profile?.is_premium} />
 
             <div className="flex flex-col xl:flex-row gap-6 mb-8">
@@ -723,7 +724,7 @@ export default function Dashboard() {
                     {isAiMatch ? (
                       <>
                         <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                          Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">AI Matched</span> Investors
+                          Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">AI Matched</span> Investors
                         </h1>
                         <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
                           Based on your startup's context, we've filtered the directory to show the most relevant investors. Add them to your CRM to start pitching.
@@ -742,11 +743,11 @@ export default function Dashboard() {
                   </div>
                   
                   {isAiMatch ? (
-                    <div className="relative z-10 flex flex-col items-center justify-center shrink-0 bg-amber-500/10 px-8 py-4 rounded-2xl border border-amber-500/30 shadow-[0_0_30px_rgba(245,158,11,0.15)] animate-in fade-in zoom-in duration-500">
-                      <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 tracking-tighter mb-1 filter drop-shadow-sm">
+                    <div className="relative z-10 flex flex-col items-center justify-center shrink-0 bg-red-500/10 px-8 py-4 rounded-2xl border border-red-500/30 animate-in fade-in zoom-in duration-500">
+                      <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500 tracking-tighter mb-1 filter drop-shadow-sm">
                         {filteredInvestors.length}
                       </div>
-                      <div className="text-xs md:text-sm font-bold text-amber-500/90 uppercase tracking-[0.2em]">
+                      <div className="text-xs md:text-sm font-bold text-red-500/90 uppercase tracking-[0.2em]">
                         Perfect Matches
                       </div>
                     </div>
@@ -931,7 +932,7 @@ export default function Dashboard() {
                               href={`/investor/${investor.slug || investor.id}`}
                               className="flex items-center justify-center gap-2 flex-1 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm"
                             >
-                              <Sparkles className="w-4 h-4 text-amber-500" />
+                              <Sparkles className="w-4 h-4 text-red-500" />
                               AI Draft Email
                             </Link>
                             <button 
@@ -972,7 +973,7 @@ export default function Dashboard() {
                             </div>
                             <div className="flex gap-2 w-full blur-[4px] opacity-40 select-none pointer-events-none">
                               <div className="flex-1 flex items-center justify-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-sm font-medium py-2 rounded-xl">
-                                <Sparkles className="w-4 h-4 text-amber-500" />
+                                <Sparkles className="w-4 h-4 text-red-500" />
                                 AI Draft Email
                               </div>
                               <div className="w-[52px] flex items-center justify-center bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl">
@@ -1009,7 +1010,7 @@ export default function Dashboard() {
               <div className="mt-12 text-center pb-12">
                 <button 
                   onClick={() => setVisibleCount(prev => prev + 24)}
-                  className="px-6 py-2.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-300 rounded-full hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors shadow-sm active:scale-[0.98]"
+                  className="px-6 py-2.5 bg-black border border-white/10 text-sm font-medium text-zinc-300 rounded-full hover:border-white/20 hover:text-white transition-colors"
                 >
                   Load More Investors
                 </button>
@@ -1026,7 +1027,7 @@ export default function Dashboard() {
                   <Link
                     key={page.slug}
                     href={`/investors/${page.slug}`}
-                    className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-500/30 hover:shadow-sm transition-all"
+                    className="px-3 py-1.5 bg-black border border-white/5 rounded-lg text-sm text-zinc-400 hover:text-red-500 hover:border-red-500/30 transition-all"
                   >
                     {page.label}
                   </Link>
@@ -1044,7 +1045,7 @@ export default function Dashboard() {
                   <Link
                     key={hub.filters.join('/')}
                     href={`/investors/${hub.filters.join('/')}`}
-                    className="px-3 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-500/30 hover:shadow-sm transition-all"
+                    className="px-3 py-1.5 bg-black border border-white/5 rounded-lg text-sm text-zinc-400 hover:text-red-500 hover:border-red-500/30 transition-all"
                   >
                     {hub.label}
                   </Link>

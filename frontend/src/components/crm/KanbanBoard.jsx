@@ -15,8 +15,8 @@ import { supabase } from '../../lib/supabase.js';
 const COLUMNS = {
   inbox: { name: 'Saved', color: 'border-blue-500/40', dot: 'bg-blue-500' },
   contacted: { name: 'Contacted', color: 'border-purple-500/40', dot: 'bg-purple-500' },
-  meeting_set: { name: 'Meeting', color: 'border-amber-500/40', dot: 'bg-amber-500' },
-  dd: { name: 'Due Diligence', color: 'border-orange-500/40', dot: 'bg-orange-500' },
+  meeting_set: { name: 'Meeting', color: 'border-red-500/40', dot: 'bg-red-500' },
+  dd: { name: 'Due Diligence', color: 'border-rose-500/40', dot: 'bg-rose-500' },
   won: { name: 'Committed', color: 'border-emerald-500/40', dot: 'bg-emerald-500' },
   lost: { name: 'Passed', color: 'border-red-500/40', dot: 'bg-red-500' }
 };
@@ -139,12 +139,12 @@ export default function KanbanBoard() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-200 flex flex-col items-center justify-center p-8 font-sans">
+      <div className="min-h-screen bg-black text-zinc-200 flex flex-col items-center justify-center p-8 font-sans">
         <h1 className="text-3xl font-bold text-white mb-4">Investor CRM</h1>
         <p className="text-zinc-400 mb-8">Sign in to access your personal investor pipeline.</p>
         <Link 
           href="/"
-          className="px-6 py-3 bg-white text-zinc-900 font-medium rounded-xl hover:bg-zinc-100 transition-colors"
+          className="px-6 py-3 bg-white text-black font-medium rounded-lg hover:bg-zinc-200 transition-colors"
         >
           ← Back to Dashboard
         </Link>
@@ -153,13 +153,12 @@ export default function KanbanBoard() {
   }
 
   return (
-    <div className="h-screen bg-zinc-950 text-zinc-200 flex flex-col font-sans">
-      {/* Header */}
-      <header className="border-b border-zinc-800/50 flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-0 sm:h-16 bg-zinc-950/80 backdrop-blur-xl shrink-0 gap-3 sm:gap-0">
+    <div className="h-screen bg-black text-zinc-200 flex flex-col font-sans">
+      <header className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-0 sm:h-16 bg-black/80 backdrop-blur-xl shrink-0 gap-3 sm:gap-0">
         <div className="flex items-center gap-3 sm:gap-4 justify-between sm:justify-start">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
-              <span className="text-zinc-900 text-sm font-bold">OA</span>
+              <span className="text-black text-sm font-bold">OA</span>
             </div>
             <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400 truncate">
               OpenAngels
@@ -181,7 +180,7 @@ export default function KanbanBoard() {
               placeholder="Search..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-zinc-700 text-sm w-full sm:w-56 transition-all text-zinc-200 placeholder:text-zinc-500"
+              className="pl-10 pr-4 py-2 bg-black border border-white/10 rounded-lg focus:outline-none focus:border-red-500/50 text-sm w-full sm:w-56 transition-all text-zinc-200 placeholder:text-zinc-500"
             />
           </div>
           {leads.length > 0 && (
@@ -218,7 +217,7 @@ export default function KanbanBoard() {
             </p>
             <Link 
               href="/"
-              className="px-6 py-3 bg-white text-zinc-900 font-medium rounded-xl hover:bg-zinc-100 transition-colors"
+              className="px-6 py-3 bg-white text-black font-medium rounded-lg hover:bg-zinc-200 transition-colors"
             >
               Browse Investors →
             </Link>
@@ -228,7 +227,7 @@ export default function KanbanBoard() {
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-3 px-5 pt-5 pb-20 sm:pb-5">
               {columns.map(col => (
                 <div key={col.id} className="flex flex-col min-w-0">
-                  <div className={cn("flex items-center justify-between pb-2 mb-3 border-b-2 sticky top-0 bg-zinc-950 z-10 pt-1", col.color)}>
+                  <div className={cn("flex items-center justify-between pb-2 mb-3 border-b-2 sticky top-0 bg-black z-10 pt-1", col.color)}>
                     <div className="flex items-center gap-2">
                       <div className={cn("w-2 h-2 rounded-full", col.dot)} />
                       <h2 className="font-semibold text-zinc-400 text-xs uppercase tracking-wider">{col.name}</h2>
@@ -244,7 +243,7 @@ export default function KanbanBoard() {
                         ref={provided.innerRef}
                         className={cn(
                           "rounded-xl transition-colors p-1.5 sm:-mx-1.5 custom-scrollbar min-h-[60px] h-full flex-1",
-                          snapshot.isDraggingOver ? "bg-zinc-900/60 ring-1 ring-zinc-700/50" : ""
+                          snapshot.isDraggingOver ? "bg-white/5 ring-1 ring-white/10" : ""
                         )}
                       >
                         {col.items.map((lead, index) => {
@@ -265,8 +264,8 @@ export default function KanbanBoard() {
                                     }
                                   }}
                                   className={cn(
-                                    "group bg-zinc-900/70 border border-zinc-800/80 rounded-xl mb-2 transition-all cursor-pointer sm:cursor-grab",
-                                    snapshot.isDragging ? "ring-2 ring-amber-500/30 rotate-1 scale-105 shadow-xl cursor-grabbing" : "hover:border-zinc-700",
+                                    "group bg-black border border-white/5 rounded-xl mb-2 transition-all cursor-pointer sm:cursor-grab",
+                                    snapshot.isDragging ? "ring-1 ring-red-500/30 rotate-1 scale-105 cursor-grabbing border-white/20" : "hover:border-white/20",
                                     isExpanded ? "p-3" : "p-2 sm:p-3"
                                   )}
                                   style={provided.draggableProps.style}
@@ -284,7 +283,7 @@ export default function KanbanBoard() {
                                         className="p-1 hover:bg-zinc-800 rounded transition-colors"
                                         title="Notes"
                                       >
-                                        <StickyNote className="w-3.5 h-3.5 text-zinc-500 hover:text-amber-400" />
+                                        <StickyNote className="w-3.5 h-3.5 text-zinc-500 hover:text-red-400" />
                                       </button>
                                       <button 
                                         onClick={(e) => { e.preventDefault(); removeLead(lead.id); }}
@@ -305,8 +304,8 @@ export default function KanbanBoard() {
                                       )}
 
                                       {lead.notes && (
-                                        <div className="mb-2 px-2 py-1.5 bg-amber-500/5 border border-amber-500/10 rounded-lg">
-                                          <p className="text-[11px] text-amber-300/70 line-clamp-2">{lead.notes}</p>
+                                        <div className="mb-2 px-2 py-1.5 bg-red-500/5 border border-red-500/10 rounded-lg">
+                                          <p className="text-[11px] text-red-300/70 line-clamp-2">{lead.notes}</p>
                                         </div>
                                       )}
 
@@ -314,7 +313,7 @@ export default function KanbanBoard() {
                                         {inv.email && (
                                           <button 
                                             onClick={(e) => { e.preventDefault(); copyEmail(inv.email); }}
-                                            className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-[11px] transition-colors text-zinc-400 hover:text-zinc-200"
+                                            className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-lg text-[11px] transition-colors text-zinc-400 hover:text-white"
                                             title="Copy Email"
                                           >
                                             <Mail className="w-3 h-3" />
@@ -327,7 +326,7 @@ export default function KanbanBoard() {
                                             target="_blank" 
                                             rel="noreferrer"
                                             onClick={(e) => e.stopPropagation()}
-                                            className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-zinc-800/80 hover:bg-blue-600/20 hover:text-blue-400 rounded-lg text-[11px] transition-colors text-zinc-400"
+                                            className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-white/5 hover:bg-blue-600/20 hover:text-blue-400 border border-white/5 rounded-lg text-[11px] transition-colors text-zinc-400"
                                           >
                                             <LinkIcon className="w-3 h-3" />
                                             LinkedIn
@@ -356,7 +355,7 @@ export default function KanbanBoard() {
       {editingNotes && (
         <>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={() => setEditingNotes(null)} />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl z-50 p-6">
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-black border border-white/10 rounded-2xl shadow-2xl z-50 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-white">📝 Notes</h3>
               <button onClick={() => setEditingNotes(null)} className="text-zinc-500 hover:text-white transition-colors">
@@ -367,7 +366,7 @@ export default function KanbanBoard() {
               value={notesText}
               onChange={(e) => setNotesText(e.target.value)}
               placeholder="Add your personal notes about this investor..."
-              className="w-full h-40 bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-sm text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 resize-none"
+              className="w-full h-40 bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-red-500/50 resize-none"
             />
             <div className="flex justify-end gap-3 mt-4">
               <button
@@ -379,7 +378,7 @@ export default function KanbanBoard() {
               <button
                 onClick={saveNotes}
                 disabled={savingNotes}
-                className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-zinc-900 text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                className="px-5 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
               >
                 {savingNotes ? 'Saving...' : 'Save Notes'}
               </button>
