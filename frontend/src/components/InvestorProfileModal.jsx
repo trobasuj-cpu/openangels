@@ -165,7 +165,13 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
       setGeneratedBody(data.body || data.email || 'Error: Could not parse response.');
 
       // Match other investors based on startup description keywords
-      if (startupDescription && allInvestors.length > 0) {
+      let currentInvestors = allInvestors;
+      if (currentInvestors.length === 0) {
+        const { data } = await supabase.from('investors_secure').select('*');
+        if (data) currentInvestors = data;
+      }
+
+      if (startupDescription && currentInvestors.length > 0) {
         const descLower = startupDescription.toLowerCase();
         // Common tech/startup keywords to look for
         const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data', 'climate', 'media', 'infrastructure', 'deep-tech', 'creator-economy', 'impact', 'ar-vr', 'autonomous', 'robotics', 'iot', 'machine-learning', 'cloud', 'mobile', 'social', 'food', 'real-estate', 'insurance', 'legal', 'hr', 'logistics', 'travel'];
@@ -177,14 +183,14 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         const stopWords = new Set(['the', 'and', 'our', 'are', 'for', 'with', 'that', 'this', 'from', 'have', 'has', 'been', 'will', 'can', 'not', 'but', 'also', 'into', 'about', 'over', 'more', 'than', 'just', 'very', 'what', 'when', 'where', 'which', 'their', 'there', 'being', 'were', 'would', 'could', 'should', 'does', 'doing', 'during', 'each', 'other']);
         const descWords = descLower.split(/[\s,.\-:;!?()]+/).filter(w => w.length > 4 && !stopWords.has(w));
 
-        const scoredMatches = allInvestors.map(inv => {
+        const scoredMatches = currentInvestors.map(inv => {
           if (inv.id === investor.id) return { inv, score: 0 };
           
           let score = 0;
           
           // Industry match: +3 per matching industry tag
-          if (inv.industries) {
-            const invInds = Array.isArray(inv.industries) ? inv.industries : [inv.industries];
+          if (inv.industry) {
+            const invInds = Array.isArray(inv.industry) ? inv.industry : inv.industry.split(',').map(i => i.trim());
             const matchCount = invInds.filter(ind => searchTags.includes(ind.toLowerCase())).length;
             score += matchCount * 3;
           }
@@ -227,7 +233,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
       'sep=,',
       headers.join(','),
       ...matchedInvestors.map(inv => {
-        const inds = Array.isArray(inv.industries) ? inv.industries.join(', ') : (inv.industries || '');
+        const inds = Array.isArray(inv.industry) ? inv.industry.join(', ') : (inv.industry || '');
         return [
           escapeCSV(inv.name),
           escapeCSV(inv.email),
