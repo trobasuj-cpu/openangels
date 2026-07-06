@@ -47,6 +47,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
   }, [initialUser]);
 
   const [allInvestors, setAllInvestors] = useState([]);
+  const [isLoadingInvestors, setIsLoadingInvestors] = useState(true);
 
   useEffect(() => {
     const fetchAllInvestors = async () => {
@@ -71,6 +72,8 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         setAllInvestors(allData);
       } catch (err) {
         console.error('Failed to fetch all investors:', err);
+      } finally {
+        setIsLoadingInvestors(false);
       }
     };
     fetchAllInvestors();
@@ -353,13 +356,12 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                     </p>
                     <div className="flex flex-wrap gap-3">
                       {crmLeadIds && matchedInvestors.every(inv => crmLeadIds.has(inv.id)) ? (
-                        <Link 
-                          href="/crm"
-                          onClick={handleClose}
+                        <button 
+                          onClick={() => router.push('/crm')}
                           className="px-4 py-2 bg-black hover:bg-zinc-900 text-white text-sm font-medium rounded-lg transition-all border border-white/10 flex items-center justify-center gap-2"
                         >
                           Go to CRM →
-                        </Link>
+                        </button>
                       ) : (
                         <button 
                           onClick={async () => {
@@ -455,13 +457,13 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           {!generatedBody ? (
             <button
               onClick={handleGenerate}
-              disabled={!startupDescription.trim() || isGenerating}
+              disabled={!startupDescription.trim() || isGenerating || isLoadingInvestors}
               className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-medium rounded-xl hover:from-red-600 hover:to-rose-700 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isGenerating ? (
+              {isGenerating || isLoadingInvestors ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Writing magic...
+                  {isLoadingInvestors ? 'Loading AI...' : 'Writing magic...'}
                 </>
               ) : (
                 <>
