@@ -249,6 +249,15 @@ export default function Dashboard() {
   const [addingToCrm, setAddingToCrm] = useState(null); // investor ID currently being added
   const [showNewOnly, setShowNewOnly] = useState(false);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('newest') === 'true') {
+        setShowNewOnly(true);
+      }
+    }
+  }, []);
+
   const isAiMatch = useMemo(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -438,7 +447,8 @@ export default function Dashboard() {
   const filteredInvestors = useMemo(() => {
     let baseInvestors = investors;
     if (showNewOnly) {
-      const newest100 = [...investors].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).reverse().slice(0, 100);
+      // Sort descending (newest first) and take top 100
+      const newest100 = [...investors].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).slice(0, 100);
       const newestIds = new Set(newest100.map(i => i.id));
       baseInvestors = investors.filter(inv => newestIds.has(inv.id));
     }
@@ -598,17 +608,22 @@ export default function Dashboard() {
               <SlidersHorizontal className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3 relative">
-              <button 
-                onClick={() => setShowNewOnly(!showNewOnly)}
-                className={cn(
-                  "hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer",
-                  showNewOnly 
-                    ? "bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" 
-                    : "bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20"
-                )}
-              >
-                {showNewOnly ? "Show All" : "Recently Added 🔥"}
-              </button>
+              {showNewOnly ? (
+                <button 
+                  onClick={() => setShowNewOnly(false)}
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                >
+                  Show All
+                </button>
+              ) : (
+                <Link 
+                  href="/?newest=true"
+                  target="_blank"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20"
+                >
+                  Recently Added 🔥
+                </Link>
+              )}
               
               {/* CRM Button in Header (Always Visible) */}
               {user ? (
