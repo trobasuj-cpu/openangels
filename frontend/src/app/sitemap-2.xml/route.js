@@ -19,11 +19,18 @@ export async function GET() {
     const start = 1200;
     const end = 2399;
 
-    const p1 = supabase.from('investors_secure').select('slug, created_at').not('slug', 'is', null).range(start, start + 599);
-    const p2 = supabase.from('investors_secure').select('slug, created_at').not('slug', 'is', null).range(start + 600, end);
+    const p1 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start, start + 599);
+    const p2 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start + 600, end);
     
     const [res1, res2] = await Promise.all([p1, p2]);
-    const data = [...(res1.data || []), ...(res2.data || [])];
+    const rawData = [...(res1.data || []), ...(res2.data || [])];
+    const data = rawData.filter(inv => {
+      const hasRealBio = inv.bio && !inv.bio.includes("Found via automated") && !inv.bio.includes("Extracted from public");
+      const rawInd = inv.industry || inv.industries;
+      const hasTags = Array.isArray(rawInd) ? rawInd.length > 0 : !!rawInd;
+      const hasSocial = !!inv.email || !!inv.linkedin_url || !!inv.twitter_url || !!inv.website;
+      return hasRealBio || hasTags || hasSocial;
+    });
 
     const urls = data.map((inv) => `
   <url>
