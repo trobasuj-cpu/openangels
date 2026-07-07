@@ -247,6 +247,7 @@ export default function Dashboard() {
   const [isSavingBcc, setIsSavingBcc] = useState(false);
   const [crmLeadIds, setCrmLeadIds] = useState(new Set()); // investor IDs already in CRM
   const [addingToCrm, setAddingToCrm] = useState(null); // investor ID currently being added
+  const [showNewOnly, setShowNewOnly] = useState(false);
 
   const isAiMatch = useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -435,7 +436,14 @@ export default function Dashboard() {
   const deferredStages = useDeferredValue(selectedStages);
 
   const filteredInvestors = useMemo(() => {
-    return investors.filter(inv => {
+    let baseInvestors = investors;
+    if (showNewOnly) {
+      const newest100 = [...investors].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).reverse().slice(0, 100);
+      const newestIds = new Set(newest100.map(i => i.id));
+      baseInvestors = investors.filter(inv => newestIds.has(inv.id));
+    }
+
+    return baseInvestors.filter(inv => {
       const invIndustries = (() => {
         const raw = inv.industry || inv.industries;
         return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
@@ -477,7 +485,7 @@ export default function Dashboard() {
 
       return matchesSearch && matchesIndustry && matchesLocation && matchesCheckSize && matchesStage && matchesAi;
     });
-  }, [investors, deferredSearch, deferredIndustries, deferredLocations, deferredCheckSizes, deferredStages, isAiMatch, aiMatchedIds]);
+  }, [investors, deferredSearch, deferredIndustries, deferredLocations, deferredCheckSizes, deferredStages, isAiMatch, aiMatchedIds, showNewOnly]);
 
   useEffect(() => {
     setVisibleCount(24);
@@ -760,6 +768,19 @@ export default function Dashboard() {
                         <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
                       </div>
                       <div className="flex flex-col text-left sm:text-right">
+                        <div className="flex items-center justify-end gap-2 mb-1">
+                          <button 
+                            onClick={() => setShowNewOnly(!showNewOnly)}
+                            className={cn(
+                              "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full transition-all border cursor-pointer",
+                              showNewOnly 
+                                ? "bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" 
+                                : "bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20"
+                            )}
+                          >
+                            NEW 🔥
+                          </button>
+                        </div>
                         <div className="text-sm font-medium text-zinc-300">
                           <span className="text-white font-bold text-xl">{loading ? INVESTOR_COUNT : investors.length.toLocaleString()}</span> active
                         </div>
