@@ -765,6 +765,15 @@ export default function Dashboard() {
                           Based on your startup's context, we've filtered the directory to show the most relevant investors. Add them to your CRM to start pitching.
                         </p>
                       </>
+                    ) : showNewOnly ? (
+                      <>
+                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                          Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">100 Investors</span>
+                        </h1>
+                        <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
+                          The most recently added active investors in our database. Fresh opportunities for your next fundraising round.
+                        </p>
+                      </>
                     ) : (
                       <>
                         <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
@@ -859,6 +868,14 @@ export default function Dashboard() {
                   {filteredInvestors.slice(0, visibleCount).map((investor, index) => {
                     const isUnlocked = profile?.is_premium || index < 6;
                   
+                  let cleanBio = investor.bio || '';
+                  if (cleanBio.includes('Source: http')) {
+                    cleanBio = cleanBio.split('Source: http')[0].trim();
+                  }
+                  if (cleanBio === "Found via automated news parsing." || cleanBio === "Extracted from public investor list.") {
+                    cleanBio = "Active early-stage angel investor.";
+                  }
+
                   const rawInd = investor.industry || investor.industries;
                   const displayIndustries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
                   const formatMoney = (val) => {
@@ -915,7 +932,7 @@ export default function Dashboard() {
                         </div>
                         
                         <p className="text-sm text-zinc-600 dark:text-zinc-300 mb-5 line-clamp-3 leading-relaxed">
-                          {investor.bio}
+                          {cleanBio}
                         </p>
                         
                         <div className="flex flex-wrap gap-2 mb-6">
