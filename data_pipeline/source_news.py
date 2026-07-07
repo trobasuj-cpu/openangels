@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 from dotenv import load_dotenv
 import requests
 import time
+from bs4 import BeautifulSoup
 
 # Load .env relative to script location
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend', '.env')
@@ -100,6 +101,23 @@ def extract_names_with_gemini(text):
             break
     return []
 
+def scrape_page_text(url):
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            html = res.read()
+            soup = BeautifulSoup(html, 'html.parser')
+            # Extract visible text
+            for script in soup(["script", "style"]):
+                script.extract()
+            text = soup.get_text(separator=' ')
+            # Clean up whitespace
+            text = re.sub(r'\s+', ' ', text).strip()
+            return text
+    except Exception as e:
+        print(f"  [!] Failed to scrape article {url}: {e}")
+        return ""
+
 def scrape_rss(feed_url):
     print(f"Fetching RSS: {feed_url}")
     req = urllib.request.Request(feed_url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -121,9 +139,15 @@ def scrape_rss(feed_url):
         # Combine title and desc to send to Gemini
         text = f"{title}\n{desc}"
         
-        # Simple heuristic to save Gemini API calls: only process if it mentions funding
+        # Simple heuristic to save API calls: only process if title/desc mentions funding
         if any(kw in text.lower() for kw in ['raise', 'funding', 'seed', 'series', 'angel', 'invest', 'backing']):
-            items.append({'text': text, 'link': link})
+            print(f"  -> Found relevant article: {title}")
+            full_text = scrape_page_text(link)
+            if len(full_text) > 200:
+                # Truncate to save tokens if it's crazy long
+                items.append({'text': full_text[:20000], 'link': link})
+            else:
+                items.append({'text': text, 'link': link})
     
     return items
 
@@ -131,7 +155,9 @@ def run_news_scraper():
     print("Starting News Scraper...")
     feeds = [
         "https://techcrunch.com/category/startups/feed/",
-        # Add more RSS feeds here
+        "https://techcrunch.com/category/venture/feed/",
+        "https://sifted.eu/feed/",
+        "https://news.crunchbase.com/feed/"
     ]
     
     total_added = 0

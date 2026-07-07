@@ -54,7 +54,7 @@ export default function RootLayout({ children, modal }) {
           }}
         />
       </head>
-      <body className="antialiased min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-900 dark:text-zinc-100 flex flex-col">
+      <body className="antialiased min-h-screen bg-zinc-50 dark:bg-black font-sans text-zinc-900 dark:text-zinc-100 flex flex-col">
         {children}
         {modal}
       </body>

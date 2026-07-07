@@ -91,9 +91,21 @@ def run_twitter_scraper():
     print("Starting Twitter Scraper...")
     
     queries = [
-        'site:x.com "Angel Investor" "San Francisco"',
-        'site:x.com "Investing in early stage" "AI"',
-        'site:twitter.com "investor" "seed"'
+        'site:x.com "Angel Investor"',
+        'site:x.com "Investing in early stage"',
+        'site:x.com "Pre-seed investor"',
+        'site:x.com "Angel backing"',
+        'site:x.com "Seed investor" "portfolio"',
+        'site:x.com "Investing in AI" "angel"',
+        'site:x.com "Investing in SaaS"',
+        'site:x.com "Angel investor" "fintech"',
+        'site:x.com "investor" "seed" "b2b"',
+        'site:x.com "Angel Syndicate"',
+        'site:x.com "early stage investor"',
+        'site:x.com "investing my own money"',
+        'site:x.com "angel investing" "startups"',
+        'site:twitter.com "Angel Investor"',
+        'site:twitter.com "investing in startups"'
     ]
     
     total_added = 0

@@ -112,7 +112,7 @@ def scrape_page_text(url):
             # Extract visible text
             for script in soup(["script", "style"]):
                 script.extract()
-            text = soup.get_text(separator=' ')
+            text = soup.get_text(separator=' | ')
             # Clean up whitespace
             text = re.sub(r'\s+', ' ', text).strip()
             return text
@@ -125,9 +125,12 @@ def run_lists_scraper():
     
     # Search for public lists of angel investors
     queries = [
-        '"angel investors" filetype:pdf OR filetype:csv',
+        '"angel investors" filetype:csv',
         '"list of angel investors" "name" "portfolio"',
-        'site:github.com "angel investors" csv'
+        'site:github.com "angel investors" csv',
+        '"top angel investors" "portfolio"',
+        '"angel syndicate" list of members',
+        '"seed investors" directory'
     ]
     
     total_added = 0
@@ -152,7 +155,7 @@ def run_lists_scraper():
             
             if names:
                 print(f"  -> Gemini found {len(names)} names.")
-                for name in names[:20]: # Limit to 20 per list to avoid spamming the DB in one go
+                for name in names[:50]: # Limit to 50 per list to avoid spamming the DB in one go
                     slug = generate_slug(name)
                     if check_exists(slug):
                         pass # Silently skip
