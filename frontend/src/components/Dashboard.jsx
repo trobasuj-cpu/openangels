@@ -598,6 +598,18 @@ export default function Dashboard() {
               <SlidersHorizontal className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3 relative">
+              <button 
+                onClick={() => setShowNewOnly(!showNewOnly)}
+                className={cn(
+                  "hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer",
+                  showNewOnly 
+                    ? "bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" 
+                    : "bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20"
+                )}
+              >
+                {showNewOnly ? "Show All" : "Recently Added 🔥"}
+              </button>
+              
               {/* CRM Button in Header (Always Visible) */}
               {user ? (
                 <Link
@@ -768,19 +780,6 @@ export default function Dashboard() {
                         <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
                       </div>
                       <div className="flex flex-col text-left sm:text-right">
-                        <div className="flex items-center justify-end gap-2 mb-1">
-                          <button 
-                            onClick={() => setShowNewOnly(!showNewOnly)}
-                            className={cn(
-                              "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full transition-all border cursor-pointer",
-                              showNewOnly 
-                                ? "bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" 
-                                : "bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20"
-                            )}
-                          >
-                            NEW 🔥
-                          </button>
-                        </div>
                         <div className="text-sm font-medium text-zinc-300">
                           <span className="text-white font-bold text-xl">{loading ? INVESTOR_COUNT : investors.length.toLocaleString()}</span> active
                         </div>
