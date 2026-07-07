@@ -1,12 +1,10 @@
 export async function GET() {
   // We have 1 static sitemap and 5 investor sitemaps (for ~4700 investors, 1000 per page)
   const sitemaps = [
-    'https://openangels.xyz/sitemap-static.xml',
-    'https://openangels.xyz/sitemap-investors?page=1',
-    'https://openangels.xyz/sitemap-investors?page=2',
-    'https://openangels.xyz/sitemap-investors?page=3',
-    'https://openangels.xyz/sitemap-investors?page=4',
-    'https://openangels.xyz/sitemap-investors?page=5',
+    'https://openangels.xyz/sitemap-1.xml',
+    'https://openangels.xyz/sitemap-2.xml',
+    'https://openangels.xyz/sitemap-3.xml',
+    'https://openangels.xyz/sitemap-4.xml',
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
