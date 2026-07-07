@@ -51,8 +51,27 @@ export default async function StandaloneInvestorPage({ params }) {
     notFound();
   }
 
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": finalInvestor.name || "Angel Investor",
+    "description": finalInvestor.bio || "Angel Investor Profile",
+    "url": absoluteUrl(`/investor/${finalInvestor.slug || finalInvestor.id}`),
+    ...(finalInvestor.firm && { "worksFor": { "@type": "Organization", "name": finalInvestor.firm } }),
+    ...(finalInvestor.location && { "homeLocation": { "@type": "Place", "name": finalInvestor.location } }),
+    "sameAs": [
+      finalInvestor.linkedin_url,
+      finalInvestor.twitter_url,
+      finalInvestor.website
+    ].filter(Boolean)
+  };
+
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col pt-12 items-center justify-center p-4 sm:p-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
       <div className="w-full max-w-3xl bg-white dark:bg-zinc-900 rounded-2xl shadow-xl overflow-hidden relative min-h-[600px] border border-zinc-200 dark:border-zinc-800">
         <InvestorProfileModal investor={finalInvestor} isStandalone={true} />
       </div>
