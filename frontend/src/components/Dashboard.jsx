@@ -331,7 +331,16 @@ export default function Dashboard() {
         }
       }
       
-      const sortedData = (allData || []).sort((a, b) => {
+      const validData = (allData || []).filter(inv => {
+        const hasRealBio = inv.bio && !inv.bio.includes("Found via automated") && !inv.bio.includes("Extracted from public");
+        const rawInd = inv.industry || inv.industries;
+        const hasTags = Array.isArray(rawInd) ? rawInd.length > 0 : !!rawInd;
+        const hasSocial = !!inv.email || !!inv.linkedin_url || !!inv.twitter_url || !!inv.website;
+        
+        return hasRealBio || hasTags || hasSocial;
+      });
+
+      const sortedData = validData.sort((a, b) => {
         if (a.email && !b.email) return -1;
         if (!a.email && b.email) return 1;
         return 0;
