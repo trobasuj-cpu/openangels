@@ -47,8 +47,8 @@ def extract_industries_with_gemini(investor):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
     
     bio = investor.get('bio', '')
-    if not bio or len(bio) < 10:
-        return ["saas", "b2b"] # Fallback for empty bios
+    if not bio or len(bio) < 10 or "Found via automated" in bio or "Extracted from public" in bio:
+        return [] # Fallback for empty/generic bios
         
     prompt = f"""
     Analyze the following bio of an angel investor.
@@ -79,11 +79,9 @@ def extract_industries_with_gemini(investor):
                 
                 # Filter to only standard tags
                 valid_tags = [t for t in tags if t in STANDARD_TAGS]
-                if not valid_tags:
-                    valid_tags = ["saas"]
                 return valid_tags
             except (KeyError, IndexError, json.JSONDecodeError):
-                return ["saas"]
+                return []
         except requests.exceptions.HTTPError as e:
             if res.status_code == 429:
                 time.sleep(5)
@@ -92,7 +90,7 @@ def extract_industries_with_gemini(investor):
         except Exception:
             break
             
-    return ["saas"]
+    return []
 
 def update_investor_industries(investor_id, industries):
     url = f"{SUPABASE_URL}/rest/v1/investors_secure?id=eq.{investor_id}"

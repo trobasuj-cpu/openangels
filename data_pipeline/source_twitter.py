@@ -138,11 +138,16 @@ def run_twitter_scraper():
                 continue # Too long to be a real name
             junk_words = ['results', 'connect with', 'get funded', 'list of', 
                          'top angel', 'best investors', 'how to', 'what is',
-                         'the seed', 'angel investors', 'stock', 'invest in']
+                         'the seed', 'angel investors', 'stock', 'invest in',
+                         'los angeles', 'call back', 'theory', 'you need our']
             if any(jw in name.lower() for jw in junk_words):
                 continue
             # Name should not contain special chars typical of page titles
-            if any(c in name for c in ['|', '#', '→', '—', ':', '®', '™']):
+            if any(c in name for c in ['|', '#', '→', '—', ':', '®', '™', '✨', '🩵']):
+                continue
+            
+            # Filter names containing emojis (using basic regex for non-ascii ranges that usually contain emojis)
+            if re.search(r'[\U00010000-\U0010ffff]', name):
                 continue
                 
             slug = generate_slug(name)

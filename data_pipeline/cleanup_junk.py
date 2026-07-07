@@ -27,6 +27,14 @@ JUNK_SLUGS = [
     'angel-investor-business-get-funded-angel-investors',
     'transactglobal-results-on-x-live-posts-updates',
     'the-seed-100-the-best-early-stage-investors',
+    'angel-baker',
+    'angel-keeping',
+    'angels-call-back',
+    'angel-theory',
+    'los-angeles-angels',
+    'meta-angel',
+    'sf-angels-group',
+    'angel-investment-you-need-our-angel-investors'
 ]
 
 def delete_by_slug(slug):
