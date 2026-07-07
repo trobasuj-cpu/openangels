@@ -1,6 +1,8 @@
 import { absoluteUrl } from '@/seo';
 import { supabase } from '@/lib/supabase';
 
+function escapeXml(unsafe) { return unsafe.replace(/[<>&'\"]/g, function (c) { switch (c) { case '<': return '&lt;'; case '>': return '&gt;'; case '&': return '&amp;'; case '\'': return '&apos;'; case '\"': return '&quot;'; } }); }
+
 export async function GET() {
   try {
     const staticPages = [
@@ -56,7 +58,7 @@ export async function GET() {
     if (data && data.length > 0) {
       const investorUrls = data.map((inv) => `
   <url>
-    <loc>${absoluteUrl(`/investor/${inv.slug}`)}</loc>
+    <loc>${absoluteUrl(`/investor/${escapeXml(inv.slug)}`)}</loc>
     <lastmod>${inv.created_at ? new Date(inv.created_at).toISOString() : new Date().toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -80,3 +82,4 @@ ${allUrls.join('')}
     return new Response('Error', { status: 500 });
   }
 }
+
