@@ -62,7 +62,7 @@ export default function KanbanBoard() {
         created_at,
         investor_id,
         investors (
-          id, name, bio, location, email, linkedin_url, website, twitter_url, avatar_url,
+          id, slug, name, bio, location, email, linkedin_url, website, twitter_url, avatar_url,
           industries, stages, check_min, check_max
         )
       `)
