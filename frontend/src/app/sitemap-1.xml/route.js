@@ -19,8 +19,8 @@ export async function GET() {
     const start = 0;
     const end = 1199;
 
-    const p1 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start, start + 599);
-    const p2 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start + 600, end);
+    const p1 = supabase.from('investors_secure').select('slug, created_at, bio, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start, start + 599);
+    const p2 = supabase.from('investors_secure').select('slug, created_at, bio, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start + 600, end);
     
     const [res1, res2] = await Promise.all([p1, p2]);
     const rawData = [...(res1.data || []), ...(res2.data || [])];
