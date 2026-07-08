@@ -54,9 +54,8 @@ export default function Footer() {
         <div>
           <h2 className="text-white font-semibold mb-4">Fundraising Tools</h2>
           <ul className="space-y-3 text-sm">
-            <li><Link href="/" className="hover:text-amber-500 transition-colors">Investor database</Link></li>
-            <li><Link href="/" className="hover:text-amber-500 transition-colors">AI pitch email drafts</Link></li>
-            <li><Link href="/" className="hover:text-amber-500 transition-colors">Fundraising CRM</Link></li>
+            <li><Link href="/investors/all" className="hover:text-amber-500 transition-colors">Investor database</Link></li>
+            <li><Link href="/crm" className="hover:text-amber-500 transition-colors">Fundraising CRM</Link></li>
             <li><a href="mailto:support@openangels.xyz" className="hover:text-amber-500 transition-colors">Suggest an investor</a></li>
           </ul>
         </div>
