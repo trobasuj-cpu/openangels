@@ -333,6 +333,16 @@ export default function KanbanBoard() {
                                           </a>
                                         )}
                                       </div>
+                                      <div className="mt-1.5 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                        <Link
+                                          href={`/investor/${inv.slug}`}
+                                          onClick={(e) => e.stopPropagation()}
+                                          className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-red-950/30 hover:bg-red-900/50 text-red-400 border border-red-900/40 rounded-lg text-[11px] font-medium transition-colors"
+                                        >
+                                          <Sparkles className="w-3 h-3" />
+                                          AI Draft Email
+                                        </Link>
+                                      </div>
                                     </>
                                   )}
                                 </div>
