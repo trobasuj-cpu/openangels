@@ -40,8 +40,18 @@ export async function GET() {
     <priority>0.7</priority>
   </url>`).join('');
 
+    let xmlUrls = urls;
+    if (!xmlUrls) {
+      xmlUrls = `
+  <url>
+    <loc>${absoluteUrl('/')}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <priority>0.1</priority>
+  </url>`;
+    }
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${xmlUrls}</urlset>`;
 
     return new Response(xml, {
       headers: {
