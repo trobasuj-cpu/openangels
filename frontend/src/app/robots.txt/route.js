@@ -6,8 +6,7 @@ Allow: /
 Disallow: /api/
 Disallow: /crm/
 
-Sitemap: https://openangels.xyz/sitemap-index-1.xml
-Sitemap: https://openangels.xyz/sitemap-index-2.xml
+Sitemap: https://openangels.xyz/sitemap-index.xml
 `;
 
   return new Response(robotsTxt, {
