@@ -2,7 +2,7 @@ import { absoluteUrl } from '@/seo';
 
 export async function GET() {
   const staticPages = [
-    '', '/contact', '/privacy', '/terms', '/gdpr', '/refund',
+    '', '/directory', '/contact', '/privacy', '/terms', '/gdpr', '/refund',
     '/investors/all', '/investors/saas', '/investors/ai', '/investors/fintech',
     '/investors/healthtech', '/investors/ecommerce', '/investors/edtech',
     '/investors/cleantech', '/investors/web3', '/investors/deeptech',

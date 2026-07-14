@@ -946,9 +946,9 @@ export default function Dashboard() {
                         
                         <div className="flex flex-wrap gap-2 mb-6">
                           {displayIndustries.map(tag => (
-                            <span key={tag} className="px-2.5 py-1 text-xs font-medium bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 rounded-md border border-zinc-200 dark:border-zinc-800">
+                            <Link key={tag} href={`/investors/${tag.toLowerCase().replace(/[\s/]+/g, '-')}`} onClick={(e) => e.stopPropagation()} className="px-2.5 py-1 text-xs font-medium bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 rounded-md border border-zinc-200 dark:border-zinc-800 hover:border-amber-500/50 hover:text-amber-600 dark:hover:text-amber-500 transition-colors">
                               {tag}
-                            </span>
+                            </Link>
                           ))}
                           {displayCheckSize && (
                             <span className="px-2.5 py-1 text-xs font-medium bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md border border-blue-100 dark:border-blue-900/30">
@@ -1093,6 +1093,12 @@ export default function Dashboard() {
                     {page.label}
                   </Link>
                 ))}
+                <Link
+                  href="/directory"
+                  className="px-3 py-1.5 bg-zinc-900 border border-zinc-700 rounded-lg text-sm text-white font-medium hover:bg-zinc-800 transition-all flex items-center gap-1"
+                >
+                  View Complete Directory &rarr;
+                </Link>
               </div>
             </div>
 
