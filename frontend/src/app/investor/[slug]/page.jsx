@@ -8,7 +8,7 @@ export async function generateMetadata({ params }) {
   
   const { data: investors } = await supabase
     .from('investors_secure')
-    .select('name, bio, industry, firm')
+    .select('name, bio, industry, industries, firm, email, linkedin_url, twitter_url, website')
     .eq('slug', slug)
     .limit(1);
 
@@ -19,10 +19,18 @@ export async function generateMetadata({ params }) {
   const investorName = investor.name;
   const firmText = investor.firm ? ` at ${investor.firm}` : '';
   
+  const hasRealBio = investor.bio && !investor.bio.includes("Found via automated") && !investor.bio.includes("Extracted from public");
+  const rawInd = investor.industry || investor.industries;
+  const hasTags = Array.isArray(rawInd) ? rawInd.length > 0 : !!rawInd;
+  const hasSocial = !!investor.email || !!investor.linkedin_url || !!investor.twitter_url || !!investor.website;
+  
+  const isThin = !(hasRealBio || hasTags || hasSocial);
+  
   return {
     title: `${investorName}${firmText} - Angel Investor Profile | OpenAngels`,
     description: investor.bio ? investor.bio.substring(0, 160) : `Contact ${investorName} and see their investment thesis, past investments, and check size on OpenAngels.`,
     alternates: { canonical: absoluteUrl(`/investor/${slug}`) },
+    ...(isThin && { robots: { index: false, follow: true } })
   };
 }
 

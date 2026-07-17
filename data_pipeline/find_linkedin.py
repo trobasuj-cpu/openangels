@@ -64,7 +64,7 @@ def extract_linkedin_url(results):
     return None
 
 def update_supabase(investor_id, linkedin_url):
-    update_url = f"{url}/rest/v1/investors?id=eq.{investor_id}"
+    update_url = f"{url}/rest/v1/investors_secure?id=eq.{investor_id}"
     req = urllib.request.Request(
         update_url,
         data=json.dumps({"linkedin_url": linkedin_url}).encode('utf-8'),
@@ -79,7 +79,7 @@ def update_supabase(investor_id, linkedin_url):
         return False
 
 def get_total_remaining():
-    req_url = f"{url}/rest/v1/investors?linkedin_url=is.null"
+    req_url = f"{url}/rest/v1/investors_secure?linkedin_url=is.null"
     headers = HEADERS.copy()
     headers['Prefer'] = 'count=exact'
     headers['Range-Unit'] = 'items'
@@ -110,7 +110,7 @@ def run_full_scale():
     offset = 0
     
     while True:
-        req_url = f"{url}/rest/v1/investors?select=id,name,bio,twitter_url,linkedin_url&limit={limit}&offset={offset}"
+        req_url = f"{url}/rest/v1/investors_secure?select=id,name,bio,twitter_url,linkedin_url&limit={limit}&offset={offset}"
         req = urllib.request.Request(req_url, headers=HEADERS)
         try:
             with urllib.request.urlopen(req) as res:

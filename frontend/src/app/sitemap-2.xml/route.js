@@ -5,25 +5,20 @@ function escapeXml(unsafe) {
   if (!unsafe) return '';
   return unsafe.replace(/[<>&'"]/g, function (c) {
     switch (c) {
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '&': return '&amp;';
-      case '\'': return '&apos;';
-      case '"': return '&quot;';
+      case '<': return '&lt;'; case '>': return '&gt;'; case '&': return '&amp;';
+      case '\'': return '&apos;'; case '"': return '&quot;';
     }
   });
 }
 
 export async function GET() {
   try {
-    const start = 1200;
-    const end = 2399;
-
-    const p1 = supabase.from('investors_secure').select('slug, created_at, bio, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start, start + 599);
-    const p2 = supabase.from('investors_secure').select('slug, created_at, bio, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(start + 600, end);
-    
+    const p1 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(1200, 1799);
+    const p2 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(1800, 2399);
     const [res1, res2] = await Promise.all([p1, p2]);
     const rawData = [...(res1.data || []), ...(res2.data || [])];
+
+    // Filter out thin content profiles
     const data = rawData.filter(inv => {
       const hasRealBio = inv.bio && !inv.bio.includes("Found via automated") && !inv.bio.includes("Extracted from public");
       const rawInd = inv.industry || inv.industries;
@@ -40,24 +35,11 @@ export async function GET() {
     <priority>0.7</priority>
   </url>`).join('');
 
-    let xmlUrls = urls;
-    if (!xmlUrls) {
-      xmlUrls = `
-  <url>
-    <loc>${absoluteUrl('/')}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.1</priority>
-  </url>`;
-    }
-
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${xmlUrls}</urlset>`;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
 
     return new Response(xml, {
-      headers: {
-        'Content-Type': 'application/xml',
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate',
-      },
+      headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate' },
     });
   } catch (error) {
     console.error('Sitemap error:', error);

@@ -87,7 +87,7 @@ def extract_twitter_url(results, investor_name=""):
     return None
 
 def update_supabase(investor_id, twitter_url):
-    update_url = f"{url}/rest/v1/investors?id=eq.{investor_id}"
+    update_url = f"{url}/rest/v1/investors_secure?id=eq.{investor_id}"
     req = urllib.request.Request(
         update_url,
         data=json.dumps({"twitter_url": twitter_url}).encode('utf-8'),
@@ -199,8 +199,8 @@ def run_full_scale():
     checked_ids = get_checked_ids()
     print(f"Loaded {len(checked_ids)} already checked IDs.")
     
-    # Count total missing
-    count_url = f"{url}/rest/v1/investors?twitter_url=is.null"
+    # Count
+    req_url = f"{url}/rest/v1/investors_secure?twitter_url=is.null"
     count_headers = HEADERS.copy()
     count_headers['Prefer'] = 'count=exact'
     count_headers['Range-Unit'] = 'items'
