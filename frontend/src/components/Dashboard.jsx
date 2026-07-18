@@ -1078,56 +1078,65 @@ export default function Dashboard() {
               </div>
             )}
             
-            <div className="mt-16 mb-8 border-t border-zinc-200 dark:border-zinc-800 pt-16">
-              <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-6">Browse Angel Investors by Industry</h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8 text-sm max-w-3xl leading-relaxed">
-                Discover the most active venture capitalists and angel investors across top industries. Filter by sector to find the perfect match for your startup's niche. Our database is continuously updated with the latest investment data.
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            <div className="mt-16 mb-8 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-16">
+              <div className="flex flex-col items-center text-center mb-10">
+                <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Browse Angel Investors by Industry</h2>
+                <p className="text-zinc-600 dark:text-zinc-400 text-sm max-w-2xl leading-relaxed">
+                  Discover the most active venture capitalists and angel investors across top industries. Filter by sector to find the perfect match for your startup's niche.
+                </p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-3">
                 {INDUSTRY_PAGES.map((page) => (
                   <Link
                     key={page.slug}
                     href={`/investors/${page.slug}`}
-                    className="group flex items-center justify-between p-3 bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:border-red-500/40 dark:hover:border-red-500/40 hover:shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] hover:-translate-y-0.5 transition-all duration-300"
+                    className="group relative px-5 py-2.5 rounded-full bg-white/50 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-white/5 backdrop-blur-md overflow-hidden hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all duration-300"
                   >
-                    <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{page.label}</span>
-                    <svg className="w-4 h-4 text-zinc-400 group-hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/0 to-red-500/0 group-hover:from-red-500/5 group-hover:via-red-500/10 group-hover:to-red-500/5 transition-all duration-500"></div>
+                    <span className="relative z-10 text-sm font-semibold text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{page.label}</span>
                   </Link>
                 ))}
               </div>
-              <div className="mt-8 flex justify-start sm:justify-center">
+              <div className="mt-10 flex justify-center">
                 <Link
                   href="/directory"
-                  className="inline-flex items-center justify-center px-6 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium text-sm rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm group"
+                  className="inline-flex items-center justify-center px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-sm rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all hover:scale-105 active:scale-95 shadow-lg group"
                 >
                   View Complete Directory 
                   <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </Link>
               </div>
             </div>
 
-            <div className="mt-10 mb-8">
-              <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-6">Popular Investor Hubs</h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8 text-sm max-w-3xl leading-relaxed">
-                Explore curated lists of angel investors and VCs by combining industry, stage, and location filters. Find the perfect niche match for your fundraise.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="mt-16 mb-12">
+              <div className="flex flex-col items-center text-center mb-10">
+                <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Popular Investor Hubs</h2>
+                <p className="text-zinc-600 dark:text-zinc-400 text-sm max-w-2xl leading-relaxed">
+                  Explore curated lists of angel investors and VCs by combining industry, stage, and location filters.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {POPULAR_HUBS.map((hub) => (
                   <Link
                     key={hub.filters.join('/')}
                     href={`/investors/${hub.filters.join('/')}`}
-                    className="group flex items-start gap-3 p-4 bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900/40 dark:to-zinc-900/10 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-300"
+                    className="group flex items-center justify-between p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-transparent hover:border-blue-500/30 hover:bg-white dark:hover:bg-zinc-900/80 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-800/30 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
-                      <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <div className="flex items-center gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 shadow-sm">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{hub.label}</h3>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-0.5">Explore curated list</p>
+                      </div>
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-zinc-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{hub.label}</span>
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Explore curated list</span>
+                    <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      <svg className="w-4 h-4 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
                     </div>
                   </Link>
                 ))}
