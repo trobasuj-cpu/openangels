@@ -1083,21 +1083,29 @@ export default function Dashboard() {
               <p className="text-zinc-600 dark:text-zinc-400 mb-8 text-sm max-w-3xl leading-relaxed">
                 Discover the most active venture capitalists and angel investors across top industries. Filter by sector to find the perfect match for your startup's niche. Our database is continuously updated with the latest investment data.
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {INDUSTRY_PAGES.map((page) => (
                   <Link
                     key={page.slug}
                     href={`/investors/${page.slug}`}
-                    className="px-3 py-1.5 bg-black border border-white/5 rounded-lg text-sm text-zinc-400 hover:text-red-500 hover:border-red-500/30 transition-all"
+                    className="group flex items-center justify-between p-3 bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:border-red-500/40 dark:hover:border-red-500/40 hover:shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] hover:-translate-y-0.5 transition-all duration-300"
                   >
-                    {page.label}
+                    <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{page.label}</span>
+                    <svg className="w-4 h-4 text-zinc-400 group-hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </Link>
                 ))}
+              </div>
+              <div className="mt-8 flex justify-start sm:justify-center">
                 <Link
                   href="/directory"
-                  className="px-3 py-1.5 bg-zinc-900 border border-zinc-700 rounded-lg text-sm text-white font-medium hover:bg-zinc-800 transition-all flex items-center gap-1"
+                  className="inline-flex items-center justify-center px-6 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium text-sm rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm group"
                 >
-                  View Complete Directory &rarr;
+                  View Complete Directory 
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -1107,14 +1115,20 @@ export default function Dashboard() {
               <p className="text-zinc-600 dark:text-zinc-400 mb-8 text-sm max-w-3xl leading-relaxed">
                 Explore curated lists of angel investors and VCs by combining industry, stage, and location filters. Find the perfect niche match for your fundraise.
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {POPULAR_HUBS.map((hub) => (
                   <Link
                     key={hub.filters.join('/')}
                     href={`/investors/${hub.filters.join('/')}`}
-                    className="px-3 py-1.5 bg-black border border-white/5 rounded-lg text-sm text-zinc-400 hover:text-red-500 hover:border-red-500/30 transition-all"
+                    className="group flex items-start gap-3 p-4 bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900/40 dark:to-zinc-900/10 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-300"
                   >
-                    {hub.label}
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-800/30 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
+                      <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-zinc-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{hub.label}</span>
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Explore curated list</span>
+                    </div>
                   </Link>
                 ))}
               </div>
