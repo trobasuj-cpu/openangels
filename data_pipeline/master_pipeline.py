@@ -23,6 +23,7 @@ load_dotenv(str(env_path))
 SUPABASE_URL = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("VITE_SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("VITE_SUPABASE_SERVICE_ROLE_KEY")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 
 HEADERS = {
     'apikey': SUPABASE_KEY,
@@ -113,27 +114,41 @@ Return a JSON object with key "investors" containing an array. Each element must
 Raw Text (Contains Multiple Articles):
 {text}
 """
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+    api_url = "https://openrouter.ai/api/v1/chat/completions"
     payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.2}
+        "model": "google/gemini-2.0-flash-lite-preview-02-05:free",
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        "temperature": 0.2,
+        "response_format": {"type": "json_object"}
     }
     
-    # Anti-rate limit for Gemini (gemini-2.0-flash allows ~15 RPM on free tier)
+    # Rate limit pause
     time.sleep(5)
+    
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://openangels.xyz",
+        "X-Title": "OpenAngels Pipeline"
+    }
     
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            res = requests.post(api_url, json=payload, headers={'Content-Type': 'application/json'})
+            res = requests.post(api_url, json=payload, headers=headers)
             if res.status_code == 429:
-                wait = 30 * (attempt + 1)
+                wait = 15 * (attempt + 1)
                 print(f"  [Rate limited, waiting {wait}s...]")
                 time.sleep(wait)
                 continue
             res.raise_for_status()
             data = res.json()
-            raw_output = data['candidates'][0]['content']['parts'][0]['text']
+            raw_output = data['choices'][0]['message']['content']
             cleaned_output = raw_output.replace('```json', '').replace('```', '').strip()
             parsed = json.loads(cleaned_output)
             return parsed.get('investors', [])
@@ -142,7 +157,7 @@ Raw Text (Contains Multiple Articles):
                 print(f"  [Retry {attempt+1}, waiting 15s...]")
                 time.sleep(15)
             else:
-                print(f"  Gemini Error: {e}")
+                print(f"  OpenRouter Error: {e} | Response: {res.text if 'res' in locals() else ''}")
     return []
 
 def check_duplicate_in_db(name):
@@ -156,8 +171,8 @@ def check_duplicate_in_db(name):
         return False
 
 def main():
-    if not GEMINI_API_KEY:
-        print("ERROR: GEMINI_API_KEY not found in .env")
+    if not OPENROUTER_API_KEY:
+        print("ERROR: OPENROUTER_API_KEY not found in .env")
         return
         
     print("=== Step 1: Fetching News (RSS) ===")
