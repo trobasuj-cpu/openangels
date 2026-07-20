@@ -176,8 +176,18 @@ def main():
         return
         
     print("=== Step 1: Fetching News (RSS) ===")
+    
+    # Load already processed links to avoid reprocessing old news
+    processed_file = os.path.join(os.path.dirname(__file__), 'processed_news.txt')
     seen_links = set()
+    if os.path.exists(processed_file):
+        with open(processed_file, 'r', encoding='utf-8') as f:
+            seen_links = set(line.strip() for line in f if line.strip())
+            
+    print(f"Loaded {len(seen_links)} previously processed articles.")
+    
     articles = []
+    new_links_found = []
     for feed_url in RSS_FEEDS:
         print(f"Fetching {feed_url}...")
         try:
@@ -191,13 +201,20 @@ def main():
                     if link in seen_links:
                         continue
                     seen_links.add(link)
+                    new_links_found.append(link)
                     desc_html = item.description.text if item.description else ""
                     clean_desc = BeautifulSoup(desc_html, "html.parser").get_text(separator=' ').strip()
                     articles.append((title, link, clean_desc))
         except Exception as e:
             print(f"Error fetching {feed_url}: {e}")
 
-    print(f"Total unique articles found: {len(articles)}")
+    print(f"Total unique NEW articles found: {len(articles)}")
+    
+    # Save newly found links so we don't process them again tomorrow
+    if new_links_found:
+        with open(processed_file, 'a', encoding='utf-8') as f:
+            for link in new_links_found:
+                f.write(link + '\n')
     
     print("\n=== Step 2: AI Enrichment (Batch Processing) ===")
     all_found_investors = []
