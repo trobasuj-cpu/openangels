@@ -472,6 +472,21 @@ def find_email_for_investor(name, bio):
     except Exception as e:
         print(f"    [Email] M8 error: {e}")
     
+    # 8. Best-guess fallback: if we found a domain, generate the most likely email
+    if domain:
+        clean = re.sub(r'[^a-zA-Z\s]', '', name).lower().strip()
+        parts = clean.split()
+        if len(parts) >= 2:
+            first, last = parts[0], parts[-1]
+            guess = f"{first}.{last}@{domain}"
+        elif parts:
+            guess = f"{parts[0]}@{domain}"
+        else:
+            guess = None
+        if guess:
+            print(f"    [Email] M9(best-guess): {guess}")
+            return guess
+    
     print(f"    [Email] All methods exhausted for {name}.")
     return None
 
