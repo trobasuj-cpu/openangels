@@ -387,6 +387,60 @@ def update_supabase(investor_id, email):
         return False
 
 # ============================================================
+# WRAPPER FOR SINGLE INVESTOR
+# ============================================================
+
+def find_email_for_investor(name, bio):
+    """Full cascade email search for a single investor."""
+    # 1. Deobfuscate
+    email = method_deobfuscate(bio)
+    if email: return email
+    
+    # 2. DDG direct email
+    time.sleep(2)
+    email = method_ddg_email_search(name)
+    if email: return email
+    
+    # 3. Github
+    email = method_github(name)
+    if email: return email
+    
+    # 4. Personal Website Scraping
+    personal_url = extract_personal_url(bio)
+    if personal_url:
+        email = method_scrape_website(personal_url)
+        if email: return email
+        
+    # 5. Company SMTP Verification
+    domain, result = method_smtp_company(name, bio)
+    if result and result != 'CATCHALL':
+        return result
+    elif result == 'CATCHALL' and domain:
+        time.sleep(2)
+        email = method_ddg_catchall(name, domain)
+        if email: return email
+        
+    # 6. DDG Domain Discovery
+    if not domain:
+        time.sleep(2)
+        domain = method_ddg_find_domain(name)
+        if domain:
+            mx = get_mx_record(domain)
+            if mx and not is_catch_all(domain, mx):
+                perms = generate_permutations(name, domain)
+                for p in perms:
+                    if verify_email(p, mx):
+                        return p
+                    time.sleep(0.3)
+                    
+    # 7. DDG Scrape Contact Page
+    time.sleep(2)
+    email = method_ddg_scrape_contact(name)
+    if email: return email
+    
+    return None
+
+# ============================================================
 # MAIN PIPELINE
 # ============================================================
 

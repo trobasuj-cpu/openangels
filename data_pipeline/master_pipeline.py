@@ -237,16 +237,8 @@ def main():
                 time.sleep(2)
                 linkedin_url = find_linkedin(name, tw_handle)
                 
-                # Email search
-                email = fe.method_deobfuscate(inv.get('bio', ''))
-                if not email:
-                    try:
-                        time.sleep(2)
-                        email = fe.method_ddg_email_search(name)
-                    except AttributeError:
-                        email = None
-                if not email:
-                    email = fe.method_github(name)
+                # Email search (Full OSINT Cascade)
+                email = fe.find_email_for_investor(name, inv.get('bio', ''))
 
                 inv['twitter_url'] = twitter_url
                 inv['linkedin_url'] = linkedin_url
