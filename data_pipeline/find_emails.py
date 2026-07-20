@@ -18,9 +18,10 @@ url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("VITE_SUPABAS
 key = os.environ.get("VITE_SUPABASE_SERVICE_ROLE_KEY")
 github_token = os.environ.get("GITHUB_TOKEN")
 
-if not key or "ВСТАВЬТЕ_СЮДА" in key:
-    print("ERROR: Add VITE_SUPABASE_SERVICE_ROLE_KEY to frontend/.env")
-    exit(1)
+if not key or "ВСТАВЬТЕ_СЮДА" in (key or ''):
+    if __name__ == '__main__':
+        print("ERROR: Add VITE_SUPABASE_SERVICE_ROLE_KEY to frontend/.env")
+        exit(1)
 
 HEADERS = {
     'apikey': key,
@@ -392,52 +393,86 @@ def update_supabase(investor_id, email):
 
 def find_email_for_investor(name, bio):
     """Full cascade email search for a single investor."""
+    print(f"    [Email Cascade] Starting for {name}...")
+    
     # 1. Deobfuscate
     email = method_deobfuscate(bio)
-    if email: return email
+    if email:
+        print(f"    [Email] M1(deobfuscate): {email}")
+        return email
     
     # 2. DDG direct email
     time.sleep(2)
-    email = method_ddg_email_search(name)
-    if email: return email
+    try:
+        email = method_ddg_email_search(name)
+        if email:
+            print(f"    [Email] M5(ddg-email): {email}")
+            return email
+    except Exception as e:
+        print(f"    [Email] M5 error: {e}")
     
     # 3. Github
-    email = method_github(name)
-    if email: return email
+    try:
+        email = method_github(name)
+        if email:
+            print(f"    [Email] M2(github): {email}")
+            return email
+    except Exception as e:
+        print(f"    [Email] M2 error: {e}")
     
     # 4. Personal Website Scraping
     personal_url = extract_personal_url(bio)
     if personal_url:
         email = method_scrape_website(personal_url)
-        if email: return email
+        if email:
+            print(f"    [Email] M3(website): {email}")
+            return email
         
     # 5. Company SMTP Verification
-    domain, result = method_smtp_company(name, bio)
-    if result and result != 'CATCHALL':
-        return result
-    elif result == 'CATCHALL' and domain:
-        time.sleep(2)
-        email = method_ddg_catchall(name, domain)
-        if email: return email
+    try:
+        domain, result = method_smtp_company(name, bio)
+        print(f"    [Email] M4(smtp): domain={domain}, result={result}")
+        if result and result != 'CATCHALL':
+            return result
+        elif result == 'CATCHALL' and domain:
+            time.sleep(2)
+            email = method_ddg_catchall(name, domain)
+            if email:
+                print(f"    [Email] M6(catchall-ddg): {email}")
+                return email
+    except Exception as e:
+        print(f"    [Email] M4 error: {e}")
+        domain = None
         
     # 6. DDG Domain Discovery
     if not domain:
         time.sleep(2)
-        domain = method_ddg_find_domain(name)
-        if domain:
-            mx = get_mx_record(domain)
-            if mx and not is_catch_all(domain, mx):
-                perms = generate_permutations(name, domain)
-                for p in perms:
-                    if verify_email(p, mx):
-                        return p
-                    time.sleep(0.3)
+        try:
+            domain = method_ddg_find_domain(name)
+            print(f"    [Email] M7(ddg-domain): {domain}")
+            if domain:
+                mx = get_mx_record(domain)
+                if mx and not is_catch_all(domain, mx):
+                    perms = generate_permutations(name, domain)
+                    for p in perms:
+                        if verify_email(p, mx):
+                            print(f"    [Email] M7(ddg-domain+smtp): {p}")
+                            return p
+                        time.sleep(0.3)
+        except Exception as e:
+            print(f"    [Email] M7 error: {e}")
                     
     # 7. DDG Scrape Contact Page
     time.sleep(2)
-    email = method_ddg_scrape_contact(name)
-    if email: return email
+    try:
+        email = method_ddg_scrape_contact(name)
+        if email:
+            print(f"    [Email] M8(ddg-scrape): {email}")
+            return email
+    except Exception as e:
+        print(f"    [Email] M8 error: {e}")
     
+    print(f"    [Email] All methods exhausted for {name}.")
     return None
 
 # ============================================================
