@@ -225,6 +225,7 @@ def main():
 
                 print(f"  -> Processing: {name}")
                 
+                time.sleep(2)
                 twitter_url = find_twitter(name)
                 
                 tw_handle = ''
@@ -233,12 +234,14 @@ def main():
                     if parts:
                         tw_handle = parts[-1]
                         
+                time.sleep(2)
                 linkedin_url = find_linkedin(name, tw_handle)
                 
                 # Email search
                 email = fe.method_deobfuscate(inv.get('bio', ''))
                 if not email:
                     try:
+                        time.sleep(2)
                         email = fe.method_ddg_email_search(name)
                     except AttributeError:
                         email = None
