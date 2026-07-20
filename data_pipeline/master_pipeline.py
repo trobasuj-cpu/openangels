@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 from urllib.parse import urlparse
 
+import find_emails as fe
+
 # Force stdout to utf-8 if printing
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -116,6 +118,9 @@ Raw Text:
         "generationConfig": {"temperature": 0.2}
     }
     
+    # Anti-rate limit for Gemini (avoid 429)
+    time.sleep(5)
+    
     try:
         res = requests.post(api_url, json=payload, headers={'Content-Type': 'application/json'})
         res.raise_for_status()
@@ -195,8 +200,19 @@ def main():
                     
             linkedin_url = find_linkedin(name, tw_handle)
             
+            # Email search
+            email = fe.method_deobfuscate(inv.get('bio', ''))
+            if not email:
+                try:
+                    email = fe.method_ddg_email_search(name)
+                except AttributeError:
+                    email = None
+            if not email:
+                email = fe.method_github(name)
+
             inv['twitter_url'] = twitter_url
             inv['linkedin_url'] = linkedin_url
+            inv['email'] = email
             inv['source_url'] = link
             all_found_investors.append(inv)
             
@@ -213,6 +229,7 @@ def main():
         print(f"    Location: {inv.get('location', 'Unknown')}")
         print(f"    LinkedIn: {inv.get('linkedin_url', 'Not found')}")
         print(f"    Twitter: {inv.get('twitter_url', 'Not found')}")
+        print(f"    Email: {inv.get('email', 'Not found')}")
         print(f"    Bio: {inv.get('bio', '')}")
 
     print("\n---------------------------------------------------------")
@@ -244,6 +261,7 @@ def main():
             "location": inv.get('location', ''),
             "linkedin_url": inv.get('linkedin_url'),
             "twitter_url": inv.get('twitter_url'),
+            "email": inv.get('email'),
             "is_premium": False,
             "avatar": "" 
         }
