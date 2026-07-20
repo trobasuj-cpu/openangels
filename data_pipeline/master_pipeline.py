@@ -108,30 +108,42 @@ Return a JSON object with key "investors" containing an array. Each element must
 - "bio": A professional bio in 3rd person (2-3 sentences) describing them as an investor, mentioning the deal from the article if relevant. (string).
 - "industries": Investment focus tags. Pick 1-4 from ONLY this list: {json.dumps(STANDARD_TAGS)}. Default to ["saas"] if unclear.
 - "location": City/country if mentioned, otherwise null.
+- "source_url": The EXACT link of the article where this investor was mentioned. (string).
 
-Raw Text:
+Raw Text (Contains Multiple Articles):
 {text}
 """
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {"temperature": 0.2}
     }
     
-    # Anti-rate limit for Gemini (avoid 429)
+    # Anti-rate limit for Gemini (gemini-2.0-flash allows ~15 RPM on free tier)
     time.sleep(5)
     
-    try:
-        res = requests.post(api_url, json=payload, headers={'Content-Type': 'application/json'})
-        res.raise_for_status()
-        data = res.json()
-        raw_output = data['candidates'][0]['content']['parts'][0]['text']
-        cleaned_output = raw_output.replace('```json', '').replace('```', '').strip()
-        parsed = json.loads(cleaned_output)
-        return parsed.get('investors', [])
-    except Exception as e:
-        print(f"Gemini API Error: {e}")
-        return []
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            res = requests.post(api_url, json=payload, headers={'Content-Type': 'application/json'})
+            if res.status_code == 429:
+                wait = 30 * (attempt + 1)
+                print(f"  [Rate limited, waiting {wait}s...]")
+                time.sleep(wait)
+                continue
+            res.raise_for_status()
+            data = res.json()
+            raw_output = data['candidates'][0]['content']['parts'][0]['text']
+            cleaned_output = raw_output.replace('```json', '').replace('```', '').strip()
+            parsed = json.loads(cleaned_output)
+            return parsed.get('investors', [])
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"  [Retry {attempt+1}, waiting 15s...]")
+                time.sleep(15)
+            else:
+                print(f"  Gemini Error: {e}")
+    return []
 
 def check_duplicate_in_db(name):
     query_url = f"{SUPABASE_URL}/rest/v1/investors_secure?name=eq.{urllib.parse.quote(name)}&select=id"
@@ -149,6 +161,7 @@ def main():
         return
         
     print("=== Step 1: Fetching News (RSS) ===")
+    seen_links = set()
     articles = []
     for feed_url in RSS_FEEDS:
         print(f"Fetching {feed_url}...")
@@ -160,63 +173,71 @@ def main():
                 for item in items[:5]: 
                     title = item.title.text if item.title else ""
                     link = item.link.text if item.link else ""
+                    if link in seen_links:
+                        continue
+                    seen_links.add(link)
                     desc_html = item.description.text if item.description else ""
                     clean_desc = BeautifulSoup(desc_html, "html.parser").get_text(separator=' ').strip()
                     articles.append((title, link, clean_desc))
         except Exception as e:
             print(f"Error fetching {feed_url}: {e}")
 
-    print(f"Total articles found: {len(articles)}")
+    print(f"Total unique articles found: {len(articles)}")
     
-    print("\n=== Step 2 & 3: AI Enrichment & Social Search ===")
+    print("\n=== Step 2: AI Enrichment (Batch Processing) ===")
     all_found_investors = []
     
-    for idx, (title, link, desc) in enumerate(articles):
-        print(f"\n[{idx+1}/{len(articles)}] Analyzing: {title[:60]}...")
-        raw_text = f"Title: {title}\nLink: {link}\nContent:\n{desc}"
-        investors = enrich_with_gemini(raw_text)
+    if articles:
+        combined_text = ""
+        for idx, (title, link, desc) in enumerate(articles):
+            combined_text += f"\n--- ARTICLE {idx+1} ---\nTitle: {title}\nLink: {link}\nContent:\n{desc}\n"
+            
+        print("Sending all articles to Gemini in a single request...")
+        investors = enrich_with_gemini(combined_text)
         
         if not investors:
-            print("  -> No human investors found.")
-            continue
+            print("  -> No human investors found in any of the articles.")
+        else:
+            print(f"  -> Found {len(investors)} potential investors. Searching social links...")
             
-        for inv in investors:
-            name = inv.get('name', '')
-            if not name: continue
-            
-            if check_duplicate_in_db(name):
-                print(f"  -> {name} is already in the database. Skipping.")
-                continue
+            for inv in investors:
+                name = inv.get('name', '')
+                if not name: continue
+                
+                if check_duplicate_in_db(name):
+                    print(f"  -> {name} is already in the database. Skipping.")
+                    continue
 
-            print(f"  -> Found: {name} (Finding social links...)")
-            
-            twitter_url = find_twitter(name)
-            
-            tw_handle = ''
-            if twitter_url:
-                parts = [p for p in twitter_url.split('/') if p and p != 'twitter.com' and p != 'x.com']
-                if parts:
-                    tw_handle = parts[-1]
-                    
-            linkedin_url = find_linkedin(name, tw_handle)
-            
-            # Email search
-            email = fe.method_deobfuscate(inv.get('bio', ''))
-            if not email:
-                try:
-                    email = fe.method_ddg_email_search(name)
-                except AttributeError:
-                    email = None
-            if not email:
-                email = fe.method_github(name)
+                print(f"  -> Processing: {name}")
+                
+                twitter_url = find_twitter(name)
+                
+                tw_handle = ''
+                if twitter_url:
+                    parts = [p for p in twitter_url.split('/') if p and p != 'twitter.com' and p != 'x.com']
+                    if parts:
+                        tw_handle = parts[-1]
+                        
+                linkedin_url = find_linkedin(name, tw_handle)
+                
+                # Email search
+                email = fe.method_deobfuscate(inv.get('bio', ''))
+                if not email:
+                    try:
+                        email = fe.method_ddg_email_search(name)
+                    except AttributeError:
+                        email = None
+                if not email:
+                    email = fe.method_github(name)
 
-            inv['twitter_url'] = twitter_url
-            inv['linkedin_url'] = linkedin_url
-            inv['email'] = email
-            inv['source_url'] = link
-            all_found_investors.append(inv)
-            
-            time.sleep(2)
+                inv['twitter_url'] = twitter_url
+                inv['linkedin_url'] = linkedin_url
+                inv['email'] = email
+                if not inv.get('source_url'):
+                    inv['source_url'] = articles[0][1] if articles else ""
+                all_found_investors.append(inv)
+                
+                time.sleep(2)
 
     if not all_found_investors:
         print("\nNo new investors found today. Exiting.")
@@ -257,14 +278,12 @@ def main():
             "name": inv['name'],
             "slug": slug,
             "bio": inv.get('bio', ''),
-            "industries": inv.get('industries', ['saas']),
-            "location": inv.get('location', ''),
-            "linkedin_url": inv.get('linkedin_url'),
-            "twitter_url": inv.get('twitter_url'),
-            "email": inv.get('email'),
-            "is_premium": False,
-            "avatar": "" 
+            "industries": inv.get('industries', ['saas'])
         }
+        
+        if inv.get('linkedin_url'): payload['linkedin_url'] = inv['linkedin_url']
+        if inv.get('twitter_url'): payload['twitter_url'] = inv['twitter_url']
+        if inv.get('email'): payload['email'] = inv['email']
         
         insert_url = f"{SUPABASE_URL}/rest/v1/investors_secure"
         req = urllib.request.Request(insert_url, data=json.dumps(payload).encode('utf-8'), headers=HEADERS, method='POST')
