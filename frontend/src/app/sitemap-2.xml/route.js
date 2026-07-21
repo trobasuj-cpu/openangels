@@ -13,8 +13,8 @@ function escapeXml(unsafe) {
 
 export async function GET() {
   try {
-    const p1 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(1200, 1799);
-    const p2 = supabase.from('investors_secure').select('slug, created_at, bio, industry, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).range(1800, 2399);
+    const p1 = supabase.from('investors_secure').select('slug, created_at, bio, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).order('id').range(1200, 1799);
+    const p2 = supabase.from('investors_secure').select('slug, created_at, bio, industries, email, linkedin_url, twitter_url, website').not('slug', 'is', null).order('id').range(1800, 2399);
     const [res1, res2] = await Promise.all([p1, p2]);
     const rawData = [...(res1.data || []), ...(res2.data || [])];
 
@@ -27,13 +27,23 @@ export async function GET() {
       return hasRealBio || hasTags || hasSocial;
     });
 
-    const urls = data.map((inv) => `
+    let urls = data.map((inv) => `
   <url>
     <loc>${absoluteUrl(`/investor/${escapeXml(inv.slug)}`)}</loc>
     <lastmod>${inv.created_at ? new Date(inv.created_at).toISOString() : new Date().toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`).join('');
+
+    // Google Search Console requires at least one URL tag to not fail validation
+    if (!urls) {
+      urls = `
+  <url>
+    <loc>${absoluteUrl('/')}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.1</priority>
+  </url>`;
+    }
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
