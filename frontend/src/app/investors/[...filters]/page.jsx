@@ -8,6 +8,7 @@ import {
 import Link from 'next/link';
 import { ArrowLeft, Mail, MapPin, DollarSign, Sparkles, Filter } from 'lucide-react';
 import Footer from '@/components/Footer';
+import AddToCrmButton from '@/components/AddToCrmButton';
 import { notFound } from 'next/navigation';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -368,10 +369,11 @@ export default async function FilteredInvestorsPage({ params }) {
                 </div>
 
                 {/* Right Column - Actions */}
-                <div className="flex flex-col sm:items-end gap-3 shrink-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 shrink-0">
+                  <AddToCrmButton investorId={investor.id} />
                   <Link
                     href={`/investor/${investor.slug || investor.id}`}
-                    className="inline-flex items-center justify-center h-10 px-6 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium transition-transform hover:scale-105 shadow-sm"
+                    className="inline-flex items-center justify-center h-10 px-5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium transition-transform hover:scale-105 shadow-sm"
                   >
                     <Sparkles className="w-4 h-4 mr-2 text-amber-500" />
                     View Profile
