@@ -204,7 +204,20 @@ def main():
                     new_links_found.append(link)
                     desc_html = item.description.text if item.description else ""
                     clean_desc = BeautifulSoup(desc_html, "html.parser").get_text(separator=' ').strip()
-                    articles.append((title, link, clean_desc))
+                    
+                    # Fetch full text from article page for rich extraction of investor names
+                    full_text = clean_desc
+                    try:
+                        r_art = requests.get(link, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5)
+                        if r_art.status_code == 200:
+                            art_soup = BeautifulSoup(r_art.text, 'html.parser')
+                            ps = [p.get_text().strip() for p in art_soup.find_all('p') if len(p.get_text().strip()) > 40]
+                            if ps:
+                                full_text = ' '.join(ps[:8])
+                    except Exception:
+                        pass
+                        
+                    articles.append((title, link, full_text))
         except Exception as e:
             print(f"Error fetching {feed_url}: {e}")
 
