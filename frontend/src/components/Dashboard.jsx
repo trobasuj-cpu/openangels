@@ -3,7 +3,11 @@ import React, { useState, useEffect, useMemo, useDeferredValue, useRef } from 'r
 // helmet removed
 // helmet removed
 import Link from 'next/link';
-import { Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, ChevronDown, Check, Layers, Loader2, X, UserPlus, CheckCircle } from 'lucide-react';
+import { 
+  Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, 
+  ChevronDown, ChevronRight, Check, Layers, Loader2, X, UserPlus, CheckCircle,
+  Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, Store, Cpu, Code2, Leaf, Dna 
+} from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
 import BackgroundAnimation from './BackgroundAnimation';
@@ -1110,36 +1114,94 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="mt-16 mb-12">
-              <div className="flex flex-col items-center text-center mb-10">
-                <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Popular Investor Hubs</h2>
-                <p className="text-zinc-600 dark:text-zinc-400 text-sm max-w-2xl leading-relaxed">
+            {/* Popular Investor Hubs — Compact Layout with Unique Icons */}
+            <div className="mt-10 mb-8">
+              <div className="flex flex-col items-center text-center mb-6">
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight mb-1.5">Popular Investor Hubs</h2>
+                <p className="text-zinc-500 dark:text-zinc-400 text-xs max-w-xl leading-relaxed">
                   Explore curated lists of angel investors and VCs by combining industry, stage, and location filters.
                 </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {POPULAR_HUBS.map((hub) => (
-                  <Link
-                    key={hub.filters.join('/')}
-                    href={`/investors/${hub.filters.join('/')}`}
-                    className="group flex items-center justify-between p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-transparent hover:border-blue-500/30 hover:bg-white dark:hover:bg-zinc-900/80 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 shadow-sm">
-                        <MapPin className="w-5 h-5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {POPULAR_HUBS.map((hub) => {
+                  const primary = hub.filters[0]?.toLowerCase() || '';
+                  let Icon = MapPin;
+                  let iconColor = 'text-blue-400 bg-blue-500/10 group-hover:bg-blue-500 group-hover:text-white';
+                  let borderColor = 'hover:border-blue-500/30';
+
+                  if (primary === 'saas') {
+                    Icon = Cloud;
+                    iconColor = 'text-cyan-400 bg-cyan-500/10 group-hover:bg-cyan-500 group-hover:text-white';
+                    borderColor = 'hover:border-cyan-500/30';
+                  } else if (primary === 'ai') {
+                    Icon = Sparkles;
+                    iconColor = 'text-purple-400 bg-purple-500/10 group-hover:bg-purple-500 group-hover:text-white';
+                    borderColor = 'hover:border-purple-500/30';
+                  } else if (primary === 'fintech') {
+                    Icon = CreditCard;
+                    iconColor = 'text-emerald-400 bg-emerald-500/10 group-hover:bg-emerald-500 group-hover:text-white';
+                    borderColor = 'hover:border-emerald-500/30';
+                  } else if (primary === 'b2b') {
+                    Icon = Briefcase;
+                    iconColor = 'text-blue-400 bg-blue-500/10 group-hover:bg-blue-500 group-hover:text-white';
+                    borderColor = 'hover:border-blue-500/30';
+                  } else if (primary === 'consumer') {
+                    Icon = ShoppingBag;
+                    iconColor = 'text-rose-400 bg-rose-500/10 group-hover:bg-rose-500 group-hover:text-white';
+                    borderColor = 'hover:border-rose-500/30';
+                  } else if (primary === 'health') {
+                    Icon = HeartPulse;
+                    iconColor = 'text-red-400 bg-red-500/10 group-hover:bg-red-500 group-hover:text-white';
+                    borderColor = 'hover:border-red-500/30';
+                  } else if (primary === 'crypto') {
+                    Icon = Shield;
+                    iconColor = 'text-amber-400 bg-amber-500/10 group-hover:bg-amber-500 group-hover:text-white';
+                    borderColor = 'hover:border-amber-500/30';
+                  } else if (primary === 'marketplace') {
+                    Icon = Store;
+                    iconColor = 'text-orange-400 bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white';
+                    borderColor = 'hover:border-orange-500/30';
+                  } else if (primary === 'enterprise') {
+                    Icon = Building2;
+                    iconColor = 'text-indigo-400 bg-indigo-500/10 group-hover:bg-indigo-500 group-hover:text-white';
+                    borderColor = 'hover:border-indigo-500/30';
+                  } else if (primary === 'deep-tech') {
+                    Icon = Cpu;
+                    iconColor = 'text-teal-400 bg-teal-500/10 group-hover:bg-teal-500 group-hover:text-white';
+                    borderColor = 'hover:border-teal-500/30';
+                  } else if (primary === 'developer-tools') {
+                    Icon = Code2;
+                    iconColor = 'text-sky-400 bg-sky-500/10 group-hover:bg-sky-500 group-hover:text-white';
+                    borderColor = 'hover:border-sky-500/30';
+                  } else if (primary === 'climate') {
+                    Icon = Leaf;
+                    iconColor = 'text-green-400 bg-green-500/10 group-hover:bg-green-500 group-hover:text-white';
+                    borderColor = 'hover:border-green-500/30';
+                  } else if (primary === 'biotech') {
+                    Icon = Dna;
+                    iconColor = 'text-pink-400 bg-pink-500/10 group-hover:bg-pink-500 group-hover:text-white';
+                    borderColor = 'hover:border-pink-500/30';
+                  }
+
+                  return (
+                    <Link
+                      key={hub.filters.join('/')}
+                      href={`/investors/${hub.filters.join('/')}`}
+                      className={`group flex items-center justify-between py-2.5 px-3.5 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/40 border border-zinc-200/40 dark:border-zinc-800/60 ${borderColor} hover:bg-white dark:hover:bg-zinc-900/90 transition-all duration-200`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-8 h-8 rounded-lg ${iconColor} flex items-center justify-center shrink-0 transition-all duration-200 shadow-xs`}>
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div className="flex flex-col text-left truncate">
+                          <h3 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-white transition-colors truncate">{hub.label}</h3>
+                          <span className="text-[10px] text-zinc-500">Curated list</span>
+                        </div>
                       </div>
-                      <div className="flex flex-col text-left">
-                        <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{hub.label}</h3>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-0.5">Explore curated list</p>
-                      </div>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                      <svg className="w-4 h-4 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </Link>
-                ))}
+                      <ChevronRight className="w-3.5 h-3.5 text-zinc-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 shrink-0 ml-2" />
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
