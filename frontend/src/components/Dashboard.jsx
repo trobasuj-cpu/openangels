@@ -1082,40 +1082,8 @@ export default function Dashboard() {
               </div>
             )}
             
-            <div className="mt-16 mb-8 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-16">
-              <div className="flex flex-col items-center text-center mb-10">
-                <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Browse Angel Investors by Industry</h2>
-                <p className="text-zinc-600 dark:text-zinc-400 text-sm max-w-2xl leading-relaxed">
-                  Discover the most active venture capitalists and angel investors across top industries. Filter by sector to find the perfect match for your startup's niche.
-                </p>
-              </div>
-              <div className="flex flex-wrap justify-center gap-3">
-                {INDUSTRY_PAGES.map((page) => (
-                  <Link
-                    key={page.slug}
-                    href={`/investors/${page.slug}`}
-                    className="group relative px-5 py-2.5 rounded-full bg-white/50 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-white/5 backdrop-blur-md overflow-hidden hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all duration-300"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/0 to-red-500/0 group-hover:from-red-500/5 group-hover:via-red-500/10 group-hover:to-red-500/5 transition-all duration-500"></div>
-                    <span className="relative z-10 text-sm font-semibold text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{page.label}</span>
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-10 flex justify-center">
-                <Link
-                  href="/directory"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-sm rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all hover:scale-105 active:scale-95 shadow-lg group"
-                >
-                  View Complete Directory 
-                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-
             {/* Popular Investor Hubs — Compact Layout with Unique Icons */}
-            <div className="mt-10 mb-8">
+            <div className="mt-16 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-12 mb-8">
               <div className="flex flex-col items-center text-center mb-6">
                 <h2 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight mb-1.5">Popular Investor Hubs</h2>
                 <p className="text-zinc-500 dark:text-zinc-400 text-xs max-w-xl leading-relaxed">
@@ -1202,6 +1170,39 @@ export default function Dashboard() {
                     </Link>
                   );
                 })}
+              </div>
+            </div>
+
+            {/* Browse Angel Investors by Industry */}
+            <div className="mt-12 mb-12 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-12">
+              <div className="flex flex-col items-center text-center mb-8">
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight mb-2">Browse Angel Investors by Industry</h2>
+                <p className="text-zinc-600 dark:text-zinc-400 text-xs max-w-2xl leading-relaxed">
+                  Discover the most active venture capitalists and angel investors across top industries. Filter by sector to find the perfect match for your startup's niche.
+                </p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-2.5">
+                {INDUSTRY_PAGES.map((page) => (
+                  <Link
+                    key={page.slug}
+                    href={`/investors/${page.slug}`}
+                    className="group relative px-4 py-2 rounded-full bg-white/50 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-white/5 backdrop-blur-md overflow-hidden hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all duration-300"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/0 to-red-500/0 group-hover:from-red-500/5 group-hover:via-red-500/10 group-hover:to-red-500/5 transition-all duration-500"></div>
+                    <span className="relative z-10 text-xs font-semibold text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{page.label}</span>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-8 flex justify-center">
+                <Link
+                  href="/directory"
+                  className="inline-flex items-center justify-center px-6 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-xs rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all hover:scale-105 active:scale-95 shadow-lg group"
+                >
+                  View Complete Directory 
+                  <svg className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
               </div>
             </div>
 
