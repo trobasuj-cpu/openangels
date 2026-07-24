@@ -138,6 +138,7 @@ export async function generateMetadata({ params }) {
     title,
     description,
     alternates: { canonical: absoluteUrl(canonicalPath) },
+    ...(numInvestors === 0 && { robots: { index: false, follow: true } }),
     openGraph: {
       title: `${typeStr} Angel Investors${geoStr} | OpenAngels`,
       description,
@@ -188,10 +189,7 @@ export default async function FilteredInvestorsPage({ params }) {
     console.error('Error fetching filtered investors:', err);
   }
 
-  // CRITICAL: Soft 404 protection — don't let Google index empty pages
-  if (totalMatches === 0) {
-    notFound();
-  }
+  // If no exact matches, don't throw 404, just let the page render with 0 state and suggestions below
 
   // Build display strings
   const parts = [industryLabel, stageLabel].filter(Boolean);
@@ -318,7 +316,33 @@ export default async function FilteredInvestorsPage({ params }) {
 
         {/* Investor Cards */}
         <div className="space-y-4">
-          {investors.map((investor) => (
+          {investors.length === 0 ? (
+            <div className="text-center py-16 px-6 bg-zinc-50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                No investors found matching this exact filter combination
+              </h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto mb-6">
+                {parsed.industry ? `We don't have active ${stageLabel || ''} investors matching ${industryLabel}${geoLabel ? ` in ${geoLabel}` : ''} yet.` : `No investors found matching your filter criteria.`}
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                {parsed.industry && (
+                  <Link
+                    href={`/investors/${parsed.industry}`}
+                    className="px-5 py-2.5 rounded-xl bg-amber-500 text-black text-sm font-semibold hover:bg-amber-400 transition-colors shadow-sm"
+                  >
+                    View all {industryLabel} Investors →
+                  </Link>
+                )}
+                <Link
+                  href="/"
+                  className="px-5 py-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm font-medium hover:opacity-80 transition-opacity"
+                >
+                  Back to Main Directory
+                </Link>
+              </div>
+            </div>
+          ) : (
+            investors.map((investor) => (
             <div
               key={investor.id}
               className="group relative bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 transition-all hover:shadow-lg hover:border-amber-500/50"
@@ -381,7 +405,8 @@ export default async function FilteredInvestorsPage({ params }) {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+          )}
         </div>
 
         {/* Related Hubs Section for Cross-Linking */}
