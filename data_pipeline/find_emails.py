@@ -12,6 +12,9 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from ddgs import DDGS
 
+# Force stdout encoding to UTF-8 for Windows console safety
+sys.stdout.reconfigure(encoding='utf-8')
+
 load_dotenv('frontend/.env')
 
 url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("VITE_SUPABASE_URL")

@@ -240,6 +240,13 @@ def import_nfx_batch(limit=10):
     print(f"SUMMARY: Added {added_count} new unique investors. Skipped {skipped_duplicates} duplicates.")
     print("="*50)
 
+    if added_count > 0:
+        print("\n⚡ Running OSINT Email Search Cascade (find_emails.py) for new profiles...")
+        try:
+            subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'find_emails.py')], timeout=60)
+        except Exception as e:
+            print(f"  -> Email search finished or timed out: {e}")
+
 if __name__ == "__main__":
     count = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     import_nfx_batch(limit=count)
