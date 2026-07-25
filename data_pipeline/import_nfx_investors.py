@@ -117,7 +117,7 @@ def parse_nfx_profile(url):
                 if 'linkedin.com/in/' in href and not linkedin_url:
                     linkedin_url = href.split('?')[0]
                 elif ('twitter.com/' in href or 'x.com/' in href) and not twitter_url:
-                    if '/nfx' not in href and '/status/' not in href:
+                    if 'nfx.com' not in href and 'nfx' not in href.split('/')[-1] and '/status/' not in href:
                         twitter_url = href.split('?')[0]
                 elif href.startswith('http') and not any(x in href for x in ['signal.nfx.com', 'nfx.com', 'linkedin.com', 'twitter.com', 'x.com', 'google.com']):
                     if not website:
@@ -141,11 +141,11 @@ def parse_nfx_profile(url):
             # Bio
             meta_desc = soup.find('meta', property='og:description')
             bio = meta_desc['content'].strip() if meta_desc and meta_desc.get('content') else ""
-            if not bio or "View who can give you a warm intro" in bio:
+            if not bio or "View who can give you a warm intro" in bio or "Signal" in bio:
                 if firm and firm != "Independent":
-                    bio = f"Partner at {firm}. Active early-stage investor featured on Signal NFX."
+                    bio = f"Partner at {firm}. Active early-stage angel investor and VC."
                 else:
-                    bio = f"Active early-stage angel investor and VC featured on Signal NFX."
+                    bio = f"Active early-stage angel investor and VC."
 
             # Tags
             industries = ["saas", "ai"]
