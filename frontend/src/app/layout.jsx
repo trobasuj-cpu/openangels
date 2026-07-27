@@ -30,7 +30,7 @@ export const viewport = {
 
 export default function RootLayout({ children, modal }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <script
           type="application/ld+json"
