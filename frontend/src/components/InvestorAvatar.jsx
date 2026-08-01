@@ -1,8 +1,12 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function InvestorAvatar({ name, avatarUrl, className = "w-11 h-11" }) {
   const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [avatarUrl]);
 
   const getInitials = (str) => {
     if (!str) return 'OA';
@@ -12,8 +16,9 @@ export default function InvestorAvatar({ name, avatarUrl, className = "w-11 h-11
   };
 
   const initials = getInitials(name);
+  const hasValidUrl = typeof avatarUrl === 'string' && avatarUrl.trim().length > 5;
 
-  if (avatarUrl && !imgError) {
+  if (hasValidUrl && !imgError) {
     return (
       <img
         loading="lazy"
@@ -25,12 +30,13 @@ export default function InvestorAvatar({ name, avatarUrl, className = "w-11 h-11
     );
   }
 
+  // Red theme matching OpenAngels design system
   return (
     <div
-      className={`${className} rounded-full bg-gradient-to-br from-zinc-800 via-zinc-900 to-black border border-amber-500/30 dark:border-amber-500/25 flex items-center justify-center shrink-0 shadow-sm shadow-amber-500/10 select-none`}
+      className={`${className} rounded-full bg-gradient-to-br from-red-950/80 via-zinc-900 to-black border border-red-500/30 flex items-center justify-center shrink-0 shadow-sm shadow-red-500/10 select-none`}
       title={name}
     >
-      <span className="text-amber-400 font-bold text-xs sm:text-sm tracking-wider font-mono">
+      <span className="text-red-400 font-extrabold text-sm sm:text-base tracking-wider font-sans">
         {initials}
       </span>
     </div>

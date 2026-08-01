@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { ArrowLeft, Mail, MapPin, DollarSign, Sparkles, Filter } from 'lucide-react';
 import Footer from '@/components/Footer';
 import AddToCrmButton from '@/components/AddToCrmButton';
+import InvestorAvatar from '@/components/InvestorAvatar';
 import { notFound } from 'next/navigation';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -351,20 +352,27 @@ export default async function FilteredInvestorsPage({ params }) {
                 {/* Left Column - Core Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-4 mb-2">
-                    <div>
-                      <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
-                          {investor.name}
-                        </Link>
-                        {(investor.linkedin_url || investor.twitter_url) && (
-                          <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                    <div className="flex items-center gap-3">
+                      <InvestorAvatar 
+                        name={investor.name} 
+                        avatarUrl={investor.avatar_url || investor.avatar || (investor.twitter_url ? `https://unavatar.io/x/${investor.twitter_url.split('/').pop().split('?')[0]}?ttl=30d` : null)} 
+                        className="w-11 h-11" 
+                      />
+                      <div>
+                        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                          <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
+                            {investor.name}
+                          </Link>
+                          {(investor.linkedin_url || investor.twitter_url) && (
+                            <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                          )}
+                        </h2>
+                        {investor.firm && (
+                          <div className="text-sm font-medium text-zinc-600 dark:text-zinc-400 mt-1">
+                            {investor.title ? `${investor.title} at ` : ''}{investor.firm}
+                          </div>
                         )}
-                      </h2>
-                      {investor.firm && (
-                        <div className="text-sm font-medium text-zinc-600 dark:text-zinc-400 mt-1">
-                          {investor.title ? `${investor.title} at ` : ''}{investor.firm}
-                        </div>
-                      )}
+                      </div>
                     </div>
                   </div>
 

@@ -906,6 +906,14 @@ export default function Dashboard() {
                   else if (minStr) displayCheckSize = `${minStr}+`;
                   else if (maxStr) displayCheckSize = `Up to ${maxStr}`;
                   
+                  let displayAvatar = investor.avatar_url || investor.avatar;
+                  if (!displayAvatar && investor.twitter_url) {
+                    const handle = investor.twitter_url.split('/').pop().split('?')[0];
+                    if (handle && handle.length > 2) {
+                      displayAvatar = `https://unavatar.io/x/${handle}?ttl=30d`;
+                    }
+                  }
+
                   return (
                     <div key={investor.id} className="group flex flex-col bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-black/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">
                       <div className="p-5 flex-1 flex flex-col justify-between">
@@ -913,7 +921,7 @@ export default function Dashboard() {
                         <div>
                           <div className="flex items-start justify-between gap-3 mb-3">
                             <div className="flex items-center gap-3 min-w-0">
-                              <InvestorAvatar name={investor.name} avatarUrl={investor.avatar_url || investor.avatar} className="w-11 h-11" />
+                              <InvestorAvatar name={investor.name} avatarUrl={displayAvatar} className="w-11 h-11" />
                               <div className="min-w-0">
                                 <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
                                   <h3 className="text-base font-bold text-zinc-900 dark:text-white truncate">{investor.name}</h3>
