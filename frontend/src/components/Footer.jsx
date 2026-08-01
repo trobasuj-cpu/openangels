@@ -21,9 +21,9 @@ export default function Footer() {
           <p className="text-sm leading-relaxed">
             A curated database of {INVESTOR_COUNT} angel investors and VCs for founders raising pre-seed and seed rounds.
           </p>
-          <a href="mailto:support@openangels.xyz" className="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-amber-500 transition-colors">
+          <a href="mailto:tackssignals@gmail.com" className="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-amber-500 transition-colors">
             <Mail className="w-4 h-4" />
-            support@openangels.xyz
+            tackssignals@gmail.com
           </a>
         </div>
 
@@ -56,7 +56,7 @@ export default function Footer() {
           <ul className="space-y-3 text-sm">
             <li><Link href="/directory" className="hover:text-amber-500 transition-colors">Investor directory (All)</Link></li>
             <li><Link href="/crm" className="hover:text-amber-500 transition-colors">Fundraising CRM</Link></li>
-            <li><a href="mailto:support@openangels.xyz" className="hover:text-amber-500 transition-colors">Suggest an investor</a></li>
+            <li><a href="mailto:tackssignals@gmail.com" className="hover:text-amber-500 transition-colors">Suggest an investor</a></li>
           </ul>
         </div>
       </div>

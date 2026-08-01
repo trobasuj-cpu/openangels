@@ -42,7 +42,7 @@ export default function Refund() {
 
           <h2 className="text-2xl font-bold mt-8 mb-4">Contact</h2>
           <p>
-            If you experience a technical issue, please contact us at <a href="mailto:support@openangels.xyz" className="text-amber-600 hover:underline">support@openangels.xyz</a>. We will work diligently to resolve the problem.
+            If you experience a technical issue, please contact us at <a href="mailto:tackssignals@gmail.com" className="text-amber-600 hover:underline">tackssignals@gmail.com</a>. We will work diligently to resolve the problem.
           </p>
         </div>
       </main>

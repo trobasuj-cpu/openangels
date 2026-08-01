@@ -34,7 +34,7 @@ export default function GDPR() {
           
           <h2 className="text-2xl font-bold mt-8 mb-4">Exercising Your Rights</h2>
           <p>
-            If you wish to exercise any of these rights, please contact us at <a href="mailto:support@openangels.xyz" className="text-amber-600 hover:underline">support@openangels.xyz</a>. We have one month to respond to your request.
+            If you wish to exercise any of these rights, please contact us at <a href="mailto:tackssignals@gmail.com" className="text-amber-600 hover:underline">tackssignals@gmail.com</a>. We have one month to respond to your request.
           </p>
         </div>
       </main>

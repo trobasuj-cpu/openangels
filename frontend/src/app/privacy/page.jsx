@@ -51,7 +51,7 @@ export default function Privacy() {
 
           <h2 className="text-2xl font-bold mt-8 mb-4">5. Contact Us</h2>
           <p>
-            If you have questions about this Privacy Policy, please contact us at <a href="mailto:support@openangels.xyz" className="text-amber-600 hover:underline">support@openangels.xyz</a>.
+            If you have questions about this Privacy Policy, please contact us at <a href="mailto:tackssignals@gmail.com" className="text-amber-600 hover:underline">tackssignals@gmail.com</a>.
           </p>
         </div>
       </main>

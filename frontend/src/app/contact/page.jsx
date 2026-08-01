@@ -26,8 +26,8 @@ export default function Contact() {
             </div>
             <h3 className="text-lg font-bold mb-2">Email Support</h3>
             <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-4">We usually respond within 24 hours.</p>
-            <a href="mailto:support@openangels.xyz" className="text-amber-600 dark:text-amber-500 font-medium hover:underline">
-              support@openangels.xyz
+            <a href="mailto:tackssignals@gmail.com" className="text-amber-600 dark:text-amber-500 font-medium hover:underline">
+              tackssignals@gmail.com
             </a>
           </div>
 
