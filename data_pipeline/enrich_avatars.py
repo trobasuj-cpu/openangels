@@ -34,6 +34,20 @@ def get_twitter_username(url):
             return username
     return None
 
+def fetch_direct_twitter_avatar(username):
+    """Fetches direct pbs.twimg.com CDN avatar URL using Microlink API."""
+    try:
+        url = f"https://api.microlink.io/?url=https://x.com/{username}"
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            img_url = data.get('data', {}).get('image', {}).get('url')
+            if img_url and 'twimg.com' in img_url:
+                return img_url
+    except Exception:
+        pass
+    return None
+
 def extract_domain(url):
     if not url:
         return None
@@ -50,23 +64,11 @@ def extract_domain(url):
     except Exception:
         return None
 
-def verify_image_url(url):
-    """Checks if image URL returns HTTP 200 and image content type."""
-    try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'}, method='HEAD')
-        with urllib.request.urlopen(req, timeout=4) as res:
-            ct = res.headers.get('Content-Type', '')
-            if res.status == 200 and ('image' in ct or 'octet-stream' in ct or res.length > 500):
-                return True
-    except Exception:
-        pass
-    return False
-
-def enrich_avatars(batch_size=100):
-    print("=== Starting Investor Avatar Enrichment Pipeline ===")
+def enrich_avatars(batch_size=50):
+    print("=== Starting Direct CDN Investor Avatar Enrichment ===")
     
-    # 1. Fetch investors without avatar_url
-    query_url = f"{SUPABASE_URL}/rest/v1/investors_secure?avatar_url=is.null&select=id,name,twitter_url,website,linkedin_url&limit={batch_size}"
+    # Query investors with unavatar or null avatar_url
+    query_url = f"{SUPABASE_URL}/rest/v1/investors_secure?or=(avatar_url.is.null,avatar_url.ilike.*unavatar.io*)&select=id,name,twitter_url,website,linkedin_url&limit={batch_size}"
     req = urllib.request.Request(query_url, headers=HEADERS)
     
     try:
@@ -76,7 +78,7 @@ def enrich_avatars(batch_size=100):
         print(f"Error fetching investors from Supabase: {e}")
         return
 
-    print(f"Found {len(investors)} investors without avatar_url to enrich.\n")
+    print(f"Found {len(investors)} investors to enrich with direct CDN avatars.\n")
 
     updated_count = 0
     for idx, inv in enumerate(investors, 1):
@@ -88,14 +90,15 @@ def enrich_avatars(batch_size=100):
         avatar_candidate = None
         source = None
 
-        # Method 1: Twitter Avatar
+        # Method 1: Direct Twitter pbs.twimg.com Avatar
         tw_user = get_twitter_username(tw_url)
         if tw_user:
-            candidate = f"https://unavatar.io/x/{tw_user}?ttl=30d"
-            avatar_candidate = candidate
-            source = f"Twitter (@{tw_user})"
+            candidate = fetch_direct_twitter_avatar(tw_user)
+            if candidate:
+                avatar_candidate = candidate
+                source = f"Direct Twitter CDN ({tw_user})"
 
-        # Method 2: Clearbit Logo from personal website
+        # Method 2: Clearbit Logo from domain
         if not avatar_candidate and web_url:
             domain = extract_domain(web_url)
             if domain:
@@ -104,12 +107,12 @@ def enrich_avatars(batch_size=100):
                 source = f"Domain ({domain})"
 
         if not avatar_candidate:
-            print(f"[{idx}/{len(investors)}] {name}: No Twitter/Website found. Skipping.")
+            print(f"[{idx}/{len(investors)}] {name}: No direct avatar found.")
             continue
 
-        print(f"[{idx}/{len(investors)}] {name} ({source})...", end="", flush=True)
+        print(f"[{idx}/{len(investors)}] {name} -> {source}...", end="", flush=True)
 
-        # Update Supabase with valid candidate
+        # Update Supabase
         patch_payload = json.dumps({'avatar_url': avatar_candidate}).encode('utf-8')
         patch_req = urllib.request.Request(
             f"{SUPABASE_URL}/rest/v1/investors_secure?id=eq.{inv_id}",
@@ -122,16 +125,16 @@ def enrich_avatars(batch_size=100):
             with urllib.request.urlopen(patch_req) as p_res:
                 if p_res.status in (200, 204):
                     updated_count += 1
-                    print(f" ✅ Avatar Set!")
+                    print(f" ✅ Saved!")
         except Exception as e:
-            print(f" ❌ Patch error: {e}")
+            print(f" ❌ Error: {e}")
 
-        time.sleep(0.1)
+        time.sleep(0.3)
 
     print("\n" + "="*50)
-    print(f"SUMMARY: Successfully enriched {updated_count} investor avatars out of {len(investors)} processed.")
+    print(f"SUMMARY: Successfully updated {updated_count} direct CDN avatars out of {len(investors)} processed.")
     print("="*50)
 
 if __name__ == "__main__":
-    limit = int(sys.argv[1]) if len(sys.argv) > 1 else 200
+    limit = int(sys.argv[1]) if len(sys.argv) > 1 else 50
     enrich_avatars(batch_size=limit)
