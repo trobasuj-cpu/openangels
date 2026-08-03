@@ -681,26 +681,28 @@ export default function Dashboard() {
               <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2">Popular Categories</p>
               <div className="flex flex-wrap gap-1.5">
                 {[
-                  { slug: 'ai', label: '🤖 AI' },
-                  { slug: 'saas', label: '💻 SaaS' },
-                  { slug: 'b2b', label: '⚡ B2B' },
-                  { slug: 'developer-tools', label: '🛠️ DevTools' },
-                  { slug: 'fintech', label: '💳 Fintech' },
-                  { slug: 'consumer', label: '🚀 Consumer' },
+                  { slug: 'ai', name: 'AI', Icon: Cpu, color: 'text-red-400' },
+                  { slug: 'saas', name: 'SaaS', Icon: Cloud, color: 'text-rose-400' },
+                  { slug: 'b2b', name: 'B2B', Icon: Building2, color: 'text-amber-400' },
+                  { slug: 'developer-tools', name: 'DevTools', Icon: Code2, color: 'text-orange-400' },
+                  { slug: 'fintech', name: 'Fintech', Icon: CreditCard, color: 'text-emerald-400' },
+                  { slug: 'consumer', name: 'Consumer', Icon: ShoppingBag, color: 'text-purple-400' },
                 ].map(chip => {
                   const active = selectedIndustries.includes(chip.slug);
+                  const IconComponent = chip.Icon;
                   return (
                     <button
                       key={chip.slug}
                       onClick={() => toggleFilter(setSelectedIndustries, chip.slug)}
                       className={cn(
-                        "px-2 py-1 text-xs rounded-lg border transition-all font-medium",
+                        "px-2.5 py-1.5 text-xs rounded-xl border transition-all font-semibold flex items-center gap-1.5 shadow-sm active:scale-95",
                         active 
-                          ? "bg-red-500 text-white border-red-500 shadow-sm" 
-                          : "bg-zinc-900/80 border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700"
+                          ? "bg-gradient-to-r from-red-600 to-rose-600 text-white border-red-500 shadow-red-500/20 shadow-md" 
+                          : "bg-zinc-900/90 border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 hover:bg-zinc-800/80"
                       )}
                     >
-                      {chip.label}
+                      <IconComponent className={cn("w-3.5 h-3.5 transition-colors", active ? "text-white" : chip.color)} />
+                      <span>{chip.name}</span>
                     </button>
                   );
                 })}
