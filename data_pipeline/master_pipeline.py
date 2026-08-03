@@ -36,8 +36,12 @@ RSS_FEEDS = [
     "https://techcrunch.com/category/venture/feed/",
     "https://techcrunch.com/category/startups/feed/",
     "https://www.eu-startups.com/feed/",
-    "https://sifted.eu/feed",
-    "https://strictlyvc.substack.com/feed"
+    "https://tech.eu/feed/",
+    "https://pulse2.com/category/venture-capital/feed/",
+    "https://www.startupdaily.net/feed/",
+    "https://latamlist.com/feed/",
+    "https://inc42.com/feed/",
+    "https://sifted.eu/feed"
 ]
 
 STANDARD_TAGS = [

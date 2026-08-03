@@ -156,8 +156,13 @@ def run_news_scraper():
     feeds = [
         "https://techcrunch.com/category/startups/feed/",
         "https://techcrunch.com/category/venture/feed/",
-        "https://sifted.eu/feed/",
-        "https://news.crunchbase.com/feed/"
+        "https://www.eu-startups.com/feed/",
+        "https://tech.eu/feed/",
+        "https://pulse2.com/category/venture-capital/feed/",
+        "https://www.startupdaily.net/feed/",
+        "https://latamlist.com/feed/",
+        "https://inc42.com/feed/",
+        "https://sifted.eu/feed/"
     ]
     
     total_added = 0
