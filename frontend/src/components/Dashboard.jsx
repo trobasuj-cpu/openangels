@@ -1072,9 +1072,24 @@ export default function Dashboard() {
                             <div className="flex items-center gap-3 min-w-0">
                               <InvestorAvatar name={investor.name} avatarUrl={displayAvatar} className="w-11 h-11" />
                               <div className="min-w-0">
-                                <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
-                                  <h3 className="text-base font-bold text-zinc-900 dark:text-white truncate">{investor.name}</h3>
-                                </Link>
+                                {isUnlocked ? (
+                                  <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
+                                    <h3 className="text-base font-bold text-zinc-900 dark:text-white truncate">{investor.name}</h3>
+                                  </Link>
+                                ) : (
+                                  <h3 
+                                    className="text-base font-bold text-zinc-900 dark:text-white truncate cursor-pointer hover:text-red-400 transition-colors"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (user) {
+                                        window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                                      } else {
+                                        setIsLoginModalOpen(true);
+                                      }
+                                    }}
+                                    title="Unlock Premium to view full profile"
+                                  >{investor.name}</h3>
+                                )}
                                 {investor.firm ? (
                                   <p className="text-xs font-medium text-amber-600 dark:text-amber-400 truncate">
                                     {investor.title ? `${investor.title} at ` : ''}{investor.firm}
@@ -1090,20 +1105,49 @@ export default function Dashboard() {
 
                             {/* Top Right Social Links */}
                             <div className="flex items-center gap-2 shrink-0">
-                              {investor.website && (
-                                <a href={investor.website.startsWith('http') ? investor.website : `https://${investor.website}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Website">
-                                  <Globe className="w-3.5 h-3.5" />
-                                </a>
-                              )}
-                              {investor.twitter_url && (
-                                <a href={investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors" title="X">
-                                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                                </a>
-                              )}
-                              {investor.linkedin_url && (
-                                <a href={investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-[#0A66C2] transition-colors" title="LinkedIn">
-                                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                                </a>
+                              {isUnlocked ? (
+                                <>
+                                  {investor.website && (
+                                    <a href={investor.website.startsWith('http') ? investor.website : `https://${investor.website}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Website">
+                                      <Globe className="w-3.5 h-3.5" />
+                                    </a>
+                                  )}
+                                  {investor.twitter_url && (
+                                    <a href={investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors" title="X">
+                                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                    </a>
+                                  )}
+                                  {investor.linkedin_url && (
+                                    <a href={investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-[#0A66C2] transition-colors" title="LinkedIn">
+                                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                  )}
+                                </>
+                              ) : (
+                                <>
+                                  {(investor.twitter_url || investor.linkedin_url) && (
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (user) {
+                                          window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                                        } else {
+                                          setIsLoginModalOpen(true);
+                                        }
+                                      }}
+                                      className="flex items-center gap-1 text-zinc-600 hover:text-amber-500 transition-colors"
+                                      title="Unlock Premium for social links"
+                                    >
+                                      <Lock className="w-3 h-3 text-amber-500/60" />
+                                      {investor.twitter_url && (
+                                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 opacity-30" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                      )}
+                                      {investor.linkedin_url && (
+                                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 opacity-30" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                      )}
+                                    </button>
+                                  )}
+                                </>
                               )}
                             </div>
                           </div>
