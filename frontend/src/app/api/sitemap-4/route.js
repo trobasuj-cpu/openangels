@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { absoluteUrl } from '@/seo';
 
 function escapeXml(unsafe) {
@@ -15,7 +16,7 @@ export async function GET() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://fluhgqbfesctqefazjln.supabase.co';
     const supabaseKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy';
 
-    const res = await fetch(`${supabaseUrl}/rest/v1/investors_secure?select=slug,created_at&slug=not.is.null&order=id.asc&offset=3600&limit=1200`, {
+    const res = await fetch(`${supabaseUrl}/rest/v1/investors_secure?select=slug,created_at&slug=not.is.null&order=id.asc&offset=3600&limit=1400`, {
       headers: {
         'apikey': supabaseKey,
         'Authorization': `Bearer ${supabaseKey}`,
