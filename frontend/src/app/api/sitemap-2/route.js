@@ -1,5 +1,4 @@
 import { absoluteUrl } from '@/seo';
-import { supabase } from '@/lib/supabase';
 
 function escapeXml(unsafe) {
   if (!unsafe) return '';
@@ -13,16 +12,20 @@ function escapeXml(unsafe) {
 
 export async function GET() {
   try {
-    const { data: rawData } = await supabase
-      .from('investors_secure')
-      .select('slug, created_at')
-      .not('slug', 'is', null)
-      .order('id')
-      .range(1200, 2399);
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://fluhgqbfesctqefazjln.supabase.co';
+    const supabaseKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy';
 
-    const data = rawData || [];
+    const res = await fetch(`${supabaseUrl}/rest/v1/investors_secure?select=slug,created_at&slug=not.is.null&order=id.asc&offset=1200&limit=1200`, {
+      headers: {
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`,
+      },
+      next: { revalidate: 3600 }
+    });
 
-    let urls = data.map((inv) => `  <url>
+    const data = res.ok ? await res.json() : [];
+
+    let urls = (data || []).map((inv) => `  <url>
     <loc>${absoluteUrl(`/investor/${escapeXml(inv.slug)}`)}</loc>
     <lastmod>${inv.created_at ? new Date(inv.created_at).toISOString() : new Date().toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
@@ -49,6 +52,16 @@ ${urls}
       },
     });
   } catch (e) {
-    return new Response('Error generating sitemap', { status: 500 });
+    const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${absoluteUrl('/')}</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.1</priority>
+  </url>
+</urlset>`;
+    return new Response(fallbackXml, {
+      headers: { 'Content-Type': 'application/xml; charset=utf-8' },
+    });
   }
 }
