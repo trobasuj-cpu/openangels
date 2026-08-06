@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { supabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Investor Directory | OpenAngels',
   description: 'Browse our complete directory of angel investors and VCs by industry, stage, and location.',
@@ -11,13 +13,17 @@ export const metadata = {
 
 export default async function DirectoryPage() {
   // Fetch investor slugs/names for internal linking (helps Googlebot discover pages)
-  const { data: investors } = await supabase
+  const { data: investors, error } = await supabase
     .from('investors_secure')
     .select('slug, name, firm, location')
     .not('slug', 'is', null)
     .not('name', 'is', null)
     .order('name', { ascending: true })
     .limit(4000);
+
+  if (error) {
+    console.error('[DirectoryPage] Supabase error:', error.message);
+  }
 
   const investorList = investors || [];
 
