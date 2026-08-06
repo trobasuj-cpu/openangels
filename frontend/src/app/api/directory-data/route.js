@@ -5,39 +5,53 @@ export async function GET() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+    const debug = {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseKey,
+      keyPrefix: supabaseKey ? supabaseKey.substring(0, 10) : 'NONE',
+    };
+
     if (!supabaseUrl || !supabaseKey) {
-      return Response.json({ investors: [], error: 'Missing env vars' });
+      return Response.json({ investors: [], debug, error: 'Missing env vars' });
     }
 
     const headers = {
       'apikey': supabaseKey,
       'Authorization': `Bearer ${supabaseKey}`,
-      'Range': '0-3999',
-      'Prefer': 'count=exact',
     };
 
-    // Fetch in batches of 1000
-    const batches = [];
-    for (let offset = 0; offset < 5000; offset += 1000) {
-      const res = await fetch(
-        `${supabaseUrl}/rest/v1/investors_secure?select=slug,name,firm&slug=not.is.null&name=not.is.null&order=name.asc&offset=${offset}&limit=1000`,
-        { headers, next: { revalidate: 3600 } }
-      );
-      if (!res.ok) break;
-      const data = await res.json();
-      if (!data || data.length === 0) break;
-      batches.push(...data);
+    // Test 1: exact same query as sitemap-1 (known to work)
+    const testRes = await fetch(
+      `${supabaseUrl}/rest/v1/investors_secure?select=slug,created_at&slug=not.is.null&order=id.asc&offset=0&limit=5`,
+      { headers }
+    );
+    const testData = testRes.ok ? await testRes.json() : null;
+    debug.sitemapQueryStatus = testRes.status;
+    debug.sitemapQueryCount = testData ? testData.length : 0;
+
+    // Test 2: our query with name
+    const testRes2 = await fetch(
+      `${supabaseUrl}/rest/v1/investors_secure?select=slug,name&slug=not.is.null&order=id.asc&offset=0&limit=5`,
+      { headers }
+    );
+    const testData2 = testRes2.ok ? await testRes2.json() : await testRes2.text();
+    debug.nameQueryStatus = testRes2.status;
+    debug.nameQueryResult = testData2;
+
+    // Test 3: with firm
+    const testRes3 = await fetch(
+      `${supabaseUrl}/rest/v1/investors_secure?select=slug,name,firm&slug=not.is.null&order=id.asc&offset=0&limit=5`,
+      { headers }
+    );
+    debug.firmQueryStatus = testRes3.status;
+    if (testRes3.ok) {
+      debug.firmQueryResult = await testRes3.json();
+    } else {
+      debug.firmQueryError = await testRes3.text();
     }
 
-    return Response.json(
-      { investors: batches, count: batches.length },
-      {
-        headers: {
-          'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-        },
-      }
-    );
+    return Response.json({ debug });
   } catch (err) {
-    return Response.json({ investors: [], error: err.message });
+    return Response.json({ error: err.message, stack: err.stack });
   }
 }

@@ -23,13 +23,25 @@ async function fetchInvestors() {
     };
 
     // Fetch in batches of 1000 to bypass Supabase row limit
+    // Use exact same query pattern as working sitemaps
     const all = [];
     for (let offset = 0; offset < 5000; offset += 1000) {
       const res = await fetch(
-        `${supabaseUrl}/rest/v1/investors_secure?select=slug,name,firm&slug=not.is.null&name=not.is.null&order=name.asc&offset=${offset}&limit=1000`,
+        `${supabaseUrl}/rest/v1/investors_secure?select=slug,name,firm&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
         { headers, next: { revalidate: 3600 } }
       );
-      if (!res.ok) break;
+      if (!res.ok) {
+        // Fallback: try without firm column
+        const res2 = await fetch(
+          `${supabaseUrl}/rest/v1/investors_secure?select=slug,name&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
+          { headers, next: { revalidate: 3600 } }
+        );
+        if (!res2.ok) break;
+        const data2 = await res2.json();
+        if (!data2 || data2.length === 0) break;
+        all.push(...data2);
+        continue;
+      }
       const data = await res.json();
       if (!data || data.length === 0) break;
       all.push(...data);
