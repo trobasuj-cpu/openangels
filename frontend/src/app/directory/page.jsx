@@ -23,25 +23,13 @@ async function fetchInvestors() {
     };
 
     // Fetch in batches of 1000 to bypass Supabase row limit
-    // Use exact same query pattern as working sitemaps
     const all = [];
     for (let offset = 0; offset < 5000; offset += 1000) {
       const res = await fetch(
-        `${supabaseUrl}/rest/v1/investors_secure?select=slug,name,firm&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
+        `${supabaseUrl}/rest/v1/investors_secure?select=slug,name&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
         { headers, next: { revalidate: 3600 } }
       );
-      if (!res.ok) {
-        // Fallback: try without firm column
-        const res2 = await fetch(
-          `${supabaseUrl}/rest/v1/investors_secure?select=slug,name&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
-          { headers, next: { revalidate: 3600 } }
-        );
-        if (!res2.ok) break;
-        const data2 = await res2.json();
-        if (!data2 || data2.length === 0) break;
-        all.push(...data2);
-        continue;
-      }
+      if (!res.ok) break;
       const data = await res.json();
       if (!data || data.length === 0) break;
       all.push(...data);
@@ -145,10 +133,8 @@ export default async function DirectoryPage() {
                           key={inv.slug}
                           href={`/investor/${inv.slug}`}
                           className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-400 truncate py-0.5 transition-colors"
-                          title={inv.firm ? `${inv.name} — ${inv.firm}` : inv.name}
                         >
                           {inv.name}
-                          {inv.firm && <span className="text-zinc-400 dark:text-zinc-600 text-xs ml-1">· {inv.firm}</span>}
                         </Link>
                       ))}
                     </div>
