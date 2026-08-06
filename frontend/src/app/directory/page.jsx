@@ -15,30 +15,28 @@ async function fetchInvestors() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    if (!supabaseUrl || !supabaseKey) {
-      console.error('[DirectoryPage] Missing Supabase env vars');
-      return [];
+    if (!supabaseUrl || !supabaseKey) return [];
+
+    const headers = {
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`,
+    };
+
+    // Fetch in batches of 1000 to bypass Supabase row limit
+    const all = [];
+    for (let offset = 0; offset < 5000; offset += 1000) {
+      const res = await fetch(
+        `${supabaseUrl}/rest/v1/investors_secure?select=slug,name,firm&slug=not.is.null&name=not.is.null&order=name.asc&offset=${offset}&limit=1000`,
+        { headers, next: { revalidate: 3600 } }
+      );
+      if (!res.ok) break;
+      const data = await res.json();
+      if (!data || data.length === 0) break;
+      all.push(...data);
     }
-
-    const res = await fetch(
-      `${supabaseUrl}/rest/v1/investors_secure?select=slug,name,firm&slug=not.is.null&name=not.is.null&order=name.asc&limit=4000`,
-      {
-        headers: {
-          'apikey': supabaseKey,
-          'Authorization': `Bearer ${supabaseKey}`,
-        },
-        next: { revalidate: 3600 }, // ISR: refresh every 1 hour
-      }
-    );
-
-    if (!res.ok) {
-      console.error('[DirectoryPage] Supabase fetch error:', res.status, res.statusText);
-      return [];
-    }
-
-    return await res.json();
+    return all;
   } catch (err) {
-    console.error('[DirectoryPage] Fetch error:', err.message);
+    console.error('[DirectoryPage] Error:', err.message);
     return [];
   }
 }
@@ -46,7 +44,6 @@ async function fetchInvestors() {
 export default async function DirectoryPage() {
   const investorList = await fetchInvestors();
 
-  // Group into alphabetical sections
   const grouped = {};
   for (const inv of investorList) {
     const letter = (inv.name?.[0] || '#').toUpperCase();
@@ -79,11 +76,7 @@ export default async function DirectoryPage() {
             <h2 className="text-2xl font-bold mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-2">Browse by Industry</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {INDUSTRY_PAGES.map(page => (
-                <Link 
-                  key={page.slug} 
-                  href={`/investors/${page.slug}`}
-                  className="text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-500 font-medium transition-colors"
-                >
+                <Link key={page.slug} href={`/investors/${page.slug}`} className="text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-500 font-medium transition-colors">
                   {page.label} Investors
                 </Link>
               ))}
@@ -94,11 +87,7 @@ export default async function DirectoryPage() {
             <h2 className="text-2xl font-bold mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-2">Browse by Funding Stage</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {Object.entries(STAGE_SLUGS).map(([slug, info]) => (
-                <Link 
-                  key={slug} 
-                  href={`/investors/${slug}`}
-                  className="text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-500 font-medium transition-colors"
-                >
+                <Link key={slug} href={`/investors/${slug}`} className="text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-500 font-medium transition-colors">
                   {info.label} Investors
                 </Link>
               ))}
@@ -109,38 +98,28 @@ export default async function DirectoryPage() {
             <h2 className="text-2xl font-bold mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-2">Browse by Location</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {Object.entries(GEO_REGIONS).map(([slug, info]) => (
-                <Link 
-                  key={slug} 
-                  href={`/investors/${slug}`}
-                  className="text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-500 font-medium transition-colors"
-                >
+                <Link key={slug} href={`/investors/${slug}`} className="text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-500 font-medium transition-colors">
                   Investors in {info.label}
                 </Link>
               ))}
             </div>
           </section>
 
-          {/* Complete A-Z Investor Index — crawlable internal links for Googlebot */}
+          {/* A-Z Investor Index — crawlable links for Googlebot */}
           {investorList.length > 0 && (
             <section>
               <h2 className="text-2xl font-bold mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 All Angel Investors A-Z ({investorList.length.toLocaleString()} profiles)
               </h2>
               
-              {/* Letter quick-nav */}
               <nav className="flex flex-wrap gap-1.5 mb-8" aria-label="Alphabetical navigation">
                 {sortedLetters.map(letter => (
-                  <a 
-                    key={letter} 
-                    href={`#letter-${letter}`}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-500/10 hover:text-amber-600 dark:hover:text-amber-400 border border-zinc-200 dark:border-zinc-800 transition-colors"
-                  >
+                  <a key={letter} href={`#letter-${letter}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-500/10 hover:text-amber-600 dark:hover:text-amber-400 border border-zinc-200 dark:border-zinc-800 transition-colors">
                     {letter}
                   </a>
                 ))}
               </nav>
 
-              {/* Investor list grouped by letter */}
               <div className="space-y-8">
                 {sortedLetters.map(letter => (
                   <div key={letter} id={`letter-${letter}`}>
