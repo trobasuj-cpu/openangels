@@ -364,7 +364,7 @@ export default function Dashboard() {
       while (fetchMore) {
         const { data, error } = await supabase
           .from('investors_secure')
-          .select('id, slug, name, firm, title, location, bio, industry, industries, stages, avatar, avatar_url, status')
+          .select('*')
           .range(from, from + limit - 1);
           
         if (error) throw error;
@@ -393,7 +393,19 @@ export default function Dashboard() {
         return 0;
       });
       
-      setInvestors(sortedData);
+      // Sanitize: strip sensitive fields before storing in React state
+      const sanitizedData = sortedData.map(inv => {
+        const { email, linkedin_url, twitter_url, website, check_min, check_max, ...publicData } = inv;
+        return {
+          ...publicData,
+          has_email: !!email,
+          has_linkedin: !!linkedin_url,
+          has_twitter: !!twitter_url,
+          has_website: !!website,
+        };
+      });
+
+      setInvestors(sanitizedData);
     } catch (err) {
       console.error('Error fetching investors:', err);
       setError(err.message);

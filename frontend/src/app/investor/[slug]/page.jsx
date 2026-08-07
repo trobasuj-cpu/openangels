@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
   
   const { data: investors } = await supabase
     .from('investors_secure')
-    .select('name, bio, industries, firm, location')
+    .select('*')
     .eq('slug', slug)
     .limit(1);
 
@@ -71,14 +71,14 @@ export default async function StandaloneInvestorPage({ params }) {
   
   const { data: investorsData } = await supabase
     .from('investors_secure')
-    .select('id, slug, name, firm, title, location, bio, industry, industries, stages, avatar, avatar_url, status')
+    .select('*')
     .eq('slug', slug)
     .limit(1);
     
   const investor = investorsData?.[0];
 
   const { data: investorByIds } = !investor && slug.length > 20 
-    ? await supabase.from('investors_secure').select('id, slug, name, firm, title, location, bio, industry, industries, stages, avatar, avatar_url, status').eq('id', slug).limit(1)
+    ? await supabase.from('investors_secure').select('*').eq('id', slug).limit(1)
     : { data: null };
     
   const rawInvestor = investor || investorByIds?.[0];
@@ -87,7 +87,7 @@ export default async function StandaloneInvestorPage({ params }) {
     notFound();
   }
 
-  // Sanitize investor data so no emails or social URLs are passed to SSR HTML/props
+  // SECURITY: Sanitize investor data — strip email, socials, check sizes before SSR
   const safeInvestor = sanitizePublicInvestor(rawInvestor);
 
   let cleanBio = safeInvestor.bio || '';
@@ -113,13 +113,10 @@ export default async function StandaloneInvestorPage({ params }) {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col pt-12 items-center justify-center p-4 sm:p-6">
-      {/* Schema.org JSON-LD for Googlebot */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />
-
-      {/* Hidden SSR Semantic HTML for Search Engine Crawlers */}
       <article className="sr-only">
         <h1>{safeInvestor.name} - Angel Investor Profile</h1>
         {safeInvestor.firm && <h2>Partner / Investor at {safeInvestor.firm}</h2>}
@@ -139,8 +136,6 @@ export default async function StandaloneInvestorPage({ params }) {
           <span>{safeInvestor.name}</span>
         </nav>
       </article>
-
-      {/* Visible Interactive Dossier Component */}
       <div className="w-full max-w-3xl bg-zinc-950 rounded-3xl shadow-2xl overflow-hidden relative min-h-[600px] border border-zinc-800">
         <InvestorProfileModal investor={safeInvestor} isStandalone={true} />
       </div>
