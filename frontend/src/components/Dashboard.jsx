@@ -364,7 +364,7 @@ export default function Dashboard() {
       while (fetchMore) {
         const { data, error } = await supabase
           .from('investors_secure')
-          .select('*')
+          .select('id, slug, name, firm, title, location, bio, industry, industries, stages, avatar, avatar_url, status')
           .range(from, from + limit - 1);
           
         if (error) throw error;

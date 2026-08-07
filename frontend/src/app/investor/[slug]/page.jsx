@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { absoluteUrl } from '@/seo';
 import InvestorProfileModal from '@/components/InvestorProfileModal';
+import { sanitizePublicInvestor } from '@/lib/security';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -70,46 +71,44 @@ export default async function StandaloneInvestorPage({ params }) {
   
   const { data: investorsData } = await supabase
     .from('investors_secure')
-    .select('*')
+    .select('id, slug, name, firm, title, location, bio, industry, industries, stages, avatar, avatar_url, status')
     .eq('slug', slug)
     .limit(1);
     
   const investor = investorsData?.[0];
 
   const { data: investorByIds } = !investor && slug.length > 20 
-    ? await supabase.from('investors_secure').select('*').eq('id', slug).limit(1)
+    ? await supabase.from('investors_secure').select('id, slug, name, firm, title, location, bio, industry, industries, stages, avatar, avatar_url, status').eq('id', slug).limit(1)
     : { data: null };
     
-  const finalInvestor = investor || investorByIds?.[0];
+  const rawInvestor = investor || investorByIds?.[0];
 
-  if (!finalInvestor) {
+  if (!rawInvestor) {
     notFound();
   }
 
-  let cleanBio = finalInvestor.bio || '';
+  // Sanitize investor data so no emails or social URLs are passed to SSR HTML/props
+  const safeInvestor = sanitizePublicInvestor(rawInvestor);
+
+  let cleanBio = safeInvestor.bio || '';
   if (cleanBio.includes('Source: http')) {
     cleanBio = cleanBio.split('Source: http')[0].trim();
   }
   if (!cleanBio || cleanBio.includes("automated news") || cleanBio.includes("public investor list")) {
-    cleanBio = `${finalInvestor.name} is an active early-stage angel investor${finalInvestor.firm ? ` at ${finalInvestor.firm}` : ''}${finalInvestor.location ? ` based in ${finalInvestor.location}` : ''}. View investment thesis, check sizes, focus industries, and contact details on OpenAngels.`;
+    cleanBio = `${safeInvestor.name} is an active early-stage angel investor${safeInvestor.firm ? ` at ${safeInvestor.firm}` : ''}${safeInvestor.location ? ` based in ${safeInvestor.location}` : ''}. View investment thesis, check sizes, focus industries, and contact details on OpenAngels.`;
   }
 
-  const rawInd = finalInvestor.industry || finalInvestor.industries;
+  const rawInd = safeInvestor.industry || safeInvestor.industries;
   const industries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
 
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": finalInvestor.name || "Angel Investor",
+    "name": safeInvestor.name || "Angel Investor",
     "description": cleanBio,
-    "url": absoluteUrl(`/investor/${finalInvestor.slug || finalInvestor.id}`),
-    ...(finalInvestor.firm && { "worksFor": { "@type": "Organization", "name": finalInvestor.firm } }),
-    ...(finalInvestor.location && { "homeLocation": { "@type": "Place", "name": finalInvestor.location } }),
-    "sameAs": [
-      finalInvestor.linkedin_url,
-      finalInvestor.twitter_url,
-      finalInvestor.website
-    ].filter(Boolean)
+    "url": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}`),
+    ...(safeInvestor.firm && { "worksFor": { "@type": "Organization", "name": safeInvestor.firm } }),
+    ...(safeInvestor.location && { "homeLocation": { "@type": "Place", "name": safeInvestor.location } })
   };
 
   return (
@@ -122,9 +121,9 @@ export default async function StandaloneInvestorPage({ params }) {
 
       {/* Hidden SSR Semantic HTML for Search Engine Crawlers */}
       <article className="sr-only">
-        <h1>{finalInvestor.name} - Angel Investor Profile</h1>
-        {finalInvestor.firm && <h2>Partner / Investor at {finalInvestor.firm}</h2>}
-        {finalInvestor.location && <p>Location: {finalInvestor.location}</p>}
+        <h1>{safeInvestor.name} - Angel Investor Profile</h1>
+        {safeInvestor.firm && <h2>Partner / Investor at {safeInvestor.firm}</h2>}
+        {safeInvestor.location && <p>Location: {safeInvestor.location}</p>}
         <p>{cleanBio}</p>
         {industries.length > 0 && (
           <div>
@@ -137,13 +136,13 @@ export default async function StandaloneInvestorPage({ params }) {
         <nav aria-label="Breadcrumb">
           <Link href="/">Home</Link>
           <Link href="/directory">Investor Directory</Link>
-          <span>{finalInvestor.name}</span>
+          <span>{safeInvestor.name}</span>
         </nav>
       </article>
 
       {/* Visible Interactive Dossier Component */}
       <div className="w-full max-w-3xl bg-zinc-950 rounded-3xl shadow-2xl overflow-hidden relative min-h-[600px] border border-zinc-800">
-        <InvestorProfileModal investor={finalInvestor} isStandalone={true} />
+        <InvestorProfileModal investor={safeInvestor} isStandalone={true} />
       </div>
     </div>
   );

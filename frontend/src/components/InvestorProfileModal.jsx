@@ -22,26 +22,44 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
   const [user, setUser] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const [unlockedContact, setUnlockedContact] = useState(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data?.user) {
-        setUser(data.user);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUser(session.user);
         // Check premium status
         supabase
           .from('profiles')
           .select('is_premium')
-          .eq('id', data.user.id)
+          .eq('id', session.user.id)
           .single()
-          .then(({ data: profile }) => {
-            if (profile?.is_premium) setIsPremium(true);
+          .then(async ({ data: profile }) => {
+            if (profile?.is_premium) {
+              setIsPremium(true);
+              // Fetch contact data from secure API route (server-validated)
+              try {
+                const res = await fetch(
+                  `/api/investor/contact?slug=${encodeURIComponent(investor?.slug || '')}&id=${encodeURIComponent(investor?.id || '')}`,
+                  { headers: { Authorization: `Bearer ${session.access_token}` } }
+                );
+                if (res.ok) {
+                  const contactData = await res.json();
+                  if (contactData.contact) {
+                    setUnlockedContact(contactData.contact);
+                  }
+                }
+              } catch (e) {
+                console.error('Failed to load contact info:', e);
+              }
+            }
             setLoadingProfile(false);
           });
         // Check CRM status
         supabase
           .from('crm_leads')
           .select('id')
-          .eq('user_id', data.user.id)
+          .eq('user_id', session.user.id)
           .eq('investor_id', investor?.id)
           .single()
           .then(({ data: lead }) => {
@@ -51,7 +69,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
         setLoadingProfile(false);
       }
     });
-  }, [investor?.id]);
+  }, [investor?.id, investor?.slug]);
 
   const handleClose = () => {
     if (isStandalone) {
@@ -63,8 +81,8 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
 
   const handleCopyEmail = (e) => {
     e.stopPropagation();
-    if (!investor?.email) return;
-    navigator.clipboard.writeText(investor.email);
+    if (!unlockedContact?.email) return;
+    navigator.clipboard.writeText(unlockedContact.email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -124,8 +142,8 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
     return `$${val}`;
   };
 
-  const minStr = formatMoney(investor.check_min);
-  const maxStr = formatMoney(investor.check_max);
+  const minStr = formatMoney(unlockedContact?.check_min);
+  const maxStr = formatMoney(unlockedContact?.check_max);
   let checkSizeStr = '';
   if (minStr && maxStr) checkSizeStr = `${minStr} – ${maxStr}`;
   else if (minStr) checkSizeStr = `${minStr}+`;
@@ -181,27 +199,27 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                 ) : null}
 
                 {/* Social Links Bar — Only for Premium */}
-                {isPremium ? (
+                {isPremium && unlockedContact ? (
                   <div className="flex items-center gap-3 pt-1">
-                    {investor.twitter_url && (
-                      <a href={investor.twitter_url} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
+                    {unlockedContact.twitter_url && (
+                      <a href={unlockedContact.twitter_url} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
                         <span className="font-bold">𝕏</span> Twitter/X
                       </a>
                     )}
-                    {investor.linkedin_url && (
-                      <a href={investor.linkedin_url} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
+                    {unlockedContact.linkedin_url && (
+                      <a href={unlockedContact.linkedin_url} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
                         <span className="font-bold text-blue-400">in</span> LinkedIn
                       </a>
                     )}
-                    {investor.website && (
-                      <a href={investor.website} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
+                    {unlockedContact.website && (
+                      <a href={unlockedContact.website} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
                         <Globe className="w-3.5 h-3.5" /> Website
                       </a>
                     )}
                   </div>
                 ) : (
                   <div className="flex items-center gap-3 pt-1">
-                    {(investor.twitter_url || investor.linkedin_url || investor.website) && (
+                    {(investor.has_twitter || investor.has_linkedin || investor.has_website) && (
                       <button 
                         onClick={handleUnlockClick}
                         className="p-2 rounded-lg bg-zinc-900/50 text-zinc-600 border border-zinc-800/50 text-xs flex items-center gap-1.5 hover:border-amber-500/30 hover:text-amber-500 transition-all cursor-pointer"
@@ -297,13 +315,13 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
               {/* Action Footer — Full Access */}
               <div className="p-5 bg-zinc-950 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
                 {/* Copy Email Button */}
-                {investor.email ? (
+                {unlockedContact?.email ? (
                   <button
                     onClick={handleCopyEmail}
                     className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all"
                   >
                     {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Mail className="w-4 h-4 text-zinc-400" />}
-                    <span>{copied ? "Email Copied!" : investor.email}</span>
+                    <span>{copied ? "Email Copied!" : unlockedContact.email}</span>
                   </button>
                 ) : (
                   <span className="text-xs text-zinc-500">Contact info protected</span>

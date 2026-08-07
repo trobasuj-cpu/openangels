@@ -161,7 +161,8 @@ export default async function FilteredInvestorsPage({ params }) {
     notFound();
   }
 
-  const { query, industryLabel, stageLabel, geoLabel, geoInfo } = buildQuery(parsed);
+  const PUBLIC_FIELDS = 'id, slug, name, firm, title, location, bio, industry, industries, stages, avatar, avatar_url, status';
+  const { query, industryLabel, stageLabel, geoLabel, geoInfo } = buildQuery(parsed, PUBLIC_FIELDS);
 
   // Fetch data
   let investors = [];
