@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export async function generateStaticParams() {
   const { data } = await supabase
-    .from('investors_secure')
+    .from('investors_public')
     .select('slug')
     .not('slug', 'is', null)
     .limit(1000);
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   
   const { data: investors } = await supabase
-    .from('investors_secure')
+    .from('investors_public')
     .select('*')
     .eq('slug', slug)
     .limit(1);
@@ -70,7 +70,7 @@ export default async function StandaloneInvestorPage({ params }) {
   const { slug } = await params;
   
   const { data: investorsData } = await supabase
-    .from('investors_secure')
+    .from('investors_public')
     .select('*')
     .eq('slug', slug)
     .limit(1);
@@ -78,7 +78,7 @@ export default async function StandaloneInvestorPage({ params }) {
   const investor = investorsData?.[0];
 
   const { data: investorByIds } = !investor && slug.length > 20 
-    ? await supabase.from('investors_secure').select('*').eq('id', slug).limit(1)
+    ? await supabase.from('investors_public').select('*').eq('id', slug).limit(1)
     : { data: null };
     
   const rawInvestor = investor || investorByIds?.[0];

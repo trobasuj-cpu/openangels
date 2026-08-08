@@ -8,7 +8,7 @@ export default async function InterceptedInvestorModal({ params }) {
   
   // Fetch with select('*') — investors_secure view already limits visible columns
   const { data: investorsData } = await supabase
-    .from('investors_secure')
+    .from('investors_public')
     .select('*')
     .eq('slug', slug)
     .limit(1);
@@ -16,7 +16,7 @@ export default async function InterceptedInvestorModal({ params }) {
   const investor = investorsData?.[0];
 
   const { data: investorByIds } = !investor && slug.length > 20 
-    ? await supabase.from('investors_secure').select('*').eq('id', slug).limit(1)
+    ? await supabase.from('investors_public').select('*').eq('id', slug).limit(1)
     : { data: null };
     
   const rawInvestor = investor || investorByIds?.[0];

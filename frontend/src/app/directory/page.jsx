@@ -26,7 +26,7 @@ async function fetchInvestors() {
     const all = [];
     for (let offset = 0; offset < 5000; offset += 1000) {
       const res = await fetch(
-        `${supabaseUrl}/rest/v1/investors_secure?select=slug,name&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
+        `${supabaseUrl}/rest/v1/investors_public?select=slug,name&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
         { headers, next: { revalidate: 3600 } }
       );
       if (!res.ok) break;

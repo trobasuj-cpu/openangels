@@ -20,7 +20,7 @@ const CURRENT_YEAR = new Date().getFullYear();
  */
 function buildQuery(parsed, selectClause = '*', countOnly = false) {
   let query = supabase
-    .from('investors_secure')
+    .from('investors_public')
     .select(selectClause, countOnly ? { count: 'exact', head: true } : { count: 'exact' });
 
   const industryLabel = parsed.industry ? formatIndustryLabel(parsed.industry) : null;
