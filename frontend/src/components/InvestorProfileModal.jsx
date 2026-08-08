@@ -4,6 +4,7 @@ import { Sparkles, X, Copy, Mail, Globe, MapPin, Check, Briefcase, DollarSign, L
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
+import { openGumroadOverlay } from '@/lib/gumroad';
 import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
 
@@ -116,10 +117,9 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
 
   const handleUnlockClick = () => {
     if (user) {
-      window.open(`${GUMROAD_URL}?email=${encodeURIComponent(user.email)}`, '_blank');
+      openGumroadOverlay(user.email);
     } else {
-      // Redirect to login first
-      window.location.href = '/directory';
+      openGumroadOverlay();
     }
   };
 

@@ -1,3 +1,4 @@
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata = {
@@ -55,6 +56,7 @@ export default function RootLayout({ children, modal }) {
         />
       </head>
       <body className="antialiased min-h-screen bg-zinc-50 dark:bg-black font-sans text-zinc-900 dark:text-zinc-100 flex flex-col">
+        <Script src="https://gumroad.com/js/gumroad.js" strategy="afterInteractive" />
         {children}
         {modal}
       </body>

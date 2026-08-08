@@ -15,6 +15,7 @@ import InvestorAvatar from './InvestorAvatar';
 import LoginModal from './LoginModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
+import { openGumroadOverlay } from '@/lib/gumroad';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 
 const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = false, children }) => {
@@ -746,9 +747,9 @@ export default function Dashboard() {
               <button 
                 onClick={() => {
                   if (user) {
-                    window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                    openGumroadOverlay(user.email);
                   } else {
-                    setIsLoginModalOpen(true);
+                    openGumroadOverlay();
                   }
                 }}
                 className="crm-btn-oil w-full text-white border border-white/10 text-sm font-medium py-2 rounded-lg transition-all active:scale-[0.98] relative"
@@ -880,7 +881,7 @@ export default function Dashboard() {
                             onClick={() => {
                               setIsProfileMenuOpen(false);
                               if (!profile?.is_premium) {
-                                window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                                openGumroadOverlay(user?.email);
                               }
                             }}
                           >
@@ -1010,9 +1011,9 @@ export default function Dashboard() {
                     <button 
                       onClick={() => {
                         if (user) {
-                          window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}&discount_code=PHLAUNCH`, '_blank');
+                          openGumroadOverlay(user.email, 'PHLAUNCH');
                         } else {
-                          setIsLoginModalOpen(true);
+                          openGumroadOverlay('', 'PHLAUNCH');
                         }
                       }}
                       className="w-full py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10"
@@ -1094,9 +1095,9 @@ export default function Dashboard() {
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       if (user) {
-                                        window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                                        openGumroadOverlay(user.email);
                                       } else {
-                                        setIsLoginModalOpen(true);
+                                        openGumroadOverlay();
                                       }
                                     }}
                                     title="Unlock Premium to view full profile"
@@ -1142,9 +1143,9 @@ export default function Dashboard() {
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         if (user) {
-                                          window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
+                                          openGumroadOverlay(user.email);
                                         } else {
-                                          setIsLoginModalOpen(true);
+                                          openGumroadOverlay();
                                         }
                                       }}
                                       className="flex items-center gap-1 text-zinc-600 hover:text-amber-500 transition-colors"
