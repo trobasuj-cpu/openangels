@@ -5,7 +5,7 @@
  */
 
 export function getGumroadUrl(userEmail = '', discountCode = '') {
-  let url = 'https://beatsprom.gumroad.com/l/vgobnh/checkout';
+  let url = 'https://gumroad.com/checkout?product=vgobnh';
   const params = new URLSearchParams();
 
   if (userEmail) {
@@ -16,7 +16,7 @@ export function getGumroadUrl(userEmail = '', discountCode = '') {
   }
 
   const query = params.toString();
-  return query ? `${url}?${query}` : url;
+  return query ? `${url}&${query}` : url;
 }
 
 export function openGumroadOverlay(userEmail = '', discountCode = '') {
