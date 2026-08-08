@@ -4,7 +4,7 @@ import { Sparkles, X, Copy, Mail, Globe, MapPin, Check, Briefcase, DollarSign, L
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
-import { openGumroadOverlay } from '@/lib/gumroad';
+import { openGumroadOverlay, getGumroadUrl } from '@/lib/gumroad';
 import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
 
@@ -421,13 +421,15 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                     </div>
 
                     {/* CTA Button */}
-                    <button
-                      onClick={handleUnlockClick}
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] group"
+                    <a
+                      href={getGumroadUrl(user?.email)}
+                      className="gumroad-button w-full py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] group"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <Lock className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                       Unlock Full Access — Lifetime Deal
-                    </button>
+                    </a>
                     <p className="text-center text-[11px] text-zinc-500 mt-2">
                       One-time payment • Lifetime access to 4,000+ investor profiles
                     </p>

@@ -1,10 +1,11 @@
 /**
- * Helper to trigger Gumroad Overlay Checkout directly on openangels.xyz.
- * Opens as a modal overlay on top of the site instead of redirecting users away.
+ * Gumroad URL Builder & Overlay Helper.
+ * Formats official Gumroad links with className="gumroad-button" so gumroad.js
+ * automatically intercepts clicks and displays the in-page overlay modal.
  */
 
-export function openGumroadOverlay(userEmail = '', discountCode = '') {
-  let url = `https://beatsprom.gumroad.com/l/vgobnh?wanted=true`;
+export function getGumroadUrl(userEmail = '', discountCode = '') {
+  let url = 'https://beatsprom.gumroad.com/l/vgobnh?wanted=true';
 
   if (userEmail) {
     url += `&email=${encodeURIComponent(userEmail)}`;
@@ -13,20 +14,30 @@ export function openGumroadOverlay(userEmail = '', discountCode = '') {
     url += `&discount_code=${encodeURIComponent(discountCode)}`;
   }
 
-  // Create temporary hidden anchor tag
-  const link = document.createElement('a');
+  return url;
+}
+
+export function openGumroadOverlay(userEmail = '', discountCode = '') {
+  const url = getGumroadUrl(userEmail, discountCode);
+
+  let link = document.getElementById('gumroad-overlay-trigger');
+  if (!link) {
+    link = document.createElement('a');
+    link.id = 'gumroad-overlay-trigger';
+    link.className = 'gumroad-button';
+    link.style.position = 'fixed';
+    link.style.top = '-9999px';
+    link.style.left = '-9999px';
+    document.body.appendChild(link);
+  }
+
   link.href = url;
-  link.className = 'gumroad-button';
-  link.style.display = 'none';
-  document.body.appendChild(link);
-
-  // If Gumroad JS is loaded, click will open modal overlay
-  link.click();
-
-  // Cleanup after trigger
-  setTimeout(() => {
-    if (document.body.contains(link)) {
-      document.body.removeChild(link);
-    }
-  }, 1000);
+  
+  // Trigger click event
+  const evt = new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+  });
+  link.dispatchEvent(evt);
 }

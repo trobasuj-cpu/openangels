@@ -15,7 +15,7 @@ import InvestorAvatar from './InvestorAvatar';
 import LoginModal from './LoginModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
-import { openGumroadOverlay } from '@/lib/gumroad';
+import { openGumroadOverlay, getGumroadUrl } from '@/lib/gumroad';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 
 const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = false, children }) => {
@@ -744,18 +744,14 @@ export default function Dashboard() {
                 Premium (Lifetime Access)
               </h4>
               <p className="text-xs text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
-              <button 
-                onClick={() => {
-                  if (user) {
-                    openGumroadOverlay(user.email);
-                  } else {
-                    openGumroadOverlay();
-                  }
-                }}
-                className="crm-btn-oil w-full text-white border border-white/10 text-sm font-medium py-2 rounded-lg transition-all active:scale-[0.98] relative"
+              <a 
+                href={getGumroadUrl(user?.email)}
+                className="gumroad-button crm-btn-oil block text-center w-full text-white border border-white/10 text-sm font-medium py-2 rounded-lg transition-all active:scale-[0.98] relative"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Upgrade Now
-              </button>
+              </a>
             </div>
           </div>
         )}
@@ -1008,18 +1004,14 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <p className="text-white/90 text-sm mb-4 relative z-10">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
-                    <button 
-                      onClick={() => {
-                        if (user) {
-                          openGumroadOverlay(user.email, 'PHLAUNCH');
-                        } else {
-                          openGumroadOverlay('', 'PHLAUNCH');
-                        }
-                      }}
-                      className="w-full py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10"
+                    <a 
+                      href={getGumroadUrl(user?.email, 'PHLAUNCH')}
+                      className="gumroad-button block text-center w-full py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Claim Discount
-                    </button>
+                    </a>
                   </div>
                 </div>
               )}
@@ -1277,19 +1269,15 @@ export default function Dashboard() {
                               </div>
                             </div>
                             <div className="absolute inset-0 flex items-center justify-center bg-zinc-50/60 dark:bg-zinc-900/60 backdrop-blur-[2px]">
-                              <button 
-                                onClick={() => {
-                                  if (user) {
-                                    window.open(`https://beatsprom.gumroad.com/l/vgobnh?email=${encodeURIComponent(user.email)}`, '_blank');
-                                  } else {
-                                    setIsLoginModalOpen(true);
-                                  }
-                                }}
-                                className="flex items-center gap-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn"
+                              <a 
+                                href={getGumroadUrl(user?.email)}
+                                className="gumroad-button flex items-center gap-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn"
+                                target="_blank"
+                                rel="noopener noreferrer"
                               >
                                 <Lock className="w-3 h-3 group-hover/btn:rotate-12 transition-transform text-amber-500 dark:text-amber-600" />
                                 Unlock Contact
-                              </button>
+                              </a>
                             </div>
                           </div>
                         )}
