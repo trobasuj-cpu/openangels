@@ -5,18 +5,24 @@
  */
 
 export function getGumroadUrl(userEmail = '', discountCode = '') {
-  let url = 'https://gumroad.com/checkout?product=vgobnh';
+  let url = 'https://beatsprom.gumroad.com/l/vgobnh';
+  if (discountCode) {
+    url += `/${encodeURIComponent(discountCode)}`;
+  }
+  url += '/checkout';
+
   const params = new URLSearchParams();
 
   if (userEmail) {
     params.set('email', userEmail);
   }
   if (discountCode) {
+    params.set('code', discountCode);
     params.set('discount_code', discountCode);
   }
 
   const query = params.toString();
-  return query ? `${url}&${query}` : url;
+  return query ? `${url}?${query}` : url;
 }
 
 export function openGumroadOverlay(userEmail = '', discountCode = '') {

@@ -381,14 +381,7 @@ export default function Dashboard() {
         }
       }
       
-      const validData = (allData || []).filter(inv => {
-        const hasRealBio = inv.bio && !inv.bio.includes("Found via automated") && !inv.bio.includes("Extracted from public");
-        const rawInd = inv.industry || inv.industries;
-        const hasTags = Array.isArray(rawInd) ? rawInd.length > 0 : !!rawInd;
-        const hasSocial = !!inv.has_email || !!inv.has_linkedin || !!inv.has_twitter || !!inv.has_website;
-        
-        return hasRealBio || hasTags || hasSocial;
-      });
+      const validData = (allData || []).filter(inv => inv && inv.name && inv.name.trim() !== '');
 
       const sortedData = validData.sort((a, b) => {
         if (a.has_email && !b.has_email) return -1;
