@@ -8,6 +8,8 @@ export function getGumroadUrl(userEmail = '', discountCode = '') {
   let url = 'https://beatsprom.gumroad.com/l/vgobnh';
   const params = new URLSearchParams();
 
+  params.set('wanted', 'true');
+
   if (userEmail) {
     params.set('email', userEmail);
   }
@@ -16,7 +18,7 @@ export function getGumroadUrl(userEmail = '', discountCode = '') {
   }
 
   const query = params.toString();
-  return query ? `${url}?${query}` : url;
+  return `${url}?${query}`;
 }
 
 export function openGumroadOverlay(userEmail = '', discountCode = '') {
