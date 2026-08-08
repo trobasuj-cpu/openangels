@@ -5,7 +5,7 @@
  */
 
 export function getGumroadUrl(userEmail = '', discountCode = '') {
-  let url = 'https://beatsprom.gumroad.com/l/vgobnh';
+  let url = 'https://beatsprom.gumroad.com/l/vgobnh/checkout';
   const params = new URLSearchParams();
 
   if (userEmail) {
