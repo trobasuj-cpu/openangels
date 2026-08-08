@@ -747,8 +747,7 @@ export default function Dashboard() {
               <a 
                 href={getGumroadUrl(user?.email)}
                 className="gumroad-button crm-btn-oil block text-center w-full text-white border border-white/10 text-sm font-medium py-2 rounded-lg transition-all active:scale-[0.98] relative"
-                target="_blank"
-                rel="noopener noreferrer"
+                data-gumroad-single-product="true"
               >
                 Upgrade Now
               </a>
@@ -1007,8 +1006,7 @@ export default function Dashboard() {
                     <a 
                       href={getGumroadUrl(user?.email, 'PHLAUNCH')}
                       className="gumroad-button block text-center w-full py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      data-gumroad-single-product="true"
                     >
                       Claim Discount
                     </a>
@@ -1272,8 +1270,7 @@ export default function Dashboard() {
                               <a 
                                 href={getGumroadUrl(user?.email)}
                                 className="gumroad-button flex items-center gap-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-transform hover:scale-105 active:scale-[0.98] shadow-md group/btn"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                data-gumroad-single-product="true"
                               >
                                 <Lock className="w-3 h-3 group-hover/btn:rotate-12 transition-transform text-amber-500 dark:text-amber-600" />
                                 Unlock Contact

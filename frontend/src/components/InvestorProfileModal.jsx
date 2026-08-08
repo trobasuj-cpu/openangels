@@ -424,8 +424,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                     <a
                       href={getGumroadUrl(user?.email)}
                       className="gumroad-button w-full py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] group"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      data-gumroad-single-product="true"
                     >
                       <Lock className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                       Unlock Full Access — Lifetime Deal
