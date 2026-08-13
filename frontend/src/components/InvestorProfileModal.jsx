@@ -8,6 +8,7 @@ import GumroadIframeModal from './GumroadIframeModal';
 import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
 import InvestorEvidenceSection from './InvestorEvidenceSection';
+import { INVESTOR_COUNT } from '@/seo';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,

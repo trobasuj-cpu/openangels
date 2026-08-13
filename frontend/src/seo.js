@@ -1,6 +1,6 @@
-﻿export const SITE_URL = 'https://openangels.xyz';
+export const SITE_URL = 'https://openangels.xyz';
 export const PRODUCT_NAME = 'OpenAngels';
-export const INVESTOR_COUNT = '4,700+';
+export const INVESTOR_COUNT = '4,050+';
 export const LEGAL_UPDATED_LABEL = 'July 1, 2026';
 export const SEO_LASTMOD = '2026-07-01';
 
