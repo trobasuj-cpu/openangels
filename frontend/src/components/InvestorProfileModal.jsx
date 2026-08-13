@@ -7,6 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 import GumroadIframeModal from './GumroadIframeModal';
 import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
+import InvestorEvidenceSection from './InvestorEvidenceSection';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -347,12 +348,18 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                     AI Draft Email
                   </button>
                 </div>
+
+                {/* Evidence & Data Lineage Proof */}
+                <InvestorEvidenceSection investorId={investor.id} investor={investor} />
               </div>
             </>
           ) : (
             <>
               {/* NON-PREMIUM: Premium Upsell Screen */}
               <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-5">
+                
+                {/* Evidence & Data Lineage Proof for Free Users */}
+                <InvestorEvidenceSection investorId={investor.id} investor={investor} />
                 
                 {/* Teaser — blurred preview of check size + stages */}
                 <div className="relative">
