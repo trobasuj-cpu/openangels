@@ -316,12 +316,12 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
               </div>
 
               {/* Action Footer — Full Access */}
-              <div className="p-5 bg-zinc-950 border-t border-zinc-800 flex flex-col gap-2.5 shrink-0">
+              <div className="p-4 bg-zinc-950 border-t border-zinc-800 flex flex-col gap-2 shrink-0">
                 {/* Copy Email Button */}
                 {unlockedContact?.email && (
                   <button
                     onClick={handleCopyEmail}
-                    className="w-full py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
+                    className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
                   >
                     {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Mail className="w-4 h-4 text-zinc-400" />}
                     <span>{copied ? "Email Copied!" : unlockedContact.email}</span>
@@ -329,27 +329,27 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                 )}
 
                 {/* Stacked Elongated Action Buttons */}
-                <div className="flex flex-col gap-2 w-full">
-                  {/* AI Draft Email Button (Elongated Primary) */}
-                  <button
-                    onClick={() => setIsAiPitchOpen(true)}
-                    className="w-full crm-btn-oil py-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 border border-white/10 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
-                  >
-                    <Sparkles className="w-4 h-4 text-amber-300" />
-                    <span>AI Draft Email</span>
-                  </button>
-
+                <div className="grid grid-cols-2 gap-2 w-full">
                   {/* Add to CRM (Elongated Secondary) */}
                   <button
                     onClick={handleToggleCrm}
-                    className={`w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all cursor-pointer ${
+                    className={`w-full py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all cursor-pointer ${
                       inCrm 
                         ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" 
                         : "bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border-zinc-800"
                     }`}
                   >
-                    {inCrm ? <CheckCircle2 className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                    <span>{inCrm ? "Saved in My CRM" : "+ Add to CRM"}</span>
+                    {inCrm ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <UserPlus className="w-4 h-4 text-zinc-400" />}
+                    <span>{inCrm ? "In CRM" : "+ Add to CRM"}</span>
+                  </button>
+
+                  {/* AI Draft Email Button (Elongated Primary) */}
+                  <button
+                    onClick={() => setIsAiPitchOpen(true)}
+                    className="w-full crm-btn-oil py-2.5 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 border border-white/10 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <span>AI Draft Email</span>
                   </button>
                 </div>
               </div>
