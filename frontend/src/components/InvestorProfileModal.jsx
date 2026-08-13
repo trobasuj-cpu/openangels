@@ -310,56 +310,54 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
 
               </div>
 
+              {/* Evidence & Data Lineage Proof */}
+              <div className="px-6 sm:px-8 pb-4">
+                <InvestorEvidenceSection investorId={investor.id} investor={investor} />
+              </div>
+
               {/* Action Footer — Full Access */}
-              <div className="p-5 bg-zinc-950 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+              <div className="p-5 bg-zinc-950 border-t border-zinc-800 flex flex-col gap-2.5 shrink-0">
                 {/* Copy Email Button */}
-                {unlockedContact?.email ? (
+                {unlockedContact?.email && (
                   <button
                     onClick={handleCopyEmail}
-                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all"
+                    className="w-full py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
                   >
                     {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Mail className="w-4 h-4 text-zinc-400" />}
                     <span>{copied ? "Email Copied!" : unlockedContact.email}</span>
                   </button>
-                ) : (
-                  <span className="text-xs text-zinc-500">Contact info protected</span>
                 )}
 
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  {/* Add to CRM */}
+                {/* Stacked Elongated Action Buttons */}
+                <div className="flex flex-col gap-2 w-full">
+                  {/* AI Draft Email Button (Elongated Primary) */}
+                  <button
+                    onClick={() => setIsAiPitchOpen(true)}
+                    className="w-full crm-btn-oil py-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 border border-white/10 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <span>AI Draft Email</span>
+                  </button>
+
+                  {/* Add to CRM (Elongated Secondary) */}
                   <button
                     onClick={handleToggleCrm}
-                    className={`flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all ${
+                    className={`w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all cursor-pointer ${
                       inCrm 
                         ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" 
-                        : "bg-zinc-900 text-zinc-300 hover:text-white border-zinc-800"
+                        : "bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border-zinc-800"
                     }`}
                   >
                     {inCrm ? <CheckCircle2 className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                    {inCrm ? "Saved to CRM" : "+ Add to CRM"}
-                  </button>
-
-                  {/* AI Draft Email Button */}
-                  <button
-                    onClick={() => setIsAiPitchOpen(true)}
-                    className="flex-1 sm:flex-initial crm-btn-oil px-5 py-2.5 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 border border-white/10 shadow-lg"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    AI Draft Email
+                    <span>{inCrm ? "Saved in My CRM" : "+ Add to CRM"}</span>
                   </button>
                 </div>
-
-                {/* Evidence & Data Lineage Proof */}
-                <InvestorEvidenceSection investorId={investor.id} investor={investor} />
               </div>
             </>
           ) : (
             <>
               {/* NON-PREMIUM: Premium Upsell Screen */}
               <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-5">
-                
-                {/* Evidence & Data Lineage Proof for Free Users */}
-                <InvestorEvidenceSection investorId={investor.id} investor={investor} />
                 
                 {/* Teaser — blurred preview of check size + stages */}
                 <div className="relative">
@@ -384,6 +382,9 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                     <Lock className="w-5 h-5 text-zinc-600" />
                   </div>
                 </div>
+
+                {/* Evidence & Data Lineage Proof */}
+                <InvestorEvidenceSection investorId={investor.id} investor={investor} />
 
                 {/* Premium Upsell Card */}
                 <div className="relative rounded-2xl overflow-hidden border border-red-500/20">
