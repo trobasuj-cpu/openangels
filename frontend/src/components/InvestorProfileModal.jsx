@@ -198,27 +198,42 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                 ) : null}
 
                 {/* Social Links Bar — Only for Premium */}
-                {isPremium && unlockedContact ? (
-                  <div className="flex items-center gap-3 pt-1">
-                    {unlockedContact.twitter_url && (
-                      <a href={unlockedContact.twitter_url} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
+                {isPremium ? (
+                  <div className="flex items-center gap-2 pt-1 flex-wrap">
+                    {(unlockedContact?.twitter_url || investor.twitter_url || investor.has_twitter) && (
+                      <a 
+                        href={unlockedContact?.twitter_url || (investor.twitter_url ? (investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`) : `https://x.com/search?q=${encodeURIComponent(investor.name)}`)} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5"
+                      >
                         <span className="font-bold">𝕏</span> Twitter/X
                       </a>
                     )}
-                    {unlockedContact.linkedin_url && (
-                      <a href={unlockedContact.linkedin_url} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
+                    {(unlockedContact?.linkedin_url || investor.linkedin_url || investor.has_linkedin) && (
+                      <a 
+                        href={unlockedContact?.linkedin_url || (investor.linkedin_url ? (investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`) : `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(investor.name)}`)} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5"
+                      >
                         <span className="font-bold text-blue-400">in</span> LinkedIn
                       </a>
                     )}
-                    {unlockedContact.website && (
-                      <a href={unlockedContact.website} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5">
-                        <Globe className="w-3.5 h-3.5" /> Website
+                    {(unlockedContact?.website || investor.website || investor.has_website) && (
+                      <a 
+                        href={unlockedContact?.website || (investor.website ? (investor.website.startsWith('http') ? investor.website : `https://${investor.website}`) : `https://www.google.com/search?q=${encodeURIComponent(investor.name + ' investor')}`)} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5"
+                      >
+                        <Globe className="w-3.5 h-3.5 text-zinc-400" /> Website
                       </a>
                     )}
                   </div>
                 ) : (
                   <div className="flex items-center gap-3 pt-1">
-                    {(investor.has_twitter || investor.has_linkedin || investor.has_website) && (
+                    {(investor.has_twitter || investor.has_linkedin || investor.has_website || investor.twitter_url || investor.linkedin_url) && (
                       <button 
                         onClick={handleUnlockClick}
                         className="p-2 rounded-lg bg-zinc-900/50 text-zinc-600 border border-zinc-800/50 text-xs flex items-center gap-1.5 hover:border-amber-500/30 hover:text-amber-500 transition-all cursor-pointer"
@@ -318,14 +333,27 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
 
               {/* Action Footer — Full Access */}
               <div className="p-4 bg-zinc-950 border-t border-zinc-800 flex flex-col gap-2 shrink-0">
-                {/* Copy Email Button */}
-                {unlockedContact?.email && (
+                {/* Copy Email Button for Premium Users */}
+                {(unlockedContact?.email || investor.email || investor.has_email) && (
                   <button
-                    onClick={handleCopyEmail}
+                    onClick={() => {
+                      const emailToCopy = unlockedContact?.email || investor.email;
+                      if (emailToCopy) {
+                        navigator.clipboard.writeText(emailToCopy);
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
+                      } else {
+                        setIsAiPitchOpen(true);
+                      }
+                    }}
                     className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
                   >
-                    {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Mail className="w-4 h-4 text-zinc-400" />}
-                    <span>{copied ? "Email Copied!" : unlockedContact.email}</span>
+                    {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Mail className="w-4 h-4 text-emerald-400" />}
+                    <span>
+                      {copied 
+                        ? "Email Copied!" 
+                        : (unlockedContact?.email || investor.email || `✉️ Verified Direct Mailbox (${investor.name})`)}
+                    </span>
                   </button>
                 )}
 

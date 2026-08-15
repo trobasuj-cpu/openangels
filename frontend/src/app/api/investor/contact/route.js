@@ -15,9 +15,9 @@ export async function GET(request) {
     const authHeader = request.headers.get('Authorization') || '';
     const token = authHeader.replace(/^Bearer\s+/i, '').trim();
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    const serviceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || anonKey;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    const serviceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || anonKey;
 
     if (!supabaseUrl || !anonKey) {
       return Response.json({ error: 'Server configuration error' }, { status: 500 });
@@ -56,25 +56,34 @@ export async function GET(request) {
       }, { status: 403 });
     }
 
-    // 3. User IS Premium — fetch full sensitive contact info securely
+    // 3. User IS Premium — fetch full sensitive contact info securely from main investors table
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false },
     });
 
-    let query = supabaseAdmin.from('investors_secure').select('*');
-    if (slug) {
-      query = query.eq('slug', slug);
+    // Query main 'investors' table first, fallback to 'investors_secure'
+    let fullInvestor = null;
+
+    let query1 = supabaseAdmin.from('investors').select('*');
+    if (slug) query1 = query1.eq('slug', slug);
+    else query1 = query1.eq('id', id);
+
+    const { data: data1 } = await query1.limit(1);
+    if (data1 && data1.length > 0) {
+      fullInvestor = data1[0];
     } else {
-      query = query.eq('id', id);
+      let query2 = supabaseAdmin.from('investors_secure').select('*');
+      if (slug) query2 = query2.eq('slug', slug);
+      else query2 = query2.eq('id', id);
+      const { data: data2 } = await query2.limit(1);
+      if (data2 && data2.length > 0) {
+        fullInvestor = data2[0];
+      }
     }
 
-    const { data, error } = await query.limit(1);
-
-    if (error || !data || data.length === 0) {
+    if (!fullInvestor) {
       return Response.json({ error: 'Investor not found' }, { status: 404 });
     }
-
-    const fullInvestor = data[0];
 
     return Response.json({
       isPremium: true,
