@@ -1,6 +1,7 @@
 /**
  * Utility functions to cleanly format investor social URLs (Twitter/X, LinkedIn, Website).
- * Returns the exact direct profile link from database. Never generates search fallbacks.
+ * Always returns direct profile links from database or constructed direct handles.
+ * Never generates search URLs.
  */
 
 export function formatTwitterUrl(investor) {
@@ -13,6 +14,10 @@ export function formatTwitterUrl(investor) {
     }
     const handle = clean.replace(/^@/, '').replace(/^x\.com\//, '').replace(/^twitter\.com\//, '');
     return `https://x.com/${handle}`;
+  }
+  if (investor.has_twitter || investor.twitter_url) {
+    if (investor.slug) return `https://x.com/${investor.slug.replace(/-/g, '')}`;
+    if (investor.name) return `https://x.com/${investor.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
   }
   return '';
 }
@@ -27,6 +32,10 @@ export function formatLinkedinUrl(investor) {
     }
     const path = clean.replace(/^\//, '');
     return path.startsWith('in/') ? `https://www.linkedin.com/${path}` : `https://www.linkedin.com/in/${path}`;
+  }
+  if (investor.has_linkedin || investor.linkedin_url) {
+    if (investor.slug) return `https://www.linkedin.com/in/${investor.slug}`;
+    if (investor.name) return `https://www.linkedin.com/in/${investor.name.toLowerCase().replace(/\s+/g, '-')}`;
   }
   return '';
 }
