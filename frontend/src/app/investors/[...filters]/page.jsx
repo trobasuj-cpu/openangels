@@ -363,8 +363,8 @@ export default async function FilteredInvestorsPage({ params }) {
                           <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
                             {investor.name}
                           </Link>
-                          {(investor.linkedin_url || investor.twitter_url) && (
-                            <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                          {(investor.has_linkedin || investor.has_twitter || investor.linkedin_url || investor.twitter_url) && (
+                            <Sparkles className="w-4 h-4 text-amber-500 shrink-0" title="Verified Social Presence" />
                           )}
                         </h2>
                         {investor.firm && (
