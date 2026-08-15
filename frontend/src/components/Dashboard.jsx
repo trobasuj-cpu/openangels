@@ -1157,7 +1157,6 @@ export default function Dashboard() {
                                 );
                               })()}
                             </div>
-                            </div>
                           </div>
 
                           {/* Location row if firm was shown above */}
