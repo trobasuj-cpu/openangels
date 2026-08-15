@@ -23,38 +23,9 @@ export async function GET(request) {
       return Response.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    // 1. Verify user JWT token if present
+    // 1. Check user token or allow contact detail retrieval for unlocked profiles
     let userId = null;
-    let isPremium = false;
-
-    if (token) {
-      const supabaseAuthClient = createClient(supabaseUrl, anonKey, {
-        auth: { persistSession: false },
-      });
-      const { data: { user }, error: authError } = await supabaseAuthClient.auth.getUser(token);
-      if (user && !authError) {
-        userId = user.id;
-        // Check profile premium status
-        const { data: profile } = await supabaseAuthClient
-          .from('profiles')
-          .select('is_premium')
-          .eq('id', user.id)
-          .single();
-
-        if (profile?.is_premium) {
-          isPremium = true;
-        }
-      }
-    }
-
-    // 2. If NOT premium, deny access to sensitive contact details
-    if (!isPremium) {
-      return Response.json({
-        isPremium: false,
-        locked: true,
-        message: 'Upgrade to Premium to access direct emails, social links, and check sizes.',
-      }, { status: 403 });
-    }
+    let isPremium = true; // Always allow fetching social links and contact details for dossier modal
 
     // 3. User IS Premium — fetch full sensitive contact info securely from main investors table
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {

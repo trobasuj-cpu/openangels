@@ -30,35 +30,32 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
   useEffect(() => {
     setIsPremium(true);
+    async function loadContactDetails() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          setUser(session.user);
+        }
+        
+        const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
+        const res = await fetch(
+          `/api/investor/contact?slug=${encodeURIComponent(investor?.slug || '')}&id=${encodeURIComponent(investor?.id || '')}`,
+          { headers }
+        );
+        if (res.ok) {
+          const contactData = await res.json();
+          if (contactData.contact) {
+            setUnlockedContact(contactData.contact);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load contact info:', e);
+      }
+    }
+    loadContactDetails();
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        setUser(session.user);
-        // Check premium status
-        supabase
-          .from('profiles')
-          .select('is_premium')
-          .eq('id', session.user.id)
-          .single()
-          .then(async ({ data: profile }) => {
-            if (profile?.is_premium || isPremiumProp) {
-              setIsPremium(true);
-              // Fetch contact data from secure API route (server-validated)
-              try {
-                const res = await fetch(
-                  `/api/investor/contact?slug=${encodeURIComponent(investor?.slug || '')}&id=${encodeURIComponent(investor?.id || '')}`,
-                  { headers: { Authorization: `Bearer ${session.access_token}` } }
-                );
-                if (res.ok) {
-                  const contactData = await res.json();
-                  if (contactData.contact) {
-                    setUnlockedContact(contactData.contact);
-                  }
-                }
-              } catch (e) {
-                console.error('Failed to load contact info:', e);
-              }
-            }
-          });
         // Check CRM status
         supabase
           .from('crm_leads')
@@ -73,7 +70,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         setLoadingProfile(false);
       }
     });
-  }, [investor?.id, investor?.slug]);
+  }, [investor]);
 
   const handleClose = () => {
     if (isStandalone) {
