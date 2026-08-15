@@ -17,6 +17,7 @@ import FAQ from './FAQ';
 import Footer from './Footer';
 import GumroadIframeModal from './GumroadIframeModal';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
+import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 
 const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = false, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -1124,9 +1125,9 @@ export default function Dashboard() {
                                 if (!hasLinkedin && !hasTwitter && !hasWebsite && !hasEmail) return null;
 
                                 if (isUnlocked) {
-                                  const twUrl = investor.twitter_url ? (investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`) : `https://x.com/search?q=${encodeURIComponent(investor.name)}`;
-                                  const liUrl = investor.linkedin_url ? (investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`) : `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(investor.name)}`;
-                                  const webUrl = investor.website ? (investor.website.startsWith('http') ? investor.website : `https://${investor.website}`) : `https://www.google.com/search?q=${encodeURIComponent(investor.name + ' investor')}`;
+                                  const twUrl = formatTwitterUrl(investor);
+                                  const liUrl = formatLinkedinUrl(investor);
+                                  const webUrl = formatWebsiteUrl(investor);
 
                                   return (
                                     <div className="flex items-center gap-1 text-zinc-400">

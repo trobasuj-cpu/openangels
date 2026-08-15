@@ -9,6 +9,7 @@ import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
 import InvestorEvidenceSection from './InvestorEvidenceSection';
 import { INVESTOR_COUNT } from '@/seo';
+import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -198,7 +199,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                 <div className="flex items-center gap-2 pt-2.5 flex-wrap relative z-20">
                   {(unlockedContact?.twitter_url || investor.twitter_url || investor.has_twitter) && (
                     <a 
-                      href={unlockedContact?.twitter_url || (investor.twitter_url ? (investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`) : `https://x.com/search?q=${encodeURIComponent(investor.name)}`)} 
+                      href={formatTwitterUrl(unlockedContact || investor)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
@@ -208,7 +209,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   )}
                   {(unlockedContact?.linkedin_url || investor.linkedin_url || investor.has_linkedin) && (
                     <a 
-                      href={unlockedContact?.linkedin_url || (investor.linkedin_url ? (investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`) : `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(investor.name)}`)} 
+                      href={formatLinkedinUrl(unlockedContact || investor)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
@@ -218,7 +219,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   )}
                   {(unlockedContact?.website || investor.website || investor.has_website) && (
                     <a 
-                      href={unlockedContact?.website || (investor.website ? (investor.website.startsWith('http') ? investor.website : `https://${investor.website}`) : `https://www.google.com/search?q=${encodeURIComponent(investor.name + ' investor')}`)} 
+                      href={formatWebsiteUrl(unlockedContact || investor)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
