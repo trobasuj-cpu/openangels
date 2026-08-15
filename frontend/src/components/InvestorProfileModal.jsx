@@ -168,14 +168,14 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           </button>
 
           {/* Dossier Header Banner */}
-          <div className="relative p-6 sm:p-8 bg-gradient-to-r from-red-950/40 via-zinc-900/60 to-zinc-950 border-b border-zinc-800/80 overflow-hidden">
+          <div className="relative p-6 sm:p-8 pb-8 sm:pb-9 bg-gradient-to-r from-red-950/40 via-zinc-900/60 to-zinc-950 border-b border-zinc-800/80">
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
             
             <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
               <InvestorAvatar 
                 name={investor.name} 
                 avatarUrl={investor.avatar_url || investor.avatar} 
-                className="w-20 h-20 sm:w-24 sm:h-24 ring-2 ring-red-500/20 shadow-xl" 
+                className="w-20 h-20 sm:w-22 sm:h-22 ring-2 ring-red-500/30 shadow-xl rounded-full overflow-hidden object-cover shrink-0" 
               />
 
               <div className="flex-1 min-w-0">
@@ -198,13 +198,13 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                 ) : null}
 
                 {/* Social Links Bar — Always Active & Clickable */}
-                <div className="flex items-center gap-2 pt-1 flex-wrap">
+                <div className="flex items-center gap-2 pt-2.5 flex-wrap relative z-20">
                   {(unlockedContact?.twitter_url || investor.twitter_url || investor.has_twitter) && (
                     <a 
                       href={unlockedContact?.twitter_url || (investor.twitter_url ? (investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`) : `https://x.com/search?q=${encodeURIComponent(investor.name)}`)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5 shadow-sm"
+                      className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
                     >
                       <span className="font-bold text-white">𝕏</span> Twitter/X
                     </a>
@@ -214,7 +214,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       href={unlockedContact?.linkedin_url || (investor.linkedin_url ? (investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`) : `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(investor.name)}`)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5 shadow-sm"
+                      className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
                     >
                       <span className="font-bold text-blue-400">in</span> LinkedIn
                     </a>
@@ -224,7 +224,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       href={unlockedContact?.website || (investor.website ? (investor.website.startsWith('http') ? investor.website : `https://${investor.website}`) : `https://www.google.com/search?q=${encodeURIComponent(investor.name + ' investor')}`)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5 shadow-sm"
+                      className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
                     >
                       <Globe className="w-3.5 h-3.5 text-zinc-400" /> Website
                     </a>

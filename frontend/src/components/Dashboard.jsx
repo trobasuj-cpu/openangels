@@ -359,14 +359,17 @@ export default function Dashboard() {
 
   async function fetchInvestors() {
     try {
-      // 1. Fetch first batch of 1,000 investors for instant initial page render (<0.3s)
-      const { data: firstBatch, error: firstErr } = await supabase
-        .from('investors_public')
-        .select('*')
-        .range(0, 999);
-        
-      if (firstErr) throw firstErr;
-      
+      // 1. Fetch first batch of 1,000 investors from server API route (/api/investors) with real social URLs (<0.3s)
+      const res = await fetch('/api/investors?from=0&limit=1000');
+      let firstBatch = [];
+      if (res.ok) {
+        const json = await res.json();
+        firstBatch = json.investors || [];
+      } else {
+        const { data } = await supabase.from('investors_public').select('*').range(0, 999);
+        firstBatch = data || [];
+      }
+
       if (firstBatch && firstBatch.length > 0) {
         const initialValid = firstBatch.filter(inv => inv && inv.name && inv.name.trim() !== '');
         const initialSorted = initialValid.sort((a, b) => {
@@ -383,25 +386,30 @@ export default function Dashboard() {
       let from = 1000;
       let limit = 1000;
       let fetchMore = (firstBatch || []).length === limit;
-      
+
       while (fetchMore) {
-        const { data, error } = await supabase
-          .from('investors_public')
-          .select('*')
-          .range(from, from + limit - 1);
-          
-        if (error || !data || data.length === 0) {
+        const bgRes = await fetch(`/api/investors?from=${from}&limit=${limit}`);
+        let batchData = [];
+        if (bgRes.ok) {
+          const bgJson = await bgRes.json();
+          batchData = bgJson.investors || [];
+        } else {
+          const { data } = await supabase.from('investors_public').select('*').range(from, from + limit - 1);
+          batchData = data || [];
+        }
+
+        if (!batchData || batchData.length === 0) {
           fetchMore = false;
         } else {
-          allData = [...allData, ...data];
-          if (data.length < limit) {
+          allData = [...allData, ...batchData];
+          if (batchData.length < limit) {
             fetchMore = false;
           } else {
             from += limit;
           }
         }
       }
-      
+
       const validData = (allData || []).filter(inv => inv && inv.name && inv.name.trim() !== '');
       const sortedData = validData.sort((a, b) => {
         if (a.has_email && !b.has_email) return -1;
