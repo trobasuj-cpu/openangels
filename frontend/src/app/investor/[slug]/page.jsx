@@ -1,13 +1,20 @@
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import { absoluteUrl } from '@/seo';
 import InvestorProfileModal from '@/components/InvestorProfileModal';
-import { sanitizePublicInvestor } from '@/lib/security';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const serviceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || anonKey;
+
+const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
+  auth: { persistSession: false },
+});
+
 export async function generateStaticParams() {
-  const { data } = await supabase
-    .from('investors_public')
+  const { data } = await supabaseAdmin
+    .from('investors')
     .select('slug')
     .not('slug', 'is', null)
     .limit(1000);
@@ -18,8 +25,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   
-  const { data: investors } = await supabase
-    .from('investors_public')
+  const { data: investors } = await supabaseAdmin
+    .from('investors')
     .select('*')
     .eq('slug', slug)
     .limit(1);
@@ -69,26 +76,36 @@ export async function generateMetadata({ params }) {
 export default async function StandaloneInvestorPage({ params }) {
   const { slug } = await params;
   
-  const { data: investorsData } = await supabase
-    .from('investors_public')
+  let { data: investorsData } = await supabaseAdmin
+    .from('investors')
     .select('*')
     .eq('slug', slug)
     .limit(1);
     
-  const investor = investorsData?.[0];
+  let rawInvestor = investorsData?.[0];
 
-  const { data: investorByIds } = !investor && slug.length > 20 
-    ? await supabase.from('investors_public').select('*').eq('id', slug).limit(1)
-    : { data: null };
-    
-  const rawInvestor = investor || investorByIds?.[0];
+  if (!rawInvestor && slug.length > 20) {
+    const { data: investorByIds } = await supabaseAdmin
+      .from('investors')
+      .select('*')
+      .eq('id', slug)
+      .limit(1);
+    rawInvestor = investorByIds?.[0];
+  }
 
   if (!rawInvestor) {
     notFound();
   }
 
-  // SECURITY: Sanitize investor data — strip email, socials, check sizes before SSR
-  const safeInvestor = sanitizePublicInvestor(rawInvestor);
+  // Strip email from raw public SSR render if non-premium, but KEEP full twitter_url, linkedin_url, website
+  const safeInvestor = {
+    ...rawInvestor,
+    email: null,
+    has_email: !!rawInvestor.email,
+    has_linkedin: !!rawInvestor.linkedin_url,
+    has_twitter: !!rawInvestor.twitter_url,
+    has_website: !!rawInvestor.website,
+  };
 
   let cleanBio = safeInvestor.bio || '';
   if (cleanBio.includes('Source: http')) {

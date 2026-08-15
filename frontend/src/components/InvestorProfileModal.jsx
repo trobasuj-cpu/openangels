@@ -195,39 +195,48 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   </div>
                 ) : null}
 
-                {/* Social Links Bar — Always Active & Clickable */}
-                <div className="flex items-center gap-2 pt-2.5 flex-wrap relative z-20">
-                  {(unlockedContact?.twitter_url || investor.twitter_url || investor.has_twitter) && (
-                    <a 
-                      href={formatTwitterUrl(unlockedContact || investor)} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
-                    >
-                      <span className="font-bold text-white">𝕏</span> Twitter/X
-                    </a>
-                  )}
-                  {(unlockedContact?.linkedin_url || investor.linkedin_url || investor.has_linkedin) && (
-                    <a 
-                      href={formatLinkedinUrl(unlockedContact || investor)} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
-                    >
-                      <span className="font-bold text-blue-400">in</span> LinkedIn
-                    </a>
-                  )}
-                  {(unlockedContact?.website || investor.website || investor.has_website) && (
-                    <a 
-                      href={formatWebsiteUrl(unlockedContact || investor)} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
-                    >
-                      <Globe className="w-3.5 h-3.5 text-zinc-400" /> Website
-                    </a>
-                  )}
-                </div>
+                {/* Social Links Bar — Direct Profiles Only */}
+                {(() => {
+                  const tw = formatTwitterUrl(unlockedContact || investor);
+                  const li = formatLinkedinUrl(unlockedContact || investor);
+                  const web = formatWebsiteUrl(unlockedContact || investor);
+                  if (!tw && !li && !web) return null;
+
+                  return (
+                    <div className="flex items-center gap-2 pt-2.5 flex-wrap relative z-20">
+                      {tw && (
+                        <a 
+                          href={tw} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
+                        >
+                          <span className="font-bold text-white">𝕏</span> Twitter/X
+                        </a>
+                      )}
+                      {li && (
+                        <a 
+                          href={li} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
+                        >
+                          <span className="font-bold text-blue-400">in</span> LinkedIn
+                        </a>
+                      )}
+                      {web && (
+                        <a 
+                          href={web} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
+                        >
+                          <Globe className="w-3.5 h-3.5 text-zinc-400" /> Website
+                        </a>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>
