@@ -359,10 +359,30 @@ export default function Dashboard() {
 
   async function fetchInvestors() {
     try {
-      let allData = [];
-      let fetchMore = true;
-      let from = 0;
+      // 1. Fetch first batch of 1,000 investors for instant initial page render (<0.3s)
+      const { data: firstBatch, error: firstErr } = await supabase
+        .from('investors_public')
+        .select('*')
+        .range(0, 999);
+        
+      if (firstErr) throw firstErr;
+      
+      if (firstBatch && firstBatch.length > 0) {
+        const initialValid = firstBatch.filter(inv => inv && inv.name && inv.name.trim() !== '');
+        const initialSorted = initialValid.sort((a, b) => {
+          if (a.has_email && !b.has_email) return -1;
+          if (!a.has_email && b.has_email) return 1;
+          return 0;
+        });
+        setInvestors(initialSorted);
+        setLoading(false);
+      }
+
+      // 2. Asynchronously fetch remaining batches in background
+      let allData = [...(firstBatch || [])];
+      let from = 1000;
       let limit = 1000;
+      let fetchMore = (firstBatch || []).length === limit;
       
       while (fetchMore) {
         const { data, error } = await supabase
@@ -370,30 +390,29 @@ export default function Dashboard() {
           .select('*')
           .range(from, from + limit - 1);
           
-        if (error) throw error;
-        
-        allData = [...allData, ...data];
-        
-        if (data.length < limit) {
+        if (error || !data || data.length === 0) {
           fetchMore = false;
         } else {
-          from += limit;
+          allData = [...allData, ...data];
+          if (data.length < limit) {
+            fetchMore = false;
+          } else {
+            from += limit;
+          }
         }
       }
       
       const validData = (allData || []).filter(inv => inv && inv.name && inv.name.trim() !== '');
-
       const sortedData = validData.sort((a, b) => {
         if (a.has_email && !b.has_email) return -1;
         if (!a.has_email && b.has_email) return 1;
         return 0;
       });
-      
+
       setInvestors(sortedData);
     } catch (err) {
       console.error('Error fetching investors:', err);
       setError(err.message);
-    } finally {
       setLoading(false);
     }
   }
@@ -1089,60 +1108,55 @@ export default function Dashboard() {
 
                             {/* Top Right Social Links */}
                             <div className="flex items-center gap-2 shrink-0">
-                              {isUnlocked ? (
-                                <>
-                                  {investor.website && (
-                                    <a href={investor.website.startsWith('http') ? investor.website : `https://${investor.website}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Website">
-                                      <Globe className="w-3.5 h-3.5" />
-                                    </a>
-                                  )}
-                                  {investor.twitter_url && (
-                                    <a href={investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors" title="X">
-                                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                                    </a>
-                                  )}
-                                  {investor.linkedin_url && (
-                                    <a href={investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-[#0A66C2] transition-colors" title="LinkedIn">
-                                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                                    </a>
-                                  )}
-                                </>
-                              ) : (
-                                <>
-                                  {(() => {
-                                    const hasLinkedin = investor.has_linkedin || !!investor.linkedin_url;
-                                    const hasTwitter = investor.has_twitter || !!investor.twitter_url;
-                                    const hasWebsite = investor.has_website || !!investor.website;
-                                    const hasEmail = investor.has_email || !!investor.email;
-                                    if (!hasLinkedin && !hasTwitter && !hasWebsite && !hasEmail) return null;
-                                    return (
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setCheckoutDiscount('');
-                                          setIsCheckoutOpen(true);
-                                        }}
-                                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white transition-all group/soc cursor-pointer"
-                                        title="Unlock Premium to access verified contact & social links"
-                                      >
-                                        <Lock className="w-3 h-3 text-amber-500/80 group-hover/soc:rotate-12 transition-transform" />
-                                        {hasEmail && (
-                                          <Mail className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity text-emerald-400" />
-                                        )}
-                                        {hasTwitter && (
-                                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                                        )}
-                                        {hasLinkedin && (
-                                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                                        )}
-                                        {hasWebsite && (
-                                          <Globe className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity" />
-                                        )}
-                                      </button>
-                                    );
-                                  })()}
-                                </>
-                              )}
+                              {(() => {
+                                const hasLinkedin = investor.has_linkedin || !!investor.linkedin_url;
+                                const hasTwitter = investor.has_twitter || !!investor.twitter_url;
+                                const hasWebsite = investor.has_website || !!investor.website;
+                                const hasEmail = investor.has_email || !!investor.email;
+                                if (!hasLinkedin && !hasTwitter && !hasWebsite && !hasEmail) return null;
+
+                                if (isUnlocked) {
+                                  return (
+                                    <div className="flex items-center gap-1.5 text-zinc-400">
+                                      {hasEmail && <Mail className="w-3.5 h-3.5 text-emerald-400" title="Verified Email" />}
+                                      {hasTwitter && (
+                                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 hover:text-white transition-colors" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                      )}
+                                      {hasLinkedin && (
+                                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 hover:text-[#0A66C2] transition-colors" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                      )}
+                                      {hasWebsite && <Globe className="w-3.5 h-3.5 hover:text-white transition-colors" title="Website" />}
+                                    </div>
+                                  );
+                                }
+
+                                return (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setCheckoutDiscount('');
+                                      setIsCheckoutOpen(true);
+                                    }}
+                                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white transition-all group/soc cursor-pointer"
+                                    title="Unlock Premium to access verified contact & social links"
+                                  >
+                                    <Lock className="w-3 h-3 text-amber-500/80 group-hover/soc:rotate-12 transition-transform" />
+                                    {hasEmail && (
+                                      <Mail className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity text-emerald-400" />
+                                    )}
+                                    {hasTwitter && (
+                                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                    )}
+                                    {hasLinkedin && (
+                                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    )}
+                                    {hasWebsite && (
+                                      <Globe className="w-3.5 h-3.5 opacity-60 group-hover/soc:opacity-100 transition-opacity" />
+                                    )}
+                                  </button>
+                                );
+                              })()}
+                            </div>
                             </div>
                           </div>
 
@@ -1188,19 +1202,25 @@ export default function Dashboard() {
                       <div className="p-3.5 bg-zinc-50 dark:bg-zinc-900/60 border-t border-zinc-200 dark:border-zinc-800 space-y-2.5 relative overflow-hidden">
                         {isUnlocked ? (
                           <>
-                            {investor.email && (
+                            {(investor.email || investor.has_email) && (
                               <div className="flex items-center justify-between gap-2 px-1 text-xs">
-                                <a href={`mailto:${investor.email}`} className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white flex items-center gap-1.5 truncate transition-colors">
-                                  <Mail className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
-                                  <span className="truncate underline underline-offset-2">{investor.email}</span>
-                                </a>
-                                <button 
-                                  onClick={() => navigator.clipboard.writeText(investor.email)}
-                                  className="text-[10px] text-zinc-500 hover:text-zinc-200 px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 shrink-0 transition-colors"
-                                  title="Copy Email"
-                                >
-                                  Copy
-                                </button>
+                                <span className="text-emerald-400 font-medium flex items-center gap-1.5 truncate">
+                                  <Mail className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                                  <span className="truncate">{investor.email || "Verified Direct Mailbox"}</span>
+                                </span>
+                                {investor.email ? (
+                                  <button 
+                                    onClick={() => navigator.clipboard.writeText(investor.email)}
+                                    className="text-[10px] text-zinc-400 hover:text-white px-1.5 py-0.5 rounded bg-zinc-800 shrink-0 transition-colors"
+                                    title="Copy Email"
+                                  >
+                                    Copy
+                                  </button>
+                                ) : (
+                                  <span className="text-[10px] text-emerald-400/90 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 shrink-0">
+                                    Verified
+                                  </span>
+                                )}
                               </div>
                             )}
 
