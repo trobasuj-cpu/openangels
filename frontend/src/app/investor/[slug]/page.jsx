@@ -137,7 +137,7 @@ export default async function StandaloneInvestorPage({ params }) {
         </nav>
       </article>
       <div className="w-full max-w-3xl bg-zinc-950 rounded-3xl shadow-2xl overflow-hidden relative min-h-[600px] border border-zinc-800">
-        <InvestorProfileModal investor={safeInvestor} isStandalone={true} />
+        <InvestorProfileModal investor={safeInvestor} isStandalone={true} isPremium={true} />
       </div>
     </div>
   );

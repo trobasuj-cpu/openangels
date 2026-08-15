@@ -17,18 +17,19 @@ const supabase = createClient(
 
 const GUMROAD_URL = 'https://beatsprom.gumroad.com/l/vgobnh';
 
-export default function InvestorProfileModal({ investor, isStandalone = false }) {
+export default function InvestorProfileModal({ investor, isStandalone = false, isPremium: isPremiumProp = true }) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [inCrm, setInCrm] = useState(false);
   const [isAiPitchOpen, setIsAiPitchOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [isPremium, setIsPremium] = useState(false);
-  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [isPremium, setIsPremium] = useState(isPremiumProp);
+  const [loadingProfile, setLoadingProfile] = useState(false);
   const [unlockedContact, setUnlockedContact] = useState(null);
 
   useEffect(() => {
+    setIsPremium(true);
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user);
@@ -39,7 +40,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
           .eq('id', session.user.id)
           .single()
           .then(async ({ data: profile }) => {
-            if (profile?.is_premium) {
+            if (profile?.is_premium || isPremiumProp) {
               setIsPremium(true);
               // Fetch contact data from secure API route (server-validated)
               try {
@@ -57,7 +58,6 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                 console.error('Failed to load contact info:', e);
               }
             }
-            setLoadingProfile(false);
           });
         // Check CRM status
         supabase
@@ -197,53 +197,39 @@ export default function InvestorProfileModal({ investor, isStandalone = false })
                   </div>
                 ) : null}
 
-                {/* Social Links Bar — Only for Premium */}
-                {isPremium ? (
-                  <div className="flex items-center gap-2 pt-1 flex-wrap">
-                    {(unlockedContact?.twitter_url || investor.twitter_url || investor.has_twitter) && (
-                      <a 
-                        href={unlockedContact?.twitter_url || (investor.twitter_url ? (investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`) : `https://x.com/search?q=${encodeURIComponent(investor.name)}`)} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5"
-                      >
-                        <span className="font-bold">𝕏</span> Twitter/X
-                      </a>
-                    )}
-                    {(unlockedContact?.linkedin_url || investor.linkedin_url || investor.has_linkedin) && (
-                      <a 
-                        href={unlockedContact?.linkedin_url || (investor.linkedin_url ? (investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`) : `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(investor.name)}`)} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5"
-                      >
-                        <span className="font-bold text-blue-400">in</span> LinkedIn
-                      </a>
-                    )}
-                    {(unlockedContact?.website || investor.website || investor.has_website) && (
-                      <a 
-                        href={unlockedContact?.website || (investor.website ? (investor.website.startsWith('http') ? investor.website : `https://${investor.website}`) : `https://www.google.com/search?q=${encodeURIComponent(investor.name + ' investor')}`)} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5"
-                      >
-                        <Globe className="w-3.5 h-3.5 text-zinc-400" /> Website
-                      </a>
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-3 pt-1">
-                    {(investor.has_twitter || investor.has_linkedin || investor.has_website || investor.twitter_url || investor.linkedin_url) && (
-                      <button 
-                        onClick={handleUnlockClick}
-                        className="p-2 rounded-lg bg-zinc-900/50 text-zinc-600 border border-zinc-800/50 text-xs flex items-center gap-1.5 hover:border-amber-500/30 hover:text-amber-500 transition-all cursor-pointer"
-                      >
-                        <Lock className="w-3 h-3 text-amber-500/60" />
-                        <span className="text-zinc-500">Social links locked</span>
-                      </button>
-                    )}
-                  </div>
-                )}
+                {/* Social Links Bar — Always Active & Clickable */}
+                <div className="flex items-center gap-2 pt-1 flex-wrap">
+                  {(unlockedContact?.twitter_url || investor.twitter_url || investor.has_twitter) && (
+                    <a 
+                      href={unlockedContact?.twitter_url || (investor.twitter_url ? (investor.twitter_url.startsWith('http') ? investor.twitter_url : `https://${investor.twitter_url}`) : `https://x.com/search?q=${encodeURIComponent(investor.name)}`)} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5 shadow-sm"
+                    >
+                      <span className="font-bold text-white">𝕏</span> Twitter/X
+                    </a>
+                  )}
+                  {(unlockedContact?.linkedin_url || investor.linkedin_url || investor.has_linkedin) && (
+                    <a 
+                      href={unlockedContact?.linkedin_url || (investor.linkedin_url ? (investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`) : `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(investor.name)}`)} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5 shadow-sm"
+                    >
+                      <span className="font-bold text-blue-400">in</span> LinkedIn
+                    </a>
+                  )}
+                  {(unlockedContact?.website || investor.website || investor.has_website) && (
+                    <a 
+                      href={unlockedContact?.website || (investor.website ? (investor.website.startsWith('http') ? investor.website : `https://${investor.website}`) : `https://www.google.com/search?q=${encodeURIComponent(investor.name + ' investor')}`)} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs flex items-center gap-1.5 shadow-sm"
+                    >
+                      <Globe className="w-3.5 h-3.5 text-zinc-400" /> Website
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>

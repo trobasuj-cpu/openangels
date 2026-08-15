@@ -1,6 +1,7 @@
 /**
  * Security helper to sanitize investor objects for public/non-premium consumption.
- * Ensures email, social media links, and exact check sizes are NEVER leaked to non-premium clients.
+ * Ensures email, social media links, and exact check sizes are NEVER leaked to non-premium clients,
+ * while preserving boolean indicator flags.
  */
 
 export function sanitizePublicInvestor(investor) {
@@ -18,10 +19,10 @@ export function sanitizePublicInvestor(investor) {
 
   return {
     ...publicData,
-    has_email: !!email,
-    has_linkedin: !!linkedin_url,
-    has_twitter: !!twitter_url,
-    has_website: !!website,
+    has_email: investor.has_email !== undefined ? investor.has_email : !!email,
+    has_linkedin: investor.has_linkedin !== undefined ? investor.has_linkedin : !!linkedin_url,
+    has_twitter: investor.has_twitter !== undefined ? investor.has_twitter : !!twitter_url,
+    has_website: investor.has_website !== undefined ? investor.has_website : !!website,
   };
 }
 
