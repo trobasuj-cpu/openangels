@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import { absoluteUrl } from '@/seo';
 import { createClient } from '@supabase/supabase-js';
 
@@ -43,7 +44,7 @@ ${urls}
     return new Response(xml, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     });
   } catch (e) {
