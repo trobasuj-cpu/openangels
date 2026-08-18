@@ -551,10 +551,16 @@ export default function Dashboard() {
       if ((max >= 500000 && min <= 1000000) || (!inv.check_max && min >= 500000 && min <= 1000000)) invCheckSizeBuckets.push("$500k - $1M");
       if (max >= 1000000 || min >= 1000000) invCheckSizeBuckets.push("$1M+");
 
+      const invPortfolio = (() => {
+        const raw = inv.portfolio || inv.past_investments;
+        return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
+      })();
+
       const matchesSearch = deferredSearch === '' || 
         inv.name?.toLowerCase().includes(deferredSearch.toLowerCase()) || 
         inv.bio?.toLowerCase().includes(deferredSearch.toLowerCase()) ||
-        invIndustries.some(i => i.toLowerCase().includes(deferredSearch.toLowerCase()));
+        invIndustries.some(i => i.toLowerCase().includes(deferredSearch.toLowerCase())) ||
+        invPortfolio.some(p => p.toLowerCase().includes(deferredSearch.toLowerCase()));
 
       const matchesIndustry = deferredIndustries.length === 0 || 
         deferredIndustries.some(ind => invIndustries.some(i => i.toLowerCase() === ind.toLowerCase()));
@@ -776,7 +782,7 @@ export default function Dashboard() {
                 type="text" 
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Search by name, industry, or keyword..." 
+                placeholder="Search by name, industry, or portfolio company..." 
                 className="w-full bg-black/50 border border-white/5 focus:bg-black focus:border-red-500/50 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder:text-zinc-500 transition-all outline-none"
               />
             </div>

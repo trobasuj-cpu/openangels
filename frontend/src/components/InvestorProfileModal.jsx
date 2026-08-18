@@ -302,6 +302,33 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   </div>
                 )}
 
+                {/* Notable Portfolio & Backed Startups */}
+                {(() => {
+                  const rawPort = unlockedContact?.portfolio || investor?.portfolio || investor?.past_investments;
+                  const portfolioList = Array.isArray(rawPort) 
+                    ? rawPort.filter(Boolean) 
+                    : (typeof rawPort === 'string' && rawPort.trim() ? rawPort.split(',').map(s => s.trim()).filter(Boolean) : []);
+                  if (!portfolioList || portfolioList.length === 0) return null;
+
+                  return (
+                    <div>
+                      <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Notable Portfolio & Backed Deals
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {portfolioList.map((item, idx) => (
+                          <span 
+                            key={idx} 
+                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-sm"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {/* AI Pitch Hook Recommendation */}
                 <div className="p-5 rounded-2xl bg-gradient-to-r from-red-950/30 to-zinc-900 border border-red-500/20 relative overflow-hidden">
                   <div className="flex items-center justify-between mb-2">

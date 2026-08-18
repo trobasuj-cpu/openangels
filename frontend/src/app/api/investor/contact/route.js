@@ -64,6 +64,7 @@ export async function GET(request) {
         linkedin_url: fullInvestor.linkedin_url || null,
         twitter_url: fullInvestor.twitter_url || null,
         website: fullInvestor.website || null,
+        portfolio: fullInvestor.portfolio || fullInvestor.past_investments || null,
         check_min: fullInvestor.check_min || null,
         check_max: fullInvestor.check_max || null,
       },
