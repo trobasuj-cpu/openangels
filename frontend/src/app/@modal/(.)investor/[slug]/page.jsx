@@ -14,7 +14,7 @@ export default async function InterceptedInvestorModal({ params }) {
   const { slug } = await params;
   
   const { data: investorsData } = await supabaseAdmin
-    .from('investors')
+    .from('investors_public')
     .select('*')
     .eq('slug', slug)
     .limit(1);
@@ -23,7 +23,7 @@ export default async function InterceptedInvestorModal({ params }) {
 
   if (!rawInvestor && slug.length > 20) {
     const { data: investorByIds } = await supabaseAdmin
-      .from('investors')
+      .from('investors_public')
       .select('*')
       .eq('id', slug)
       .limit(1);

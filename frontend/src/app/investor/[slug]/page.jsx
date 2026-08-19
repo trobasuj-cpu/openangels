@@ -14,7 +14,7 @@ const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
 
 export async function generateStaticParams() {
   const { data } = await supabaseAdmin
-    .from('investors')
+    .from('investors_public')
     .select('slug')
     .not('slug', 'is', null)
     .limit(1000);
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   
   const { data: investors } = await supabaseAdmin
-    .from('investors')
+    .from('investors_public')
     .select('*')
     .eq('slug', slug)
     .limit(1);
@@ -77,7 +77,7 @@ export default async function StandaloneInvestorPage({ params }) {
   const { slug } = await params;
   
   let { data: investorsData } = await supabaseAdmin
-    .from('investors')
+    .from('investors_public')
     .select('*')
     .eq('slug', slug)
     .limit(1);
@@ -86,7 +86,7 @@ export default async function StandaloneInvestorPage({ params }) {
 
   if (!rawInvestor && slug.length > 20) {
     const { data: investorByIds } = await supabaseAdmin
-      .from('investors')
+      .from('investors_public')
       .select('*')
       .eq('id', slug)
       .limit(1);

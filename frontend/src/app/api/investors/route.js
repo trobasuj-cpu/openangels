@@ -31,8 +31,8 @@ export async function GET(request) {
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
     const { data, error } = await supabaseAdmin
-      .from('investors')
-      .select('id, name, slug, bio, location, country, website, linkedin_url, twitter_url, avatar_url, type, check_min, check_max, stages, industries, portfolio, verified, active, created_at, email')
+      .from('investors_public')
+      .select('*')
       .range(from, from + limit - 1);
 
     if (error) throw error;
