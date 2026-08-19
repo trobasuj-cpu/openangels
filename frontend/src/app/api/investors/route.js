@@ -27,10 +27,24 @@ export async function GET(request) {
         const supabaseAuthClient = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } });
         const { data: { user } } = await supabaseAuthClient.auth.getUser(token);
         if (user) {
-          const { data: profile } = await supabaseAuthClient.from('profiles').select('is_premium').eq('id', user.id).single();
-          if (profile?.is_premium) isPremium = true;
+          // Check is_premium in profiles via service role key
+          const profRes = await fetch(`${supabaseUrl}/rest/v1/profiles?id=eq.${user.id}&select=is_premium`, {
+            headers: {
+              'apikey': envServiceKey,
+              'Authorization': `Bearer ${envServiceKey}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          if (profRes.ok) {
+            const profData = await profRes.json();
+            if (profData?.[0]?.is_premium) {
+              isPremium = true;
+            }
+          }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error('[API /api/investors] Auth error:', e);
+      }
     }
 
     // Direct REST query with service role key
@@ -91,7 +105,7 @@ export async function GET(request) {
       };
     });
 
-    return Response.json({ investors: sanitized, count: sanitized.length });
+    return Response.json({ investors: sanitized, count: sanitized.length, isPremium });
   } catch (err) {
     console.error('[API /api/investors] Error:', err);
     return Response.json({ error: err.message }, { status: 500 });

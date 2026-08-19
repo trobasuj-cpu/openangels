@@ -469,14 +469,13 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchInvestors();
-
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
         fetchCrmLeads(session.user.id);
       }
+      fetchInvestors();
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -488,6 +487,7 @@ export default function Dashboard() {
         setProfile(null);
         setCrmLeadIds(new Set());
       }
+      fetchInvestors();
     });
 
     return () => subscription.unsubscribe();
