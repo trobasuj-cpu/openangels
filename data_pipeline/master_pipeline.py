@@ -398,7 +398,7 @@ def parse_signal_profile(url):
     except Exception:
         return None
 
-def run_deterministic_registry_mode(batch_limit=30):
+def run_deterministic_registry_mode(batch_limit=100):
     print("\n=== MODE 2: High-Volume Verified Angel Registry Importer ===")
     print("Fetching verified sitemap URLs...")
     
@@ -851,11 +851,11 @@ def main():
     choice = input("Enter mode [1 or 2] (Default: 1): ").strip()
     
     if choice == '2':
-        batch_str = input("Enter batch size to import [Default: 30]: ").strip()
+        batch_str = input("Enter batch size to import [Default: 100]: ").strip()
         try:
-            batch_limit = int(batch_str) if batch_str else 30
+            batch_limit = int(batch_str) if batch_str else 100
         except ValueError:
-            batch_limit = 30
+            batch_limit = 100
         run_deterministic_registry_mode(batch_limit=batch_limit)
     else:
         run_daily_news_mode()
