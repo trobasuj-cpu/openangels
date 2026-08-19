@@ -37,10 +37,13 @@ export default async function InterceptedInvestorModal({ params }) {
   const safeInvestor = {
     ...rawInvestor,
     email: rawInvestor.email || null,
-    has_email: !!rawInvestor.email,
-    has_linkedin: !!rawInvestor.linkedin_url,
-    has_twitter: !!rawInvestor.twitter_url,
-    has_website: !!rawInvestor.website,
+    linkedin_url: rawInvestor.linkedin_url || null,
+    twitter_url: rawInvestor.twitter_url || null,
+    website: rawInvestor.website || null,
+    has_email: rawInvestor.has_email !== undefined ? rawInvestor.has_email : !!rawInvestor.email,
+    has_linkedin: rawInvestor.has_linkedin !== undefined ? rawInvestor.has_linkedin : !!rawInvestor.linkedin_url,
+    has_twitter: rawInvestor.has_twitter !== undefined ? rawInvestor.has_twitter : !!rawInvestor.twitter_url,
+    has_website: rawInvestor.has_website !== undefined ? rawInvestor.has_website : !!rawInvestor.website,
   };
 
   return <InvestorProfileModal investor={safeInvestor} isStandalone={false} />;
