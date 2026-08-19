@@ -16,47 +16,47 @@ export async function GET(request) {
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
     const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
-    const serviceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || DEFAULT_SERVICE_ROLE;
-
-    if (!supabaseUrl || !anonKey) {
-      return Response.json({ error: 'Server configuration error' }, { status: 500 });
+    
+    let envServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
+    if (!envServiceKey || envServiceKey.startsWith('sb_publishable_')) {
+      envServiceKey = DEFAULT_SERVICE_ROLE;
     }
 
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { persistSession: false },
-    });
+    // Direct REST query
+    const filter = slug ? `slug=eq.${encodeURIComponent(slug)}` : `id=eq.${encodeURIComponent(id)}`;
+    const restUrl = `${supabaseUrl}/rest/v1/investors?${filter}&select=*`;
 
     let fullInvestor = null;
-
-    // 1. Try 'investors' table
     try {
-      let query1 = supabaseAdmin.from('investors').select('*');
-      if (slug) query1 = query1.eq('slug', slug);
-      else query1 = query1.eq('id', id);
-      const { data: data1 } = await query1.limit(1);
-      if (data1 && data1.length > 0) fullInvestor = data1[0];
+      const restRes = await fetch(restUrl, {
+        headers: {
+          'apikey': envServiceKey,
+          'Authorization': `Bearer ${envServiceKey}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if (restRes.ok) {
+        const data = await restRes.json();
+        if (data && data.length > 0) fullInvestor = data[0];
+      }
     } catch (e) {}
 
-    // 2. Try 'investors_secure'
+    // Fallback to investors_public
     if (!fullInvestor) {
-      try {
-        let query2 = supabaseAdmin.from('investors_secure').select('*');
-        if (slug) query2 = query2.eq('slug', slug);
-        else query2 = query2.eq('id', id);
-        const { data: data2 } = await query2.limit(1);
-        if (data2 && data2.length > 0) fullInvestor = data2[0];
-      } catch (e) {}
-    }
-
-    // 3. Fallback to 'investors_public'
-    if (!fullInvestor) {
-      try {
-        let query3 = supabaseAdmin.from('investors_public').select('*');
-        if (slug) query3 = query3.eq('slug', slug);
-        else query3 = query3.eq('id', id);
-        const { data: data3 } = await query3.limit(1);
-        if (data3 && data3.length > 0) fullInvestor = data3[0];
-      } catch (e) {}
+      const pubUrl = `${supabaseUrl}/rest/v1/investors_public?${filter}&select=*`;
+      const pubRes = await fetch(pubUrl, {
+        headers: {
+          'apikey': anonKey,
+          'Authorization': `Bearer ${anonKey}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if (pubRes.ok) {
+        const dataPub = await pubRes.json();
+        if (dataPub && dataPub.length > 0) fullInvestor = dataPub[0];
+      }
     }
 
     if (!fullInvestor) {

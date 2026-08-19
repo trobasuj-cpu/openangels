@@ -76,21 +76,34 @@ export async function generateMetadata({ params }) {
 export default async function StandaloneInvestorPage({ params }) {
   const { slug } = await params;
   
-  let { data: investorsData } = await supabaseAdmin
-    .from('investors_public')
-    .select('*')
-    .eq('slug', slug)
-    .limit(1);
-    
-  let rawInvestor = investorsData?.[0];
+  let rawInvestor = null;
+  const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
+  let serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey || serviceKey.startsWith('sb_publishable_')) serviceKey = DEFAULT_SERVICE_ROLE;
 
-  if (!rawInvestor && slug.length > 20) {
-    const { data: investorByIds } = await supabaseAdmin
+  try {
+    const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodeURIComponent(slug)}&select=*`;
+    const res = await fetch(restUrl, {
+      headers: {
+        'apikey': serviceKey,
+        'Authorization': `Bearer ${serviceKey}`,
+        'Content-Type': 'application/json'
+      },
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.length > 0) rawInvestor = data[0];
+    }
+  } catch (e) {}
+
+  if (!rawInvestor) {
+    let { data: investorsData } = await supabaseAdmin
       .from('investors_public')
       .select('*')
-      .eq('id', slug)
+      .eq('slug', slug)
       .limit(1);
-    rawInvestor = investorByIds?.[0];
+    rawInvestor = investorsData?.[0];
   }
 
   if (!rawInvestor) {

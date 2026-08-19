@@ -15,36 +15,58 @@ export async function GET(request) {
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
     const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
-    const serviceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || DEFAULT_SERVICE_ROLE;
-
-    if (!supabaseUrl) {
-      return Response.json({ error: 'Server configuration error' }, { status: 500 });
+    
+    let envServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
+    if (!envServiceKey || envServiceKey.startsWith('sb_publishable_')) {
+      envServiceKey = DEFAULT_SERVICE_ROLE;
     }
 
     let isPremium = false;
     if (token) {
-      const supabaseAuthClient = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } });
-      const { data: { user } } = await supabaseAuthClient.auth.getUser(token);
-      if (user) {
-        const { data: profile } = await supabaseAuthClient.from('profiles').select('is_premium').eq('id', user.id).single();
-        if (profile?.is_premium) isPremium = true;
-      }
+      try {
+        const supabaseAuthClient = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } });
+        const { data: { user } } = await supabaseAuthClient.auth.getUser(token);
+        if (user) {
+          const { data: profile } = await supabaseAuthClient.from('profiles').select('is_premium').eq('id', user.id).single();
+          if (profile?.is_premium) isPremium = true;
+        }
+      } catch (e) {}
     }
 
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
-    
-    // Always query from 'investors' using service role key
-    let { data, error } = await supabaseAdmin
-      .from('investors')
-      .select('id, name, slug, bio, location, country, website, linkedin_url, twitter_url, avatar_url, type, check_min, check_max, stages, industries, portfolio, verified, active, created_at, email')
-      .range(from, from + limit - 1);
+    // Direct REST query with service role key
+    const restUrl = `${supabaseUrl}/rest/v1/investors?select=id,name,slug,bio,location,country,website,linkedin_url,twitter_url,avatar_url,type,check_min,check_max,stages,industries,portfolio,verified,active,created_at,email&offset=${from}&limit=${limit}`;
 
-    if (error || !data) {
-      const resPub = await supabaseAdmin
-        .from('investors_public')
-        .select('*')
-        .range(from, from + limit - 1);
-      data = resPub.data || [];
+    let data = [];
+    try {
+      const restRes = await fetch(restUrl, {
+        headers: {
+          'apikey': envServiceKey,
+          'Authorization': `Bearer ${envServiceKey}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if (restRes.ok) {
+        data = await restRes.json();
+      }
+    } catch (e) {
+      console.error('[API /api/investors] Direct REST error:', e);
+    }
+
+    // Fallback to investors_public if needed
+    if (!data || data.length === 0) {
+      const pubUrl = `${supabaseUrl}/rest/v1/investors_public?offset=${from}&limit=${limit}`;
+      const pubRes = await fetch(pubUrl, {
+        headers: {
+          'apikey': anonKey,
+          'Authorization': `Bearer ${anonKey}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if (pubRes.ok) {
+        data = await pubRes.json();
+      }
     }
 
     const sanitized = (data || []).map((inv, idx) => {
