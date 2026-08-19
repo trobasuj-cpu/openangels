@@ -361,8 +361,11 @@ export default function Dashboard() {
 
   async function fetchInvestors() {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
+
       // 1. Fetch first batch of 1,000 investors from server API route (/api/investors) with real social URLs (<0.3s)
-      const res = await fetch('/api/investors?from=0&limit=1000');
+      const res = await fetch('/api/investors?from=0&limit=1000', { headers });
       let firstBatch = [];
       if (res.ok) {
         const json = await res.json();
@@ -390,7 +393,7 @@ export default function Dashboard() {
       let fetchMore = (firstBatch || []).length === limit;
 
       while (fetchMore) {
-        const bgRes = await fetch(`/api/investors?from=${from}&limit=${limit}`);
+        const bgRes = await fetch(`/api/investors?from=${from}&limit=${limit}`, { headers });
         let batchData = [];
         if (bgRes.ok) {
           const bgJson = await bgRes.json();
