@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 import json
 import uuid
 import time
@@ -12,6 +13,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from urllib.parse import urlparse
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import find_emails as fe
 
 # Force stdout to utf-8
@@ -48,6 +50,117 @@ STANDARD_TAGS = [
     "crypto", "web3", "creator-economy", "marketplace", "developer-tools",
     "deeptech", "ecommerce", "edtech", "hardware", "gaming"
 ]
+
+# Corporate & non-human blacklist for strict Data Quality validation
+BANNED_NAME_KEYWORDS = {
+    'venture', 'ventures', 'capital', 'capitals', 'fund', 'funds', 'partner', 'partners',
+    'inc', 'inc.', 'llc', 'ltd', 'corp', 'corporation', 'group', 'seed round', 'series a',
+    'series b', 'series c', 'accelerator', 'syndicate', 'investing', 'holdings', 'labs',
+    'team', 'overview', 'opportunities', 'round', 'financial', 'management', 'news',
+    'techcrunch', 'founder', 'ceo', 'startup', 'company', 'lead investor', 'angel investor',
+    'investment', 'investments', 'technology', 'technologies', 'network', 'associates'
+}
+
+DUMMY_EMAIL_DOMAINS = {
+    'example.com', 'test.com', 'domain.com', 'email.com', 'placeholder.com',
+    'company.com', 'sample.com', 'user.com', 'tempmail.com', 'mailinator.com',
+    'gmail.con', 'yahoo.con', 'invalid.com'
+}
+
+def validate_investor_profile(inv):
+    """
+    Validation Layer (Stage 3/4 Data Quality Guard):
+    Performs deterministic validation on extracted investor profiles before DB entry.
+    Returns (is_valid: bool, reason: str, cleaned_inv: dict)
+    """
+    if not isinstance(inv, dict):
+        return False, "Invalid record format", inv
+
+    raw_name = (inv.get('name') or '').strip()
+    if not raw_name:
+        return False, "Empty name", inv
+
+    cleaned_name = ' '.join(raw_name.split())
+    
+    if len(cleaned_name) < 3 or len(cleaned_name) > 50:
+        return False, f"Name length ({len(cleaned_name)}) out of bounds", inv
+
+    words = cleaned_name.split()
+    if len(words) < 2 or len(words) > 4:
+        return False, f"Name word count ({len(words)}) invalid for human person", inv
+
+    name_lower = cleaned_name.lower()
+    for kw in BANNED_NAME_KEYWORDS:
+        if re.search(rf'\b{re.escape(kw)}\b', name_lower):
+            return False, f"Corporate keyword detected in name: '{kw}'", inv
+
+    if re.search(r'\d', cleaned_name):
+        return False, "Name contains digits", inv
+
+    sanitized = dict(inv)
+    sanitized['name'] = cleaned_name
+
+    # Validate & sanitize Email
+    email = (sanitized.get('email') or '').strip().lower()
+    if email:
+        email_match = re.match(r'^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$', email)
+        if email_match:
+            domain = email_match.group(1).lower()
+            if domain in DUMMY_EMAIL_DOMAINS or domain.endswith('.invalid'):
+                sanitized['email'] = None
+            else:
+                sanitized['email'] = email
+        else:
+            sanitized['email'] = None
+    else:
+        sanitized['email'] = None
+
+    # Validate & sanitize Twitter/X
+    tw = (sanitized.get('twitter_url') or '').strip()
+    if tw:
+        tw = tw.split('?')[0].rstrip('/')
+        parts = [p for p in tw.split('/') if p]
+        if parts:
+            handle = parts[-1].lower()
+            banned_handles = {'home', 'explore', 'notifications', 'messages', 'i', 'search', 'terms', 'privacy', 'intent', 'login', 'signup', 'share', 'status'}
+            if handle not in banned_handles and re.match(r'^[a-zA-Z0-9_]{1,20}$', handle):
+                sanitized['twitter_url'] = f"https://x.com/{parts[-1]}"
+            else:
+                sanitized['twitter_url'] = None
+        else:
+            sanitized['twitter_url'] = None
+
+    # Validate & sanitize LinkedIn
+    li = (sanitized.get('linkedin_url') or '').strip()
+    if li:
+        if 'linkedin.com/in/' in li and not any(x in li for x in ['/search', '/company', '/feed', '/groups', '/pulse']):
+            sanitized['linkedin_url'] = li
+        else:
+            sanitized['linkedin_url'] = None
+
+    # Clean Bio
+    bio = (sanitized.get('bio') or '').strip()
+    bio = re.sub(r'```json|```|Here is the JSON.*?:\s*', '', bio, flags=re.IGNORECASE).strip()
+    sanitized['bio'] = bio
+
+    # Normalize portfolio
+    raw_port = sanitized.get('portfolio') or []
+    if isinstance(raw_port, list):
+        sanitized['portfolio'] = [p.strip() for p in raw_port if isinstance(p, str) and p.strip()][:10]
+    elif isinstance(raw_port, str):
+        sanitized['portfolio'] = [p.strip() for p in raw_port.split(',') if p.strip()][:10]
+    else:
+        sanitized['portfolio'] = []
+
+    # Normalize industries
+    raw_ind = sanitized.get('industries') or ['saas']
+    if isinstance(raw_ind, list):
+        clean_ind = [i.strip().lower() for i in raw_ind if isinstance(i, str) and i.strip()]
+        sanitized['industries'] = clean_ind if clean_ind else ['saas']
+    else:
+        sanitized['industries'] = ['saas']
+
+    return True, "Valid", sanitized
 
 def ddg_search(query, max_results=3, timeout=8):
     worker_script = os.path.join(os.path.dirname(__file__), 'ddg_worker.py')
@@ -91,7 +204,7 @@ def find_twitter(name):
             if '/status/' not in href and '/search' not in href:
                 parsed = urlparse(href)
                 handle = parsed.path.strip('/').split('/')[0]
-                if handle not in ['home', 'explore', 'notifications', 'messages', 'i']:
+                if handle not in ['home', 'explore', 'notifications', 'messages', 'i', 'search', 'terms', 'privacy', 'intent']:
                     return f"https://x.com/{handle}"
     return None
 
@@ -186,7 +299,6 @@ def check_duplicate_in_db(name):
             data = json.loads(res.read().decode('utf-8'))
             return len(data) > 0
     except Exception:
-        # Fallback check on investors_secure
         try:
             query_url2 = f"{SUPABASE_URL}/rest/v1/investors_secure?name=eq.{urllib.parse.quote(name)}&select=id"
             req2 = urllib.request.Request(query_url2, headers=HEADERS)
@@ -223,7 +335,7 @@ def main():
     print("=========================================================")
     print("       OPENANGELS UNIFIED MASTER DATA PIPELINE           ")
     print("=========================================================")
-    print("Step 1: Fetching Venture News & Deal Feeds...")
+    print("Step 1: Fetching Venture News & Deal Feeds (Deterministic Scraping)...")
     
     processed_file = os.path.join(os.path.dirname(__file__), 'processed_news.txt')
     seen_links = set()
@@ -278,30 +390,34 @@ def main():
         print("\nNo new articles to process today. Database is completely up to date!")
         return
 
-    print("\nStep 2: AI Parsing (Extracting Individual Human Investors & Deals)...")
-    all_found_investors = []
-    
+    print("\nStep 2: Entity Extraction & Enrichment...")
     combined_text = ""
     for idx, (title, link, desc) in enumerate(articles):
         combined_text += f"\n--- ARTICLE {idx+1} ---\nTitle: {title}\nLink: {link}\nContent:\n{desc}\n"
         
-    investors = enrich_with_gemini(combined_text)
+    raw_investors = enrich_with_gemini(combined_text)
     
-    if not investors:
+    if not raw_investors:
         print("  -> No human investors identified in today's news articles.")
         return
 
-    print(f"  -> Identified {len(investors)} potential investors. Starting OSINT enrichment...")
+    print(f"  -> Extracted {len(raw_investors)} candidates. Passing through Strict Validation Layer...")
     
-    for inv in investors:
-        name = inv.get('name', '')
-        if not name: continue
+    all_found_investors = []
+    
+    for raw_inv in raw_investors:
+        is_valid, reason, inv = validate_investor_profile(raw_inv)
+        if not is_valid:
+            print(f"  [Filtered out: {reason}] -> {raw_inv.get('name')}")
+            continue
+
+        name = inv['name']
         
         if check_duplicate_in_db(name):
             print(f"  -> [Skip duplicate] {name} is already in database.")
             continue
 
-        print(f"\n  [+] Enriching: {name}")
+        print(f"\n  [+] [Passed Validation] Enriching: {name}")
         
         time.sleep(1.5)
         twitter_url = find_twitter(name)
@@ -332,11 +448,11 @@ def main():
         time.sleep(1.5)
 
     if not all_found_investors:
-        print("\nNo new unique investors to add. Exiting.")
+        print("\nNo new unique valid investors to add today. Exiting.")
         return
 
     print("\n=========================================================")
-    print("Step 3: Review Discovered Investors")
+    print("Step 3: Review Verified Investors (Ready for Database)")
     print("=========================================================")
     for i, inv in enumerate(all_found_investors):
         print(f"\n[{i+1}] {inv['name']}")
@@ -402,7 +518,6 @@ def main():
                     print(f"  [OK] Saved to 'investors': {inv['name']}")
                     saved_count += 1
         except Exception as e:
-            # Fallback to investors_secure if needed
             try:
                 insert_url2 = f"{SUPABASE_URL}/rest/v1/investors_secure"
                 req2 = urllib.request.Request(insert_url2, data=json.dumps(payload).encode('utf-8'), headers=HEADERS, method='POST')
@@ -416,9 +531,8 @@ def main():
             except Exception as e2:
                 print(f"  [Error] Failed to save {inv['name']}: {e2}")
 
-        # 2. Automatically log Data Lineage & Proof records for this investor
+        # 2. Automatically log Data Lineage & Proof records
         if created_id:
-            # Evidence 1: Source News Article
             source_url = inv.get('source_url') or 'https://techcrunch.com'
             source_domain = urlparse(source_url).netloc.replace('www.', '')
             add_evidence_record(
@@ -430,7 +544,6 @@ def main():
                 confidence_score=95
             )
             
-            # Evidence 2: Twitter / X
             if inv.get('twitter_url'):
                 add_evidence_record(
                     investor_id=created_id,
@@ -441,7 +554,6 @@ def main():
                     confidence_score=95
                 )
                 
-            # Evidence 3: LinkedIn
             if inv.get('linkedin_url'):
                 add_evidence_record(
                     investor_id=created_id,
@@ -452,7 +564,6 @@ def main():
                     confidence_score=95
                 )
                 
-            # Evidence 4: Direct Verified Mailbox
             if inv.get('email'):
                 add_evidence_record(
                     investor_id=created_id,
