@@ -37,11 +37,12 @@ export async function GET(request) {
 
     if (error) throw error;
 
-    const sanitized = (data || []).map(inv => {
+    const sanitized = (data || []).map((inv, idx) => {
       const { email, ...rest } = inv;
+      const isTeaserUnlocked = from === 0 && idx < 6;
       return {
         ...rest,
-        email: isPremium ? (email || null) : null,
+        email: (isPremium || isTeaserUnlocked) ? (email || null) : null,
         has_email: !!email,
         has_linkedin: !!inv.linkedin_url,
         has_twitter: !!inv.twitter_url,

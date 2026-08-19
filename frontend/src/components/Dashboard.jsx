@@ -313,6 +313,7 @@ export default function Dashboard() {
   const [selectedStages, setSelectedStages] = useState([]);
   const [industrySearch, setIndustrySearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(24);
+  const [copiedEmailId, setCopiedEmailId] = useState(null);
   const mainScrollRef = useRef(null);
 
   // Industry counts map for badges
@@ -1266,11 +1267,20 @@ export default function Dashboard() {
                                 </span>
                                 {investor.email ? (
                                   <button 
-                                    onClick={() => navigator.clipboard.writeText(investor.email)}
-                                    className="text-[10px] text-zinc-400 hover:text-white px-1.5 py-0.5 rounded bg-zinc-800 shrink-0 transition-colors"
-                                    title="Copy Email"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigator.clipboard.writeText(investor.email);
+                                      setCopiedEmailId(investor.id);
+                                      setTimeout(() => setCopiedEmailId(null), 2000);
+                                    }}
+                                    className={`text-[10px] px-1.5 py-0.5 rounded shrink-0 transition-colors font-medium ${
+                                      copiedEmailId === investor.id 
+                                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" 
+                                        : "bg-zinc-800 text-zinc-400 hover:text-white"
+                                    }`}
+                                    title="Copy Email Address"
                                   >
-                                    Copy
+                                    {copiedEmailId === investor.id ? "Copied!" : "Copy"}
                                   </button>
                                 ) : (
                                   <span className="text-[10px] text-emerald-400/90 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 shrink-0">
