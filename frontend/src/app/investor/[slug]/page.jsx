@@ -100,7 +100,7 @@ export default async function StandaloneInvestorPage({ params }) {
   // Strip email from raw public SSR render if non-premium, but KEEP full twitter_url, linkedin_url, website
   const safeInvestor = {
     ...rawInvestor,
-    email: null,
+    email: rawInvestor.email || null,
     has_email: !!rawInvestor.email,
     has_linkedin: !!rawInvestor.linkedin_url,
     has_twitter: !!rawInvestor.twitter_url,

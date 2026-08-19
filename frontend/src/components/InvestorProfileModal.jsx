@@ -354,28 +354,41 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
               {/* Action Footer — Full Access */}
               <div className="p-4 bg-zinc-950 border-t border-zinc-800 flex flex-col gap-2 shrink-0">
                 {/* Copy Email Button for Premium Users */}
-                {(unlockedContact?.email || investor.email || investor.has_email) && (
-                  <button
-                    onClick={() => {
-                      const emailToCopy = unlockedContact?.email || investor.email;
-                      if (emailToCopy) {
-                        navigator.clipboard.writeText(emailToCopy);
-                        setCopied(true);
-                        setTimeout(() => setCopied(false), 2000);
-                      } else {
-                        setIsAiPitchOpen(true);
-                      }
-                    }}
-                    className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
-                  >
-                    {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Mail className="w-4 h-4 text-emerald-400" />}
-                    <span>
-                      {copied 
-                        ? "Email Copied!" 
-                        : (unlockedContact?.email || investor.email || `✉️ Verified Direct Mailbox (${investor.name})`)}
-                    </span>
-                  </button>
-                )}
+                {(() => {
+                  const emailToCopy = unlockedContact?.email || investor.email;
+                  const hasAnyEmail = emailToCopy || investor.has_email;
+                  if (!hasAnyEmail) return null;
+
+                  return (
+                    <button
+                      onClick={() => {
+                        if (emailToCopy) {
+                          navigator.clipboard.writeText(emailToCopy);
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2500);
+                        } else {
+                          setIsAiPitchOpen(true);
+                        }
+                      }}
+                      className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:border-emerald-500/40"
+                      title={emailToCopy ? "Click to copy email address" : "Open AI Pitch Drafter"}
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="w-4 h-4 text-emerald-400" />
+                          <span className="text-emerald-400 font-bold">Email Copied to Clipboard!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Mail className="w-4 h-4 text-emerald-400" />
+                          <span className="font-mono text-zinc-200">
+                            {emailToCopy ? `${emailToCopy} (Click to copy)` : `✉️ Verified Direct Mailbox (${investor.name})`}
+                          </span>
+                        </>
+                      )}
+                    </button>
+                  );
+                })()}
 
                 {/* Stacked Elongated Action Buttons */}
                 <div className="grid grid-cols-2 gap-2 w-full">
