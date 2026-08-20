@@ -4,6 +4,19 @@ export const dynamic = 'force-dynamic';
 
 const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
 
+function calculateQualityScore(inv) {
+  let score = 0;
+  if (inv.email || inv.has_email) score += 30;
+  if (inv.linkedin_url || inv.has_linkedin) score += 15;
+  if (inv.twitter_url || inv.has_twitter) score += 10;
+  if (inv.website || inv.has_website) score += 5;
+  if (inv.check_min || inv.check_max) score += 15;
+  if (Array.isArray(inv.portfolio) && inv.portfolio.length > 0) score += 15;
+  if (inv.location) score += 5;
+  if (inv.avatar_url) score += 5;
+  return Math.min(100, Math.max(0, score));
+}
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -91,9 +104,11 @@ export async function GET(request) {
       const has_linkedin = inv.has_linkedin !== undefined ? inv.has_linkedin : !!inv.linkedin_url;
       const has_twitter = inv.has_twitter !== undefined ? inv.has_twitter : !!inv.twitter_url;
       const has_website = inv.has_website !== undefined ? inv.has_website : !!inv.website;
+      const quality_score = calculateQualityScore({ ...inv, has_email, has_linkedin, has_twitter, has_website });
 
       return {
         ...inv,
+        quality_score,
         email: canAccessFullData ? (inv.email || null) : null,
         linkedin_url: canAccessFullData ? (inv.linkedin_url || null) : null,
         twitter_url: canAccessFullData ? (inv.twitter_url || null) : null,

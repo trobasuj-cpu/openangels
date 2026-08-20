@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import find_emails as fe
+import data_quality_engine as dqe
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')
@@ -102,16 +103,17 @@ def validate_investor_profile(inv):
     sanitized = dict(inv)
     sanitized['name'] = cleaned_name
 
-    # Validate & sanitize Email
-    email = (sanitized.get('email') or '').strip().lower()
-    if email:
-        email_match = re.match(r'^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$', email)
+    # Validate, sanitize & fix Email domain typos
+    raw_email = sanitized.get('email')
+    cleaned_email = dqe.sanitize_email_domain(raw_email)
+    if cleaned_email:
+        email_match = re.match(r'^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$', cleaned_email)
         if email_match:
             domain = email_match.group(1).lower()
             if domain in DUMMY_EMAIL_DOMAINS or domain.endswith('.invalid'):
                 sanitized['email'] = None
             else:
-                sanitized['email'] = email
+                sanitized['email'] = cleaned_email
         else:
             sanitized['email'] = None
     else:
@@ -131,6 +133,8 @@ def validate_investor_profile(inv):
                 sanitized['twitter_url'] = None
         else:
             sanitized['twitter_url'] = None
+    else:
+        sanitized['twitter_url'] = None
 
     # Validate & sanitize LinkedIn
     li = (sanitized.get('linkedin_url') or '').strip()
@@ -145,14 +149,16 @@ def validate_investor_profile(inv):
     bio = re.sub(r'```json|```|Here is the JSON.*?:\s*', '', bio, flags=re.IGNORECASE).strip()
     sanitized['bio'] = bio or "Active early-stage technology angel investor and VC."
 
-    # Normalize portfolio
-    raw_port = sanitized.get('portfolio') or []
-    if isinstance(raw_port, list):
-        sanitized['portfolio'] = [p.strip() for p in raw_port if isinstance(p, str) and p.strip()][:10]
-    elif isinstance(raw_port, str):
-        sanitized['portfolio'] = [p.strip() for p in raw_port.split(',') if p.strip()][:10]
-    else:
-        sanitized['portfolio'] = []
+    # Normalize Location
+    sanitized['location'] = dqe.normalize_location(sanitized.get('location'))
+
+    # Sanitize & Clamp Check Sizes
+    c_min, c_max = dqe.sanitize_check_sizes(sanitized.get('check_min'), sanitized.get('check_max'))
+    sanitized['check_min'] = c_min
+    sanitized['check_max'] = c_max
+
+    # Entity Resolution for Portfolio Companies
+    sanitized['portfolio'] = dqe.canonicalize_portfolio_list(sanitized.get('portfolio'))
 
     # Normalize industries
     raw_ind = sanitized.get('industries') or ['saas']

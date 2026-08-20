@@ -378,9 +378,9 @@ export default function Dashboard() {
       if (firstBatch && firstBatch.length > 0) {
         const initialValid = firstBatch.filter(inv => inv && inv.name && inv.name.trim() !== '');
         const initialSorted = initialValid.sort((a, b) => {
-          if (a.has_email && !b.has_email) return -1;
-          if (!a.has_email && b.has_email) return 1;
-          return 0;
+          const scoreA = a.quality_score !== undefined ? a.quality_score : (a.has_email ? 70 : 40);
+          const scoreB = b.quality_score !== undefined ? b.quality_score : (b.has_email ? 70 : 40);
+          return scoreB - scoreA;
         });
         setInvestors(initialSorted);
         setLoading(false);
@@ -417,9 +417,9 @@ export default function Dashboard() {
 
       const validData = (allData || []).filter(inv => inv && inv.name && inv.name.trim() !== '');
       const sortedData = validData.sort((a, b) => {
-        if (a.has_email && !b.has_email) return -1;
-        if (!a.has_email && b.has_email) return 1;
-        return 0;
+        const scoreA = a.quality_score !== undefined ? a.quality_score : (a.has_email ? 70 : 40);
+        const scoreB = b.quality_score !== undefined ? b.quality_score : (b.has_email ? 70 : 40);
+        return scoreB - scoreA;
       });
 
       setInvestors(sortedData);
