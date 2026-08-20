@@ -330,7 +330,7 @@ def add_evidence_record(investor_id, field_name, evidence_text, source_name, sou
         }
         data_json = json.dumps(payload).encode('utf-8')
         req = urllib.request.Request(url, data=data_json, headers=HEADERS, method='POST')
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, timeout=5) as resp:
             return resp.status in (200, 201)
     except Exception:
         return False
@@ -462,10 +462,23 @@ def run_deterministic_registry_mode(batch_limit=100):
         # Enrich Email via OSINT cascade
         email = fe.find_email_for_investor(inv['name'], inv.get('bio', ''))
         
-        inv['avatar_url'] = avatar_url
+        # Enrich Twitter / LinkedIn via search if not found
+        if not inv.get('twitter_url'):
+            inv['twitter_url'] = find_twitter(inv['name'])
+        if not inv.get('linkedin_url'):
+            inv['linkedin_url'] = find_linkedin(inv['name'], inv.get('twitter_url', ''))
+
+        inv['avatar_url'] = avatar_url or fetch_direct_avatar(inv.get('twitter_url'), inv['name'])
         inv['email'] = email
+
+        # STRICT QUALITY GATE: MUST have at least ONE contact method (Email, LinkedIn, or Twitter)
+        has_any_contact = bool(inv.get('email') or inv.get('linkedin_url') or inv.get('twitter_url'))
+        if not has_any_contact:
+            print(f"  [Auto-filtered: Zero contacts found (No Email/LinkedIn/Twitter)] {inv['name']}")
+            continue
+
         candidates.append(inv)
-        time.sleep(1.5)
+        time.sleep(1)
 
     if new_seen:
         with open(processed_file, 'a', encoding='utf-8') as f:
@@ -473,11 +486,11 @@ def run_deterministic_registry_mode(batch_limit=100):
                 f.write(u + '\n')
 
     if not candidates:
-        print("\nNo new unique candidates found in this batch. Exiting.")
+        print("\nNo new unique candidates with verified contacts found in this batch. Exiting.")
         return
 
     print("\n=========================================================")
-    print(f"Review Discovered Investors ({len(candidates)} Verified Profiles)")
+    print(f"Review Discovered Investors ({len(candidates)} Verified Profiles with Contacts)")
     print("=========================================================")
     for i, inv in enumerate(candidates):
         print(f"\n[{i+1}] {inv['name']}")
@@ -502,6 +515,7 @@ def run_deterministic_registry_mode(batch_limit=100):
             
     print("\nStep: Saving to Supabase & Writing Data Lineage Proofs...")
     saved_count = 0
+    total_to_save = len(candidates) - len(rejected_indices)
     
     for i, inv in enumerate(candidates):
         if i in rejected_indices:
@@ -533,26 +547,26 @@ def run_deterministic_registry_mode(batch_limit=100):
         
         created_id = None
         try:
-            with urllib.request.urlopen(req) as res:
+            with urllib.request.urlopen(req, timeout=6) as res:
                 if res.status in [200, 201]:
                     res_body = json.loads(res.read().decode('utf-8'))
                     if isinstance(res_body, list) and len(res_body) > 0:
                         created_id = res_body[0].get('id')
-                    print(f"  [OK] Saved to 'investors': {inv['name']}")
+                    print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors': {inv['name']}", flush=True)
                     saved_count += 1
         except Exception:
             try:
                 insert_url2 = f"{SUPABASE_URL}/rest/v1/investors_secure"
                 req2 = urllib.request.Request(insert_url2, data=json.dumps(payload).encode('utf-8'), headers=HEADERS, method='POST')
-                with urllib.request.urlopen(req2) as res2:
+                with urllib.request.urlopen(req2, timeout=6) as res2:
                     if res2.status in [200, 201]:
                         res_body2 = json.loads(res2.read().decode('utf-8'))
                         if isinstance(res_body2, list) and len(res_body2) > 0:
                             created_id = res_body2[0].get('id')
-                        print(f"  [OK] Saved to 'investors_secure': {inv['name']}")
+                        print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors_secure': {inv['name']}", flush=True)
                         saved_count += 1
             except Exception as e2:
-                print(f"  [Error] Failed to save {inv['name']}: {e2}")
+                print(f"  [Error] Failed to save {inv['name']}: {e2}", flush=True)
 
         # Data Lineage records
         if created_id:
@@ -714,16 +728,22 @@ def run_daily_news_mode():
         inv['email'] = email
         if not inv.get('source_url'):
             inv['source_url'] = articles[0][1] if articles else ""
+
+        # STRICT QUALITY GATE: MUST have at least ONE contact method (Email, LinkedIn, or Twitter)
+        has_any_contact = bool(inv.get('email') or inv.get('linkedin_url') or inv.get('twitter_url'))
+        if not has_any_contact:
+            print(f"  [Auto-filtered: Zero contacts found (No Email/LinkedIn/Twitter)] {name}")
+            continue
+
         all_found_investors.append(inv)
-        
-        time.sleep(1.5)
+        time.sleep(1)
 
     if not all_found_investors:
-        print("\nNo new unique valid investors to add today. Exiting.")
+        print("\nNo new unique valid investors with verified contacts to add today. Exiting.")
         return
 
     print("\n=========================================================")
-    print("Step 3: Review Verified Investors (Ready for Database)")
+    print(f"Step 3: Review Verified Investors ({len(all_found_investors)} with Contacts)")
     print("=========================================================")
     for i, inv in enumerate(all_found_investors):
         print(f"\n[{i+1}] {inv['name']}")
@@ -749,6 +769,7 @@ def run_daily_news_mode():
             
     print("\nStep 4: Saving to Supabase & Writing Data Lineage Proofs...")
     saved_count = 0
+    total_to_save = len(all_found_investors) - len(rejected_indices)
     
     for i, inv in enumerate(all_found_investors):
         if i in rejected_indices:
@@ -780,26 +801,26 @@ def run_daily_news_mode():
         
         created_id = None
         try:
-            with urllib.request.urlopen(req) as res:
+            with urllib.request.urlopen(req, timeout=6) as res:
                 if res.status in [200, 201]:
                     res_body = json.loads(res.read().decode('utf-8'))
                     if isinstance(res_body, list) and len(res_body) > 0:
                         created_id = res_body[0].get('id')
-                    print(f"  [OK] Saved to 'investors': {inv['name']}")
+                    print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors': {inv['name']}", flush=True)
                     saved_count += 1
         except Exception:
             try:
                 insert_url2 = f"{SUPABASE_URL}/rest/v1/investors_secure"
                 req2 = urllib.request.Request(insert_url2, data=json.dumps(payload).encode('utf-8'), headers=HEADERS, method='POST')
-                with urllib.request.urlopen(req2) as res2:
+                with urllib.request.urlopen(req2, timeout=6) as res2:
                     if res2.status in [200, 201]:
                         res_body2 = json.loads(res2.read().decode('utf-8'))
                         if isinstance(res_body2, list) and len(res_body2) > 0:
                             created_id = res_body2[0].get('id')
-                        print(f"  [OK] Saved to 'investors_secure': {inv['name']}")
+                        print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors_secure': {inv['name']}", flush=True)
                         saved_count += 1
             except Exception as e2:
-                print(f"  [Error] Failed to save {inv['name']}: {e2}")
+                print(f"  [Error] Failed to save {inv['name']}: {e2}", flush=True)
 
         if created_id:
             source_url = inv.get('source_url') or 'https://techcrunch.com'
