@@ -64,16 +64,26 @@ export async function GET(request) {
     const restUrl = `${supabaseUrl}/rest/v1/investors?select=id,name,slug,bio,location,country,website,linkedin_url,twitter_url,avatar_url,type,check_min,check_max,stages,industries,portfolio,verified,active,created_at,email&offset=${from}&limit=${limit}`;
 
     let data = [];
+    let totalCount = 4231;
+
     try {
       const restRes = await fetch(restUrl, {
         headers: {
           'apikey': envServiceKey,
           'Authorization': `Bearer ${envServiceKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Prefer': 'count=exact'
         },
         cache: 'no-store'
       });
       if (restRes.ok) {
+        const range = restRes.headers.get('content-range') || '';
+        if (range.includes('/')) {
+          const parsed = parseInt(range.split('/')[1], 10);
+          if (!isNaN(parsed) && parsed > 0) {
+            totalCount = parsed;
+          }
+        }
         data = await restRes.json();
       }
     } catch (e) {
@@ -87,11 +97,19 @@ export async function GET(request) {
         headers: {
           'apikey': anonKey,
           'Authorization': `Bearer ${anonKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Prefer': 'count=exact'
         },
         cache: 'no-store'
       });
       if (pubRes.ok) {
+        const range = pubRes.headers.get('content-range') || '';
+        if (range.includes('/')) {
+          const parsed = parseInt(range.split('/')[1], 10);
+          if (!isNaN(parsed) && parsed > 0) {
+            totalCount = parsed;
+          }
+        }
         data = await pubRes.json();
       }
     }
@@ -120,7 +138,7 @@ export async function GET(request) {
       };
     });
 
-    return Response.json({ investors: sanitized, count: sanitized.length, isPremium });
+    return Response.json({ investors: sanitized, count: sanitized.length, totalCount, isPremium });
   } catch (err) {
     console.error('[API /api/investors] Error:', err);
     return Response.json({ error: err.message }, { status: 500 });

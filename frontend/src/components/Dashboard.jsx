@@ -247,6 +247,7 @@ const MarketingShowcase = ({ isPremium }) => {
 
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
+  const [totalDatabaseCount, setTotalDatabaseCount] = useState(4231);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
@@ -370,6 +371,9 @@ export default function Dashboard() {
       if (res.ok) {
         const json = await res.json();
         firstBatch = json.investors || [];
+        if (json.totalCount) {
+          setTotalDatabaseCount(json.totalCount);
+        }
       } else {
         const { data } = await supabase.from('investors_public').select('*').range(0, 999);
         firstBatch = data || [];
@@ -439,6 +443,9 @@ export default function Dashboard() {
     if (!error && data) {
       setProfile(data);
       if (data.crm_bcc_email) setBccEmail(data.crm_bcc_email);
+      if (data.is_premium) {
+        fetchInvestors();
+      }
     }
   };
 
@@ -469,6 +476,14 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    // Instant live count fetch (<30ms)
+    fetch('/api/investors/count')
+      .then(r => r.json())
+      .then(d => {
+        if (d?.total) setTotalDatabaseCount(d.total);
+      })
+      .catch(() => {});
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -996,9 +1011,9 @@ export default function Dashboard() {
                       </div>
                       <div className="flex flex-col text-left sm:text-right">
                         <div className="text-sm font-medium text-zinc-300">
-                          <span className="text-white font-bold text-xl">{loading ? INVESTOR_COUNT : investors.length.toLocaleString()}</span> active
+                          <span className="text-white font-bold text-xl">{totalDatabaseCount.toLocaleString()}</span> active
                         </div>
-                        {investors.length !== filteredInvestors.length && (
+                        {(totalActiveFilters > 0 || (search && search.trim() !== '')) && (
                           <div className="text-xs font-medium text-blue-400">
                             {filteredInvestors.length.toLocaleString()} matching
                           </div>
