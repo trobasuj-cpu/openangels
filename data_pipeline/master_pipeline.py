@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import find_emails as fe
 import data_quality_engine as dqe
+import record_linkage_engine as rle
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')
@@ -299,22 +300,46 @@ Raw Text (Contains News Articles):
                 print(f"  OpenRouter Error: {e}")
     return []
 
-def check_duplicate_in_db(name):
-    query_url = f"{SUPABASE_URL}/rest/v1/investors?name=eq.{urllib.parse.quote(name)}&select=id"
-    req = urllib.request.Request(query_url, headers=HEADERS)
+def check_duplicate_in_db(name, candidate_dict=None):
+    """
+    Record Linkage duplicate check:
+    1. Checks exact name match in DB.
+    2. Checks social handles (Twitter/LinkedIn) or email collision.
+    """
     try:
-        with urllib.request.urlopen(req) as res:
+        # 1. Exact name check
+        query_url = f"{SUPABASE_URL}/rest/v1/investors?name=eq.{urllib.parse.quote(name)}&select=id,name,twitter_url,linkedin_url,email"
+        req = urllib.request.Request(query_url, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=5) as res:
             data = json.loads(res.read().decode('utf-8'))
-            return len(data) > 0
+            if len(data) > 0:
+                return True
+
+        # 2. Check by Twitter handle if available
+        if candidate_dict and candidate_dict.get('twitter_url'):
+            handle = rle.extract_social_handle(candidate_dict['twitter_url'])
+            if handle:
+                tw_url = f"{SUPABASE_URL}/rest/v1/investors?twitter_url=ilike.*{urllib.parse.quote(handle)}*&select=id,name"
+                treq = urllib.request.Request(tw_url, headers=HEADERS)
+                with urllib.request.urlopen(treq, timeout=5) as tres:
+                    tdata = json.loads(tres.read().decode('utf-8'))
+                    if len(tdata) > 0:
+                        return True
+
+        # 3. Check by Email if available
+        if candidate_dict and candidate_dict.get('email'):
+            em = candidate_dict['email'].strip().lower()
+            if '@' in em and not em.startswith('info@'):
+                em_url = f"{SUPABASE_URL}/rest/v1/investors?email=eq.{urllib.parse.quote(em)}&select=id,name"
+                ereq = urllib.request.Request(em_url, headers=HEADERS)
+                with urllib.request.urlopen(ereq, timeout=5) as eres:
+                    edata = json.loads(eres.read().decode('utf-8'))
+                    if len(edata) > 0:
+                        return True
+
+        return False
     except Exception:
-        try:
-            query_url2 = f"{SUPABASE_URL}/rest/v1/investors_secure?name=eq.{urllib.parse.quote(name)}&select=id"
-            req2 = urllib.request.Request(query_url2, headers=HEADERS)
-            with urllib.request.urlopen(req2) as res2:
-                data2 = json.loads(res2.read().decode('utf-8'))
-                return len(data2) > 0
-        except Exception:
-            return False
+        return False
 
 def add_evidence_record(investor_id, field_name, evidence_text, source_name, source_url=None, confidence_score=95):
     """Logs verified data lineage records to investor_evidence table."""
