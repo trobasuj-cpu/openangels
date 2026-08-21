@@ -104,46 +104,14 @@ def validate_investor_profile(inv):
     sanitized = dict(inv)
     sanitized['name'] = cleaned_name
 
-    # Validate, sanitize & fix Email domain typos
-    raw_email = sanitized.get('email')
-    cleaned_email = dqe.sanitize_email_domain(raw_email)
-    if cleaned_email:
-        email_match = re.match(r'^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$', cleaned_email)
-        if email_match:
-            domain = email_match.group(1).lower()
-            if domain in DUMMY_EMAIL_DOMAINS or domain.endswith('.invalid'):
-                sanitized['email'] = None
-            else:
-                sanitized['email'] = cleaned_email
-        else:
-            sanitized['email'] = None
-    else:
-        sanitized['email'] = None
+    # Strict Sanitize & Validate Email
+    sanitized['email'] = dqe.sanitize_email_address(sanitized.get('email'))
 
-    # Validate & sanitize Twitter/X
-    tw = (sanitized.get('twitter_url') or '').strip()
-    if tw:
-        tw = tw.split('?')[0].rstrip('/')
-        parts = [p for p in tw.split('/') if p]
-        if parts:
-            handle = parts[-1].lower()
-            banned_handles = {'home', 'explore', 'notifications', 'messages', 'i', 'search', 'terms', 'privacy', 'intent', 'login', 'signup', 'share', 'status', 'nfx'}
-            if handle not in banned_handles and re.match(r'^[a-zA-Z0-9_]{1,25}$', handle):
-                sanitized['twitter_url'] = f"https://x.com/{parts[-1]}"
-            else:
-                sanitized['twitter_url'] = None
-        else:
-            sanitized['twitter_url'] = None
-    else:
-        sanitized['twitter_url'] = None
+    # Strict Sanitize & Validate Twitter/X
+    sanitized['twitter_url'] = dqe.sanitize_twitter_url(sanitized.get('twitter_url'))
 
-    # Validate & sanitize LinkedIn
-    li = (sanitized.get('linkedin_url') or '').strip()
-    if li:
-        if 'linkedin.com/in/' in li and not any(x in li for x in ['/search', '/company', '/feed', '/groups', '/pulse']):
-            sanitized['linkedin_url'] = li
-        else:
-            sanitized['linkedin_url'] = None
+    # Strict Sanitize & Validate LinkedIn
+    sanitized['linkedin_url'] = dqe.sanitize_linkedin_url(sanitized.get('linkedin_url'))
 
     # Clean Bio
     bio = (sanitized.get('bio') or '').strip()
@@ -191,17 +159,17 @@ def find_linkedin(name, twitter_handle=''):
     res1 = ddg_search(query1, max_results=3)
     for r in res1:
         href = r.get('href', '')
-        if 'linkedin.com/in/' in href:
-            parsed = urlparse(href)
-            return f"https://www.linkedin.com{parsed.path}"
+        clean = dqe.sanitize_linkedin_url(href)
+        if clean:
+            return clean
             
     if query2:
         res2 = ddg_search(query2, max_results=3)
         for r in res2:
             href = r.get('href', '')
-            if 'linkedin.com/in/' in href:
-                parsed = urlparse(href)
-                return f"https://www.linkedin.com{parsed.path}"
+            clean = dqe.sanitize_linkedin_url(href)
+            if clean:
+                return clean
     return None
 
 def find_twitter(name):
@@ -209,12 +177,9 @@ def find_twitter(name):
     results = ddg_search(query, max_results=3)
     for r in results:
         href = r.get('href', '')
-        if 'twitter.com/' in href or 'x.com/' in href:
-            if '/status/' not in href and '/search' not in href:
-                parsed = urlparse(href)
-                handle = parsed.path.strip('/').split('/')[0]
-                if handle not in ['home', 'explore', 'notifications', 'messages', 'i', 'search', 'terms', 'privacy', 'intent', 'nfx']:
-                    return f"https://x.com/{handle}"
+        clean = dqe.sanitize_twitter_url(href)
+        if clean:
+            return clean
     return None
 
 def fetch_direct_avatar(twitter_url, name):
@@ -383,10 +348,10 @@ def parse_signal_profile(url):
             for a in soup.find_all('a', href=True):
                 href = a['href']
                 if 'linkedin.com/in/' in href and not linkedin_url:
-                    linkedin_url = href.split('?')[0]
+                    linkedin_url = dqe.sanitize_linkedin_url(href)
                 elif ('twitter.com/' in href or 'x.com/' in href) and not twitter_url:
                     if 'nfx.com' not in href and 'nfx' not in href.split('/')[-1] and '/status/' not in href:
-                        twitter_url = href.split('?')[0]
+                        twitter_url = dqe.sanitize_twitter_url(href)
                 elif href.startswith('http') and not any(x in href for x in ['signal.nfx.com', 'nfx.com', 'linkedin.com', 'twitter.com', 'x.com', 'google.com']):
                     if not website:
                         website = href
@@ -475,7 +440,7 @@ def run_deterministic_registry_mode(batch_limit=100):
             print(f"  [Filtered: {reason}] {raw_inv.get('name')}")
             continue
             
-        if check_duplicate_in_db(inv['name']):
+        if check_duplicate_in_db(inv['name'], inv):
             print(f"  [Skip duplicate] {inv['name']}")
             continue
             
@@ -496,10 +461,9 @@ def run_deterministic_registry_mode(batch_limit=100):
         inv['avatar_url'] = avatar_url or fetch_direct_avatar(inv.get('twitter_url'), inv['name'])
         inv['email'] = email
 
-        # STRICT QUALITY GATE: MUST have at least ONE contact method (Email, LinkedIn, or Twitter)
-        has_any_contact = bool(inv.get('email') or inv.get('linkedin_url') or inv.get('twitter_url'))
-        if not has_any_contact:
-            print(f"  [Auto-filtered: Zero contacts found (No Email/LinkedIn/Twitter)] {inv['name']}")
+        # STRICT QUALITY GATE: MUST have at least ONE valid, non-empty contact method
+        if not dqe.has_verified_contact(inv):
+            print(f"  [Auto-filtered: Zero contacts found (No verified Email/LinkedIn/Twitter)] {inv['name']}")
             continue
 
         candidates.append(inv)
@@ -754,10 +718,9 @@ def run_daily_news_mode():
         if not inv.get('source_url'):
             inv['source_url'] = articles[0][1] if articles else ""
 
-        # STRICT QUALITY GATE: MUST have at least ONE contact method (Email, LinkedIn, or Twitter)
-        has_any_contact = bool(inv.get('email') or inv.get('linkedin_url') or inv.get('twitter_url'))
-        if not has_any_contact:
-            print(f"  [Auto-filtered: Zero contacts found (No Email/LinkedIn/Twitter)] {name}")
+        # STRICT QUALITY GATE: MUST have at least ONE valid, non-empty contact method
+        if not dqe.has_verified_contact(inv):
+            print(f"  [Auto-filtered: Zero contacts found (No verified Email/LinkedIn/Twitter)] {name}")
             continue
 
         all_found_investors.append(inv)

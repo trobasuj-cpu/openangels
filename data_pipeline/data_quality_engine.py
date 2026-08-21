@@ -374,8 +374,63 @@ def sanitize_check_sizes(check_min: Any, check_max: Any) -> Tuple[Optional[int],
     return c_min, c_max
 
 
+RESERVED_TWITTER_HANDLES = {
+    '', 'x.com', 'twitter.com', 'www.twitter.com', 'www.x.com', 'home', 'explore',
+    'notifications', 'messages', 'i', 'search', 'terms', 'privacy', 'intent',
+    'login', 'signup', 'share', 'status', 'nfx', 'settings', 'hashtag', 'about',
+    'help', 'tos', 'jobs', 'download', 'compose', 'who_to_follow', 'account',
+    'search-advanced', 'login-to', 'null', 'undefined'
+}
+
+def sanitize_twitter_url(url: Optional[str]) -> Optional[str]:
+    """Strictly validates and canonicalizes Twitter/X profile URLs."""
+    if not url or not isinstance(url, str): return None
+    url = url.strip().split('?')[0].rstrip('/')
+    parts = [p for p in url.split('/') if p]
+    if not parts: return None
+    handle = parts[-1].lower()
+    if handle.startswith('@'): handle = handle[1:]
+    if handle in RESERVED_TWITTER_HANDLES: return None
+    if not re.match(r'^[a-zA-Z0-9_]{1,30}$', handle): return None
+    return f"https://x.com/{parts[-1]}"
+
+def sanitize_linkedin_url(url: Optional[str]) -> Optional[str]:
+    """Strictly validates and canonicalizes LinkedIn personal profile URLs."""
+    if not url or not isinstance(url, str): return None
+    url = url.strip().split('?')[0].rstrip('/')
+    if 'linkedin.com/in/' not in url.lower(): return None
+    slug = url.lower().split('linkedin.com/in/')[-1].strip('/')
+    if not slug or any(x in slug for x in ['search', 'company', 'feed', 'groups', 'pulse', 'school', 'jobs']):
+        return None
+    # Strip language subpaths like /de, /en
+    slug = slug.split('/')[0]
+    if not re.match(r'^[a-zA-Z0-9\-_%]{2,100}$', slug): return None
+    return f"https://www.linkedin.com/in/{slug}"
+
+def sanitize_email_address(email: Optional[str]) -> Optional[str]:
+    """Strictly validates and fixes email addresses."""
+    if not email or not isinstance(email, str) or '@' not in email: return None
+    email = sanitize_email_domain(email.strip().lower())
+    if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email): return None
+    mailbox = email.split('@')[0]
+    if mailbox in {'info', 'contact', 'support', 'hello', 'admin', 'help', 'sales', 'team', 'jobs', 'service', 'press', 'media', 'hi'}:
+        return None
+    return email
+
+def has_verified_contact(inv: Dict[str, Any]) -> bool:
+    """Verifies that the investor profile has at least ONE valid, non-empty contact method."""
+    tw = sanitize_twitter_url(inv.get('twitter_url'))
+    li = sanitize_linkedin_url(inv.get('linkedin_url'))
+    em = sanitize_email_address(inv.get('email'))
+    # Mutate in-place to sanitized versions
+    inv['twitter_url'] = tw
+    inv['linkedin_url'] = li
+    inv['email'] = em
+    return bool(tw or li or em)
+
+
 # ============================================================================
-# 4. DATA COMPLETENESS & QUALITY SCORING (0-100%)
+# 4. PROFILE QUALITY SCORER (0 - 100%)
 # ============================================================================
 
 def calculate_quality_score(inv: Dict[str, Any]) -> int:
