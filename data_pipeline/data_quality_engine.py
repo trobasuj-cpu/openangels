@@ -3,6 +3,11 @@ import os
 import re
 from typing import Dict, List, Tuple, Any, Optional
 
+try:
+    import entity_resolution_engine as ere
+except ImportError:
+    from . import entity_resolution_engine as ere
+
 # Force stdout to utf-8 on Windows
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
@@ -137,13 +142,8 @@ STAGE_BRACKET_PATTERN = re.compile(
 
 def canonicalize_portfolio_company(raw_name: str) -> Optional[str]:
     """
-    Entity Resolution: Normalizes company name into a clean, canonical brand representation.
-    Examples:
-      'Open AI' -> 'OpenAI'
-      'OpenAI, Inc.' -> 'OpenAI'
-      'Figma (early)' -> 'Figma'
-      'DoorDash LLC' -> 'DoorDash'
-      'TransferWise' -> 'Wise'
+    Resolves any raw company name, legal variation, or domain into its canonical entity name
+    using Entity Resolution Engine v0.1.
     """
     if not raw_name or not isinstance(raw_name, str):
         return None
@@ -152,25 +152,34 @@ def canonicalize_portfolio_company(raw_name: str) -> Optional[str]:
     if not cleaned:
         return None
 
-    # 1. Strip bracketed stage/deal markers (e.g. '(early)', '[Acquired]')
+    # 1. First pass through Entity Resolution Engine v0.1
+    try:
+        engine = ere.get_engine()
+        resolved = engine.resolve_single_name_or_domain(cleaned)
+        if resolved and len(resolved) >= 2:
+            return resolved
+    except Exception:
+        pass
+
+    # 2. Fallback cleaning: Strip bracketed stage markers
     cleaned = STAGE_BRACKET_PATTERN.sub('', cleaned).strip()
 
-    # 2. Strip standard trailing legal/corporate suffixes
+    # 3. Strip standard trailing legal/corporate suffixes
     cleaned = LEGAL_SUFFIX_PATTERN.sub('', cleaned).strip()
 
-    # 3. Clean remaining punctuation and whitespace
+    # 4. Clean remaining punctuation and whitespace
     cleaned = re.sub(r'^[,\-–—\.\s]+|[,\-–—\.\s]+$', '', cleaned)
     cleaned = ' '.join(cleaned.split())
 
     if len(cleaned) < 2 or len(cleaned) > 40:
         return None
 
-    # 4. Check canonical dictionary match
+    # 5. Check canonical dictionary match
     key = cleaned.lower()
     if key in CANONICAL_COMPANIES:
         return CANONICAL_COMPANIES[key]
 
-    # 5. Smart Title Casing for unmapped entities (preserve camelCase if present like 'GitLab')
+    # 6. Smart Title Casing for unmapped entities
     if any(c.isupper() for c in cleaned[1:]):
         return cleaned
     
@@ -494,10 +503,9 @@ if __name__ == '__main__':
         "Open AI", "OpenAI, Inc.", "Figma (early)", "Doordash LLC", 
         "TransferWise", "FitBit", "MindBody", "SUGAR Cosmetics", "Stripe Tech"
     ]
-    canon_ports = canonicalize_portfolio_list(test_ports)
     print("\n1. Portfolio Entity Resolution:")
-    for raw, canon in zip(test_ports, canon_ports):
-        print(f"  '{raw}' ──► '{canon}'")
+    for raw in test_ports:
+        print(f"  '{raw}' ──► '{canonicalize_portfolio_company(raw)}'")
 
     # Test 2: Location Normalization
     test_locs = ["SF", "NYC", "San Francisco, California", "Austin, Texas", "London, UK", "Berlin", "Remote"]

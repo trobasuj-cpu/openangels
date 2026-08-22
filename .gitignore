@@ -11,3 +11,4 @@ scraper/.env
 node_modules/
 api 10.txt
 frontend_old/audit.js
+data_pipeline/knowledge_graph.json
