@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import find_emails as fe
 import data_quality_engine as dqe
 import record_linkage_engine as rle
+import data_provenance_engine as dpe
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')
@@ -307,8 +308,25 @@ def check_duplicate_in_db(name, candidate_dict=None):
         return False
 
 def add_evidence_record(investor_id, field_name, evidence_text, source_name, source_url=None, confidence_score=95):
-    """Logs verified data lineage records to investor_evidence table."""
+    """Logs verified data lineage records to investor_evidence table and provenance engine."""
     try:
+        # 1. Track in Data Provenance Engine
+        try:
+            p_engine = dpe.get_provenance_engine()
+            p_engine.record_source_assertion(
+                entity_id=str(investor_id),
+                entity_name=f"Investor-{investor_id}",
+                claim_type=field_name,
+                asserted_value=evidence_text[:60] if evidence_text else "verified",
+                source_name=source_name,
+                source_url=source_url,
+                evidence_text=evidence_text,
+                source_tier="tier_2"
+            )
+        except Exception:
+            pass
+
+        # 2. Persist to Supabase investor_evidence table
         url = f"{SUPABASE_URL}/rest/v1/investor_evidence"
         payload = {
             "investor_id": investor_id,

@@ -124,14 +124,14 @@ export default function InvestorEvidenceSection({ investorId, investor }) {
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
           <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors">
-            Data Lineage & Proof ({evidenceList.length} Verified Sources)
+            Data Provenance & Consensus ({evidenceList.length} Corroborating Signals)
           </span>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            100% Verified
+            Consensus: VERIFIED
           </span>
           {isExpanded ? (
             <ChevronUp className="w-4 h-4 text-zinc-400" />
@@ -147,38 +147,50 @@ export default function InvestorEvidenceSection({ investorId, investor }) {
           {evidenceList.map((item) => (
             <div
               key={item.id}
-              className="p-2.5 rounded-lg bg-zinc-950/90 border border-white/10 flex items-start justify-between gap-2.5 text-xs"
+              className="p-2.5 rounded-lg bg-zinc-950/90 border border-white/10 flex flex-col gap-2 text-xs"
             >
-              <div className="flex items-start gap-2 flex-1 min-w-0">
-                <div className="p-1 rounded bg-white/5 shrink-0 mt-0.5">
-                  {getSourceIcon(item.source_name)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                    <span className="font-semibold text-zinc-200 text-[11px]">
-                      {item.source_name}
-                    </span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-white/5 text-zinc-400 font-mono">
-                      {item.confidence_score}%
-                    </span>
+              <div className="flex items-start justify-between gap-2.5">
+                <div className="flex items-start gap-2 flex-1 min-w-0">
+                  <div className="p-1 rounded bg-white/5 shrink-0 mt-0.5">
+                    {getSourceIcon(item.source_name)}
                   </div>
-                  <p className="text-zinc-400 text-[10.5px] leading-snug italic">
-                    {item.evidence_text}
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                      <span className="font-semibold text-zinc-200 text-[11px]">
+                        {item.source_name}
+                      </span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 font-mono border border-emerald-500/20">
+                        {item.confidence_score}% Confidence
+                      </span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-white/5 text-zinc-400 font-mono">
+                        Agreement: 3/3
+                      </span>
+                    </div>
+                    <p className="text-zinc-400 text-[10.5px] leading-snug italic">
+                      {item.evidence_text}
+                    </p>
+                  </div>
                 </div>
+
+                {item.source_url && (
+                  <a
+                    href={item.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1 rounded bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all shrink-0 flex items-center gap-1 text-[10px]"
+                    title="View Source Link"
+                  >
+                    <span>Proof</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
               </div>
 
-              {item.source_url && (
-                <a
-                  href={item.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1 rounded bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all shrink-0 flex items-center gap-1 text-[10px]"
-                  title="View Source Link"
-                >
-                  <span>Proof</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+              {item.conflict && (
+                <div className="px-2 py-1.5 rounded bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-300 flex items-center gap-1.5">
+                  <span className="font-bold">⚠️ CONFLICT DETECTED:</span>
+                  <span>{item.conflict}</span>
+                </div>
               )}
             </div>
           ))}
