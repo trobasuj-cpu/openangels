@@ -391,7 +391,9 @@ RESERVED_TWITTER_HANDLES = {
     'search-advanced', 'login-to', 'null', 'undefined', 'en', 'es', 'fr', 'de',
     'ja', 'pt', 'ru', 'it', 'zh', 'ar', 'ko', 'hi', 'tr', 'nl', 'pl', 'sv',
     'id', 'vi', 'uk', 'th', 'cs', 'el', 'ro', 'hu', 'da', 'fi', 'no', 'he', 'fa',
-    'share_url', 'direct_messages', 'lists', 'bookmarks', 'communities', 'premium'
+    'share_url', 'direct_messages', 'lists', 'bookmarks', 'communities', 'premium',
+    'access', 'session', 'oauth', 'authorize', 'verify', 'support', 'developer', 'dev',
+    'blog', 'legal'
 }
 
 def sanitize_twitter_url(url: Optional[str]) -> Optional[str]:
