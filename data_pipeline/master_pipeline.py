@@ -413,23 +413,54 @@ def parse_signal_profile(url):
     except Exception:
         return None
 
-def run_deterministic_registry_mode(batch_limit=100):
-    print("\n=== MODE 2: High-Volume Verified Angel Registry Importer ===")
-    print("Fetching verified sitemap URLs...")
-    
+def fetch_all_registry_urls():
+    """Fetches all verified investor URLs from root sitemap or sub-sitemap indices."""
     url = "https://signal.nfx.com/sitemap.xml.gz"
-    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'})
     
     investor_urls = []
     try:
-        with urllib.request.urlopen(req, timeout=10) as res:
+        with urllib.request.urlopen(req, timeout=15) as res:
             compressed = res.read()
-            xml_text = gzip.GzipFile(fileobj=io.BytesIO(compressed)).read().decode('utf-8')
-            all_urls = re.findall(r'https://signal\.nfx\.com/investors/[a-zA-Z0-9_-]+', xml_text)
-            investor_urls = list(dict.fromkeys(all_urls))
-            print(f"Loaded {len(investor_urls)} total verified profiles in registry index.")
+            try:
+                xml_text = gzip.GzipFile(fileobj=io.BytesIO(compressed)).read().decode('utf-8')
+            except Exception:
+                xml_text = compressed.decode('utf-8', errors='ignore')
+            
+            # Direct investor URLs
+            direct_urls = re.findall(r'https://signal\.nfx\.com/investors/[a-zA-Z0-9_-]+', xml_text)
+            investor_urls.extend(direct_urls)
+            
+            # Sub-sitemaps in index (e.g. sitemap1.xml.gz, sitemap2.xml.gz)
+            sub_sitemaps = re.findall(r'https://[^\s<>"\']+\.xml(?:\.gz)?', xml_text)
+            for s_url in sub_sitemaps:
+                if s_url == url: continue
+                try:
+                    s_req = urllib.request.Request(s_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+                    with urllib.request.urlopen(s_req, timeout=15) as s_res:
+                        s_comp = s_res.read()
+                        try:
+                            s_xml = gzip.GzipFile(fileobj=io.BytesIO(s_comp)).read().decode('utf-8')
+                        except Exception:
+                            s_xml = s_comp.decode('utf-8', errors='ignore')
+                        s_urls = re.findall(r'https://signal\.nfx\.com/investors/[a-zA-Z0-9_-]+', s_xml)
+                        investor_urls.extend(s_urls)
+                except Exception:
+                    pass
+
+        return list(dict.fromkeys(investor_urls))
     except Exception as e:
         print(f"Error fetching registry sitemap: {e}")
+        return []
+
+def run_deterministic_registry_mode(batch_limit=100):
+    print("\n=== MODE 2: High-Volume Verified Angel Registry Importer ===")
+    print("Fetching verified sitemap URLs (including sitemap sub-indices)...")
+    
+    investor_urls = fetch_all_registry_urls()
+    print(f"Loaded {len(investor_urls)} total verified profiles in registry index.")
+    if not investor_urls:
+        print("No investor URLs found. Exiting.")
         return
 
     processed_file = os.path.join(os.path.dirname(__file__), 'checked_registry_urls.txt')
