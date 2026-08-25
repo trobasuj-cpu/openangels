@@ -346,6 +346,10 @@ def sanitize_email_domain(email: Optional[str]) -> Optional[str]:
         return None
     
     clean_email = email.strip().lower()
+    # Strip URL prefixes and mailto prefixes
+    clean_email = re.sub(r'^(?:https?:\/\/|mailto:)+', '', clean_email)
+    clean_email = clean_email.strip('/:,; \t\n\r')
+    
     match = re.match(r'^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$', clean_email)
     if not match:
         return None
@@ -424,12 +428,13 @@ def sanitize_linkedin_url(url: Optional[str]) -> Optional[str]:
 def sanitize_email_address(email: Optional[str]) -> Optional[str]:
     """Strictly validates and fixes email addresses."""
     if not email or not isinstance(email, str) or '@' not in email: return None
-    email = sanitize_email_domain(email.strip().lower())
-    if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email): return None
-    mailbox = email.split('@')[0]
+    clean = sanitize_email_domain(email)
+    if not clean: return None
+    if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', clean): return None
+    mailbox = clean.split('@')[0]
     if mailbox in {'info', 'contact', 'support', 'hello', 'admin', 'help', 'sales', 'team', 'jobs', 'service', 'press', 'media', 'hi'}:
         return None
-    return email
+    return clean
 
 def has_verified_contact(inv: Dict[str, Any]) -> bool:
     """Verifies that the investor profile has at least ONE valid, non-empty contact method."""

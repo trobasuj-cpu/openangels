@@ -359,8 +359,9 @@ def method_ddg_scrape_contact(name):
                 soup = BeautifulSoup(res.text, 'html.parser')
                 # Check mailto links
                 for a in soup.find_all('a', href=True):
-                    if a['href'].startswith('mailto:'):
-                        email = a['href'].replace('mailto:', '').split('?')[0].strip()
+                    href_clean = a['href'].strip()
+                    if href_clean.startswith('mailto:') or '@' in href_clean:
+                        email = re.sub(r'^(?:https?:\/\/|mailto:)+', '', href_clean).split('?')[0].strip()
                         if not is_junk_email(email, name):
                             return email
                 # Check text
