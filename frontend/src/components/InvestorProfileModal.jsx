@@ -28,7 +28,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
   const [isPremium, setIsPremium] = useState(isPremiumProp);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [unlockedContact, setUnlockedContact] = useState(null);
-  const [isGraphExpanded, setIsGraphExpanded] = useState(true);
+  const [isGraphExpanded, setIsGraphExpanded] = useState(false);
 
   useEffect(() => {
     setIsPremium(true);
@@ -347,10 +347,10 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                             </div>
                             <div className="text-left">
                               <div className="text-xs font-bold text-purple-200 flex items-center gap-1.5 uppercase tracking-wider">
-                                Venture Knowledge Network (Multi-Hop)
+                                Venture Knowledge Network (Graph Layer)
                               </div>
                               <div className="text-[10px] text-purple-400/80 font-mono">
-                                Interactive Syndicate & Warm Intro Graph
+                                Multi-Hop Intro Path & Syndicate Co-Investors
                               </div>
                             </div>
                           </div>
@@ -372,48 +372,49 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                         {isGraphExpanded && (
                           <div className="p-4 space-y-4 text-xs animate-fadeIn">
                             {/* 1. Multi-Hop Warm Intro Chain */}
-                            <div>
-                              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-2">
-                                ⚡ Multi-Hop Warm Intro Discovery Path:
-                              </span>
-                              <div className="p-3 rounded-xl bg-zinc-900/90 border border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
-                                {/* Node 1: Founder */}
-                                <div className="flex items-center gap-2 p-2 rounded-lg bg-white/5 border border-white/10 flex-1 min-w-0">
-                                  <span className="text-base">👤</span>
-                                  <div className="min-w-0">
-                                    <div className="text-[11px] font-bold text-white truncate">You (Founder)</div>
-                                    <div className="text-[9.5px] text-zinc-400">Seeking Intro</div>
-                                  </div>
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
+                                  <Zap className="w-3 h-3 text-purple-400" /> Warm Intro Connection Route:
+                                </span>
+                                <span className="text-[9.5px] font-mono text-purple-400/90">Fastest 2-Hop Path</span>
+                              </div>
+
+                              <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 flex flex-wrap sm:flex-nowrap items-center gap-2 text-xs">
+                                {/* Step 1: Founder */}
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 shrink-0">
+                                  <span className="text-sm">👤</span>
+                                  <span className="font-semibold text-zinc-200">You (Founder)</span>
                                 </div>
 
-                                <div className="text-center font-mono text-[9.5px] text-purple-400 font-bold px-1 shrink-0 hidden sm:flex items-center justify-center">
-                                  ──[:PITCHES]──►
+                                {/* Arrow 1 */}
+                                <div className="flex items-center gap-1 text-[10px] font-mono text-purple-400 font-bold px-1 shrink-0">
+                                  <span>→</span>
+                                  <span className="text-[9px] uppercase tracking-wider text-purple-400/80">Intro</span>
+                                  <span>→</span>
                                 </div>
 
-                                {/* Node 2: Portfolio Bridge */}
-                                <div className="flex items-center gap-2 p-2 rounded-lg bg-purple-500/10 border border-purple-500/20 flex-1 min-w-0">
-                                  <span className="text-base">🏢</span>
-                                  <div className="min-w-0">
-                                    <div className="text-[11px] font-bold text-purple-200 truncate">
-                                      {portfolioList[0]} Alumni
-                                    </div>
-                                    <div className="text-[9.5px] text-purple-400 truncate">Portfolio Founder</div>
-                                  </div>
+                                {/* Step 2: Portfolio Bridge */}
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple-900/30 border border-purple-500/30 shrink-0 min-w-0">
+                                  <span className="text-sm">🏢</span>
+                                  <span className="font-semibold text-purple-200 truncate">
+                                    {portfolioList[0] || 'Portfolio'} Alumni
+                                  </span>
                                 </div>
 
-                                <div className="text-center font-mono text-[9.5px] text-emerald-400 font-bold px-1 shrink-0 hidden sm:flex items-center justify-center">
-                                  ──[:WARM_INTRO]──►
+                                {/* Arrow 2 */}
+                                <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 font-bold px-1 shrink-0">
+                                  <span>→</span>
+                                  <span className="text-[9px] uppercase tracking-wider text-emerald-400/80">Backs</span>
+                                  <span>→</span>
                                 </div>
 
-                                {/* Node 3: Target Investor */}
-                                <div className="flex items-center gap-2 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex-1 min-w-0">
-                                  <span className="text-base">🎯</span>
-                                  <div className="min-w-0">
-                                    <div className="text-[11px] font-bold text-emerald-300 truncate">
-                                      {investor?.name || 'Target Investor'}
-                                    </div>
-                                    <div className="text-[9.5px] text-emerald-400 font-medium">Angel / Partner</div>
-                                  </div>
+                                {/* Step 3: Target Investor */}
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 shrink-0 min-w-0">
+                                  <span className="text-sm">🎯</span>
+                                  <span className="font-semibold text-emerald-300 truncate">
+                                    {investor?.name || 'Target Investor'}
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -424,25 +425,41 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                                 🤝 Frequent Syndicate Co-Investors (Shared Deals):
                               </span>
                               <div className="flex flex-wrap gap-2">
-                                {[
-                                  { name: 'Marc Andreessen', count: 3 },
-                                  { name: 'Ron Conway', count: 2 },
-                                  { name: 'Naval Ravikant', count: 2 }
-                                ].map((synd, sIdx) => (
-                                  <Link
-                                    key={sIdx}
-                                    href={`/directory?q=${encodeURIComponent(synd.name)}`}
-                                    onClick={() => handleClose()}
-                                    className="px-2.5 py-1.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 text-purple-200 hover:text-white transition-all flex items-center gap-1.5 text-xs cursor-pointer group"
-                                  >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-125 transition-transform" />
-                                    <span className="font-semibold">{synd.name}</span>
-                                    <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">
-                                      {synd.count} deals
-                                    </span>
-                                    <ExternalLink className="w-3 h-3 text-purple-400 group-hover:text-purple-200 opacity-70 group-hover:opacity-100" />
-                                  </Link>
-                                ))}
+                                {(() => {
+                                  const currentName = (investor?.name || '').trim().toLowerCase();
+                                  const syndicatePool = [
+                                    { name: 'Marc Andreessen', count: 3 },
+                                    { name: 'Peter Thiel', count: 3 },
+                                    { name: 'Ron Conway', count: 3 },
+                                    { name: 'Naval Ravikant', count: 2 },
+                                    { name: 'Reid Hoffman', count: 2 },
+                                    { name: 'Elad Gil', count: 2 },
+                                    { name: 'Keith Rabois', count: 2 },
+                                    { name: 'Garry Tan', count: 2 },
+                                    { name: 'Alexis Ohanian', count: 2 }
+                                  ];
+                                  // Strictly filter out self
+                                  const filteredSyndicates = syndicatePool
+                                    .filter(s => s.name.toLowerCase() !== currentName)
+                                    .slice(0, 3);
+
+                                  return filteredSyndicates.map((synd, sIdx) => (
+                                    <Link
+                                      key={sIdx}
+                                      href={`/directory?q=${encodeURIComponent(synd.name)}`}
+                                      onClick={() => handleClose()}
+                                      className="px-2.5 py-1.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 text-purple-200 hover:text-white transition-all flex items-center gap-1.5 text-xs cursor-pointer group"
+                                      title={`View ${synd.name} in Directory`}
+                                    >
+                                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-125 transition-transform" />
+                                      <span className="font-semibold">{synd.name}</span>
+                                      <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">
+                                        {synd.count} deals
+                                      </span>
+                                      <ExternalLink className="w-3 h-3 text-purple-400 group-hover:text-purple-200 opacity-70 group-hover:opacity-100" />
+                                    </Link>
+                                  ));
+                                })()}
                               </div>
                             </div>
                           </div>
