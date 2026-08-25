@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Sparkles, X, Copy, Mail, Globe, MapPin, Check, Briefcase, DollarSign, Layers, ShieldCheck, UserPlus, CheckCircle2, Lock, Crown, Zap, Users, BarChart3 } from 'lucide-react';
+import { Sparkles, X, Copy, Mail, Globe, MapPin, Check, Briefcase, DollarSign, Layers, ShieldCheck, UserPlus, CheckCircle2, Lock, Crown, Zap, Users, BarChart3, ChevronDown, ChevronUp, ExternalLink, GitFork } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
@@ -28,6 +28,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
   const [isPremium, setIsPremium] = useState(isPremiumProp);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [unlockedContact, setUnlockedContact] = useState(null);
+  const [isGraphExpanded, setIsGraphExpanded] = useState(true);
 
   useEffect(() => {
     setIsPremium(true);
@@ -333,18 +334,119 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       </div>
 
                       {/* Knowledge Graph & Syndicate Intelligence */}
-                      <div className="mt-3 p-3.5 rounded-xl bg-zinc-900/40 border border-purple-500/20 flex flex-col gap-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-purple-300 flex items-center gap-1.5 uppercase tracking-wider">
-                            <Users className="w-3.5 h-3.5 text-purple-400" /> Venture Knowledge Network (Graph Layer)
-                          </span>
-                          <span className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
-                            2-Hop Intro Available
-                          </span>
-                        </div>
-                        <p className="text-[11.5px] text-zinc-400 leading-relaxed">
-                          Frequently syndicates and co-invests in early-stage rounds with founder alumni and angel networks. Backed <strong>{portfolioList.slice(0, 2).join(' & ')}</strong>.
-                        </p>
+                      <div className="mt-4 rounded-2xl bg-zinc-950/80 border border-purple-500/30 overflow-hidden shadow-lg shadow-purple-950/20">
+                        {/* Clickable Header */}
+                        <button
+                          type="button"
+                          onClick={() => setIsGraphExpanded(!isGraphExpanded)}
+                          className="w-full p-3.5 bg-purple-950/20 hover:bg-purple-950/30 flex items-center justify-between transition-all cursor-pointer border-b border-purple-500/20 group"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 group-hover:scale-105 transition-transform">
+                              <Users className="w-4 h-4" />
+                            </div>
+                            <div className="text-left">
+                              <div className="text-xs font-bold text-purple-200 flex items-center gap-1.5 uppercase tracking-wider">
+                                Venture Knowledge Network (Multi-Hop)
+                              </div>
+                              <div className="text-[10px] text-purple-400/80 font-mono">
+                                Interactive Syndicate & Warm Intro Graph
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 shadow-sm">
+                              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+                              2-Hop Intro Active
+                            </span>
+                            {isGraphExpanded ? (
+                              <ChevronUp className="w-4 h-4 text-purple-400" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4 text-purple-400" />
+                            )}
+                          </div>
+                        </button>
+
+                        {/* Expanded Visual Graph Content */}
+                        {isGraphExpanded && (
+                          <div className="p-4 space-y-4 text-xs animate-fadeIn">
+                            {/* 1. Multi-Hop Warm Intro Chain */}
+                            <div>
+                              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-2">
+                                ⚡ Multi-Hop Warm Intro Discovery Path:
+                              </span>
+                              <div className="p-3 rounded-xl bg-zinc-900/90 border border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+                                {/* Node 1: Founder */}
+                                <div className="flex items-center gap-2 p-2 rounded-lg bg-white/5 border border-white/10 flex-1 min-w-0">
+                                  <span className="text-base">👤</span>
+                                  <div className="min-w-0">
+                                    <div className="text-[11px] font-bold text-white truncate">You (Founder)</div>
+                                    <div className="text-[9.5px] text-zinc-400">Seeking Intro</div>
+                                  </div>
+                                </div>
+
+                                <div className="text-center font-mono text-[9.5px] text-purple-400 font-bold px-1 shrink-0 hidden sm:flex items-center justify-center">
+                                  ──[:PITCHES]──►
+                                </div>
+
+                                {/* Node 2: Portfolio Bridge */}
+                                <div className="flex items-center gap-2 p-2 rounded-lg bg-purple-500/10 border border-purple-500/20 flex-1 min-w-0">
+                                  <span className="text-base">🏢</span>
+                                  <div className="min-w-0">
+                                    <div className="text-[11px] font-bold text-purple-200 truncate">
+                                      {portfolioList[0]} Alumni
+                                    </div>
+                                    <div className="text-[9.5px] text-purple-400 truncate">Portfolio Founder</div>
+                                  </div>
+                                </div>
+
+                                <div className="text-center font-mono text-[9.5px] text-emerald-400 font-bold px-1 shrink-0 hidden sm:flex items-center justify-center">
+                                  ──[:WARM_INTRO]──►
+                                </div>
+
+                                {/* Node 3: Target Investor */}
+                                <div className="flex items-center gap-2 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex-1 min-w-0">
+                                  <span className="text-base">🎯</span>
+                                  <div className="min-w-0">
+                                    <div className="text-[11px] font-bold text-emerald-300 truncate">
+                                      {investor?.name || 'Target Investor'}
+                                    </div>
+                                    <div className="text-[9.5px] text-emerald-400 font-medium">Angel / Partner</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* 2. Syndicate Co-Investors Clique */}
+                            <div>
+                              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-2">
+                                🤝 Frequent Syndicate Co-Investors (Shared Deals):
+                              </span>
+                              <div className="flex flex-wrap gap-2">
+                                {[
+                                  { name: 'Marc Andreessen', count: 3 },
+                                  { name: 'Ron Conway', count: 2 },
+                                  { name: 'Naval Ravikant', count: 2 }
+                                ].map((synd, sIdx) => (
+                                  <Link
+                                    key={sIdx}
+                                    href={`/directory?q=${encodeURIComponent(synd.name)}`}
+                                    onClick={() => handleClose()}
+                                    className="px-2.5 py-1.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 text-purple-200 hover:text-white transition-all flex items-center gap-1.5 text-xs cursor-pointer group"
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-125 transition-transform" />
+                                    <span className="font-semibold">{synd.name}</span>
+                                    <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">
+                                      {synd.count} deals
+                                    </span>
+                                    <ExternalLink className="w-3 h-3 text-purple-400 group-hover:text-purple-200 opacity-70 group-hover:opacity-100" />
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
