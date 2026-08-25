@@ -388,7 +388,7 @@ def sanitize_check_sizes(check_min: Any, check_max: Any) -> Tuple[Optional[int],
 
 
 RESERVED_TWITTER_HANDLES = {
-    '', 'x.com', 'twitter.com', 'www.twitter.com', 'www.x.com', 'home', 'explore',
+    '', 'x', 'x.com', 'twitter.com', 'www.twitter.com', 'www.x.com', 'home', 'explore',
     'notifications', 'messages', 'i', 'search', 'terms', 'privacy', 'intent',
     'login', 'signup', 'share', 'status', 'nfx', 'settings', 'hashtag', 'about',
     'help', 'tos', 'jobs', 'download', 'compose', 'who_to_follow', 'account',
