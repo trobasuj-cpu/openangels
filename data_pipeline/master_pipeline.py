@@ -20,6 +20,7 @@ import find_emails as fe
 import data_quality_engine as dqe
 import record_linkage_engine as rle
 import data_provenance_engine as dpe
+import knowledge_graph_engine as kge
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')

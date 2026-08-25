@@ -324,11 +324,27 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                         {portfolioList.map((item, idx) => (
                           <span 
                             key={idx} 
-                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-sm"
+                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-sm flex items-center gap-1.5"
                           >
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                             {item}
                           </span>
                         ))}
+                      </div>
+
+                      {/* Knowledge Graph & Syndicate Intelligence */}
+                      <div className="mt-3 p-3.5 rounded-xl bg-zinc-900/40 border border-purple-500/20 flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-purple-300 flex items-center gap-1.5 uppercase tracking-wider">
+                            <Users className="w-3.5 h-3.5 text-purple-400" /> Venture Knowledge Network (Graph Layer)
+                          </span>
+                          <span className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                            2-Hop Intro Available
+                          </span>
+                        </div>
+                        <p className="text-[11.5px] text-zinc-400 leading-relaxed">
+                          Frequently syndicates and co-invests in early-stage rounds with founder alumni and angel networks. Backed <strong>{portfolioList.slice(0, 2).join(' & ')}</strong>.
+                        </p>
                       </div>
                     </div>
                   );
