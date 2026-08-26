@@ -60,8 +60,14 @@ export async function GET(request) {
       }
     }
 
+    const orderParam = searchParams.get('order') || '';
+    let orderClause = '';
+    if (orderParam === 'created_at.desc' || orderParam === 'newest') {
+      orderClause = '&order=created_at.desc';
+    }
+
     // Direct REST query with service role key
-    const restUrl = `${supabaseUrl}/rest/v1/investors?select=id,name,slug,bio,location,country,website,linkedin_url,twitter_url,avatar_url,type,check_min,check_max,stages,industries,portfolio,verified,active,created_at,email&offset=${from}&limit=${limit}`;
+    const restUrl = `${supabaseUrl}/rest/v1/investors?select=id,name,slug,bio,location,country,website,linkedin_url,twitter_url,avatar_url,type,check_min,check_max,stages,industries,portfolio,verified,active,created_at,email${orderClause}&offset=${from}&limit=${limit}`;
 
     let data = [];
     let totalCount = 4231;

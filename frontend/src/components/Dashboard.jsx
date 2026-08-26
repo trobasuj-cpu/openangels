@@ -260,7 +260,13 @@ export default function Dashboard() {
   const [isSavingBcc, setIsSavingBcc] = useState(false);
   const [crmLeadIds, setCrmLeadIds] = useState(new Set()); // investor IDs already in CRM
   const [addingToCrm, setAddingToCrm] = useState(null); // investor ID currently being added
-  const [showNewOnly, setShowNewOnly] = useState(false);
+  const [showNewOnly, setShowNewOnly] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('newest') === 'true';
+    }
+    return false;
+  });
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutDiscount, setCheckoutDiscount] = useState('');
 
@@ -360,10 +366,28 @@ export default function Dashboard() {
     }
   }, [selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages]);
 
-  async function fetchInvestors() {
+  async function fetchInvestors(forceNewest = null) {
     try {
+      const isNewestActive = forceNewest !== null ? forceNewest : (showNewOnly || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('newest') === 'true'));
       const { data: { session } } = await supabase.auth.getSession();
       const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
+
+      // If user requested newest, fetch the 100 newest immediately with order=created_at.desc (<50ms)!
+      if (isNewestActive) {
+        try {
+          const newestRes = await fetch('/api/investors?from=0&limit=100&order=created_at.desc', { headers });
+          if (newestRes.ok) {
+            const newestJson = await newestRes.json();
+            const newestData = newestJson.investors || [];
+            if (newestData.length > 0) {
+              const validNewest = newestData.filter(inv => inv && inv.name && inv.name.trim() !== '');
+              setInvestors(validNewest);
+              setLoading(false);
+              if (newestJson.totalCount) setTotalDatabaseCount(newestJson.totalCount);
+            }
+          }
+        } catch (e) {}
+      }
 
       // 1. Fetch first batch of 1,000 investors from server API route (/api/investors) with real social URLs (<0.3s)
       const res = await fetch('/api/investors?from=0&limit=1000', { headers });
@@ -386,7 +410,9 @@ export default function Dashboard() {
           const scoreB = b.quality_score !== undefined ? b.quality_score : (b.has_email ? 70 : 40);
           return scoreB - scoreA;
         });
-        setInvestors(initialSorted);
+        if (!isNewestActive) {
+          setInvestors(initialSorted);
+        }
         setLoading(false);
       }
 
@@ -426,7 +452,20 @@ export default function Dashboard() {
         return scoreB - scoreA;
       });
 
-      setInvestors(sortedData);
+      if (!isNewestActive) {
+        setInvestors(sortedData);
+      } else {
+        // Merge without disrupting newest order
+        setInvestors(prev => {
+          const combined = [...prev, ...sortedData];
+          const seen = new Set();
+          return combined.filter(item => {
+            if (!item || !item.id || seen.has(item.id)) return false;
+            seen.add(item.id);
+            return true;
+          });
+        });
+      }
     } catch (err) {
       console.error('Error fetching investors:', err);
       setError(err.message);
@@ -547,9 +586,7 @@ export default function Dashboard() {
     let baseInvestors = investors;
     if (showNewOnly) {
       // Sort descending (newest first) and take top 100
-      const newest100 = [...investors].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).slice(0, 100);
-      const newestIds = new Set(newest100.map(i => i.id));
-      baseInvestors = investors.filter(inv => newestIds.has(inv.id));
+      baseInvestors = [...investors].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).slice(0, 100);
     }
 
     return baseInvestors.filter(inv => {
@@ -816,19 +853,25 @@ export default function Dashboard() {
             <div className="flex items-center gap-3 relative">
               {showNewOnly ? (
                 <button 
-                  onClick={() => setShowNewOnly(false)}
+                  onClick={() => {
+                    setShowNewOnly(false);
+                    if (typeof window !== 'undefined') window.history.replaceState(null, '', '/');
+                  }}
                   className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
                 >
                   Show All
                 </button>
               ) : (
-                <Link 
-                  href="/?newest=true"
-                  target="_blank"
+                <button 
+                  onClick={() => {
+                    setShowNewOnly(true);
+                    if (typeof window !== 'undefined') window.history.replaceState(null, '', '/?newest=true');
+                    fetchInvestors(true);
+                  }}
                   className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20"
                 >
                   Recently Added 🔥
-                </Link>
+                </button>
               )}
               
               {/* CRM Button in Header (Always Visible) */}
