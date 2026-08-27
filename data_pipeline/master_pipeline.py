@@ -919,7 +919,7 @@ def main():
     
     if choice == '3':
         engine = ode.get_data_engine()
-        engine.print_pipeline_hud_report()
+        engine.run_full_system_audit()
     elif choice == '2':
         batch_str = input("Enter batch size to import [Default: 100]: ").strip()
         try:
