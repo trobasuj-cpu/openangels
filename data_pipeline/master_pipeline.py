@@ -21,6 +21,7 @@ import data_quality_engine as dqe
 import record_linkage_engine as rle
 import data_provenance_engine as dpe
 import knowledge_graph_engine as kge
+import openangels_data_engine as ode
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')
@@ -906,16 +907,20 @@ def run_daily_news_mode():
 
 def main():
     print("=========================================================")
-    print("       OPENANGELS UNIFIED MASTER DATA ENGINE             ")
+    print("       OPENANGELS DATA ENGINE v1.0 (STAGE 10)            ")
     print("=========================================================")
     print("Choose pipeline mode:")
     print("  [1] Daily Deals & News Monitor (TechCrunch, Sifted, EU-Startups...)")
     print("  [2] High-Volume Verified Angel Registries (Fast Scale / Zero-AI)")
+    print("  [3] Full 14-Stage Data Quality & Engine Audit (HUD Benchmark)")
     print("---------------------------------------------------------")
     
-    choice = input("Enter mode [1 or 2] (Default: 1): ").strip()
+    choice = input("Enter mode [1, 2, or 3] (Default: 1): ").strip()
     
-    if choice == '2':
+    if choice == '3':
+        engine = ode.get_data_engine()
+        engine.print_pipeline_hud_report()
+    elif choice == '2':
         batch_str = input("Enter batch size to import [Default: 100]: ").strip()
         try:
             batch_limit = int(batch_str) if batch_str else 100

@@ -188,6 +188,33 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       <Sparkles className="w-3 h-3" /> {investor.quality_score}% Quality
                     </span>
                   ) : null}
+                  {/* Investment Signal Archetype */}
+                  {(() => {
+                    const checkMax = investor.check_max || 0;
+                    const portfolio = Array.isArray(investor.portfolio) ? investor.portfolio : (Array.isArray(investor.past_investments) ? investor.past_investments : []);
+                    const stages = Array.isArray(investor.stages) ? investor.stages : (Array.isArray(investor.stage) ? investor.stage : []);
+                    const bio = (investor.bio || '').toLowerCase();
+                    
+                    let badge = "🚀 High-Velocity Angel";
+                    let badgeClass = "bg-red-500/10 text-red-400 border-red-500/20";
+                    
+                    if (checkMax >= 1000000 || bio.includes('lead') || bio.includes('general partner') || bio.includes('managing partner')) {
+                      badge = "👑 Lead Investor";
+                      badgeClass = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+                    } else if (portfolio.length >= 3 || bio.includes('syndicate') || bio.includes('angel network')) {
+                      badge = "🤝 Syndicate Backer";
+                      badgeClass = "bg-purple-500/10 text-purple-400 border-purple-500/20";
+                    } else if (stages.some(s => s.toLowerCase().includes('pre-seed')) || bio.includes('first check') || (investor.check_min && investor.check_min <= 50000)) {
+                      badge = "🌱 Pre-Seed Pioneer";
+                      badgeClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+                    }
+                    
+                    return (
+                      <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full border ${badgeClass} shadow-sm`}>
+                        {badge}
+                      </span>
+                    );
+                  })()}
                 </div>
 
                 {investor.firm ? (
