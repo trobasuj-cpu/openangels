@@ -22,6 +22,35 @@ export async function GET(request) {
       envServiceKey = DEFAULT_SERVICE_ROLE;
     }
 
+    const authHeader = request.headers.get('Authorization') || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+
+    let isPremium = false;
+    if (token) {
+      try {
+        const supabaseAuthClient = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } });
+        const { data: { user } } = await supabaseAuthClient.auth.getUser(token);
+        if (user) {
+          // Check is_premium in profiles via service role key
+          const profRes = await fetch(`${supabaseUrl}/rest/v1/profiles?id=eq.${user.id}&select=is_premium`, {
+            headers: {
+              'apikey': envServiceKey,
+              'Authorization': `Bearer ${envServiceKey}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          if (profRes.ok) {
+            const profData = await profRes.json();
+            if (profData?.[0]?.is_premium) {
+              isPremium = true;
+            }
+          }
+        }
+      } catch (e) {
+        console.error('[API /api/investor/contact] Auth error:', e);
+      }
+    }
+
     // Direct REST query
     const filter = slug ? `slug=eq.${encodeURIComponent(slug)}` : `id=eq.${encodeURIComponent(id)}`;
     const restUrl = `${supabaseUrl}/rest/v1/investors?${filter}&select=*`;
@@ -138,13 +167,13 @@ export async function GET(request) {
     }
 
     return Response.json({
-      isPremium: true,
-      locked: false,
+      isPremium,
+      locked: !isPremium,
       contact: {
-        email: fullInvestor.email || null,
-        linkedin_url: fullInvestor.linkedin_url || null,
-        twitter_url: fullInvestor.twitter_url || null,
-        website: fullInvestor.website || null,
+        email: isPremium ? (fullInvestor.email || null) : null,
+        linkedin_url: isPremium ? (fullInvestor.linkedin_url || null) : null,
+        twitter_url: isPremium ? (fullInvestor.twitter_url || null) : null,
+        website: isPremium ? (fullInvestor.website || null) : null,
         portfolio: fullInvestor.portfolio || [],
         has_email,
         has_linkedin,

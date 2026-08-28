@@ -31,12 +31,20 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
 
   useEffect(() => {
-    setIsPremium(true);
     async function loadContactDetails() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
           setUser(session.user);
+          // Check profile is_premium
+          const { data: prof } = await supabase
+            .from('profiles')
+            .select('is_premium')
+            .eq('id', session.user.id)
+            .single();
+          if (prof?.is_premium) {
+            setIsPremium(true);
+          }
         }
         
         const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
@@ -48,6 +56,9 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           const contactData = await res.json();
           if (contactData.contact) {
             setUnlockedContact(contactData.contact);
+          }
+          if (contactData.isPremium !== undefined) {
+            setIsPremium(contactData.isPremium);
           }
         }
       } catch (e) {
