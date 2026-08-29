@@ -123,7 +123,7 @@ export async function GET(request) {
     if (orderParam === 'created_at.desc' || orderParam === 'newest') {
       queryParts.push('order=created_at.desc');
     } else {
-      queryParts.push('order=id.asc');
+      queryParts.push('order=verified.desc,created_at.asc');
     }
 
     // Pagination
