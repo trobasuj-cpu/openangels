@@ -18,6 +18,7 @@ import Footer from './Footer';
 import GumroadIframeModal from './GumroadIframeModal';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
+import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
 
 const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = false, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -319,9 +320,12 @@ export default function Dashboard() {
   const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
   const [selectedStages, setSelectedStages] = useState([]);
   const [industrySearch, setIndustrySearch] = useState('');
-  const [visibleCount, setVisibleCount] = useState(24);
   const [copiedEmailId, setCopiedEmailId] = useState(null);
+  const [matchingCount, setMatchingCount] = useState(4267);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const mainScrollRef = useRef(null);
+  const isInitialMount = useRef(true);
 
   // Industry counts map for badges
   const industryCounts = useMemo(() => {
@@ -364,114 +368,109 @@ export default function Dashboard() {
     if (mainScrollRef.current) {
       mainScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages]);
+  }, [selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages, search]);
 
-  async function fetchInvestors(forceNewest = null) {
+  async function fetchInvestors({ offset = 0, isAppend = false, forceNewest = null } = {}) {
     try {
+      if (isAppend) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+        setError(null);
+      }
+
       const isNewestActive = forceNewest !== null ? forceNewest : (showNewOnly || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('newest') === 'true'));
       const { data: { session } } = await supabase.auth.getSession();
       const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
 
-      // If user requested newest, fetch the 100 newest immediately with order=created_at.desc (<50ms)!
+      const params = new URLSearchParams();
+      params.set('from', String(offset));
+      params.set('limit', isNewestActive && offset === 0 ? '100' : '24');
+
       if (isNewestActive) {
-        try {
-          const newestRes = await fetch('/api/investors?from=0&limit=100&order=created_at.desc', { headers });
-          if (newestRes.ok) {
-            const newestJson = await newestRes.json();
-            const newestData = newestJson.investors || [];
-            if (newestData.length > 0) {
-              const validNewest = newestData.filter(inv => inv && inv.name && inv.name.trim() !== '');
-              setInvestors(validNewest);
-              setLoading(false);
-              if (newestJson.totalCount) setTotalDatabaseCount(newestJson.totalCount);
-            }
-          }
-        } catch (e) {}
+        params.set('order', 'created_at.desc');
       }
 
-      // 1. Fetch first batch of 1,000 investors from server API route (/api/investors) with real social URLs (<0.3s)
-      const res = await fetch('/api/investors?from=0&limit=1000', { headers });
-      let firstBatch = [];
-      if (res.ok) {
-        const json = await res.json();
-        firstBatch = json.investors || [];
-        if (json.totalCount) {
-          setTotalDatabaseCount(json.totalCount);
+      if (search && search.trim()) {
+        params.set('search', search.trim());
+      }
+      if (selectedIndustries && selectedIndustries.length > 0) {
+        params.set('industries', selectedIndustries.join(','));
+      }
+      if (selectedStages && selectedStages.length > 0) {
+        params.set('stages', selectedStages.join(','));
+      }
+      if (selectedLocations && selectedLocations.length > 0) {
+        params.set('locations', selectedLocations.join(','));
+      }
+
+      // Check size mapping
+      if (selectedCheckSizes && selectedCheckSizes.length > 0) {
+        let minC = null;
+        let maxC = null;
+        if (selectedCheckSizes.includes("Up to $100k")) maxC = 100000;
+        if (selectedCheckSizes.includes("$100k - $500k")) {
+          minC = minC !== null ? Math.min(minC, 100000) : 100000;
+          maxC = maxC !== null ? Math.max(maxC, 500000) : 500000;
+        }
+        if (selectedCheckSizes.includes("$500k - $1M")) {
+          minC = minC !== null ? Math.min(minC, 500000) : 500000;
+          maxC = maxC !== null ? Math.max(maxC, 1000000) : 1000000;
+        }
+        if (selectedCheckSizes.includes("$1M+")) {
+          minC = minC !== null ? Math.min(minC, 1000000) : 1000000;
+          maxC = null;
+        }
+        if (minC !== null) params.set('check_min', String(minC));
+        if (maxC !== null) params.set('check_max', String(maxC));
+      }
+
+      const res = await fetch(`/api/investors?${params.toString()}`, { headers });
+      if (!res.ok) {
+        throw new Error(`HTTP error ${res.status}`);
+      }
+
+      const json = await res.json();
+      const rawData = json.investors || [];
+      const validData = rawData.filter(inv => inv && inv.name && inv.name.trim() !== '');
+      const total = json.totalCount !== undefined ? json.totalCount : totalDatabaseCount;
+
+      if (!isAppend) {
+        setInvestors(validData);
+        setMatchingCount(total);
+        if (!search && selectedIndustries.length === 0 && selectedLocations.length === 0 && selectedStages.length === 0 && selectedCheckSizes.length === 0) {
+          setTotalDatabaseCount(total);
         }
       } else {
-        const { data } = await supabase.from('investors_public').select('*').range(0, 999);
-        firstBatch = data || [];
-      }
-
-      if (firstBatch && firstBatch.length > 0) {
-        const initialValid = firstBatch.filter(inv => inv && inv.name && inv.name.trim() !== '');
-        const initialSorted = initialValid.sort((a, b) => {
-          const scoreA = a.quality_score !== undefined ? a.quality_score : (a.has_email ? 70 : 40);
-          const scoreB = b.quality_score !== undefined ? b.quality_score : (b.has_email ? 70 : 40);
-          return scoreB - scoreA;
-        });
-        if (!isNewestActive) {
-          setInvestors(initialSorted);
-        }
-        setLoading(false);
-      }
-
-      // 2. Asynchronously fetch remaining batches in background
-      let allData = [...(firstBatch || [])];
-      let from = 1000;
-      let limit = 1000;
-      let fetchMore = (firstBatch || []).length === limit;
-
-      while (fetchMore) {
-        const bgRes = await fetch(`/api/investors?from=${from}&limit=${limit}`, { headers });
-        let batchData = [];
-        if (bgRes.ok) {
-          const bgJson = await bgRes.json();
-          batchData = bgJson.investors || [];
-        } else {
-          const { data } = await supabase.from('investors_public').select('*').range(from, from + limit - 1);
-          batchData = data || [];
-        }
-
-        if (!batchData || batchData.length === 0) {
-          fetchMore = false;
-        } else {
-          allData = [...allData, ...batchData];
-          if (batchData.length < limit) {
-            fetchMore = false;
-          } else {
-            from += limit;
-          }
-        }
-      }
-
-      const validData = (allData || []).filter(inv => inv && inv.name && inv.name.trim() !== '');
-      const sortedData = validData.sort((a, b) => {
-        const scoreA = a.quality_score !== undefined ? a.quality_score : (a.has_email ? 70 : 40);
-        const scoreB = b.quality_score !== undefined ? b.quality_score : (b.has_email ? 70 : 40);
-        return scoreB - scoreA;
-      });
-
-      if (!isNewestActive) {
-        setInvestors(sortedData);
-      } else {
-        // Merge without disrupting newest order
         setInvestors(prev => {
-          const combined = [...prev, ...sortedData];
-          const seen = new Set();
-          return combined.filter(item => {
-            if (!item || !item.id || seen.has(item.id)) return false;
-            seen.add(item.id);
-            return true;
-          });
+          const seen = new Set(prev.map(i => i.id));
+          const newItems = validData.filter(i => !seen.has(i.id));
+          return [...prev, ...newItems];
         });
       }
+
+      setHasMore(json.hasMore !== undefined ? json.hasMore : (offset + validData.length < total));
+      setLoading(false);
+      setLoadingMore(false);
     } catch (err) {
       console.error('Error fetching investors:', err);
       setError(err.message);
       setLoading(false);
+      setLoadingMore(false);
     }
   }
+
+  // Debounced filter refetching
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    const timer = setTimeout(() => {
+      fetchInvestors({ offset: 0, isAppend: false });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search, selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages, showNewOnly]);
 
   const fetchProfile = async (userId) => {
     const { data, error } = await supabase
@@ -547,28 +546,10 @@ export default function Dashboard() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const uniqueIndustries = useMemo(() => {
-    const all = investors.flatMap(inv => {
-      const raw = inv.industry || inv.industries;
-      return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
-    });
-    return [...new Set(all)].filter(Boolean).sort();
-  }, [investors]);
-
-  const uniqueLocations = useMemo(() => {
-    const all = investors.map(inv => inv.location);
-    return [...new Set(all)].filter(Boolean).sort();
-  }, [investors]);
-
-  const uniqueCheckSizes = ["Up to $100k", "$100k - $500k", "$500k - $1M", "$1M+"];
-
-  const uniqueStages = useMemo(() => {
-    const all = investors.flatMap(inv => {
-      const raw = inv.stage || inv.stages;
-      return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
-    });
-    return [...new Set(all)].filter(Boolean).sort();
-  }, [investors]);
+  const uniqueIndustries = useMemo(() => DEFAULT_INDUSTRIES, []);
+  const uniqueLocations = useMemo(() => DEFAULT_LOCATIONS, []);
+  const uniqueCheckSizes = DEFAULT_CHECK_SIZES;
+  const uniqueStages = useMemo(() => DEFAULT_STAGES, []);
 
   const toggleFilter = (setter, value) => {
     setter(prev => 
@@ -576,72 +557,12 @@ export default function Dashboard() {
     );
   };
 
-  const deferredSearch = useDeferredValue(search);
-  const deferredIndustries = useDeferredValue(selectedIndustries);
-  const deferredLocations = useDeferredValue(selectedLocations);
-  const deferredCheckSizes = useDeferredValue(selectedCheckSizes);
-  const deferredStages = useDeferredValue(selectedStages);
-
   const filteredInvestors = useMemo(() => {
-    let baseInvestors = investors;
-    if (showNewOnly) {
-      // Sort descending (newest first) and take top 100
-      baseInvestors = [...investors].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).slice(0, 100);
+    if (isAiMatch && aiMatchedIds) {
+      return investors.filter(inv => aiMatchedIds.has(inv.id));
     }
-
-    return baseInvestors.filter(inv => {
-      const invIndustries = (() => {
-        const raw = inv.industry || inv.industries;
-        return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
-      })();
-      const invStages = (() => {
-        const raw = inv.stage || inv.stages;
-        return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
-      })();
-      const min = inv.check_min || 0;
-      const max = inv.check_max || Infinity;
-      
-      const invCheckSizeBuckets = [];
-      if (max <= 100000 || min <= 100000) invCheckSizeBuckets.push("Up to $100k");
-      if ((max >= 100000 && min <= 500000) || (!inv.check_max && min >= 100000 && min <= 500000)) invCheckSizeBuckets.push("$100k - $500k");
-      if ((max >= 500000 && min <= 1000000) || (!inv.check_max && min >= 500000 && min <= 1000000)) invCheckSizeBuckets.push("$500k - $1M");
-      if (max >= 1000000 || min >= 1000000) invCheckSizeBuckets.push("$1M+");
-
-      const invPortfolio = (() => {
-        const raw = inv.portfolio || inv.past_investments;
-        return Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : []);
-      })();
-
-      const matchesSearch = deferredSearch === '' || 
-        inv.name?.toLowerCase().includes(deferredSearch.toLowerCase()) || 
-        inv.bio?.toLowerCase().includes(deferredSearch.toLowerCase()) ||
-        invIndustries.some(i => i.toLowerCase().includes(deferredSearch.toLowerCase())) ||
-        invPortfolio.some(p => p.toLowerCase().includes(deferredSearch.toLowerCase()));
-
-      const matchesIndustry = deferredIndustries.length === 0 || 
-        deferredIndustries.some(ind => invIndustries.some(i => i.toLowerCase() === ind.toLowerCase()));
-        
-      const matchesLocation = deferredLocations.length === 0 || 
-        deferredLocations.includes(inv.location);
-
-      const matchesCheckSize = deferredCheckSizes.length === 0 || 
-        deferredCheckSizes.some(size => invCheckSizeBuckets.includes(size));
-
-      const matchesStage = deferredStages.length === 0 || 
-        deferredStages.some(stage => invStages.some(s => s.toLowerCase() === stage.toLowerCase()));
-
-      let matchesAi = true;
-      if (isAiMatch && aiMatchedIds) {
-        matchesAi = aiMatchedIds.has(inv.id);
-      }
-
-      return matchesSearch && matchesIndustry && matchesLocation && matchesCheckSize && matchesStage && matchesAi;
-    });
-  }, [investors, deferredSearch, deferredIndustries, deferredLocations, deferredCheckSizes, deferredStages, isAiMatch, aiMatchedIds, showNewOnly]);
-
-  useEffect(() => {
-    setVisibleCount(24);
-  }, [filteredInvestors]);
+    return investors;
+  }, [investors, isAiMatch, aiMatchedIds]);
 
   const renderFilterOptions = (options, selected, setter, isIndustry = false) => {
     let filteredOptions = options;
@@ -1038,7 +959,7 @@ export default function Dashboard() {
                   {isAiMatch ? (
                     <div className="relative z-10 flex flex-col items-center justify-center shrink-0 bg-red-500/10 px-8 py-4 rounded-2xl border border-red-500/30 animate-in fade-in zoom-in duration-500">
                       <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500 tracking-tighter mb-1 filter drop-shadow-sm">
-                        {filteredInvestors.length}
+                        {matchingCount}
                       </div>
                       <div className="text-xs md:text-sm font-bold text-red-500/90 uppercase tracking-[0.2em]">
                         Perfect Matches
@@ -1058,7 +979,7 @@ export default function Dashboard() {
                         </div>
                         {(totalActiveFilters > 0 || (search && search.trim() !== '')) && (
                           <div className="text-xs font-medium text-blue-400">
-                            {filteredInvestors.length.toLocaleString()} matching
+                            {matchingCount.toLocaleString()} matching
                           </div>
                         )}
                       </div>
@@ -1108,7 +1029,7 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <>
-                  {filteredInvestors.slice(0, visibleCount).map((investor, index) => {
+                  {filteredInvestors.map((investor, index) => {
                     const isUnlocked = profile?.is_premium || index < 6;
                   
                   let cleanBio = investor.bio || '';
@@ -1423,13 +1344,21 @@ export default function Dashboard() {
               )}
             </div>
             
-            {!loading && !error && visibleCount < filteredInvestors.length && (
+            {!loading && !error && hasMore && (
               <div className="mt-12 text-center pb-12">
                 <button 
-                  onClick={() => setVisibleCount(prev => prev + 24)}
-                  className="px-6 py-2.5 bg-black border border-white/10 text-sm font-medium text-zinc-300 rounded-full hover:border-white/20 hover:text-white transition-colors"
+                  onClick={() => fetchInvestors({ offset: investors.length, isAppend: true })}
+                  disabled={loadingMore}
+                  className="px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 border border-zinc-800 dark:border-zinc-200 text-sm font-semibold rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-md active:scale-95 flex items-center gap-2 mx-auto cursor-pointer"
                 >
-                  Load More Investors
+                  {loadingMore ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
+                      <span>Loading More Investors...</span>
+                    </>
+                  ) : (
+                    <span>Load More Investors ({investors.length} of {matchingCount.toLocaleString()})</span>
+                  )}
                 </button>
               </div>
             )}

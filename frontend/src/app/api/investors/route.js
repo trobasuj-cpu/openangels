@@ -20,8 +20,15 @@ function calculateQualityScore(inv) {
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const from = parseInt(searchParams.get('from') || '0', 10);
-    const limit = parseInt(searchParams.get('limit') || '1000', 10);
+    const from = Math.max(0, parseInt(searchParams.get('from') || searchParams.get('offset') || '0', 10));
+    const limit = Math.min(1000, Math.max(1, parseInt(searchParams.get('limit') || '24', 10)));
+    const search = (searchParams.get('search') || searchParams.get('q') || '').trim();
+    const industry = (searchParams.get('industry') || searchParams.get('industries') || '').trim();
+    const stage = (searchParams.get('stage') || searchParams.get('stages') || '').trim();
+    const location = (searchParams.get('location') || searchParams.get('locations') || '').trim();
+    const checkMinParam = searchParams.get('check_min');
+    const checkMaxParam = searchParams.get('check_max');
+    const orderParam = searchParams.get('order') || '';
 
     const authHeader = request.headers.get('Authorization') || '';
     const token = authHeader.replace(/^Bearer\s+/i, '').trim();
@@ -60,17 +67,74 @@ export async function GET(request) {
       }
     }
 
-    const orderParam = searchParams.get('order') || '';
-    let orderClause = '';
-    if (orderParam === 'created_at.desc' || orderParam === 'newest') {
-      orderClause = '&order=created_at.desc';
+    // Build PostgREST query parameters
+    const queryParts = [
+      'select=id,name,slug,bio,location,country,website,linkedin_url,twitter_url,avatar_url,type,check_min,check_max,stages,industries,portfolio,verified,active,created_at,email'
+    ];
+
+    // Search query across name, bio, location
+    if (search) {
+      const cleanSearch = encodeURIComponent(search.replace(/[%*]/g, ''));
+      queryParts.push(`or=(name.ilike.*${cleanSearch}*,bio.ilike.*${cleanSearch}*,location.ilike.*${cleanSearch}*)`);
     }
 
+    // Industry filter (supports comma-separated list)
+    if (industry) {
+      const indList = industry.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+      if (indList.length === 1) {
+        queryParts.push(`industries=cs.{${encodeURIComponent(indList[0])}}`);
+      } else if (indList.length > 1) {
+        const indConditions = indList.map(ind => `industries.cs.{${encodeURIComponent(ind)}}`).join(',');
+        queryParts.push(`or=(${indConditions})`);
+      }
+    }
+
+    // Stage filter
+    if (stage) {
+      const stgList = stage.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+      if (stgList.length === 1) {
+        queryParts.push(`stages=cs.{${encodeURIComponent(stgList[0])}}`);
+      } else if (stgList.length > 1) {
+        const stgConditions = stgList.map(stg => `stages.cs.{${encodeURIComponent(stg)}}`).join(',');
+        queryParts.push(`or=(${stgConditions})`);
+      }
+    }
+
+    // Location filter
+    if (location) {
+      const locList = location.split(',').map(s => s.trim()).filter(Boolean);
+      if (locList.length === 1) {
+        queryParts.push(`location=ilike.*${encodeURIComponent(locList[0])}*`);
+      } else if (locList.length > 1) {
+        const locConditions = locList.map(loc => `location.ilike.*${encodeURIComponent(loc)}*`).join(',');
+        queryParts.push(`or=(${locConditions})`);
+      }
+    }
+
+    // Check size filters
+    if (checkMinParam && !isNaN(parseInt(checkMinParam, 10))) {
+      queryParts.push(`check_max=gte.${parseInt(checkMinParam, 10)}`);
+    }
+    if (checkMaxParam && !isNaN(parseInt(checkMaxParam, 10))) {
+      queryParts.push(`check_min=lte.${parseInt(checkMaxParam, 10)}`);
+    }
+
+    // Order clause
+    if (orderParam === 'created_at.desc' || orderParam === 'newest') {
+      queryParts.push('order=created_at.desc');
+    } else {
+      queryParts.push('order=id.asc');
+    }
+
+    // Pagination
+    queryParts.push(`offset=${from}`);
+    queryParts.push(`limit=${limit}`);
+
     // Direct REST query with service role key
-    const restUrl = `${supabaseUrl}/rest/v1/investors?select=id,name,slug,bio,location,country,website,linkedin_url,twitter_url,avatar_url,type,check_min,check_max,stages,industries,portfolio,verified,active,created_at,email${orderClause}&offset=${from}&limit=${limit}`;
+    const restUrl = `${supabaseUrl}/rest/v1/investors?${queryParts.join('&')}`;
 
     let data = [];
-    let totalCount = 4231;
+    let totalCount = 4267;
 
     try {
       const restRes = await fetch(restUrl, {
@@ -86,7 +150,7 @@ export async function GET(request) {
         const range = restRes.headers.get('content-range') || '';
         if (range.includes('/')) {
           const parsed = parseInt(range.split('/')[1], 10);
-          if (!isNaN(parsed) && parsed > 0) {
+          if (!isNaN(parsed) && parsed >= 0) {
             totalCount = parsed;
           }
         }
@@ -144,7 +208,15 @@ export async function GET(request) {
       };
     });
 
-    return Response.json({ investors: sanitized, count: sanitized.length, totalCount, isPremium });
+    return Response.json({
+      investors: sanitized,
+      count: sanitized.length,
+      totalCount,
+      from,
+      limit,
+      hasMore: (from + sanitized.length) < totalCount,
+      isPremium
+    });
   } catch (err) {
     console.error('[API /api/investors] Error:', err);
     return Response.json({ error: err.message }, { status: 500 });
