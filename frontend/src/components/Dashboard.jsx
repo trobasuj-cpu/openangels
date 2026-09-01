@@ -1056,13 +1056,7 @@ export default function Dashboard() {
                   else if (minStr) displayCheckSize = `${minStr}+`;
                   else if (maxStr) displayCheckSize = `Up to ${maxStr}`;
                   
-                  let displayAvatar = investor.avatar_url || investor.avatar;
-                  if (!displayAvatar && investor.twitter_url) {
-                    const handle = investor.twitter_url.split('/').pop().split('?')[0];
-                    if (handle && handle.length > 2) {
-                      displayAvatar = `https://unavatar.io/x/${handle}?ttl=30d`;
-                    }
-                  }
+                  const displayAvatar = investor.avatar_url || investor.avatar || null;
 
                   return (
                     <div key={investor.id} className="group flex flex-col bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-black/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">

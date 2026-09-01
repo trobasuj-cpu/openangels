@@ -22,6 +22,7 @@ import record_linkage_engine as rle
 import data_provenance_engine as dpe
 import knowledge_graph_engine as kge
 import openangels_data_engine as ode
+import avatar_storage_engine as ase
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')
@@ -185,23 +186,13 @@ def find_twitter(name):
             return clean
     return None
 
-def fetch_direct_avatar(twitter_url, name):
-    """Fetches high-res CDN avatar from Twitter/X via Microlink or unavatar fallback."""
-    if twitter_url:
-        handle = twitter_url.rstrip('/').split('/')[-1].split('?')[0]
-        if handle and handle.lower() not in ['terms', 'privacy', 'intent', 'search', 'home', 'nfx']:
-            try:
-                m_url = f"https://api.microlink.io/?url=https://x.com/{handle}"
-                req = urllib.request.Request(m_url, headers={'User-Agent': 'Mozilla/5.0'})
-                with urllib.request.urlopen(req, timeout=4) as res:
-                    data = json.loads(res.read().decode('utf-8'))
-                    img_url = data.get('data', {}).get('image', {}).get('url')
-                    if img_url and 'twimg.com' in img_url:
-                        return img_url
-            except Exception:
-                pass
-            return f"https://unavatar.io/x/{handle}?ttl=30d"
-    return None
+def fetch_direct_avatar(twitter_url, name, existing_avatar=None):
+    """Fetches high-res avatar and permanently uploads/caches to Supabase Storage."""
+    return ase.resolve_and_cache_avatar(
+        name=name,
+        twitter_url=twitter_url,
+        candidate_avatar_url=existing_avatar
+    )
 
 def enrich_with_gemini(text):
     prompt = f"""
