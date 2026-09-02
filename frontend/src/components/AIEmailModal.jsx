@@ -19,6 +19,7 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
   const [isSaving, setIsSaving] = useState(false);
   const [isAddingToCrm, setIsAddingToCrm] = useState(false);
   const [addedToCrmCount, setAddedToCrmCount] = useState(0);
+  const [quotaInfo, setQuotaInfo] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -51,8 +52,6 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
       if (saveError) throw saveError;
       
       setIsEditingDescription(false);
-      // We also update the local profile object so the parent knows, 
-      // but modifying props directly is bad practice. We'll just rely on the local state here.
       if (profile) profile.startup_description = startupDescription;
     } catch (err) {
       setError(err.message);
@@ -73,24 +72,44 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
       const industries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
 
       const { data: { session } } = await supabase.auth.getSession();
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/generate-email`, {
+      const response = await fetch('/api/generate-email', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
-        },
+        headers,
         body: JSON.stringify({
           investorName: investor.name,
           investorIndustry: industries,
+          investorBio: investor.bio,
           startupDescription: startupDescription
         })
       });
 
       const data = await response.json();
       
-      if (!response.ok) throw new Error(data.error || 'Failed to generate email');
-      
+      if (!response.ok) {
+        if (response.status === 429) {
+          setQuotaInfo({
+            remaining: 0,
+            limit: data.limit || 10,
+            resetInSeconds: data.resetInSeconds || 3600,
+            isPremium: data.isPremium || false
+          });
+        }
+        throw new Error(data.error || 'Failed to generate email');
+      }
+
+      setQuotaInfo({
+        remaining: data.remaining,
+        limit: data.limit,
+        resetInSeconds: data.resetInSeconds,
+        isPremium: data.isPremium
+      });
       
       setGeneratedSubject(data.subject || 'Investment Opportunity');
       setGeneratedBody(data.body || data.email || 'Error: Could not parse response.');
@@ -98,13 +117,11 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
       // Match other investors based on startup description keywords
       if (startupDescription && allInvestors.length > 0) {
         const descLower = startupDescription.toLowerCase();
-        // Common tech/startup keywords to look for
         const possibleTags = ['ai', 'saas', 'fintech', 'healthtech', 'edtech', 'consumer', 'enterprise', 'hardware', 'crypto', 'web3', 'biotech', 'marketplace', 'b2b', 'b2c', 'ecommerce', 'gaming', 'api', 'devtool', 'security', 'data', 'climate', 'media', 'infrastructure', 'deep-tech', 'creator-economy', 'impact', 'ar-vr', 'autonomous', 'robotics', 'iot', 'machine-learning', 'cloud', 'mobile', 'social', 'food', 'real-estate', 'insurance', 'legal', 'hr', 'logistics', 'travel'];
         
         const extractedTags = possibleTags.filter(tag => descLower.includes(tag));
         const searchTags = extractedTags.length > 0 ? extractedTags : industries;
 
-        // Extract meaningful words from description for bio matching
         const stopWords = new Set(['the', 'and', 'our', 'are', 'for', 'with', 'that', 'this', 'from', 'have', 'has', 'been', 'will', 'can', 'not', 'but', 'also', 'into', 'about', 'over', 'more', 'than', 'just', 'very', 'what', 'when', 'where', 'which', 'their', 'there', 'being', 'were', 'would', 'could', 'should', 'does', 'doing', 'during', 'each', 'other']);
         const descWords = descLower.split(/[\s,.\-:;!?()]+/).filter(w => w.length > 4 && !stopWords.has(w));
 
@@ -112,15 +129,12 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
           if (inv.id === investor.id) return { inv, score: 0 };
           
           let score = 0;
-          
-          // Industry match: +3 per matching industry tag
           if (inv.industries) {
             const invInds = Array.isArray(inv.industries) ? inv.industries : [inv.industries];
             const matchCount = invInds.filter(ind => searchTags.includes(ind.toLowerCase())).length;
             score += matchCount * 3;
           }
           
-          // Bio keyword match: +1 per keyword found in bio
           if (inv.bio && descWords.length > 0) {
             const bioLower = inv.bio.toLowerCase();
             const bioMatches = descWords.filter(w => bioLower.includes(w)).length;
@@ -128,9 +142,8 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
           }
           
           return { inv, score };
-        }).filter(m => m.score >= 3); // Only truly relevant matches
+        }).filter(m => m.score >= 3);
 
-        // Sort by highest score first, cap at top 25
         scoredMatches.sort((a, b) => b.score - a.score);
         const topMatches = scoredMatches.slice(0, 25);
         setMatchedInvestors(topMatches.map(m => m.inv));
@@ -201,9 +214,38 @@ export default function AIEmailModal({ isOpen, onClose, investor, profile, user,
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-6">
+          {quotaInfo && (
+            <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-zinc-900/90 border border-white/10 text-xs">
+              <div className="flex items-center gap-2 text-zinc-300">
+                <Sparkles className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                <span>
+                  {quotaInfo.isPremium ? (
+                    <strong className="text-amber-400">Pro Plan: </strong>
+                  ) : (
+                    <strong className="text-zinc-200">Free Plan: </strong>
+                  )}
+                  {quotaInfo.remaining} of {quotaInfo.limit} hourly pitches remaining
+                </span>
+              </div>
+              <span className="text-zinc-500 shrink-0">
+                Resets in {Math.ceil(quotaInfo.resetInSeconds / 60)}m
+              </span>
+            </div>
+          )}
+
           {error && (
             <div className="p-4 bg-red-900/20 text-red-400 rounded-xl text-sm border border-red-900/30">
-              {error}
+              <p className="font-semibold mb-1">{error}</p>
+              {quotaInfo && !quotaInfo.isPremium && (
+                <a
+                  href="/#pricing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-2 px-3 py-1.5 bg-rose-500 text-white rounded-lg text-xs font-bold hover:bg-rose-600 transition-colors"
+                >
+                  ⚡ Upgrade to Pro (100 AI pitches/hr)
+                </a>
+              )}
             </div>
           )}
 

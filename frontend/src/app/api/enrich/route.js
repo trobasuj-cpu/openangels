@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { globalRateLimiter } from '@/lib/rateLimiter';
+
+export const dynamic = 'force-dynamic';
 
 const STANDARD_TAGS = [
     "ai", "saas", "fintech", "b2b", "b2c", "climate", "health", 
@@ -6,8 +9,32 @@ const STANDARD_TAGS = [
     "deeptech", "ecommerce", "edtech", "hardware", "gaming"
 ];
 
+function getClientIp(request) {
+  const forwarded = request.headers.get('x-forwarded-for');
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+  return request.headers.get('x-real-ip') || request.headers.get('cf-connecting-ip') || '127.0.0.1';
+}
+
 export async function POST(request) {
     try {
+        const ip = getClientIp(request);
+        const rateCheck = globalRateLimiter.check(`enrich_${ip}`, false);
+
+        const responseHeaders = {
+            'X-RateLimit-Limit': String(rateCheck.limit),
+            'X-RateLimit-Remaining': String(rateCheck.remaining),
+            'X-RateLimit-Reset': String(rateCheck.resetInSeconds),
+        };
+
+        if (!rateCheck.allowed) {
+            return NextResponse.json(
+                { error: 'Rate limit exceeded for raw enrichment (10 requests/hour).' },
+                { status: 429, headers: responseHeaders }
+            );
+        }
+
         const { rawText } = await request.json();
 
         if (!rawText) {
@@ -72,7 +99,7 @@ ${rawText}
             throw new Error("Invalid JSON returned by Gemini");
         }
 
-        return NextResponse.json(extractedJson);
+        return NextResponse.json(extractedJson, { headers: responseHeaders });
     } catch (error) {
         console.error('Enrichment error:', error);
         return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
