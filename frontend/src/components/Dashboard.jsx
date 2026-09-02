@@ -16,6 +16,7 @@ import LoginModal from './LoginModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
 import GumroadIframeModal from './GumroadIframeModal';
+import AiPitchModal from './AiPitchModal';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
@@ -270,6 +271,7 @@ export default function Dashboard() {
   });
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutDiscount, setCheckoutDiscount] = useState('');
+  const [aiPitchInvestor, setAiPitchInvestor] = useState(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -1267,13 +1269,17 @@ export default function Dashboard() {
                             )}
 
                             <div className="flex items-center gap-2">
-                              <Link 
-                                href={`/investor/${investor.slug || investor.id}`}
-                                className="crm-btn-oil flex items-center justify-center gap-1.5 flex-1 py-2 border border-white/10 text-white text-xs font-semibold rounded-xl transition-all active:scale-[0.98] shadow-sm"
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  setAiPitchInvestor(investor);
+                                }}
+                                className="crm-btn-oil flex items-center justify-center gap-1.5 flex-1 py-2 border border-white/10 text-white text-xs font-semibold rounded-xl transition-all active:scale-[0.98] shadow-sm cursor-pointer"
                               >
                                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                                 AI Draft Email
-                              </Link>
+                              </button>
                               <button 
                                 onClick={() => addToCrm(investor.id)}
                                 disabled={crmLeadIds.has(investor.id) || addingToCrm === investor.id}
@@ -1499,6 +1505,13 @@ export default function Dashboard() {
         userEmail={user?.email}
         discountCode={checkoutDiscount}
       />
+
+      {aiPitchInvestor && (
+        <AiPitchModal
+          investor={aiPitchInvestor}
+          onClose={() => setAiPitchInvestor(null)}
+        />
+      )}
     </>
   );
 }
