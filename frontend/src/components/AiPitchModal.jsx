@@ -29,24 +29,44 @@ export default function AiPitchModal({ investor, onClose }) {
       setStartupDescription(saved);
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser(session.user);
-        supabase
-          .from('profiles')
-          .select('startup_description, is_premium')
-          .eq('id', session.user.id)
-          .single()
-          .then(({ data: prof }) => {
-            if (prof?.startup_description) {
-              setStartupDescription(prof.startup_description);
-            }
-            if (prof?.is_premium) {
-              setQuotaInfo(prev => ({ ...prev, limit: 100, remaining: prev?.remaining && prev.remaining < 100 ? prev.remaining : 100, isPremium: true }));
-            }
+    // 2. Fetch real-time server quota
+    async function initQuota() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const headers = {};
+        if (session?.access_token) {
+          headers['Authorization'] = `Bearer ${session.access_token}`;
+        }
+        if (session?.user) {
+          setUser(session.user);
+          supabase
+            .from('profiles')
+            .select('startup_description, is_premium')
+            .eq('id', session.user.id)
+            .single()
+            .then(({ data: prof }) => {
+              if (prof?.startup_description) {
+                setStartupDescription(prof.startup_description);
+              }
+            });
+        }
+
+        const res = await fetch('/api/generate-email', { headers });
+        if (res.ok) {
+          const qData = await res.json();
+          setQuotaInfo({
+            remaining: qData.remaining,
+            limit: qData.limit,
+            resetInSeconds: qData.resetInSeconds,
+            isPremium: qData.isPremium
           });
+        }
+      } catch (e) {
+        console.error('Failed to init quota:', e);
       }
-    });
+    }
+
+    initQuota();
   }, [investor?.id]);
 
   const handleSaveContext = async () => {

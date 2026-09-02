@@ -14,6 +14,56 @@ function getClientIp(request) {
   return request.headers.get('x-real-ip') || request.headers.get('cf-connecting-ip') || '127.0.0.1';
 }
 
+export async function GET(request) {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+    let serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!serviceKey || serviceKey.startsWith('sb_publishable_')) {
+      serviceKey = DEFAULT_SERVICE_ROLE;
+    }
+
+    const supabaseAdmin = createClient(supabaseUrl, serviceKey, {
+      auth: { persistSession: false },
+    });
+
+    let isPremium = false;
+    let identifier = getClientIp(request);
+
+    const authHeader = request.headers.get('authorization') || '';
+    if (authHeader.startsWith('Bearer ')) {
+      const token = authHeader.replace('Bearer ', '').trim();
+      if (token && token.length > 20) {
+        try {
+          const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+          if (user && !authError) {
+            identifier = `user_${user.id}`;
+            const { data: profile } = await supabaseAdmin
+              .from('profiles')
+              .select('is_premium')
+              .eq('id', user.id)
+              .single();
+
+            if (profile && profile.is_premium) {
+              isPremium = true;
+            }
+          }
+        } catch (e) {}
+      }
+    }
+
+    const status = globalRateLimiter.peek(identifier, isPremium);
+    return NextResponse.json({
+      success: true,
+      limit: status.limit,
+      remaining: status.remaining,
+      resetInSeconds: status.resetInSeconds,
+      isPremium
+    });
+  } catch (err) {
+    return NextResponse.json({ error: 'Failed to peek quota' }, { status: 500 });
+  }
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
