@@ -64,6 +64,44 @@ export async function GET(request) {
   }
 }
 
+function escapeRegex(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function sanitizeHallucinatedMetrics(emailBody, startupDescription) {
+  if (!emailBody) return '';
+  const lowerInput = startupDescription.toLowerCase();
+
+  // 1. Guard against fabricated dollar amounts not present in user input
+  const dollarRegex = /\$[0-9]+(?:\.[0-9]+)?\s*(?:k|m|b|thousand|million|mrr|arr)?/gi;
+  const matches = emailBody.match(dollarRegex) || [];
+
+  for (const match of matches) {
+    const cleanMatch = match.toLowerCase().trim();
+    if (!lowerInput.includes(cleanMatch.replace(/\s+/g, '')) && !lowerInput.includes(cleanMatch)) {
+      if (emailBody.toLowerCase().includes('raising ' + cleanMatch) || emailBody.toLowerCase().includes('round of ' + cleanMatch)) {
+        emailBody = emailBody.replace(new RegExp(`raising\\s+${escapeRegex(match)}`, 'gi'), 'raising our early round');
+        emailBody = emailBody.replace(new RegExp(`round of\\s+${escapeRegex(match)}`, 'gi'), 'early round');
+      } else {
+        emailBody = emailBody.replace(new RegExp(`(?:with|at|hitting)\\s+${escapeRegex(match)}\\s*(?:mrr|arr)?`, 'gi'), 'with strong early user engagement');
+      }
+    }
+  }
+
+  // 2. Guard against fabricated percentage growth rates not present in user input
+  const percentRegex = /[0-9]+(?:\.[0-9]+)?\s*%\s*(?:mom|yoy|growth)?/gi;
+  const percentMatches = emailBody.match(percentRegex) || [];
+  for (const pMatch of percentMatches) {
+    const cleanP = pMatch.toLowerCase().trim();
+    if (!lowerInput.includes(cleanP.replace(/\s+/g, '')) && !lowerInput.includes(cleanP)) {
+      emailBody = emailBody.replace(new RegExp(`(?:growing|growth of)\\s+${escapeRegex(pMatch)}`, 'gi'), 'growing steadily');
+      emailBody = emailBody.replace(new RegExp(escapeRegex(pMatch), 'gi'), 'steady growth');
+    }
+  }
+
+  return emailBody;
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -159,18 +197,27 @@ CONTEXT:
 ${bioContext}
 - Startup Description & Traction: "${startupDescription}"
 
-CRITICAL RULES:
-1. Subject line must be punchy, relevant, and short (max 7 words). No cheesy clickbait.
-2. Email body must be concise (100-140 words max), punchy, and direct.
-3. Structure:
-   - Paragraph 1: 1-sentence personalized hook acknowledging why this investor specifically fits.
-   - Paragraph 2: What we are building and our biggest traction point/metric.
-   - Paragraph 3: The ask (e.g., "Raising a $X round, would love 15 min if this is in your wheelhouse").
-4. Return ONLY a valid JSON object with EXACTLY two fields:
-   {
-     "subject": "Subject line text here",
-     "body": "Email body text here"
-   }
+CRITICAL ZERO-HALLUCINATION GUARDRAILS:
+1. STRICT FACTUAL FIDELITY: ONLY use facts, metrics, and numbers explicitly provided in the "Startup Description & Traction".
+2. ABSOLUTELY NEVER INVENT OR GUESS:
+   - Do NOT invent dollar revenue or traction ($MRR, $ARR, GMV).
+   - Do NOT invent user/customer/client counts (e.g., "50 beta users", "over 10,000 customers") if not explicitly provided.
+   - Do NOT invent growth percentages (e.g., "growing 25% MoM").
+   - Do NOT invent funding round amounts (e.g., "$1.5M round") if not specified in the description.
+3. ADAPTIVE CONTEXT HANDLING:
+   - If the user provided real metrics (e.g. "$10k MRR", "2k GitHub stars"), highlight them cleanly in paragraph 2.
+   - If NO numbers/metrics are present, focus strictly on the problem being solved, the unique solution/moat, and why this investor's thesis in ${indStr} aligns. DO NOT insert placeholder or fabricated numbers.
+4. SAFE ROUND CONTEXT: If no dollar raise target was specified, say "raising our seed/early round" without inventing a dollar figure.
+5. INVESTOR ACCURACY: Do NOT falsely claim the investor backed a specific portfolio company unless that company is explicitly mentioned in the context.
+
+FORMAT & STRUCTURE:
+- Subject line: Punchy, relevant, under 7 words. No cheesy clickbait.
+- Email body: Concise (100-130 words max), 3 clear paragraphs.
+- Return ONLY a valid JSON object with EXACTLY two fields:
+  {
+    "subject": "Subject line text here",
+    "body": "Email body text here"
+  }
 `.trim();
 
     let generatedSubject = '';
@@ -187,7 +234,7 @@ CRITICAL RULES:
             body: JSON.stringify({
               contents: [{ parts: [{ text: prompt }] }],
               generationConfig: {
-                temperature: 0.3,
+                temperature: 0.2,
                 responseMimeType: 'application/json'
               }
             })
@@ -221,7 +268,7 @@ CRITICAL RULES:
           body: JSON.stringify({
             model: 'google/gemini-2.5-flash',
             messages: [{ role: 'user', content: prompt }],
-            temperature: 0.3,
+            temperature: 0.2,
             response_format: { type: 'json_object' }
           })
         });
@@ -244,6 +291,9 @@ CRITICAL RULES:
       generatedSubject = `Quick intro / ${startupDescription.slice(0, 30)}...`;
       generatedBody = `Hi ${investorName.split(' ')[0]},\n\nI noticed your active investments in ${indStr} and wanted to reach out.\n\n${startupDescription}\n\nWe are currently opening our round and would love to share our deck if this is something of interest.\n\nBest regards,\n[Your Name]`;
     }
+
+    // Apply Post-Generation Metric Consistency Sanitizer
+    generatedBody = sanitizeHallucinatedMetrics(generatedBody, startupDescription);
 
     return NextResponse.json(
       {

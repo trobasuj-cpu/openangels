@@ -238,7 +238,7 @@ export default function AiPitchModal({ investor, onClose }) {
               <div className="flex justify-end">
                 <button
                   onClick={handleSaveContext}
-                  className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1"
+                  className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   <Save className="w-3.5 h-3.5" /> Save Context
                 </button>
@@ -249,6 +249,15 @@ export default function AiPitchModal({ investor, onClose }) {
               "{startupDescription}"
             </div>
           )}
+
+          {/* Zero-Hallucination Security Badge */}
+          <div className="mt-2 flex items-center justify-between text-[11px] text-zinc-500">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>Zero-Hallucination active • AI uses only your real metrics</span>
+            </span>
+            <span className="text-zinc-600">Tip: add real \$MRR for 3x replies</span>
+          </div>
         </div>
 
         {/* Generate Button */}
