@@ -23,6 +23,7 @@ import data_provenance_engine as dpe
 import knowledge_graph_engine as kge
 import openangels_data_engine as ode
 import avatar_storage_engine as ase
+import search_rotation_engine as sre
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')
@@ -144,17 +145,8 @@ def validate_investor_profile(inv):
     return True, "Valid", sanitized
 
 def ddg_search(query, max_results=3, timeout=8):
-    worker_script = os.path.join(os.path.dirname(__file__), 'ddg_worker.py')
-    try:
-        proc = subprocess.run(
-            [sys.executable, worker_script, query],
-            capture_output=True, text=True, timeout=timeout
-        )
-        if proc.returncode == 0:
-            return json.loads(proc.stdout)
-    except Exception:
-        pass
-    return []
+    """Executes multi-provider search with automatic fallback to bypass rate limits."""
+    return sre.search_multi_provider(query, max_results=max_results, timeout=timeout)
 
 def find_linkedin(name, twitter_handle=''):
     query1 = f'"{name}" site:linkedin.com/in/'

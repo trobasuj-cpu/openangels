@@ -1,6 +1,9 @@
+import os
 import sys
 import json
-from ddgs import DDGS
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import search_rotation_engine as sre
 
 def main():
     if len(sys.argv) < 2:
@@ -8,7 +11,7 @@ def main():
         return
     query = sys.argv[1]
     try:
-        res = list(DDGS().text(query, max_results=3))
+        res = sre.search_multi_provider(query, max_results=3)
         print(json.dumps(res))
     except Exception:
         print("[]")

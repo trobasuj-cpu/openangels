@@ -11,7 +11,7 @@ import concurrent.futures
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from ddgs import DDGS
+import search_rotation_engine as sre
 
 # Force stdout encoding to UTF-8 for Windows console safety
 sys.stdout.reconfigure(encoding='utf-8')
@@ -39,21 +39,8 @@ HEADERS = {
 # ============================================================
 
 def ddg_search(query, max_results=3, timeout=8):
-    """DuckDuckGo search with hard timeout to prevent hangs."""
-    def _run():
-        try:
-            return list(DDGS().text(query, max_results=max_results))
-        except Exception:
-            return []
-    pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
-    fut = pool.submit(_run)
-    try:
-        res = fut.result(timeout=timeout)
-        pool.shutdown(wait=False)
-        return res
-    except (concurrent.futures.TimeoutError, Exception):
-        pool.shutdown(wait=False)
-        return []
+    """Multi-provider search with automatic fallback to Bing/DDG-HTML to prevent hangs."""
+    return sre.search_multi_provider(query, max_results=max_results, timeout=timeout)
 
 CHECKED_FILE = os.path.join(os.path.dirname(__file__), 'checked.txt')
 
