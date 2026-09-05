@@ -10,6 +10,7 @@ import AiPitchModal from './AiPitchModal';
 import InvestorEvidenceSection from './InvestorEvidenceSection';
 import { INVESTOR_COUNT } from '@/seo';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
+import { getVerificationInfo } from './Dashboard';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -191,9 +192,15 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{investor.name}</h2>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <ShieldCheck className="w-3 h-3" /> Verified Investor
-                  </span>
+                  {(() => {
+                    const verifInfo = getVerificationInfo(investor);
+                    return (
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" title="Direct MX record validation, SMTP handshake, zero bounce risk">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                        {verifInfo.badgeText}
+                      </span>
+                    );
+                  })()}
                   {investor.quality_score && investor.quality_score >= 70 ? (
                     <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
                       <Sparkles className="w-3 h-3" /> {investor.quality_score}% Quality

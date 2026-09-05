@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { 
   Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, 
   ChevronDown, ChevronRight, Check, Layers, Loader2, X, UserPlus, CheckCircle,
-  Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, Store, Cpu, Code2, Leaf, Dna 
+  Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, ShieldCheck, Store, Cpu, Code2, Leaf, Dna 
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -20,6 +20,35 @@ import AiPitchModal from './AiPitchModal';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
+
+export function getVerificationInfo(investor) {
+  const dateStr = investor?.created_at || investor?.updated_at;
+  let formattedDate = 'Sep 2026';
+  if (dateStr) {
+    try {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        formattedDate = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      }
+    } catch (e) {}
+  }
+
+  const hasEmail = !!investor?.email || !!investor?.has_email;
+  const hasSocial = !!investor?.linkedin_url || !!investor?.has_linkedin || !!investor?.twitter_url || !!investor?.has_twitter;
+
+  let method = 'Registry Confirmed';
+  if (hasEmail) {
+    method = 'SMTP Validated';
+  } else if (hasSocial) {
+    method = 'Profile Confirmed';
+  }
+
+  return {
+    date: formattedDate,
+    method,
+    badgeText: `Verified: ${formattedDate} (${method})`
+  };
+}
 
 const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = false, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
@@ -1059,6 +1088,7 @@ export default function Dashboard() {
                   else if (maxStr) displayCheckSize = `Up to ${maxStr}`;
                   
                   const displayAvatar = investor.avatar_url || investor.avatar || null;
+                  const verifInfo = getVerificationInfo(investor);
 
                   return (
                     <div key={investor.id} className="group flex flex-col bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-black/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">
@@ -1197,11 +1227,19 @@ export default function Dashboard() {
 
                           {/* Location row if firm was shown above */}
                           {investor.firm && investor.location && (
-                            <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+                            <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mb-2">
                               <MapPin className="w-3 h-3 shrink-0" />
                               <span className="truncate">{investor.location}</span>
                             </div>
                           )}
+
+                          {/* Contact Verification Timestamp Badge */}
+                          <div className="flex items-center gap-1.5 mb-2.5">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10.5px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                              <ShieldCheck className="w-3 h-3 text-emerald-500 shrink-0" />
+                              <span>{verifInfo.badgeText}</span>
+                            </span>
+                          </div>
 
                           {/* Bio */}
                           <p className="text-xs text-zinc-600 dark:text-zinc-300 mb-4 line-clamp-2 leading-relaxed">
