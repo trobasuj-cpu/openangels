@@ -24,6 +24,7 @@ import knowledge_graph_engine as kge
 import openangels_data_engine as ode
 import avatar_storage_engine as ase
 import search_rotation_engine as sre
+import indexnow_engine as ine
 
 # Force stdout to utf-8
 sys.stdout.reconfigure(encoding='utf-8')
@@ -538,6 +539,7 @@ def run_deterministic_registry_mode(batch_limit=100):
             
     print("\nStep: Saving to Supabase & Writing Data Lineage Proofs...")
     saved_count = 0
+    saved_slugs = []
     total_to_save = len(candidates) - len(rejected_indices)
     
     for i, inv in enumerate(candidates):
@@ -577,6 +579,7 @@ def run_deterministic_registry_mode(batch_limit=100):
                         created_id = res_body[0].get('id')
                     print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors': {inv['name']}", flush=True)
                     saved_count += 1
+                    saved_slugs.append(slug)
         except Exception:
             try:
                 insert_url2 = f"{SUPABASE_URL}/rest/v1/investors_secure"
@@ -588,6 +591,7 @@ def run_deterministic_registry_mode(batch_limit=100):
                             created_id = res_body2[0].get('id')
                         print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors_secure': {inv['name']}", flush=True)
                         saved_count += 1
+                        saved_slugs.append(slug)
             except Exception as e2:
                 print(f"  [Error] Failed to save {inv['name']}: {e2}", flush=True)
 
@@ -633,6 +637,9 @@ def run_deterministic_registry_mode(batch_limit=100):
     print(f"\n=========================================================")
     print(f"DONE! Successfully added {saved_count} new verified investors from registry.")
     print("=========================================================")
+    if saved_slugs:
+        print(f"\n[IndexNow] Automatically pushing {len(saved_slugs)} new investor URLs to search engines...")
+        ine.submit_slugs_to_indexnow(saved_slugs)
 
 # ============================================================================
 # MODE 1: DAILY NEWS & RSS SCRAPER
@@ -791,6 +798,7 @@ def run_daily_news_mode():
             
     print("\nStep 4: Saving to Supabase & Writing Data Lineage Proofs...")
     saved_count = 0
+    saved_slugs = []
     total_to_save = len(all_found_investors) - len(rejected_indices)
     
     for i, inv in enumerate(all_found_investors):
@@ -830,6 +838,7 @@ def run_daily_news_mode():
                         created_id = res_body[0].get('id')
                     print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors': {inv['name']}", flush=True)
                     saved_count += 1
+                    saved_slugs.append(slug)
         except Exception:
             try:
                 insert_url2 = f"{SUPABASE_URL}/rest/v1/investors_secure"
@@ -841,6 +850,7 @@ def run_daily_news_mode():
                             created_id = res_body2[0].get('id')
                         print(f"  [{saved_count+1}/{total_to_save}] [OK] Saved to 'investors_secure': {inv['name']}", flush=True)
                         saved_count += 1
+                        saved_slugs.append(slug)
             except Exception as e2:
                 print(f"  [Error] Failed to save {inv['name']}: {e2}", flush=True)
 
@@ -887,6 +897,12 @@ def run_daily_news_mode():
     print(f"\n=========================================================")
     print(f"DONE! Successfully added {saved_count} new verified investors.")
     print("=========================================================")
+    if saved_slugs:
+        print(f"\n[IndexNow] Automatically pushing {len(saved_slugs)} new investor URLs to search engines...")
+        try:
+            ine.submit_slugs_to_indexnow(saved_slugs)
+        except Exception as e:
+            print(f"[IndexNow Error] Could not push URLs: {e}")
 
 def main():
     print("=========================================================")
