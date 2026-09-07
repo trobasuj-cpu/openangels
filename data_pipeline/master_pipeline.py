@@ -438,7 +438,7 @@ def fetch_all_registry_urls():
         print(f"Error fetching registry sitemap: {e}")
         return []
 
-def run_deterministic_registry_mode(batch_limit=100):
+def run_deterministic_registry_mode(batch_limit=200):
     print("\n=== MODE 2: High-Volume Verified Angel Registry Importer ===")
     print("Fetching verified sitemap URLs (including sitemap sub-indices)...")
     
@@ -920,11 +920,11 @@ def main():
         engine = ode.get_data_engine()
         engine.run_full_system_audit()
     elif choice == '2':
-        batch_str = input("Enter batch size to import [Default: 100]: ").strip()
+        batch_str = input("Enter batch size to import [Default: 200]: ").strip()
         try:
-            batch_limit = int(batch_str) if batch_str else 100
+            batch_limit = int(batch_str) if batch_str else 200
         except ValueError:
-            batch_limit = 100
+            batch_limit = 200
         run_deterministic_registry_mode(batch_limit=batch_limit)
     else:
         run_daily_news_mode()
