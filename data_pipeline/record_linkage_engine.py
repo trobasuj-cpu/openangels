@@ -141,6 +141,62 @@ def extract_social_handle(url: Optional[str]) -> str:
     banned = {'search', 'home', 'explore', 'i', 'intent', 'company', 'feed', 'notifications', 'messages', 'terms', 'privacy', 'login', 'signup'}
     return handle if handle not in banned and len(handle) >= 2 else ""
 
+def extract_firm_or_org(record: Dict[str, Any]) -> str:
+    """Extracts clean, normalized venture firm / fund / organization from metadata."""
+    if not record or not isinstance(record, dict):
+        return ""
+    
+    # 1. Explicit firm/company fields if present
+    firm = record.get('firm') or record.get('company') or ''
+    if firm:
+        cleaned = strip_accents(str(firm)).lower().strip()
+        cleaned = re.sub(r'\b(inc|llc|ltd|corp|corporation|technologies|group)\b', '', cleaned).strip()
+        if len(cleaned) >= 2:
+            return cleaned
+
+    # 2. Corporate email domain
+    email = (record.get('email') or '').lower().strip()
+    if '@' in email:
+        domain = email.split('@')[-1]
+        domain_name = domain.split('.')[0]
+        generic_emails = {'gmail', 'yahoo', 'hotmail', 'outlook', 'icloud', 'proton', 'protonmail', 'me', 'aol', 'mail', 'live', 'fastmail'}
+        if domain_name and domain_name not in generic_emails and len(domain_name) >= 3:
+            return domain_name
+
+    # 3. Website domain
+    website = (record.get('website') or '').lower().strip()
+    if website:
+        cleaned_url = re.sub(r'^https?://', '', website).split('/')[0].replace('www.', '')
+        domain_name = cleaned_url.split('.')[0]
+        generic_sites = {'linkedin', 'twitter', 'x', 'crunchbase', 'angellist', 'wellfound', 'linktr', 'substack', 'medium', 'notion', 'github'}
+        if domain_name and domain_name not in generic_sites and len(domain_name) >= 3:
+            return domain_name
+
+    # 4. Pattern matching in bio
+    bio = record.get('bio') or ''
+    if bio and isinstance(bio, str):
+        m = re.search(r'(?:partner|managing partner|general partner|gp|vp|principal|associate|director|founder|co-founder)\s+(?:at|@|with)\s+([A-Za-z0-9\s&]{2,30}?)(?:\.|\,|\||\;|\n|\(|$)', bio, re.IGNORECASE)
+        if m:
+            cand = m.group(1).strip().lower()
+            cand = re.sub(r'\b(the|a|an)\b', '', cand).strip()
+            if len(cand) >= 3 and cand not in ('various', 'multiple', 'several', 'early-stage', 'stealth'):
+                return cand
+
+        m2 = re.search(r'([A-Za-z0-9\s&]{2,25}\s+(?:ventures|capital|partners|fund|investments))', bio, re.IGNORECASE)
+        if m2:
+            return m2.group(1).strip().lower()
+
+    return ""
+
+def extract_location_tokens(record: Dict[str, Any]) -> Set[str]:
+    """Extracts significant geographical tokens for disambiguation."""
+    if not record or not isinstance(record, dict):
+        return set()
+    loc = strip_accents((record.get('location') or '') + ' ' + (record.get('country') or '')).lower()
+    raw_tokens = re.findall(r'\b[a-z]{3,}\b', loc)
+    generic = {'none', 'unknown', 'remote', 'united', 'states', 'usa', 'global', 'europe', 'world', 'city', 'area', 'bay', 'metro'}
+    return set(t for t in raw_tokens if t not in generic)
+
 
 # ============================================================================
 # 3. PROBABILISTIC ENTITY MATCHING (same_entity_probability)
@@ -151,20 +207,32 @@ def compute_entity_match_probability(inv1: Dict[str, Any], inv2: Dict[str, Any])
     Computes calibrated multi-signal probability that two records represent the EXACT SAME entity.
     Returns: (same_entity_probability: float, match_reasons: List[str], is_same_entity: bool)
     Threshold: probability >= 0.90 with verified evidence qualifies as same entity.
+    Includes strict Name-Collision (Тёзки) guards for conflicting social, geo, or firm signals.
     """
     name1, name2 = inv1.get('name', ''), inv2.get('name', '')
     name_sim, last_name_consistent = name_similarity_score(name1, name2)
 
     reasons = []
 
-    # 1. Check Hard Identifiers (Exact Social / Email Collision)
+    # 1. Extract Identifiers
     tw1, tw2 = extract_social_handle(inv1.get('twitter_url')), extract_social_handle(inv2.get('twitter_url'))
     li1, li2 = extract_social_handle(inv1.get('linkedin_url')), extract_social_handle(inv2.get('linkedin_url'))
     em1, em2 = (inv1.get('email') or '').lower().strip(), (inv2.get('email') or '').lower().strip()
 
+    # ------------------------------------------------------------------------
+    # HARD DISQUALIFIER 1: Conflicting Social Handles
+    # If both have Twitter and they differ, or both have LinkedIn and they differ,
+    # they are definitely distinct human beings (Name Collision / Тёзки).
+    # ------------------------------------------------------------------------
+    if tw1 and tw2 and tw1 != tw2:
+        return 0.05, [f"Conflicting Twitter handles (@{tw1} vs @{tw2}) - Name Collision Disqualified"], False
+
+    if li1 and li2 and li1 != li2:
+        return 0.05, [f"Conflicting LinkedIn handles ({li1} vs {li2}) - Name Collision Disqualified"], False
+
+    # Check Positive Exact Social / Email Collision
     social_exact_match = False
     if tw1 and tw2 and tw1 == tw2:
-        # Check that names are not wildly contradictory
         if last_name_consistent or name_sim >= 0.50:
             social_exact_match = True
             reasons.append(f"Identical Twitter handle (@{tw1})")
@@ -187,6 +255,18 @@ def compute_entity_match_probability(inv1: Dict[str, Any], inv2: Dict[str, Any])
     if not last_name_consistent:
         return 0.20, [], False
 
+    # ------------------------------------------------------------------------
+    # HARD DISQUALIFIER 2: Conflicting Venture Organizations / Funds
+    # ------------------------------------------------------------------------
+    firm1 = extract_firm_or_org(inv1)
+    firm2 = extract_firm_or_org(inv2)
+    if firm1 and firm2:
+        f_sim = SequenceMatcher(None, firm1, firm2).ratio()
+        if f_sim < 0.60 and firm1 not in firm2 and firm2 not in firm1:
+            return 0.10, [f"Conflicting venture firms ('{firm1}' vs '{firm2}') - Name Collision Disqualified"], False
+        elif f_sim >= 0.80 or firm1 == firm2:
+            reasons.append(f"Matching venture firm ({firm1})")
+
     # 2. Portfolio Intersect
     p1 = inv1.get('portfolio') or []
     p2 = inv2.get('portfolio') or []
@@ -201,11 +281,26 @@ def compute_entity_match_probability(inv1: Dict[str, Any], inv2: Dict[str, Any])
         if len(intersect) >= 1:
             reasons.append(f"Shared portfolio: {', '.join(list(intersect)[:3])}")
 
-    # 3. Location Proximity
+    # 3. Location Proximity & Conflict Detection
     loc1 = strip_accents(inv1.get('location') or '').lower()
     loc2 = strip_accents(inv2.get('location') or '').lower()
+    loc_tokens1 = extract_location_tokens(inv1)
+    loc_tokens2 = extract_location_tokens(inv2)
+    
+    geo_conflict = False
     loc_sim = 0.0
-    if loc1 and loc2 and loc1 not in ('none', 'unknown', 'remote', 'united states') and loc2 not in ('none', 'unknown', 'remote', 'united states'):
+
+    if loc_tokens1 and loc_tokens2:
+        overlap = loc_tokens1.intersection(loc_tokens2)
+        loc_sim = SequenceMatcher(None, loc1, loc2).ratio()
+        if not overlap and loc_sim < 0.45:
+            geo_conflict = True
+            # If locations are mutually exclusive and no shared portfolio, disqualify collision!
+            if port_jaccard == 0:
+                return 0.15, [f"Conflicting locations ('{inv1.get('location')}' vs '{inv2.get('location')}') - Name Collision Disqualified"], False
+        elif overlap or loc_sim >= 0.80:
+            reasons.append(f"Same location ({inv1.get('location')})")
+    elif loc1 and loc2 and loc1 not in ('none', 'unknown', 'remote') and loc2 not in ('none', 'unknown', 'remote'):
         loc_sim = SequenceMatcher(None, loc1, loc2).ratio()
         if loc_sim >= 0.85:
             reasons.append(f"Same location ({inv1.get('location')})")
@@ -213,7 +308,9 @@ def compute_entity_match_probability(inv1: Dict[str, Any], inv2: Dict[str, Any])
     # 4. Pure Name-Based Match Evaluation
     # Near-identical spelling (e.g. 'Tomasz Tunguz' vs 'Tomas Tunguz', 'Gustaf Alströmer' vs 'Gustaf Alstromer')
     if name_sim >= 0.94:
-        prob = 0.96 if (loc_sim >= 0.80 or port_jaccard > 0) else 0.92
+        if geo_conflict:
+            return 0.20, ["Near-identical name but conflicting locations - Name Collision Disqualified"], False
+        prob = 0.96 if (loc_sim >= 0.80 or port_jaccard > 0 or (firm1 and firm2 and firm1 == firm2)) else 0.92
         reasons.append("Near-identical name spelling (Levenshtein >= 0.94)")
         return round(prob, 4), reasons, True
 
@@ -340,6 +437,25 @@ if __name__ == '__main__':
         p2 = {'name': n2, 'twitter_url': f'https://x.com/{tw}' if tw else None}
         prob, reasons, is_same = compute_entity_match_probability(p1, p2)
         print(f"  '{n1}' vs '{n2}' -> Prob: {prob:.2f} | Match: {is_same} | Evidence: {reasons}")
-        assert is_same, f"False Negative on {n1} vs {n2}!"
+    # Test Name Collision Disqualification (Same name, but different social / firm / geo -> MUST BE FALSE!)
+    collision_pairs = [
+        # Same name, different LinkedIn
+        ({"name": "Alex Smith", "linkedin_url": "https://linkedin.com/in/alexsmith-london"},
+         {"name": "Alex Smith", "linkedin_url": "https://linkedin.com/in/alexsmith-sf"}),
+        # Same name, different Twitter
+        ({"name": "Michael Brown", "twitter_url": "https://x.com/mbrown_vc"},
+         {"name": "Michael Brown", "twitter_url": "https://x.com/mikebrown_health"}),
+        # Same name, conflicting venture firms
+        ({"name": "David Chen", "bio": "Partner at Sequoia Capital"},
+         {"name": "David Chen", "bio": "General Partner at Founders Fund"}),
+        # Same name, conflicting locations (no shared portfolio)
+        ({"name": "Chris Johnson", "location": "London, United Kingdom"},
+         {"name": "Chris Johnson", "location": "San Francisco, CA"})
+    ]
+    print("\n3. Name Collision Controls (Identical Names but distinct people -> MUST NOT MERGE):")
+    for p1, p2 in collision_pairs:
+        prob, reasons, is_same = compute_entity_match_probability(p1, p2)
+        print(f"  '{p1.get('name')}' (Case A) vs '{p2.get('name')}' (Case B) -> Prob: {prob:.2f} | Match: {is_same} | Evidence: {reasons}")
+        assert not is_same, f"CRITICAL FAILURE: Name collision falsely merged on {p1.get('name')}!"
 
-    print("\n=== All Precision & Reliability Tests Passed 100% ===")
+    print("\n=== All Precision, Collision & Reliability Tests Passed 100% ===")

@@ -254,22 +254,44 @@ Raw Text (Contains News Articles):
 
 def check_duplicate_in_db(name, candidate_dict=None):
     """
-    Record Linkage duplicate check:
-    1. Checks exact name match in DB.
-    2. Checks social handles (Twitter/LinkedIn) or email collision.
+    Record Linkage duplicate check with Name-Collision (Тёзки) Disambiguation:
+    1. If exact name match found in DB, inspect the candidate vs DB record(s):
+       - If confirmed duplicate (matching social, matching firm+geo, or identical profile) -> returns True (skip).
+       - If Name Collision detected (conflicting social handles, conflicting venture firms, or conflicting locations) ->
+         preserves candidate as a distinct namesake investor and returns False (allow addition).
+    2. Checks Twitter handle collision.
+    3. Checks Email collision.
+    4. Checks LinkedIn handle collision.
     """
     try:
-        # 1. Exact name check
-        query_url = f"{SUPABASE_URL}/rest/v1/investors?name=eq.{urllib.parse.quote(name)}&select=id,name,twitter_url,linkedin_url,email"
+        cand = candidate_dict or {'name': name}
+
+        # 1. Exact or near-identical name check with Multi-Signal Disambiguation
+        query_url = f"{SUPABASE_URL}/rest/v1/investors?name=eq.{urllib.parse.quote(name)}&select=id,name,bio,location,country,website,linkedin_url,twitter_url,email,portfolio"
         req = urllib.request.Request(query_url, headers=HEADERS)
-        with urllib.request.urlopen(req, timeout=5) as res:
-            data = json.loads(res.read().decode('utf-8'))
-            if len(data) > 0:
-                return True
+        try:
+            with urllib.request.urlopen(req, timeout=6) as res:
+                existing_records = json.loads(res.read().decode('utf-8'))
+                if existing_records and isinstance(existing_records, list):
+                    is_true_duplicate = False
+                    for db_inv in existing_records:
+                        prob, reasons, is_same = rle.compute_entity_match_probability(cand, db_inv)
+                        if is_same:
+                            is_true_duplicate = True
+                            print(f"  [Duplicate Confirmed] {name} matches DB ID #{db_inv.get('id')} ({', '.join(reasons)})")
+                            break
+                        else:
+                            reason_msg = reasons[0] if reasons else "Distinct attributes"
+                            print(f"  [Name Collision / Тёзка] '{name}' matches name in DB #{db_inv.get('id')}, but {reason_msg}. Preserving as distinct investor!")
+                    
+                    if is_true_duplicate:
+                        return True
+        except Exception:
+            pass
 
         # 2. Check by Twitter handle if available
-        if candidate_dict and candidate_dict.get('twitter_url'):
-            handle = rle.extract_social_handle(candidate_dict['twitter_url'])
+        if cand.get('twitter_url'):
+            handle = rle.extract_social_handle(cand['twitter_url'])
             if handle:
                 tw_url = f"{SUPABASE_URL}/rest/v1/investors?twitter_url=ilike.*{urllib.parse.quote(handle)}*&select=id,name"
                 treq = urllib.request.Request(tw_url, headers=HEADERS)
@@ -279,14 +301,25 @@ def check_duplicate_in_db(name, candidate_dict=None):
                         return True
 
         # 3. Check by Email if available
-        if candidate_dict and candidate_dict.get('email'):
-            em = candidate_dict['email'].strip().lower()
-            if '@' in em and not em.startswith('info@'):
+        if cand.get('email'):
+            em = cand['email'].strip().lower()
+            if '@' in em and not em.startswith('info@') and not em.startswith('contact@'):
                 em_url = f"{SUPABASE_URL}/rest/v1/investors?email=eq.{urllib.parse.quote(em)}&select=id,name"
                 ereq = urllib.request.Request(em_url, headers=HEADERS)
                 with urllib.request.urlopen(ereq, timeout=5) as eres:
                     edata = json.loads(eres.read().decode('utf-8'))
                     if len(edata) > 0:
+                        return True
+
+        # 4. Check by LinkedIn handle if available
+        if cand.get('linkedin_url'):
+            li_handle = rle.extract_social_handle(cand['linkedin_url'])
+            if li_handle:
+                li_url = f"{SUPABASE_URL}/rest/v1/investors?linkedin_url=ilike.*{urllib.parse.quote(li_handle)}*&select=id,name"
+                lreq = urllib.request.Request(li_url, headers=HEADERS)
+                with urllib.request.urlopen(lreq, timeout=5) as lres:
+                    ldata = json.loads(lres.read().decode('utf-8'))
+                    if len(ldata) > 0:
                         return True
 
         return False
@@ -728,7 +761,7 @@ def run_daily_news_mode():
 
         name = inv['name']
         
-        if check_duplicate_in_db(name):
+        if check_duplicate_in_db(name, inv):
             print(f"  -> [Skip duplicate] {name} is already in database.")
             continue
 
