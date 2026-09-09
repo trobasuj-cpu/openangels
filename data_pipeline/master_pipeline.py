@@ -945,11 +945,19 @@ def main():
     print("  [1] Daily Deals & News Monitor (TechCrunch, Sifted, EU-Startups...)")
     print("  [2] High-Volume Verified Angel Registries (Fast Scale / Zero-AI)")
     print("  [3] Full 14-Stage Data Quality & Engine Audit (HUD Benchmark)")
+    print("  [4] Live Database Quality Audit & DQS Report (DAY 2 — 5,465 Records)")
     print("---------------------------------------------------------")
     
-    choice = input("Enter mode [1, 2, or 3] (Default: 1): ").strip()
+    choice = input("Enter mode [1, 2, 3, or 4] (Default: 1): ").strip()
     
-    if choice == '3':
+    if choice == '4':
+        import data_quality_auditor as dqa
+        records = dqa.fetch_all_investors()
+        if records:
+            auditor = dqa.DataQualityAuditor(records)
+            report_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'DATA_QUALITY_REPORT.md')
+            auditor.generate_markdown_report(report_file)
+    elif choice == '3':
         engine = ode.get_data_engine()
         engine.run_full_system_audit()
     elif choice == '2':
