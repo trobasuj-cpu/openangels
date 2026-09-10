@@ -46,6 +46,24 @@ from collections import Counter
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
+try:
+    from data_pipeline.source_trust_engine import (
+        calculate_source_trust_score,
+        classify_source_category,
+        resolve_multi_source_consensus
+    )
+except ImportError:
+    try:
+        from source_trust_engine import (
+            calculate_source_trust_score,
+            classify_source_category,
+            resolve_multi_source_consensus
+        )
+    except ImportError:
+        calculate_source_trust_score = None
+        classify_source_category = None
+        resolve_multi_source_consensus = None
+
 # Source credibility weights
 SOURCE_TIER_WEIGHTS = {
     'tier_1': 1.0,  # Official Company Press, Regulatory Filings (SEC Form D), Direct Domain
@@ -76,7 +94,8 @@ class ProvenanceClaim:
         agreement: str = "1/1",
         confidence: float = 0.90,
         verification_status: str = "VERIFIED",
-        conflicts: Optional[List[Dict[str, Any]]] = None
+        conflicts: Optional[List[Dict[str, Any]]] = None,
+        epistemic_consensus: Optional[Dict[str, Any]] = None
     ):
         self.claim_id = claim_id
         self.entity_id = entity_id
@@ -91,9 +110,10 @@ class ProvenanceClaim:
         self.confidence = confidence
         self.verification_status = verification_status
         self.conflicts = conflicts or []
+        self.epistemic_consensus = epistemic_consensus
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        data = {
             "claim_id": self.claim_id,
             "entity_id": self.entity_id,
             "entity_name": self.entity_name,
@@ -108,6 +128,9 @@ class ProvenanceClaim:
             "verification_status": self.verification_status,
             "conflicts": self.conflicts
         }
+        if self.epistemic_consensus:
+            data["epistemic_consensus"] = self.epistemic_consensus
+        return data
 
 
 # ============================================================================
@@ -156,6 +179,27 @@ class DataProvenanceEngine:
             "published_at": published_at or now_iso,
             "collected_at": now_iso
         }
+
+        if calculate_source_trust_score:
+            try:
+                trust_claim_type = claim_type
+                if trust_claim_type in ["round_size", "funding_round", "valuation"]:
+                    trust_claim_type = "round_amount_valuation"
+                elif trust_claim_type in ["bio", "description"]:
+                    trust_claim_type = "product_description"
+                elif trust_claim_type in ["role", "firm", "fund"]:
+                    trust_claim_type = "investor_role_fund"
+                elif trust_claim_type in ["email", "contact", "deliverability"]:
+                    trust_claim_type = "contact_deliverability"
+
+                source_entry["source_trust"] = calculate_source_trust_score(
+                    source_url=source_url or "",
+                    claim_type=trust_claim_type,
+                    source_name=source_name,
+                    is_direct_smtp="smtp" in source_name.lower()
+                )
+            except Exception:
+                pass
 
         if claim_key not in self._claims_registry:
             # First observation of this claim
@@ -247,6 +291,35 @@ class DataProvenanceEngine:
         else:
             claim.verification_status = "PROBABLE"
             claim.confidence = 0.85
+
+        # Epistemic Multi-Source Consensus (DAY 3 Engine Integration)
+        if resolve_multi_source_consensus:
+            try:
+                trust_claim_type = claim.claim_type
+                if trust_claim_type in ["round_size", "funding_round", "valuation"]:
+                    trust_claim_type = "round_amount_valuation"
+                elif trust_claim_type in ["bio", "description"]:
+                    trust_claim_type = "product_description"
+                elif trust_claim_type in ["role", "firm", "fund"]:
+                    trust_claim_type = "investor_role_fund"
+                elif trust_claim_type in ["email", "contact", "deliverability"]:
+                    trust_claim_type = "contact_deliverability"
+
+                assertions_list = [
+                    {
+                        "source_name": s.get("name", ""),
+                        "source_url": s.get("url", ""),
+                        "value": s.get("value"),
+                        "is_direct_smtp": "smtp" in str(s.get("name", "")).lower()
+                    }
+                    for s in claim.sources
+                ]
+                claim.epistemic_consensus = resolve_multi_source_consensus(
+                    claim_type=trust_claim_type,
+                    assertions=assertions_list
+                )
+            except Exception:
+                claim.epistemic_consensus = None
 
     def get_claim(self, entity_id: str, claim_type: str) -> Optional[ProvenanceClaim]:
         return self._claims_registry.get(self._generate_claim_key(entity_id, claim_type))
