@@ -132,6 +132,35 @@ class ProvenanceClaim:
             data["epistemic_consensus"] = self.epistemic_consensus
         return data
 
+    def to_epistemic_chain(self) -> str:
+        """Visual 7-layer representation (DAY 4 standard)."""
+        sources_str = ", ".join([f"{s.get('name', 'Unknown')} ({str(s.get('tier', 'tier_2')).upper()})" for s in self.sources])
+        ev_sample = self.evidence_snippets[0] if self.evidence_snippets else "No excerpt recorded"
+        if len(ev_sample) > 90:
+            ev_sample = ev_sample[:87] + "..."
+        date_str = self.published_at[:10] if self.published_at else self.collected_at[:10]
+
+        lines = [
+            f"CLAIM:      \"{self.entity_name} {self.claim_type}: {self.canonical_value}\"",
+            f"  ↓",
+            f"VALUE:      {self.canonical_value}",
+            f"  ↓",
+            f"SOURCE:     {sources_str}",
+            f"  ↓",
+            f"EVIDENCE:   \"{ev_sample}\"",
+            f"  ↓",
+            f"DATE:       {date_str} (Collected: {self.collected_at[:10]})",
+            f"  ↓",
+            f"CONFIDENCE: {self.confidence * 100:.1f}% (Consensus: {self.agreement})",
+            f"  ↓",
+            f"STATUS:     [{self.verification_status}]"
+        ]
+        if self.conflicts:
+            lines.append("  [!] CONFLICT DETAILS:")
+            for c in self.conflicts:
+                lines.append(f"      - {c.get('source_name')}: claimed '{c.get('conflicting_value')}' (vs majority '{c.get('majority_value')}')")
+        return "\n".join(lines)
+
 
 # ============================================================================
 # 2. DATA PROVENANCE ENGINE
