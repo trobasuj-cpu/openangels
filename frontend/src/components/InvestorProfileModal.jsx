@@ -8,6 +8,7 @@ import GumroadIframeModal from './GumroadIframeModal';
 import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
 import InvestorEvidenceSection from './InvestorEvidenceSection';
+import CompanyProfileModal from './CompanyProfileModal';
 import { INVESTOR_COUNT } from '@/seo';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { getVerificationInfo } from './Dashboard';
@@ -30,6 +31,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [unlockedContact, setUnlockedContact] = useState(null);
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState(null);
 
   useEffect(() => {
     async function loadContactDetails() {
@@ -368,13 +370,17 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {portfolioList.map((item, idx) => (
-                          <span 
+                          <button 
                             key={idx} 
-                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-sm flex items-center gap-1.5"
+                            type="button"
+                            onClick={() => setSelectedCompany(item)}
+                            className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 hover:text-amber-200 border border-amber-500/20 hover:border-amber-500/40 shadow-sm flex items-center gap-1.5 transition-all group cursor-pointer"
+                            title={`Inspect ${item} Company Intelligence Profile`}
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                            {item}
-                          </span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 group-hover:scale-125 transition-transform" />
+                            <span>{item}</span>
+                            <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
+                          </button>
                         ))}
                       </div>
 
@@ -717,6 +723,14 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         onClose={() => setIsCheckoutOpen(false)}
         userEmail={user?.email}
       />
+
+      {/* Company Intelligence Profile Modal (DAY 6) */}
+      {selectedCompany && (
+        <CompanyProfileModal
+          companyName={selectedCompany}
+          onClose={() => setSelectedCompany(null)}
+        />
+      )}
     </>
   );
 }
