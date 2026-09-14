@@ -592,15 +592,17 @@ export default function Dashboard() {
       })
       .catch(() => {});
 
-    // Sync search if URL popstate changes (back/forward navigation)
-    const handlePopState = () => {
+    // Continuously sync search if URL changes (popstate or client-side Next navigation)
+    const checkUrl = () => {
       if (typeof window !== 'undefined') {
         const sp = new URLSearchParams(window.location.search);
         const urlQ = sp.get('search') || sp.get('q') || '';
         setSearch(prev => (prev !== urlQ ? urlQ : prev));
       }
     };
-    window.addEventListener('popstate', handlePopState);
+    checkUrl();
+    window.addEventListener('popstate', checkUrl);
+    const interval = setInterval(checkUrl, 200);
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -625,7 +627,8 @@ export default function Dashboard() {
     });
 
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('popstate', checkUrl);
+      clearInterval(interval);
       subscription.unsubscribe();
     };
   }, []);

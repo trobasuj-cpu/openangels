@@ -474,17 +474,21 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {(company.investors || []).map((invName, iIdx) => (
-                    <Link
+                    <a
                       key={iIdx}
                       href={`/?search=${encodeURIComponent(invName)}`}
-                      onClick={onClose}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onClose) onClose();
+                        window.location.href = `/?search=${encodeURIComponent(invName)}`;
+                      }}
                       className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-950/30 hover:bg-purple-900/50 text-purple-200 hover:text-white border border-purple-500/30 hover:border-purple-500/60 transition-all flex items-center gap-1.5 group cursor-pointer shadow-sm"
                       title={`Search ${invName} in OpenAngels`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-125 transition-transform" />
                       <span>{invName}</span>
                       <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -504,14 +508,18 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
                 </p>
 
                 <div className="flex items-center gap-3 flex-wrap">
-                  <Link
+                  <a
                     href={`/?search=${encodeURIComponent((company.investors || [])[0] || company.name)}`}
-                    onClick={onClose}
-                    className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-red-600/20"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (onClose) onClose();
+                      window.location.href = `/?search=${encodeURIComponent((company.investors || [])[0] || company.name)}`;
+                    }}
+                    className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-red-600/20 cursor-pointer"
                   >
                     <span>Pitch Syndicate Co-Investors {company.investors?.[0] ? `(${company.investors[0]})` : ''}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
+                  </a>
 
                   <Link
                     href={`/company/${company.slug}`}
