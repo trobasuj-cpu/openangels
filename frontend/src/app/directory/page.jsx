@@ -1,6 +1,7 @@
 import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, absoluteUrl } from '@/seo';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +42,13 @@ async function fetchInvestors() {
   }
 }
 
-export default async function DirectoryPage() {
+export default async function DirectoryPage({ searchParams }) {
+  const params = await searchParams;
+  const q = params?.q || params?.search;
+  if (q && q.trim()) {
+    redirect(`/?search=${encodeURIComponent(q.trim())}`);
+  }
+
   const investorList = await fetchInvestors();
 
   const grouped = {};

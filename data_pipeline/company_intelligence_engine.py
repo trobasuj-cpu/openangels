@@ -263,6 +263,100 @@ CURATED_DOSSIERS = {
             {'date': '2024-08-01', 'title': 'Launched Publishers Revenue Sharing', 'detail': 'Introduced automated ad revenue sharing for media publishers cited in AI answers.'}
         ],
         'pitch_hook': 'When pitching conversational AI or search investors (NEA, Bessemer), emphasize citation transparency, latency benchmarks, and low customer acquisition costs.'
+    },
+    'facebook': {
+        'name': 'Facebook (Meta)',
+        'slug': 'facebook',
+        'legal_name': 'Meta Platforms, Inc. / TheFacebook, LLC',
+        'domain': 'meta.com',
+        'tagline': 'Connecting over 3.2 billion people across social graphs and open-weights AI',
+        'overview': 'World leading social and AI technology giant behind Facebook, Instagram, WhatsApp, and Llama foundation models. Historically seeded by Peter Thiel’s legendary first outside angel investment of $500k in August 2004.',
+        'founded_year': 2004,
+        'location': 'Menlo Park, CA, USA',
+        'country': 'United States',
+        'stage': 'Public (NASDAQ: META)',
+        'funding': {
+            'total_raised': '$16.1B IPO ($500k Angel Round)',
+            'last_round_type': 'Initial Public Offering',
+            'last_round_amount': '$16.0B',
+            'valuation': '$1.45T Market Cap',
+            'round_date': 'May 2012',
+            'stage': 'Public'
+        },
+        'founders': [
+            {'name': 'Mark Zuckerberg', 'role': 'Founder, Chairman & CEO', 'pedigree': 'Harvard Alum, creator of Facebook, Llama sponsor', 'linkedin': 'https://linkedin.com/in/zuck'},
+            {'name': 'Eduardo Saverin', 'role': 'Co-Founder & Investor', 'pedigree': 'Early business lead, Founding Partner at B Capital Group', 'linkedin': 'https://linkedin.com/in/esf'}
+        ],
+        'investors': ['Peter Thiel', 'Accel Partners', 'Greylock Partners', 'Founders Fund', 'Marc Andreessen'],
+        'products': ['Facebook', 'Instagram', 'WhatsApp', 'Meta AI (Llama 3.1 & 3.2)', 'Meta Quest 3'],
+        'customers': ['Over 3.27B daily active users globally', '10M+ active small and enterprise advertisers'],
+        'employees': 70799,
+        'employee_growth_90d': '+5% high-performance engineering focus',
+        'hiring': {
+            'status': 'Elite AI Talent Recruitment',
+            'open_roles': 180,
+            'focus_areas': ['Frontier Open-Weights Models (Llama 4)', 'Custom AI Accelerators (MTIA)', 'Spatial Reality OS']
+        },
+        'technology_signals': {
+            'stack': ['PyTorch', 'React', 'Hack/PHP', 'Cassandra', 'Custom MTIA Silicon', 'GraphQL'],
+            'moat': 'World’s most ubiquitous social identity graph, creator of industry-standard dev stacks (React, PyTorch), 3.2B daily active consumer distribution',
+            'github_velocity': 'Top #1 global corporate open-source impact (PyTorch, React, Llama, Docusaurus)'
+        },
+        'growth_signals': {
+            'revenue_run_rate': '$150B+ Annual Revenue (80%+ gross margins)',
+            'user_base': '3.27 Billion family daily active people (DAP)'
+        },
+        'recent_events': [
+            {'date': '2024-07-23', 'title': 'Released Llama 3.1 405B', 'detail': 'World’s first frontier open-weights model rivaling proprietary GPT-4o performance.'}
+        ],
+        'pitch_hook': 'When pitching investors who backed Facebook (Peter Thiel, Founders Fund, Accel), highlight organic viral loops, daily retention cohorts, and developer network effects.'
+    },
+    'linkedin': {
+        'name': 'LinkedIn',
+        'slug': 'linkedin',
+        'legal_name': 'LinkedIn Corporation (Subsidiary of Microsoft)',
+        'domain': 'linkedin.com',
+        'tagline': 'The global professional economic graph connecting 1B+ members',
+        'overview': 'The definitive professional identity and recruitment network. Co-founded by Reid Hoffman and early backed by Peter Thiel and Sequoia Capital, culminating in a historic $26.2B acquisition by Microsoft.',
+        'founded_year': 2002,
+        'location': 'Sunnyvale, CA, USA',
+        'country': 'United States',
+        'stage': 'Acquired ($26.2B by Microsoft)',
+        'funding': {
+            'total_raised': '$103M Venture + $26.2B Acquisition',
+            'last_round_type': 'M&A Acquisition by Microsoft',
+            'last_round_amount': '$26.2B Cash',
+            'valuation': '$26.2B Transaction Value',
+            'round_date': 'December 2016',
+            'stage': 'Acquired'
+        },
+        'founders': [
+            {'name': 'Reid Hoffman', 'role': 'Co-Founder & Former Executive Chairman', 'pedigree': 'Partner at Greylock, PayPal Mafia, Board Member at OpenAI', 'linkedin': 'https://linkedin.com/in/reidhoffman'},
+            {'name': 'Allen Blue', 'role:': 'Co-Founder & VP Product', 'pedigree': 'Stanford Alum, workforce development researcher', 'linkedin': 'https://linkedin.com/in/allenblue'}
+        ],
+        'investors': ['Peter Thiel', 'Reid Hoffman', 'Sequoia Capital', 'Greylock Partners', 'Bessemer Venture Partners'],
+        'products': ['LinkedIn Talent Solutions', 'Sales Navigator', 'LinkedIn Premium', 'LinkedIn Learning'],
+        'customers': ['Over 1 Billion members across 200+ countries', '98% of Fortune 500 recruitment teams'],
+        'employees': 19400,
+        'employee_growth_90d': '+12% AI integrations across talent products',
+        'hiring': {
+            'status': 'Strategic Product Expansion',
+            'open_roles': 75,
+            'focus_areas': ['AI-Assisted Candidate Sourcing', 'Economic Graph Analytics']
+        },
+        'technology_signals': {
+            'stack': ['Java', 'Scala', 'Apache Kafka', 'Rest.li', 'Pinot', 'Azure Cloud'],
+            'moat': 'Unrivaled global career identity monopoly; zero viable substitute for corporate B2B recruitment at enterprise scale',
+            'github_velocity': 'Creator of Apache Kafka, Apache Pinot, DataHub'
+        },
+        'growth_signals': {
+            'revenue_run_rate': '$16B+ Annual Revenue within Microsoft Cloud ecosystem',
+            'user_base': '1.05 Billion verified member profiles'
+        },
+        'recent_events': [
+            {'date': '2024-05-15', 'title': 'Surpassed 1 Billion Global Members', 'detail': 'Milestone reached with record engagement across B2B creator content.'}
+        ],
+        'pitch_hook': 'When pitching professional network or B2B data investors (Peter Thiel, Reid Hoffman, Greylock), focus on high-LTV subscription retention, proprietary career graph density, and B2B workflow lock-in.'
     }
 }
 

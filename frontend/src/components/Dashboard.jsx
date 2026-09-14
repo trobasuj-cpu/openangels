@@ -553,6 +553,15 @@ export default function Dashboard() {
       })
       .catch(() => {});
 
+    // Read ?search= or ?q= from URL on mount
+    if (typeof window !== 'undefined') {
+      const sp = new URLSearchParams(window.location.search);
+      const urlQ = sp.get('search') || sp.get('q');
+      if (urlQ && urlQ.trim()) {
+        setSearch(urlQ.trim());
+      }
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {

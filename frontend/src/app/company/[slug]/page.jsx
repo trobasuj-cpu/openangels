@@ -418,7 +418,7 @@ export default async function CompanyIntelligencePage({ params }) {
               {(company.investors || []).map((invName, idx) => (
                 <Link
                   key={idx}
-                  href={`/directory?q=${encodeURIComponent(invName)}`}
+                  href={`/?search=${encodeURIComponent(invName)}`}
                   className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-purple-950/40 hover:bg-purple-900/60 text-purple-200 hover:text-white border border-purple-500/30 hover:border-purple-500/60 transition-all flex items-center gap-2 group shadow-sm"
                   title={`Find ${invName} on OpenAngels`}
                 >
@@ -444,10 +444,10 @@ export default async function CompanyIntelligencePage({ params }) {
               </p>
 
               <Link
-                href={`/directory?q=${encodeURIComponent((company.investors || [])[0] || company.name)}`}
+                href={`/?search=${encodeURIComponent((company.investors || [])[0] || company.name)}`}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition-all shadow-lg shadow-red-600/20"
               >
-                <span>Pitch Syndicate Co-Investors</span>
+                <span>Pitch Syndicate Co-Investors {company.investors?.[0] ? `(${company.investors[0]})` : ''}</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
