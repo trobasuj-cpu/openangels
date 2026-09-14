@@ -281,7 +281,13 @@ export default function Dashboard() {
   const [totalDatabaseCount, setTotalDatabaseCount] = useState(4231);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('search') || params.get('q') || '';
+    }
+    return '';
+  });
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -357,6 +363,23 @@ export default function Dashboard() {
   const [loadingMore, setLoadingMore] = useState(false);
   const mainScrollRef = useRef(null);
   const isInitialMount = useRef(true);
+  const activeFetchIdRef = useRef(0);
+  const filtersRef = useRef({
+    search,
+    selectedIndustries,
+    selectedLocations,
+    selectedCheckSizes,
+    selectedStages,
+    showNewOnly
+  });
+  filtersRef.current = {
+    search,
+    selectedIndustries,
+    selectedLocations,
+    selectedCheckSizes,
+    selectedStages,
+    showNewOnly
+  };
 
   // Industry counts map for badges
   const industryCounts = useMemo(() => {
@@ -401,7 +424,10 @@ export default function Dashboard() {
     }
   }, [selectedIndustries, selectedLocations, selectedCheckSizes, selectedStages, search]);
 
-  async function fetchInvestors({ offset = 0, isAppend = false, forceNewest = null } = {}) {
+  async function fetchInvestors(options = {}) {
+    const opts = typeof options === 'boolean' ? { forceNewest: options } : options;
+    const { offset = 0, isAppend = false, forceNewest = null, customSearch = null } = opts;
+    const fetchId = ++activeFetchIdRef.current;
     try {
       if (isAppend) {
         setLoadingMore(true);
@@ -410,7 +436,10 @@ export default function Dashboard() {
         setError(null);
       }
 
-      const isNewestActive = forceNewest !== null ? forceNewest : (showNewOnly || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('newest') === 'true'));
+      const cur = filtersRef.current;
+      const isNewestActive = forceNewest !== null ? forceNewest : (cur.showNewOnly || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('newest') === 'true'));
+      const activeSearch = customSearch !== null ? customSearch : (cur.search || '');
+
       const { data: { session } } = await supabase.auth.getSession();
       const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
 
@@ -422,33 +451,33 @@ export default function Dashboard() {
         params.set('order', 'created_at.desc');
       }
 
-      if (search && search.trim()) {
-        params.set('search', search.trim());
+      if (activeSearch && activeSearch.trim()) {
+        params.set('search', activeSearch.trim());
       }
-      if (selectedIndustries && selectedIndustries.length > 0) {
-        params.set('industries', selectedIndustries.join(','));
+      if (cur.selectedIndustries && cur.selectedIndustries.length > 0) {
+        params.set('industries', cur.selectedIndustries.join(','));
       }
-      if (selectedStages && selectedStages.length > 0) {
-        params.set('stages', selectedStages.join(','));
+      if (cur.selectedStages && cur.selectedStages.length > 0) {
+        params.set('stages', cur.selectedStages.join(','));
       }
-      if (selectedLocations && selectedLocations.length > 0) {
-        params.set('locations', selectedLocations.join(','));
+      if (cur.selectedLocations && cur.selectedLocations.length > 0) {
+        params.set('locations', cur.selectedLocations.join(','));
       }
 
       // Check size mapping
-      if (selectedCheckSizes && selectedCheckSizes.length > 0) {
+      if (cur.selectedCheckSizes && cur.selectedCheckSizes.length > 0) {
         let minC = null;
         let maxC = null;
-        if (selectedCheckSizes.includes("Up to $100k")) maxC = 100000;
-        if (selectedCheckSizes.includes("$100k - $500k")) {
+        if (cur.selectedCheckSizes.includes("Up to $100k")) maxC = 100000;
+        if (cur.selectedCheckSizes.includes("$100k - $500k")) {
           minC = minC !== null ? Math.min(minC, 100000) : 100000;
           maxC = maxC !== null ? Math.max(maxC, 500000) : 500000;
         }
-        if (selectedCheckSizes.includes("$500k - $1M")) {
+        if (cur.selectedCheckSizes.includes("$500k - $1M")) {
           minC = minC !== null ? Math.min(minC, 500000) : 500000;
           maxC = maxC !== null ? Math.max(maxC, 1000000) : 1000000;
         }
-        if (selectedCheckSizes.includes("$1M+")) {
+        if (cur.selectedCheckSizes.includes("$1M+")) {
           minC = minC !== null ? Math.min(minC, 1000000) : 1000000;
           maxC = null;
         }
@@ -462,6 +491,12 @@ export default function Dashboard() {
       }
 
       const json = await res.json();
+
+      // DISCARD STALE RESPONSES: if another search/filter started, drop this response
+      if (fetchId !== activeFetchIdRef.current) {
+        return;
+      }
+
       const rawData = json.investors || [];
       const validData = rawData.filter(inv => inv && inv.name && inv.name.trim() !== '');
       const total = json.totalCount !== undefined ? json.totalCount : totalDatabaseCount;
@@ -469,7 +504,7 @@ export default function Dashboard() {
       if (!isAppend) {
         setInvestors(validData);
         setMatchingCount(total);
-        if (!search && selectedIndustries.length === 0 && selectedLocations.length === 0 && selectedStages.length === 0 && selectedCheckSizes.length === 0) {
+        if (!activeSearch && cur.selectedIndustries.length === 0 && cur.selectedLocations.length === 0 && cur.selectedStages.length === 0 && cur.selectedCheckSizes.length === 0) {
           setTotalDatabaseCount(total);
         }
       } else {
@@ -484,6 +519,7 @@ export default function Dashboard() {
       setLoading(false);
       setLoadingMore(false);
     } catch (err) {
+      if (fetchId !== activeFetchIdRef.current) return;
       console.error('Error fetching investors:', err);
       setError(err.message);
       setLoading(false);
@@ -491,10 +527,11 @@ export default function Dashboard() {
     }
   }
 
-  // Debounced filter refetching
+  // Debounced filter refetching (immediate on initial mount)
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
+      fetchInvestors({ offset: 0, isAppend: false });
       return;
     }
     const timer = setTimeout(() => {
@@ -510,11 +547,13 @@ export default function Dashboard() {
       .eq('id', userId)
       .single();
     if (!error && data) {
-      setProfile(data);
+      setProfile(prev => {
+        if (prev?.is_premium !== data.is_premium) {
+          fetchInvestors({ offset: 0, isAppend: false });
+        }
+        return data;
+      });
       if (data.crm_bcc_email) setBccEmail(data.crm_bcc_email);
-      if (data.is_premium) {
-        fetchInvestors();
-      }
     }
   };
 
@@ -553,14 +592,15 @@ export default function Dashboard() {
       })
       .catch(() => {});
 
-    // Read ?search= or ?q= from URL on mount
-    if (typeof window !== 'undefined') {
-      const sp = new URLSearchParams(window.location.search);
-      const urlQ = sp.get('search') || sp.get('q');
-      if (urlQ && urlQ.trim()) {
-        setSearch(urlQ.trim());
+    // Sync search if URL popstate changes (back/forward navigation)
+    const handlePopState = () => {
+      if (typeof window !== 'undefined') {
+        const sp = new URLSearchParams(window.location.search);
+        const urlQ = sp.get('search') || sp.get('q') || '';
+        setSearch(prev => (prev !== urlQ ? urlQ : prev));
       }
-    }
+    };
+    window.addEventListener('popstate', handlePopState);
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -568,10 +608,9 @@ export default function Dashboard() {
         fetchProfile(session.user.id);
         fetchCrmLeads(session.user.id);
       }
-      fetchInvestors();
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
@@ -580,10 +619,15 @@ export default function Dashboard() {
         setProfile(null);
         setCrmLeadIds(new Set());
       }
-      fetchInvestors();
+      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+        fetchInvestors({ offset: 0, isAppend: false });
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const uniqueIndustries = useMemo(() => DEFAULT_INDUSTRIES, []);
@@ -598,11 +642,25 @@ export default function Dashboard() {
   };
 
   const filteredInvestors = useMemo(() => {
+    let list = investors;
     if (isAiMatch && aiMatchedIds) {
-      return investors.filter(inv => aiMatchedIds.has(inv.id));
+      list = list.filter(inv => aiMatchedIds.has(inv.id));
     }
-    return investors;
-  }, [investors, isAiMatch, aiMatchedIds]);
+    // Client-side safeguard: if search query is active, ensure displayed cards match query
+    if (search && search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter(inv => {
+        const name = (inv.name || '').toLowerCase();
+        const bio = (inv.bio || '').toLowerCase();
+        const loc = (inv.location || '').toLowerCase();
+        const portfolio = Array.isArray(inv.portfolio) 
+          ? inv.portfolio.join(' ').toLowerCase() 
+          : (typeof inv.portfolio === 'string' ? inv.portfolio.toLowerCase() : '');
+        return name.includes(q) || bio.includes(q) || loc.includes(q) || portfolio.includes(q);
+      });
+    }
+    return list;
+  }, [investors, isAiMatch, aiMatchedIds, search]);
 
   const renderFilterOptions = (options, selected, setter, isIndustry = false) => {
     let filteredOptions = options;

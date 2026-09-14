@@ -160,8 +160,10 @@ export async function GET(request) {
       console.error('[API /api/investors] Direct REST error:', e);
     }
 
-    // Fallback to investors_public if needed
-    if (!data || data.length === 0) {
+    const hasActiveFilters = Boolean(search || industry || stage || location || checkMinParam || checkMaxParam);
+
+    // Fallback to investors_public only if direct REST query failed (not on legitimate empty search/filter results)
+    if ((data === null || data === undefined) && !hasActiveFilters) {
       const pubUrl = `${supabaseUrl}/rest/v1/investors_public?offset=${from}&limit=${limit}`;
       const pubRes = await fetch(pubUrl, {
         headers: {
@@ -182,6 +184,8 @@ export async function GET(request) {
         }
         data = await pubRes.json();
       }
+    } else if (hasActiveFilters && (!data || data.length === 0)) {
+      totalCount = (data && data.length > 0) ? totalCount : 0;
     }
 
     const sanitized = (data || []).map((inv, idx) => {
