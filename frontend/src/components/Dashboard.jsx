@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { 
   Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, 
   ChevronDown, ChevronRight, Check, Layers, Loader2, X, UserPlus, CheckCircle,
-  Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, ShieldCheck, Store, Cpu, Code2, Leaf, Dna 
+  Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, ShieldCheck, Store, Cpu, Code2, Leaf, Dna, ExternalLink 
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -1269,6 +1269,37 @@ export default function Dashboard() {
                             </Link>
                           ))}
                         </div>
+
+                        {/* Notable Portfolio Deals Linkage */}
+                        {(() => {
+                          const rawPort = investor.portfolio || investor.past_investments;
+                          const portfolioList = Array.isArray(rawPort) 
+                            ? rawPort.filter(Boolean) 
+                            : (typeof rawPort === 'string' && rawPort.trim() ? rawPort.split(',').map(s => s.trim()).filter(Boolean) : []);
+                          if (!portfolioList || portfolioList.length === 0) return null;
+
+                          return (
+                            <div className="flex items-center gap-1.5 pt-2.5 flex-wrap text-[11px] border-t border-zinc-100 dark:border-zinc-800/60 mt-2.5">
+                              <span className="text-zinc-500 text-[10.5px] font-medium">Backed:</span>
+                              {portfolioList.slice(0, 2).map((comp, pIdx) => {
+                                const cleanSlug = comp.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                                return (
+                                  <Link
+                                    key={pIdx}
+                                    href={`/company/${cleanSlug}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:border-amber-500/40 transition-colors"
+                                    title={`View ${comp} Company Intelligence Profile`}
+                                  >
+                                    <span className="w-1 h-1 rounded-full bg-amber-400" />
+                                    <span>{comp}</span>
+                                    <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       {/* Footer Actions */}
