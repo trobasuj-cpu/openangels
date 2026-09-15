@@ -4,13 +4,14 @@ import {
   Sparkles, X, Globe, MapPin, Check, Briefcase, DollarSign, 
   Layers, ShieldCheck, Zap, Users, BarChart3, ExternalLink, 
   TrendingUp, Cpu, Building2, Award, ArrowUpRight, Share2, 
-  AlertTriangle, CheckCircle2, ChevronRight
+  AlertTriangle, CheckCircle2, ChevronRight, History, Activity
 } from 'lucide-react';
 import Link from 'next/link';
 import { getCompanyIntelligence } from '@/lib/companyData';
 
 export default function CompanyProfileModal({ companyName, companyData: initialData, onClose }) {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'claims' | 'syndicate'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'claims' | 'syndicate' | 'timeline'
+  const [timelineFilter, setTimelineFilter] = useState('all');
   const [copiedLink, setCopiedLink] = useState(false);
 
   const company = initialData || getCompanyIntelligence(companyName);
@@ -181,6 +182,23 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
               {company.investors?.length > 0 && (
                 <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-purple-500/20 text-purple-300 font-mono">
                   {company.investors.length}
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('timeline')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'timeline'
+                  ? 'bg-red-500/20 text-red-300 border border-red-500/40 shadow-sm'
+                  : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-transparent'
+              }`}
+            >
+              <History className="w-3.5 h-3.5 text-amber-400" />
+              <span>Timeline & Changes</span>
+              {company.timeline?.length > 0 && (
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 font-mono">
+                  {company.timeline.length}
                 </span>
               )}
             </button>
@@ -529,6 +547,142 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
                     <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: COMPANY TIMELINE & CHANGE DETECTION RADAR (DAY 7) */}
+          {activeTab === 'timeline' && (
+            <div className="space-y-6">
+              {/* Header & Filter Controls */}
+              <div className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                      <History className="w-4 h-4 text-amber-400" />
+                      <span>Change Detection Engine & Temporal Radar</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                        DAY 7 Engine
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-zinc-400 mt-1">
+                      Continuous observation of headcount velocity, funding rounds, product releases, and syndicate formation.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Filter Pills */}
+                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-zinc-800/60">
+                  {[
+                    { id: 'all', label: 'All Signals' },
+                    { id: 'hiring', label: '🔥 Hiring Velocity' },
+                    { id: 'funding', label: '💰 Funding & Valuation' },
+                    { id: 'product', label: '🚀 Product Breakthroughs' },
+                    { id: 'partnership', label: '🤝 Alliances & M&A' },
+                    { id: 'customer', label: '🎯 Customers' },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      type="button"
+                      onClick={() => setTimelineFilter(filter.id)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                        timelineFilter === filter.id
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                          : 'bg-zinc-800/60 text-zinc-400 hover:text-zinc-200 border border-transparent'
+                      }`}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Vertical Chronological Timeline */}
+              <div className="relative pl-6 sm:pl-8 space-y-5 before:absolute before:left-2.5 sm:before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-zinc-800">
+                {(company.timeline || [])
+                  .filter((evt) => {
+                    if (timelineFilter === 'all') return true;
+                    if (timelineFilter === 'partnership') return evt.category === 'partnership' || evt.category === 'market';
+                    return evt.category === timelineFilter;
+                  })
+                  .map((evt, eIdx) => (
+                    <div key={evt.id || eIdx} className="relative group">
+                      {/* Node Dot */}
+                      <div 
+                        className="absolute -left-6 sm:-left-8 top-1.5 w-5 h-5 rounded-full border-2 border-zinc-950 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform"
+                        style={{ backgroundColor: evt.signalColor || '#f59e0b' }}
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      </div>
+
+                      {/* Event Card */}
+                      <div className="p-4 sm:p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/90 hover:border-zinc-700/90 transition-all space-y-3 shadow-sm">
+                        {/* Header Badge Row */}
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span 
+                              className="px-2.5 py-0.5 rounded-full text-[11px] font-bold text-white shadow-sm"
+                              style={{ backgroundColor: `${evt.signalColor || '#f59e0b'}33`, color: evt.signalColor || '#f59e0b', border: `1px solid ${evt.signalColor || '#f59e0b'}55` }}
+                            >
+                              {evt.signalBadge || '⚡ DETECTED SIGNAL'}
+                            </span>
+                            <span className="text-xs font-mono text-zinc-400">
+                              {evt.relativeTime || evt.date}
+                            </span>
+                          </div>
+                          {evt.scoreImpact && (
+                            <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                              Score Impact: {evt.scoreImpact}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Title & Description */}
+                        <div>
+                          <h3 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
+                            {evt.title}
+                          </h3>
+                          <p className="text-xs text-zinc-300 mt-1 leading-relaxed">
+                            {evt.description}
+                          </p>
+                        </div>
+
+                        {/* Before / After Temporal Delta Comparison */}
+                        {evt.delta && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 rounded-xl bg-black/40 border border-zinc-800/70 text-xs">
+                            <div>
+                              <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold block mb-0.5">
+                                Previous State
+                              </span>
+                              <span className="text-zinc-400 font-mono text-xs">
+                                {evt.delta.before}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-amber-400 uppercase tracking-wider font-semibold block mb-0.5 flex items-center justify-between">
+                                <span>Observed Differential</span>
+                                <span className="text-emerald-400 font-bold">{evt.delta.change}</span>
+                              </span>
+                              <span className="text-zinc-200 font-mono text-xs font-bold">
+                                {evt.delta.after}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Source & Provenance */}
+                        {evt.evidenceSource && (
+                          <div className="pt-2 border-t border-zinc-800/60 flex items-center justify-between text-[11px] text-zinc-500">
+                            <span className="flex items-center gap-1.5">
+                              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                              <span>Audit Source: <strong className="text-zinc-400">{evt.evidenceSource}</strong></span>
+                            </span>
+                            <span className="font-mono text-zinc-600">{evt.date}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
           )}

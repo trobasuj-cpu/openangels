@@ -59,6 +59,15 @@ except ImportError:
         ClaimRecord = None
         EvidenceRecord = None
 
+try:
+    from data_pipeline.change_detection_engine import get_change_detection_engine, ChangeDetectionEngine
+except ImportError:
+    try:
+        from change_detection_engine import get_change_detection_engine, ChangeDetectionEngine
+    except ImportError:
+        get_change_detection_engine = None
+        ChangeDetectionEngine = None
+
 
 # ============================================================================
 # 1. CANONICAL VENTURE DOSSIER KNOWLEDGE BASE
@@ -461,6 +470,7 @@ class CompanyIntelligenceEngine:
     """
     def __init__(self):
         self._claim_engine = ClaimEvidenceEngine() if ClaimEvidenceEngine else None
+        self._change_engine = get_change_detection_engine() if get_change_detection_engine else None
 
     def get_company_profile(self, name_or_slug: str) -> Dict[str, Any]:
         """
@@ -546,6 +556,14 @@ class CompanyIntelligenceEngine:
         profile['openangels_score'] = score_res['score']
         profile['score_badge'] = score_res['badge']
         profile['score_details'] = score_res
+
+        # 5. Attach DAY 7 Temporal Timeline & Change Detection Signals
+        if self._change_engine:
+            profile['timeline'] = self._change_engine.get_company_timeline(profile)
+            profile['velocity_signals'] = [e['signal_badge'] for e in profile['timeline'][:3] if 'signal_badge' in e]
+        else:
+            profile['timeline'] = []
+            profile['velocity_signals'] = []
 
         return profile
 
