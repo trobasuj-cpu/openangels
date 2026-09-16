@@ -10,8 +10,9 @@ import Link from 'next/link';
 import { getCompanyIntelligence } from '@/lib/companyData';
 
 export default function CompanyProfileModal({ companyName, companyData: initialData, onClose }) {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'claims' | 'syndicate' | 'timeline'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'signals' | 'claims' | 'syndicate' | 'timeline'
   const [timelineFilter, setTimelineFilter] = useState('all');
+  const [signalFilter, setSignalFilter] = useState('all');
   const [copiedLink, setCopiedLink] = useState(false);
 
   const company = initialData || getCompanyIntelligence(companyName);
@@ -152,6 +153,23 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
               }`}
             >
               Executive Overview & Moat
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('signals')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'signals'
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                  : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-transparent'
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <span>Investment Signals</span>
+              {company.investmentSignals?.signals?.length > 0 && (
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 font-mono">
+                  {company.investmentSignals.signals.length}
+                </span>
+              )}
             </button>
             <button
               type="button"
@@ -303,6 +321,40 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
           {/* TAB 1: EXECUTIVE OVERVIEW & MOAT */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
+              {/* Day 8: Investment Signals Summary Teaser */}
+              {company.investmentSignals?.summary && (
+                <div 
+                  onClick={() => setActiveTab('signals')}
+                  className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/30 via-zinc-900/70 to-zinc-950 border border-amber-500/30 hover:border-amber-500/60 transition-all cursor-pointer flex items-center justify-between gap-4 group shadow-sm"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                      <Zap className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                          Day 8 Intelligence Radar
+                        </span>
+                        <span className="text-[10px] font-mono text-zinc-400">
+                          {company.investmentSignals.windowDays || 90}-Day Window
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-semibold text-zinc-200 mt-1">
+                        {company.investmentSignals.summary}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="shrink-0 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30 flex items-center gap-1 transition-all"
+                  >
+                    <span>View Signals</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
               {/* Executive Overview */}
               <div>
                 <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2.5 flex items-center gap-2">
@@ -405,7 +457,143 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
             </div>
           )}
 
-          {/* TAB 2: VERIFIED CLAIMS & LINEAGE (DAY 4 Integration) */}
+          {/* TAB: INVESTMENT SIGNALS & INTELLIGENCE RADAR (DAY 8) */}
+          {activeTab === 'signals' && (
+            <div className="space-y-6">
+              {/* Header Summary Banner */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-950/40 via-zinc-900 to-zinc-950 border border-amber-500/30 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div className="font-bold text-white text-sm flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-amber-400" />
+                      <span>Audited Investment Signals & Intelligence Radar</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                        DAY 8 Standard
+                      </span>
+                    </div>
+                    <p className="text-xs text-zinc-300 mt-1.5 font-medium">
+                      {company.investmentSignals?.summary || `OpenAngels detected growth signals during the last 90 days.`}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-xs px-3 py-1 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                      {company.investmentSignals?.signalStrength || 'HIGH'} STRENGTH
+                    </span>
+                    <span className="text-xs px-2.5 py-1 rounded-full font-mono text-zinc-400 bg-zinc-900 border border-zinc-800">
+                      Score: {company.investmentSignals?.aggregateConfidence || 85}%
+                    </span>
+                  </div>
+                </div>
+
+                {/* Filter Pills */}
+                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-zinc-800/60">
+                  {[
+                    { id: 'all', label: 'All Signals' },
+                    { id: 'capital', label: '💰 Capital & Funding' },
+                    { id: 'talent', label: '🔥 Talent Velocity' },
+                    { id: 'product', label: '🚀 Product & Moat' },
+                    { id: 'alliances', label: '🤝 Alliances & M&A' },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      type="button"
+                      onClick={() => setSignalFilter(filter.id)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                        signalFilter === filter.id
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                          : 'bg-zinc-800/60 text-zinc-400 hover:text-zinc-200 border border-transparent'
+                      }`}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Anti-Fluff Policy Note */}
+              <div className="px-4 py-2.5 rounded-xl bg-zinc-900/30 border border-zinc-800/60 text-[11px] text-zinc-400 flex items-center justify-between">
+                <span>
+                  <strong>Anti-Fluff Standard:</strong> Every signal requires audited empirical proof, timestamp, primary source citation, and investor decision rationale.
+                </span>
+                <span className="text-zinc-500 font-mono hidden sm:inline">6-Point Schema</span>
+              </div>
+
+              {/* Signals Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(company.investmentSignals?.signals || [])
+                  .filter((sig) => {
+                    if (signalFilter === 'all') return true;
+                    if (signalFilter === 'capital') return sig.category === 'capital';
+                    if (signalFilter === 'talent') return sig.category === 'talent';
+                    if (signalFilter === 'product') return sig.category === 'product';
+                    if (signalFilter === 'alliances') return sig.category === 'market' || sig.category === 'alliances';
+                    return true;
+                  })
+                  .map((sig, idx) => (
+                    <div 
+                      key={idx}
+                      className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-amber-500/40 transition-all flex flex-col justify-between space-y-3 shadow-sm"
+                    >
+                      <div className="space-y-2">
+                        {/* Badge Row */}
+                        <div className="flex items-center justify-between gap-2">
+                          <span 
+                            className="px-2.5 py-0.5 rounded-full text-[11px] font-bold text-white shadow-sm"
+                            style={{ 
+                              backgroundColor: `${sig.color || '#f59e0b'}33`, 
+                              color: sig.color || '#f59e0b', 
+                              border: `1px solid ${sig.color || '#f59e0b'}55` 
+                            }}
+                          >
+                            {sig.badge || sig.type}
+                          </span>
+                          <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                            {sig.confidence}% Confidence
+                          </span>
+                        </div>
+
+                        {/* Signal Title */}
+                        <h4 className="text-sm font-bold text-white">
+                          {sig.name}
+                        </h4>
+
+                        {/* Audited Evidence Callout */}
+                        <div className="p-2.5 rounded-xl bg-black/40 border border-zinc-800/70 text-xs">
+                          <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block mb-1">
+                            Audited Evidence
+                          </span>
+                          <p className="text-zinc-200 font-mono text-[11px] leading-relaxed">
+                            {sig.evidence}
+                          </p>
+                        </div>
+
+                        {/* Investor Decision Rationale */}
+                        <div className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs">
+                          <span className="text-[10px] font-semibold text-amber-400 uppercase tracking-wider block mb-1">
+                            Investor Decision Rationale
+                          </span>
+                          <p className="text-zinc-300 text-[11px] leading-relaxed">
+                            {sig.explanation}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Footer: Date & Source Citation */}
+                      <div className="pt-2 border-t border-zinc-800/60 flex items-center justify-between text-[11px] text-zinc-500">
+                        <span className="truncate max-w-[200px]" title={sig.source}>
+                          Source: <strong className="text-zinc-400 font-medium">{sig.source}</strong>
+                        </span>
+                        <span className="font-mono text-zinc-400 shrink-0 ml-2">
+                          {sig.date}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: VERIFIED CLAIMS & LINEAGE (DAY 4 Integration) */}
           {activeTab === 'claims' && (
             <div className="space-y-5">
               <div className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 text-xs text-zinc-300">

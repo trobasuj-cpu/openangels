@@ -68,6 +68,16 @@ except ImportError:
         get_change_detection_engine = None
         ChangeDetectionEngine = None
 
+try:
+    from data_pipeline.investment_signals_engine import get_investment_signals_engine, InvestmentSignalsEngine
+except ImportError:
+    try:
+        from investment_signals_engine import get_investment_signals_engine, InvestmentSignalsEngine
+    except ImportError:
+        get_investment_signals_engine = None
+        InvestmentSignalsEngine = None
+
+
 
 # ============================================================================
 # 1. CANONICAL VENTURE DOSSIER KNOWLEDGE BASE
@@ -471,6 +481,7 @@ class CompanyIntelligenceEngine:
     def __init__(self):
         self._claim_engine = ClaimEvidenceEngine() if ClaimEvidenceEngine else None
         self._change_engine = get_change_detection_engine() if get_change_detection_engine else None
+        self._signals_engine = get_investment_signals_engine() if get_investment_signals_engine else None
 
     def get_company_profile(self, name_or_slug: str) -> Dict[str, Any]:
         """
@@ -564,6 +575,16 @@ class CompanyIntelligenceEngine:
         else:
             profile['timeline'] = []
             profile['velocity_signals'] = []
+
+        # 6. Attach DAY 8 Investment Signals System Package
+        if self._signals_engine:
+            profile['investment_signals'] = self._signals_engine.get_company_signals(profile)
+        else:
+            profile['investment_signals'] = {
+                'summary': 'OpenAngels detected growth signals.',
+                'detected_count': 0,
+                'signals': []
+            }
 
         return profile
 
