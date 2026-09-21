@@ -7,7 +7,7 @@ import {
   Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, 
   ChevronDown, ChevronRight, Check, Layers, Loader2, X, UserPlus, CheckCircle,
   Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, ShieldCheck, Store, Cpu, Code2, Leaf, Dna, ExternalLink,
-  Rocket, Zap, TrendingUp, Award, Activity, FileText
+  Rocket, Zap, TrendingUp, Award, Activity, FileText, Users
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -1097,48 +1097,58 @@ export default function Dashboard() {
         <div ref={mainScrollRef} className="flex-1 overflow-y-auto p-6 md:p-8 relative custom-scrollbar">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
           <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
-            <MarketingShowcase isPremium={profile?.is_premium} />
-
-            {/* DUAL-MODE WORKSPACE TOGGLE: FOUNDERS vs INVESTORS */}
-            <div className="flex items-center justify-between flex-wrap gap-3 bg-zinc-950/80 p-2.5 rounded-2xl border border-zinc-800/80 shadow-lg">
-              <div className="flex items-center gap-2 bg-zinc-900/90 p-1 rounded-xl border border-zinc-800">
+            {/* WORKSPACE MODE SEGMENTED CONTROL — ABOVE ALL BANNERS */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/5">
+              <div className="inline-flex items-center p-1 rounded-2xl bg-zinc-900/90 border border-zinc-800 shadow-2xl backdrop-blur-xl">
                 <button
                   type="button"
                   onClick={() => setViewMode('founders')}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
                     viewMode === 'founders'
-                      ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md'
-                      : 'text-zinc-400 hover:text-white'
+                      ? 'bg-gradient-to-r from-red-600 via-rose-600 to-red-600 text-white shadow-lg shadow-red-600/30'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
                   }`}
                 >
                   <Rocket className="w-3.5 h-3.5" />
-                  <span>For Founders (Raise Capital)</span>
+                  <span>For Founders</span>
+                  <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full ${
+                    viewMode === 'founders' ? 'bg-white/20 text-white' : 'bg-zinc-800 text-zinc-400'
+                  }`}>
+                    4,050+ Angels
+                  </span>
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setViewMode('investors')}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
                     viewMode === 'investors'
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
-                      : 'text-zinc-400 hover:text-white'
+                      ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 text-white shadow-lg shadow-emerald-600/30'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
                   }`}
                 >
                   <Zap className="w-3.5 h-3.5" />
-                  <span>For Investors & Scouts (Growth Radar)</span>
-                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    NEW
+                  <span>For Investors & Scouts</span>
+                  <span className={`text-[9px] font-extrabold uppercase font-mono px-1.5 py-0.5 rounded ${
+                    viewMode === 'investors'
+                      ? 'bg-emerald-400 text-black font-black'
+                      : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                  }`}>
+                    RADAR
                   </span>
                 </button>
               </div>
 
-              <div className="flex items-center gap-3 text-xs text-zinc-400 px-2">
+              <div className="flex items-center gap-2 text-xs text-zinc-400">
                 {viewMode === 'founders' ? (
-                  <span className="hidden sm:inline">
-                    Target <strong>4,050+</strong> curated angel investors with verified direct contacts
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                    Target active angels with direct verified emails & AI pitch drafts
                   </span>
                 ) : (
-                  <span className="hidden sm:inline text-emerald-400/90 font-medium">
-                    ⚡ 90-Day verified growth signals & SEC Form D claim lineage
+                  <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                    90-Day growth signals & SEC Form D regulatory proof lineage
                   </span>
                 )}
               </div>
@@ -1323,7 +1333,7 @@ export default function Dashboard() {
                               <Activity className="w-3.5 h-3.5" />
                               <span>Inspect Claims</span>
                             </button>
-                            <ExportMemoButton companyName={company.name} />
+                            <ExportMemoButton compact companyName={company.name} />
                           </div>
                           <Link
                             href={`/company/${company.slug}`}
@@ -1339,6 +1349,7 @@ export default function Dashboard() {
               </div>
             ) : (
               <>
+                <MarketingShowcase isPremium={profile?.is_premium} />
                 <div className="flex flex-col xl:flex-row gap-6 mb-8">
               <div className="flex-1">
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
