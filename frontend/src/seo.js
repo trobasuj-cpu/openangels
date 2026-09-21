@@ -36,9 +36,9 @@ export async function getDynamicInvestorCount() {
           const roundedHundred = Math.floor(total / 100) * 100;
           return {
             total,
-            formatted: total.toLocaleString(),
-            seoLabel: `${roundedHundred.toLocaleString()}+`,
-            exactPlus: `${total.toLocaleString()}+`
+            formatted: total.toLocaleString('en-US'),
+            seoLabel: `${roundedHundred.toLocaleString('en-US')}+`,
+            exactPlus: `${total.toLocaleString('en-US')}+`
           };
         }
       }
