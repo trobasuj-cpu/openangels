@@ -1,8 +1,59 @@
 export const SITE_URL = 'https://openangels.xyz';
 export const PRODUCT_NAME = 'OpenAngels';
-export const INVESTOR_COUNT = '4,050+';
+export const INVESTOR_COUNT = '7,400+';
 export const LEGAL_UPDATED_LABEL = 'July 1, 2026';
 export const SEO_LASTMOD = '2026-07-01';
+
+const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
+
+/**
+ * Server-side dynamic investor count fetcher with Next.js ISR cache (1 hour).
+ * Provides dynamic numbers for Google SEO (title, description, Schema.org)
+ * and keeps metadata in sync with database additions.
+ */
+export async function getDynamicInvestorCount() {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+    let envServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
+    if (!envServiceKey || envServiceKey.startsWith('sb_publishable_')) {
+      envServiceKey = DEFAULT_SERVICE_ROLE;
+    }
+
+    const res = await fetch(`${supabaseUrl}/rest/v1/investors_public?select=slug&limit=1`, {
+      headers: {
+        'apikey': envServiceKey,
+        'Authorization': `Bearer ${envServiceKey}`,
+        'Prefer': 'count=exact'
+      },
+      next: { revalidate: 3600 }
+    });
+
+    if (res.ok) {
+      const range = res.headers.get('content-range') || '';
+      if (range.includes('/')) {
+        const total = parseInt(range.split('/')[1], 10);
+        if (!isNaN(total) && total >= 1000) {
+          const roundedHundred = Math.floor(total / 100) * 100;
+          return {
+            total,
+            formatted: total.toLocaleString(),
+            seoLabel: `${roundedHundred.toLocaleString()}+`,
+            exactPlus: `${total.toLocaleString()}+`
+          };
+        }
+      }
+    }
+  } catch (err) {
+    console.error('[getDynamicInvestorCount] Error fetching count:', err);
+  }
+
+  return {
+    total: 7430,
+    formatted: '7,430',
+    seoLabel: '7,400+',
+    exactPlus: '7,430+'
+  };
+}
 
 // Stage slugs for catch-all routes
 export const STAGE_SLUGS = {

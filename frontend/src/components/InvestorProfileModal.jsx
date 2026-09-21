@@ -702,7 +702,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       Unlock Full Access — Lifetime Deal
                     </button>
                     <p className="text-center text-[11px] text-zinc-500 mt-2">
-                      One-time payment • Lifetime access to 4,000+ investor profiles
+                      One-time payment • Lifetime access to {INVESTOR_COUNT} investor profiles
                     </p>
                   </div>
                 </div>

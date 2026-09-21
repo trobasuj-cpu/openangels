@@ -20,10 +20,10 @@ export async function GET() {
     });
 
     const range = res.headers.get('content-range') || '';
-    const total = range.includes('/') ? parseInt(range.split('/')[1], 10) : 4231;
+    const total = range.includes('/') ? parseInt(range.split('/')[1], 10) : 7430;
 
-    return Response.json({ total: (isNaN(total) || total < 1000) ? 4231 : total });
+    return Response.json({ total: (isNaN(total) || total < 1000) ? 7430 : total });
   } catch (e) {
-    return Response.json({ total: 4231 });
+    return Response.json({ total: 7430 });
   }
 }

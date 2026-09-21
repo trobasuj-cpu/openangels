@@ -134,7 +134,7 @@ export async function GET(request) {
     const restUrl = `${supabaseUrl}/rest/v1/investors?${queryParts.join('&')}`;
 
     let data = [];
-    let totalCount = 4267;
+    let totalCount = 7430;
 
     try {
       const restRes = await fetch(restUrl, {

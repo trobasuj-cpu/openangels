@@ -282,7 +282,7 @@ const MarketingShowcase = ({ isPremium }) => {
 
 export default function Dashboard() {
   const [investors, setInvestors] = useState([]);
-  const [totalDatabaseCount, setTotalDatabaseCount] = useState(4231);
+  const [totalDatabaseCount, setTotalDatabaseCount] = useState(7430);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState(() => {
@@ -1114,7 +1114,7 @@ export default function Dashboard() {
                   <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full ${
                     viewMode === 'founders' ? 'bg-white/20 text-white' : 'bg-zinc-800 text-zinc-400'
                   }`}>
-                    4,050+ Angels
+                    {totalDatabaseCount ? `${totalDatabaseCount.toLocaleString()} Angels` : '7,430 Angels'}
                   </span>
                 </button>
 

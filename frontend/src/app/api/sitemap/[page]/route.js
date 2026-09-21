@@ -1,0 +1,66 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+import { absoluteUrl } from '@/seo';
+import { createClient } from '@supabase/supabase-js';
+
+function escapeXml(unsafe) {
+  if (!unsafe) return '';
+  return unsafe.replace(/[<>&'"]/g, function (c) {
+    switch (c) {
+      case '<': return '&lt;'; case '>': return '&gt;'; case '&': return '&amp;';
+      case "'": return '&apos;'; case '"': return '&quot;';
+    }
+  });
+}
+
+export async function GET(request, { params }) {
+  try {
+    const { page } = await params;
+    const pageNum = parseInt(page, 10);
+    if (isNaN(pageNum) || pageNum < 1) {
+      return new Response('Invalid sitemap page', { status: 400 });
+    }
+
+    const from = (pageNum - 1) * 1000;
+    const to = pageNum * 1000 - 1;
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
+
+    const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+    
+    const { data, error } = await supabase
+      .from('investors_public')
+      .select('slug, created_at')
+      .not('slug', 'is', null)
+      .order('created_at', { ascending: false })
+      .range(from, to);
+
+    if (error) throw error;
+
+    const urls = (data || []).map((inv) => `  <url>
+    <loc>${absoluteUrl(`/investor/${escapeXml(inv.slug)}`)}</loc>
+    <lastmod>${inv.created_at ? new Date(inv.created_at).toISOString() : new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`).join('\n');
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`;
+
+    return new Response(xml, {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
+    });
+  } catch (e) {
+    console.error('Dynamic sitemap page error:', e);
+    return new Response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>', {
+      headers: { 'Content-Type': 'application/xml; charset=utf-8' },
+      status: 500
+    });
+  }
+}
