@@ -9,6 +9,7 @@ import {
   ChevronRight, Sparkles, AlertTriangle, ExternalLink,
   History, Activity
 } from 'lucide-react';
+import ExportMemoButton from '@/components/ExportMemoButton';
 
 export async function generateStaticParams() {
   return Object.keys(KNOWN_COMPANIES).map((slug) => ({ slug }));
@@ -117,6 +118,16 @@ export default async function CompanyIntelligencePage({ params }) {
 
       {/* Main Dossier Container */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+        {/* Print-Only Executive Due Diligence Header */}
+        <div className="hidden print:block border-b-2 border-black pb-4 mb-6 text-black">
+          <div className="flex justify-between items-center text-xs font-mono uppercase tracking-wider text-zinc-600 mb-1">
+            <span>OpenAngels Venture Intelligence</span>
+            <span>Institutional Due Diligence Memo</span>
+            <span>Confidential</span>
+          </div>
+          <h1 className="text-3xl font-black text-black tracking-tight">{company.name}</h1>
+          <p className="text-sm text-zinc-700 mt-1">{company.tagline || company.legalName}</p>
+        </div>
 
         {/* HERO SECTION */}
         <section className="relative p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-red-950/30 via-zinc-900/60 to-zinc-950 border border-zinc-800/80 shadow-2xl overflow-hidden">
@@ -189,6 +200,9 @@ export default async function CompanyIntelligencePage({ params }) {
               </div>
               <div className={`text-xs font-bold px-3 py-1 rounded-full border mt-2 inline-block ${getScoreColor(score)}`}>
                 {company.scoreBadge || 'High Velocity'}
+              </div>
+              <div className="mt-3">
+                <ExportMemoButton companyName={company.name} />
               </div>
             </div>
           </div>

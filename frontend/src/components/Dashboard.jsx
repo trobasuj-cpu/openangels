@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { 
   Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, 
   ChevronDown, ChevronRight, Check, Layers, Loader2, X, UserPlus, CheckCircle,
-  Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, ShieldCheck, Store, Cpu, Code2, Leaf, Dna, ExternalLink 
+  Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, ShieldCheck, Store, Cpu, Code2, Leaf, Dna, ExternalLink,
+  Rocket, Zap, TrendingUp, Award, Activity, FileText
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -17,6 +18,9 @@ import FAQ from './FAQ';
 import Footer from './Footer';
 import GumroadIframeModal from './GumroadIframeModal';
 import AiPitchModal from './AiPitchModal';
+import CompanyProfileModal from './CompanyProfileModal';
+import ExportMemoButton from './ExportMemoButton';
+import { KNOWN_COMPANIES } from '@/lib/companyData';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
@@ -361,6 +365,9 @@ export default function Dashboard() {
   const [matchingCount, setMatchingCount] = useState(4267);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [viewMode, setViewMode] = useState('founders'); // 'founders' | 'investors'
+  const [selectedCompanyModal, setSelectedCompanyModal] = useState(null);
+  const [companyCategoryFilter, setCompanyCategoryFilter] = useState('all');
   const mainScrollRef = useRef(null);
   const isInitialMount = useRef(true);
   const activeFetchIdRef = useRef(0);
@@ -396,6 +403,21 @@ export default function Dashboard() {
     });
     return counts;
   }, [investors]);
+
+  // Filtered companies for Investor Intelligence Radar
+  const filteredCompanies = useMemo(() => {
+    const list = Object.values(KNOWN_COMPANIES || {});
+    if (companyCategoryFilter === 'ai') {
+      return list.filter(c => ['openai', 'perplexity', 'facebook'].includes(c.slug));
+    }
+    if (companyCategoryFilter === 'fintech') {
+      return list.filter(c => ['stripe'].includes(c.slug));
+    }
+    if (companyCategoryFilter === 'marketplace') {
+      return list.filter(c => ['airbnb', 'uber', 'linkedin', 'twitter', 'dropbox'].includes(c.slug));
+    }
+    return list;
+  }, [companyCategoryFilter]);
 
   // Formatter for category names
   const formatCategoryLabel = (slug) => {
@@ -765,14 +787,16 @@ export default function Dashboard() {
         {/* Filter Bar Header */}
         <div className="px-6 py-2.5 border-b border-white/5 flex items-center justify-between shrink-0 bg-zinc-950/40">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Filters</span>
-            {totalActiveFilters > 0 && (
+            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              {viewMode === 'investors' ? 'Intelligence Radar' : 'Filters'}
+            </span>
+            {viewMode === 'founders' && totalActiveFilters > 0 && (
               <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
                 {totalActiveFilters}
               </span>
             )}
           </div>
-          {totalActiveFilters > 0 && (
+          {viewMode === 'founders' && totalActiveFilters > 0 && (
             <button 
               onClick={resetAllFilters} 
               className="text-xs text-red-400 hover:text-red-300 font-semibold transition-colors underline"
@@ -783,53 +807,110 @@ export default function Dashboard() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-          <FilterSection title="Industry" icon={Briefcase} activeCount={selectedIndustries.length} defaultExpanded={false}>
-            {/* Quick Chips */}
-            <div className="mb-3">
-              <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2">Popular Categories</p>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { slug: 'ai', name: 'AI', Icon: Cpu, color: 'text-red-400' },
-                  { slug: 'saas', name: 'SaaS', Icon: Cloud, color: 'text-rose-400' },
-                  { slug: 'b2b', name: 'B2B', Icon: Building2, color: 'text-amber-400' },
-                  { slug: 'developer-tools', name: 'DevTools', Icon: Code2, color: 'text-orange-400' },
-                  { slug: 'fintech', name: 'Fintech', Icon: CreditCard, color: 'text-emerald-400' },
-                  { slug: 'consumer', name: 'Consumer', Icon: ShoppingBag, color: 'text-purple-400' },
-                ].map(chip => {
-                  const active = selectedIndustries.includes(chip.slug);
-                  const IconComponent = chip.Icon;
-                  return (
+          {viewMode === 'investors' ? (
+            <div className="space-y-6">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-zinc-950 border border-emerald-500/20 shadow-sm">
+                <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Venture Radar Active</span>
+                </div>
+                <p className="text-[11px] text-zinc-400 leading-relaxed">
+                  Screening 9 audited company dossiers with verified SEC Form D claims, 90-day signals, and one-click Due Diligence memos.
+                </p>
+              </div>
+
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-2.5">
+                  Sector Coverage
+                </div>
+                <div className="space-y-1.5">
+                  {[
+                    { id: 'all', label: 'All Companies', count: 9 },
+                    { id: 'ai', label: 'Frontier AI & Reasoning', count: 3 },
+                    { id: 'fintech', label: 'Fintech & Infra', count: 1 },
+                    { id: 'marketplace', label: 'Marketplaces & Networks', count: 5 }
+                  ].map(cat => (
                     <button
-                      key={chip.slug}
-                      onClick={() => toggleFilter(setSelectedIndustries, chip.slug)}
-                      className={cn(
-                        "px-2.5 py-1.5 text-xs rounded-xl border transition-all font-semibold flex items-center gap-1.5 shadow-sm active:scale-95",
-                        active 
-                          ? "bg-gradient-to-r from-red-600 to-rose-600 text-white border-red-500 shadow-red-500/20 shadow-md" 
-                          : "bg-zinc-900/90 border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 hover:bg-zinc-800/80"
-                      )}
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setCompanyCategoryFilter(cat.id)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+                        companyCategoryFilter === cat.id
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold shadow-sm'
+                          : 'text-zinc-400 hover:text-white hover:bg-zinc-900 border border-transparent'
+                      }`}
                     >
-                      <IconComponent className={cn("w-3.5 h-3.5 transition-colors", active ? "text-white" : chip.color)} />
-                      <span>{chip.name}</span>
+                      <span>{cat.label}</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400">
+                        {cat.count}
+                      </span>
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-zinc-800/80">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('founders')}
+                  className="w-full py-2.5 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/60 text-xs font-semibold text-zinc-300 hover:text-white flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <Rocket className="w-3.5 h-3.5 text-red-400" />
+                  <span>Switch to Founder Directory</span>
+                </button>
               </div>
             </div>
-            {renderFilterOptions(uniqueIndustries, selectedIndustries, setSelectedIndustries, true)}
-          </FilterSection>
+          ) : (
+            <>
+              <FilterSection title="Industry" icon={Briefcase} activeCount={selectedIndustries.length} defaultExpanded={false}>
+                {/* Quick Chips */}
+                <div className="mb-3">
+                  <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2">Popular Categories</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      { slug: 'ai', name: 'AI', Icon: Cpu, color: 'text-red-400' },
+                      { slug: 'saas', name: 'SaaS', Icon: Cloud, color: 'text-rose-400' },
+                      { slug: 'b2b', name: 'B2B', Icon: Building2, color: 'text-amber-400' },
+                      { slug: 'developer-tools', name: 'DevTools', Icon: Code2, color: 'text-orange-400' },
+                      { slug: 'fintech', name: 'Fintech', Icon: CreditCard, color: 'text-emerald-400' },
+                      { slug: 'consumer', name: 'Consumer', Icon: ShoppingBag, color: 'text-purple-400' },
+                    ].map(chip => {
+                      const active = selectedIndustries.includes(chip.slug);
+                      const IconComponent = chip.Icon;
+                      return (
+                        <button
+                          key={chip.slug}
+                          onClick={() => toggleFilter(setSelectedIndustries, chip.slug)}
+                          className={cn(
+                            "px-2.5 py-1.5 text-xs rounded-xl border transition-all font-semibold flex items-center gap-1.5 shadow-sm active:scale-95",
+                            active 
+                              ? "bg-gradient-to-r from-red-600 to-rose-600 text-white border-red-500 shadow-red-500/20 shadow-md" 
+                              : "bg-zinc-900/90 border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 hover:bg-zinc-800/80"
+                          )}
+                        >
+                          <IconComponent className={cn("w-3.5 h-3.5 transition-colors", active ? "text-white" : chip.color)} />
+                          <span>{chip.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                {renderFilterOptions(uniqueIndustries, selectedIndustries, setSelectedIndustries, true)}
+              </FilterSection>
 
-          <FilterSection title="Stage" icon={Layers} activeCount={selectedStages.length} defaultExpanded={false}>
-            {renderFilterOptions(uniqueStages, selectedStages, setSelectedStages)}
-          </FilterSection>
+              <FilterSection title="Stage" icon={Layers} activeCount={selectedStages.length} defaultExpanded={false}>
+                {renderFilterOptions(uniqueStages, selectedStages, setSelectedStages)}
+              </FilterSection>
 
-          <FilterSection title="Location" icon={MapPin} activeCount={selectedLocations.length} defaultExpanded={false}>
-            {renderFilterOptions(uniqueLocations, selectedLocations, setSelectedLocations)}
-          </FilterSection>
+              <FilterSection title="Location" icon={MapPin} activeCount={selectedLocations.length} defaultExpanded={false}>
+                {renderFilterOptions(uniqueLocations, selectedLocations, setSelectedLocations)}
+              </FilterSection>
 
-          <FilterSection title="Check Size" icon={DollarSign} activeCount={selectedCheckSizes.length} defaultExpanded={false}>
-            {renderFilterOptions(uniqueCheckSizes, selectedCheckSizes, setSelectedCheckSizes)}
-          </FilterSection>
+              <FilterSection title="Check Size" icon={DollarSign} activeCount={selectedCheckSizes.length} defaultExpanded={false}>
+                {renderFilterOptions(uniqueCheckSizes, selectedCheckSizes, setSelectedCheckSizes)}
+              </FilterSection>
+            </>
+          )}
         </div>
         
         {!profile?.is_premium && (
@@ -1018,7 +1099,247 @@ export default function Dashboard() {
           <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
             <MarketingShowcase isPremium={profile?.is_premium} />
 
-            <div className="flex flex-col xl:flex-row gap-6 mb-8">
+            {/* DUAL-MODE WORKSPACE TOGGLE: FOUNDERS vs INVESTORS */}
+            <div className="flex items-center justify-between flex-wrap gap-3 bg-zinc-950/80 p-2.5 rounded-2xl border border-zinc-800/80 shadow-lg">
+              <div className="flex items-center gap-2 bg-zinc-900/90 p-1 rounded-xl border border-zinc-800">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('founders')}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    viewMode === 'founders'
+                      ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  <Rocket className="w-3.5 h-3.5" />
+                  <span>For Founders (Raise Capital)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('investors')}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    viewMode === 'investors'
+                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>For Investors & Scouts (Growth Radar)</span>
+                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    NEW
+                  </span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-3 text-xs text-zinc-400 px-2">
+                {viewMode === 'founders' ? (
+                  <span className="hidden sm:inline">
+                    Target <strong>4,050+</strong> curated angel investors with verified direct contacts
+                  </span>
+                ) : (
+                  <span className="hidden sm:inline text-emerald-400/90 font-medium">
+                    ⚡ 90-Day verified growth signals & SEC Form D claim lineage
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {viewMode === 'investors' ? (
+              <div className="space-y-6">
+                {/* Investor Intelligence Radar Hero */}
+                <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-zinc-900/80 to-zinc-950 border border-emerald-500/20 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+                  <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div className="max-w-2xl">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold mb-3 font-mono">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        INSTITUTIONAL VENTURE TELEMETRY & DUE DILIGENCE
+                      </div>
+                      <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        Venture Intelligence & Growth Signals Radar
+                      </h1>
+                      <p className="text-zinc-300 text-sm sm:text-base mt-2 leading-relaxed">
+                        Track verified temporal traction, funding step-ups, and SEC Form D claim lineage for breakout startups. Export institutional Due Diligence memos in one click.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row lg:flex-col gap-2 shrink-0">
+                      <div className="p-3.5 rounded-2xl bg-zinc-950/80 border border-emerald-500/20 text-center sm:text-right">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Institutional Coverage</div>
+                        <div className="text-xl font-black text-white mt-0.5">9 Verified Dossiers</div>
+                        <div className="text-[11px] text-emerald-400 font-mono mt-0.5">100% SEC Form D Audited</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sector Filter Chips */}
+                  <div className="relative z-10 flex items-center gap-2 mt-6 pt-5 border-t border-zinc-800/80 flex-wrap">
+                    <span className="text-xs font-bold text-zinc-400 mr-1">Sector Focus:</span>
+                    {[
+                      { id: 'all', label: 'All Audited Startups (9)' },
+                      { id: 'ai', label: 'Frontier AI & Reasoning (3)' },
+                      { id: 'fintech', label: 'Fintech & Infra (1)' },
+                      { id: 'marketplace', label: 'Marketplaces & Networks (5)' }
+                    ].map(tab => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setCompanyCategoryFilter(tab.id)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          companyCategoryFilter === tab.id
+                            ? 'bg-emerald-500 text-black font-extrabold shadow-sm'
+                            : 'bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Company Intelligence Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredCompanies.map(company => {
+                    const topSignal = company.investmentSignals?.signals?.[0] || company.timeline?.[0];
+                    const score = company.openangelsScore || 90;
+                    const scoreColor = score >= 95 ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-blue-400 border-blue-500/30 bg-blue-500/10';
+
+                    return (
+                      <div
+                        key={company.slug}
+                        className="p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 hover:border-emerald-500/40 hover:bg-zinc-900/90 transition-all duration-300 shadow-xl flex flex-col justify-between group"
+                      >
+                        <div>
+                          {/* Card Header: Monogram, Name, Score */}
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-700/60 flex items-center justify-center font-black text-xl text-white shadow-md">
+                                {company.name.charAt(0)}
+                              </div>
+                              <div>
+                                <h3 className="text-lg font-black text-white tracking-tight group-hover:text-emerald-300 transition-colors">
+                                  {company.name}
+                                </h3>
+                                <span className="text-[11px] font-mono text-zinc-400">
+                                  {company.stage}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="text-right">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Score</div>
+                              <div className="flex items-baseline gap-1 justify-end">
+                                <span className="text-xl font-black text-white">{score}</span>
+                                <span className="text-[10px] text-zinc-500 font-bold">/100</span>
+                              </div>
+                              <div className={`text-[10px] font-bold px-2 py-0.5 rounded-full border mt-0.5 inline-block ${scoreColor}`}>
+                                {company.scoreBadge || 'Verified Breakout'}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Tagline */}
+                          <p className="text-xs text-zinc-300 line-clamp-2 mb-4 leading-relaxed">
+                            {company.tagline || company.overview}
+                          </p>
+
+                          {/* Key Telemetry Badges */}
+                          <div className="grid grid-cols-2 gap-2 mb-4">
+                            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/70">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1">
+                                <DollarSign className="w-3 h-3 text-emerald-400" /> Capital Raised
+                              </div>
+                              <div className="text-xs font-extrabold text-white mt-0.5 truncate">
+                                {company.funding?.totalRaised || 'Confidential'}
+                              </div>
+                              <div className="text-[10px] text-zinc-400 truncate">
+                                {company.funding?.valuation ? `Val: ${company.funding.valuation}` : 'SEC Form D Verified'}
+                              </div>
+                            </div>
+
+                            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/70">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1">
+                                <Users className="w-3 h-3 text-blue-400" /> Headcount
+                              </div>
+                              <div className="text-xs font-extrabold text-white mt-0.5">
+                                {company.employees ? `${company.employees.toLocaleString()} team` : 'High Velocity'}
+                              </div>
+                              <div className="text-[10px] text-emerald-400 truncate">
+                                {company.employeeGrowth90d || '+20% 90d growth'}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Latest Verified Signal Box */}
+                          {topSignal && (
+                            <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 mb-4">
+                              <div className="flex items-center justify-between text-[10px] font-bold text-emerald-400 mb-1">
+                                <span>{topSignal.badge || topSignal.signalBadge || '⚡ RECENT SIGNAL'}</span>
+                                <span className="text-zinc-500 font-mono">{topSignal.date || topSignal.relativeTime}</span>
+                              </div>
+                              <p className="text-xs font-medium text-zinc-200 line-clamp-2 leading-snug">
+                                {topSignal.label || topSignal.title}
+                              </p>
+                              <div className="text-[10px] text-zinc-400 mt-1 flex items-center gap-1">
+                                <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
+                                <span className="truncate">Source: {topSignal.source || topSignal.evidenceSource || 'Regulatory Filings'}</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Backers Syndicate Chips */}
+                          {company.investors && company.investors.length > 0 && (
+                            <div className="mb-4">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">
+                                Syndicate & Backers
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {company.investors.slice(0, 4).map((inv, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/60"
+                                  >
+                                    {inv}
+                                  </span>
+                                ))}
+                                {company.investors.length > 4 && (
+                                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-zinc-900 text-zinc-500">
+                                    +{company.investors.length - 4} more
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Card Action Row */}
+                        <div className="pt-4 border-t border-zinc-800/80 space-y-2">
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedCompanyModal(company.slug)}
+                              className="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-black font-black text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                            >
+                              <Activity className="w-3.5 h-3.5" />
+                              <span>Inspect Claims</span>
+                            </button>
+                            <ExportMemoButton companyName={company.name} />
+                          </div>
+                          <Link
+                            href={`/company/${company.slug}`}
+                            className="block text-center py-1.5 text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
+                          >
+                            Open Full SSR Dossier →
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col xl:flex-row gap-6 mb-8">
               <div className="flex-1">
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
                 <div className="h-full p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
@@ -1501,6 +1822,8 @@ export default function Dashboard() {
                 </button>
               </div>
             )}
+              </>
+            )}
             
             {/* Popular Investor Hubs — Compact Layout with Unique Icons */}
             <div className="mt-16 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-12 mb-8">
@@ -1649,6 +1972,13 @@ export default function Dashboard() {
         <AiPitchModal
           investor={aiPitchInvestor}
           onClose={() => setAiPitchInvestor(null)}
+        />
+      )}
+
+      {selectedCompanyModal && (
+        <CompanyProfileModal
+          companyName={selectedCompanyModal}
+          onClose={() => setSelectedCompanyModal(null)}
         />
       )}
     </>

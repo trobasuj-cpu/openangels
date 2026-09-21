@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { getCompanyIntelligence } from '@/lib/companyData';
+import ExportMemoButton from './ExportMemoButton';
 
 export default function CompanyProfileModal({ companyName, companyData: initialData, onClose }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'signals' | 'claims' | 'syndicate' | 'timeline'
@@ -129,15 +130,18 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
                 </div>
               </div>
 
-              {/* Share Dossier Button */}
-              <button
-                onClick={handleShare}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/60 text-xs font-medium transition-all shadow-sm cursor-pointer mt-2"
-                title="Copy shareable company dossier link"
-              >
-                {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-zinc-400" />}
-                <span>{copiedLink ? 'Copied Link!' : 'Share Dossier'}</span>
-              </button>
+              {/* Action Buttons: Export Memo & Share */}
+              <div className="flex items-center gap-2 mt-2 flex-wrap sm:justify-end">
+                <ExportMemoButton companyName={company.name} />
+                <button
+                  onClick={handleShare}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/60 text-xs font-medium transition-all shadow-sm cursor-pointer"
+                  title="Copy shareable company dossier link"
+                >
+                  {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-zinc-400" />}
+                  <span>{copiedLink ? 'Copied Link!' : 'Share Dossier'}</span>
+                </button>
+              </div>
             </div>
           </div>
 

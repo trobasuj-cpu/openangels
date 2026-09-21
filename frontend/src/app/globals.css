@@ -147,3 +147,30 @@
   animation-duration: 2s;
   filter: brightness(1.15);
 }
+
+/* Institutional Due Diligence Memo Print Styles */
+@media print {
+  nav, header, footer, button, .no-print, [role="button"], a[href^="/"] {
+    display: none !important;
+  }
+  
+  body, main {
+    background: #ffffff !important;
+    color: #000000 !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .dark {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  * {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-shadow: none !important;
+  }
+}
