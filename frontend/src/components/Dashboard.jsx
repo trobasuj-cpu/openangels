@@ -1230,9 +1230,16 @@ export default function Dashboard() {
                                 <h3 className="text-lg font-black text-white tracking-tight group-hover:text-emerald-300 transition-colors">
                                   {company.name}
                                 </h3>
-                                <span className="text-[11px] font-mono text-zinc-400">
-                                  {company.stage}
-                                </span>
+                                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                  <span className="text-[11px] font-mono text-zinc-400">
+                                    {company.stage}
+                                  </span>
+                                  <span className="text-zinc-600">•</span>
+                                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                                    SEC Form D Audited
+                                  </span>
+                                </div>
                               </div>
                             </div>
 
