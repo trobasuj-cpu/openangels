@@ -408,13 +408,16 @@ export default function Dashboard() {
   const filteredCompanies = useMemo(() => {
     const list = Object.values(KNOWN_COMPANIES || {});
     if (companyCategoryFilter === 'ai') {
-      return list.filter(c => ['openai', 'perplexity', 'facebook'].includes(c.slug));
+      return list.filter(c => ['openai', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor', 'facebook'].includes(c.slug));
+    }
+    if (companyCategoryFilter === 'devtools') {
+      return list.filter(c => ['cursor', 'cognition', 'poolside'].includes(c.slug));
     }
     if (companyCategoryFilter === 'fintech') {
       return list.filter(c => ['stripe'].includes(c.slug));
     }
     if (companyCategoryFilter === 'marketplace') {
-      return list.filter(c => ['airbnb', 'uber', 'linkedin', 'twitter', 'dropbox'].includes(c.slug));
+      return list.filter(c => ['airbnb', 'uber', 'linkedin', 'twitter', 'dropbox', 'mercor'].includes(c.slug));
     }
     return list;
   }, [companyCategoryFilter]);
@@ -1176,7 +1179,7 @@ export default function Dashboard() {
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-2 shrink-0">
                       <div className="p-3.5 rounded-2xl bg-zinc-950/80 border border-emerald-500/20 text-center sm:text-right">
                         <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Institutional Coverage</div>
-                        <div className="text-xl font-black text-white mt-0.5">9 Verified Dossiers</div>
+                        <div className="text-xl font-black text-white mt-0.5">16 Verified Dossiers</div>
                         <div className="text-[11px] text-emerald-400 font-mono mt-0.5">100% SEC Form D Audited</div>
                       </div>
                     </div>
@@ -1186,10 +1189,11 @@ export default function Dashboard() {
                   <div className="relative z-10 flex items-center gap-2 mt-6 pt-5 border-t border-zinc-800/80 flex-wrap">
                     <span className="text-xs font-bold text-zinc-400 mr-1">Sector Focus:</span>
                     {[
-                      { id: 'all', label: 'All Audited Startups (9)' },
-                      { id: 'ai', label: 'Frontier AI & Reasoning (3)' },
-                      { id: 'fintech', label: 'Fintech & Infra (1)' },
-                      { id: 'marketplace', label: 'Marketplaces & Networks (5)' }
+                      { id: 'all', label: 'All Audited Startups (16)' },
+                      { id: 'ai', label: 'Frontier AI & Autonomous Agents (10)' },
+                      { id: 'devtools', label: 'DevTools & Code AI (3)' },
+                      { id: 'fintech', label: 'Fintech & Payments (1)' },
+                      { id: 'marketplace', label: 'Marketplaces & Networks (6)' }
                     ].map(tab => (
                       <button
                         key={tab.id}
