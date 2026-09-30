@@ -7,7 +7,7 @@ import {
   Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, 
   ChevronDown, ChevronRight, Check, Layers, Loader2, X, UserPlus, CheckCircle,
   Cloud, CreditCard, Building2, ShoppingBag, HeartPulse, Shield, ShieldCheck, Store, Cpu, Code2, Leaf, Dna, ExternalLink,
-  Rocket, Zap, TrendingUp, Award, Activity, FileText, Users
+  Rocket, Zap, TrendingUp, Award, Activity, FileText, Users, ArrowUpRight
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
@@ -488,7 +488,9 @@ export default function Dashboard() {
     if (search && search.trim()) {
       const q = search.trim().toLowerCase();
       list = list.filter(c => {
-        const text = `${c.name || ''} ${c.tagline || ''} ${c.overview || ''} ${c.industry || ''} ${(c.investors || []).join(' ')}`.toLowerCase();
+        if (!c) return false;
+        const invStr = Array.isArray(c.investors) ? c.investors.join(' ') : (typeof c.investors === 'string' ? c.investors : '');
+        const text = `${c.name || ''} ${c.tagline || ''} ${c.overview || ''} ${c.industry || ''} ${invStr}`.toLowerCase();
         return text.includes(q);
       });
     }
@@ -1359,7 +1361,7 @@ export default function Dashboard() {
                                 {company.funding?.totalRaised || company.total_raised || 'Confidential'}
                               </div>
                               <div className="text-[11px] font-medium text-zinc-400 truncate mt-0.5">
-                                {company.funding?.valuation ? (company.funding.valuation.startsWith('Val:') ? company.funding.valuation : `Val: ${company.funding.valuation}`) : 'SEC Form D Audited'}
+                                {company.funding?.valuation ? (typeof company.funding.valuation === 'string' && company.funding.valuation.startsWith('Val:') ? company.funding.valuation : `Val: ${company.funding.valuation}`) : 'SEC Form D Audited'}
                               </div>
                             </div>
 
@@ -1400,7 +1402,7 @@ export default function Dashboard() {
                           )}
 
                           {/* Backers Syndicate Chips */}
-                          {company.investors && company.investors.length > 0 && (
+                          {Array.isArray(company.investors) && company.investors.length > 0 && (
                             <div className="mb-4">
                               <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5 font-mono">
                                 Syndicate & Backers

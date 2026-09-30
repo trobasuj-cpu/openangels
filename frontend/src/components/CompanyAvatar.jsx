@@ -13,7 +13,7 @@ export default function CompanyAvatar({ name, domain, avatarUrl, className = "w-
 
   // Clean domain helper
   const cleanDomain = React.useMemo(() => {
-    if (!domain) return '';
+    if (!domain || typeof domain !== 'string') return '';
     return domain.toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0].trim();
   }, [domain]);
 
@@ -44,19 +44,23 @@ export default function CompanyAvatar({ name, domain, avatarUrl, className = "w-
   };
 
   const getInitials = (str) => {
-    if (!str) return 'CO';
+    if (!str || typeof str !== 'string') return 'CO';
     const words = str.trim().split(/[\s\-_\.]+/).filter(Boolean);
+    if (words.length === 0) return 'CO';
     if (words.length === 1) {
-      return words[0].slice(0, 2).toUpperCase();
+      return (words[0].slice(0, 2) || 'CO').toUpperCase();
     }
-    return (words[0][0] + words[1][0]).toUpperCase();
+    const first = words[0]?.[0] || 'C';
+    const second = words[1]?.[0] || words[0]?.[1] || 'O';
+    return (first + second).toUpperCase();
   };
 
   const initials = getInitials(name);
 
   // Deterministic gradient tint for brand monogram
   const getGradient = (str) => {
-    const code = (str || 'A').charCodeAt(0);
+    const safeStr = typeof str === 'string' && str.length > 0 ? str : 'A';
+    const code = safeStr.charCodeAt(0);
     if (code % 4 === 0) return 'from-emerald-950 via-zinc-900 to-zinc-950 text-emerald-400 border-emerald-500/30';
     if (code % 4 === 1) return 'from-blue-950 via-zinc-900 to-zinc-950 text-blue-400 border-blue-500/30';
     if (code % 4 === 2) return 'from-purple-950 via-zinc-900 to-zinc-950 text-purple-400 border-purple-500/30';
