@@ -19,6 +19,7 @@ import Footer from './Footer';
 import GumroadIframeModal from './GumroadIframeModal';
 import AiPitchModal from './AiPitchModal';
 import CompanyProfileModal from './CompanyProfileModal';
+import CompanyAvatar from './CompanyAvatar';
 import ExportMemoButton from './ExportMemoButton';
 import { KNOWN_COMPANIES } from '@/lib/companyData';
 import companiesCache from '@/lib/companies_cache.json';
@@ -1253,8 +1254,8 @@ export default function Dashboard() {
 
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-2 shrink-0">
                       <div className="p-3.5 rounded-2xl bg-zinc-950/80 border border-emerald-500/20 text-center sm:text-right">
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Institutional Coverage</div>
-                        <div className="text-xl font-black text-white mt-0.5">16 Verified Dossiers</div>
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-mono">Institutional Coverage</div>
+                        <div className="text-xl font-black text-white mt-0.5">{radarCompanies.length} Verified Dossiers</div>
                         <div className="text-[11px] text-emerald-400 font-mono mt-0.5">100% SEC Form D Audited</div>
                       </div>
                     </div>
@@ -1262,13 +1263,14 @@ export default function Dashboard() {
 
                   {/* Sector Filter Chips */}
                   <div className="relative z-10 flex items-center gap-2 mt-6 pt-5 border-t border-zinc-800/80 flex-wrap">
-                    <span className="text-xs font-bold text-zinc-400 mr-1">Sector Focus:</span>
+                    <span className="text-xs font-bold text-zinc-400 mr-1 font-mono">Sector Focus:</span>
                     {[
-                      { id: 'all', label: 'All Audited Startups (16)' },
-                      { id: 'ai', label: 'Frontier AI & Autonomous Agents (10)' },
-                      { id: 'devtools', label: 'DevTools & Code AI (3)' },
-                      { id: 'fintech', label: 'Fintech & Payments (1)' },
-                      { id: 'marketplace', label: 'Marketplaces & Networks (6)' }
+                      { id: 'all', label: `All Startups (${companyCategoryCounts.all})` },
+                      { id: 'ai', label: `Frontier AI (${companyCategoryCounts.ai})` },
+                      { id: 'devtools', label: `DevTools (${companyCategoryCounts.devtools})` },
+                      { id: 'fintech', label: `Fintech (${companyCategoryCounts.fintech})` },
+                      { id: 'marketplace', label: `Marketplaces (${companyCategoryCounts.marketplace})` },
+                      { id: 'saas', label: `B2B SaaS (${companyCategoryCounts.saas})` }
                     ].map(tab => (
                       <button
                         key={tab.id}
@@ -1290,77 +1292,87 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredCompanies.map(company => {
                     const topSignal = company.investmentSignals?.signals?.[0] || company.timeline?.[0];
-                    const score = company.openangelsScore || 90;
-                    const scoreColor = score >= 95 ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-blue-400 border-blue-500/30 bg-blue-500/10';
+                    const score = company.openangelsScore || 88;
+                    const scoreColor = score >= 95 
+                      ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' 
+                      : 'text-blue-400 border-blue-500/30 bg-blue-500/10';
 
                     return (
                       <div
                         key={company.slug}
-                        className="p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 hover:border-emerald-500/40 hover:bg-zinc-900/90 transition-all duration-300 shadow-xl flex flex-col justify-between group"
+                        className="p-6 rounded-3xl bg-zinc-900/70 border border-zinc-800/80 hover:border-emerald-500/40 hover:bg-zinc-900/95 transition-all duration-300 shadow-xl flex flex-col justify-between group"
                       >
                         <div>
-                          {/* Card Header: Monogram, Name, Score */}
-                          <div className="flex items-start justify-between gap-3 mb-3">
-                            <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-700/60 flex items-center justify-center font-black text-xl text-white shadow-md">
-                                {company.name.charAt(0)}
-                              </div>
-                              <div>
-                                <h3 className="text-lg font-black text-white tracking-tight group-hover:text-emerald-300 transition-colors">
+                          {/* Card Header: Avatar, Name, Stage & OA Score */}
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <CompanyAvatar 
+                                name={company.name} 
+                                domain={company.domain} 
+                                avatarUrl={company.avatar_url}
+                                className="w-12 h-12"
+                              />
+                              <div className="min-w-0 flex-1">
+                                <h3 className="text-base sm:text-lg font-black text-white tracking-tight group-hover:text-emerald-300 transition-colors truncate">
                                   {company.name}
                                 </h3>
-                                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                                  <span className="text-[11px] font-mono text-zinc-400">
-                                    {company.stage}
+                                <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                                  <span className="text-[10px] font-mono font-bold text-zinc-300 bg-zinc-800/80 px-2 py-0.5 rounded-md border border-zinc-700/60 shrink-0">
+                                    {company.stage || 'Venture Round'}
                                   </span>
-                                  <span className="text-zinc-600">•</span>
-                                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
                                     <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                                    SEC Form D Audited
+                                    Audited
                                   </span>
                                 </div>
                               </div>
                             </div>
 
-                            <div className="text-right">
-                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Score</div>
-                              <div className="flex items-baseline gap-1 justify-end">
-                                <span className="text-xl font-black text-white">{score}</span>
-                                <span className="text-[10px] text-zinc-500 font-bold">/100</span>
+                            {/* Score Block */}
+                            <div className="flex flex-col items-end shrink-0 pl-1">
+                              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-zinc-950/90 border border-zinc-800/90 shadow-inner">
+                                <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider">OA SCORE</span>
+                                <span className={`text-sm font-black font-mono ${score >= 95 ? 'text-emerald-400' : 'text-blue-400'}`}>
+                                  {score}
+                                </span>
                               </div>
-                              <div className={`text-[10px] font-bold px-2 py-0.5 rounded-full border mt-0.5 inline-block ${scoreColor}`}>
-                                {company.scoreBadge || 'Verified Breakout'}
+                              <div className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border mt-1.5 max-w-[125px] truncate text-center ${scoreColor}`}>
+                                {company.scoreBadge || 'Breakout'}
                               </div>
                             </div>
                           </div>
 
                           {/* Tagline */}
-                          <p className="text-xs text-zinc-300 line-clamp-2 mb-4 leading-relaxed">
+                          <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed my-3.5 min-h-[36px]">
                             {company.tagline || company.overview}
                           </p>
 
-                          {/* Key Telemetry Badges */}
-                          <div className="grid grid-cols-2 gap-2 mb-4">
-                            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/70">
-                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1">
-                                <DollarSign className="w-3 h-3 text-emerald-400" /> Capital Raised
+                          {/* Key Telemetry Metrics (Unified Cohesive Card) */}
+                          <div className="grid grid-cols-2 p-3 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 mb-3.5 divide-x divide-zinc-800/80 shadow-inner">
+                            {/* Capital Raised */}
+                            <div className="pr-3 flex flex-col justify-between">
+                              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-mono">
+                                <DollarSign className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                                <span>Capital Raised</span>
                               </div>
-                              <div className="text-xs font-extrabold text-white mt-0.5 truncate">
-                                {company.funding?.totalRaised || 'Confidential'}
+                              <div className="text-base font-black text-white tracking-tight mt-1 truncate">
+                                {company.funding?.totalRaised || company.total_raised || 'Confidential'}
                               </div>
-                              <div className="text-[10px] text-zinc-400 truncate">
-                                {company.funding?.valuation ? `Val: ${company.funding.valuation}` : 'SEC Form D Verified'}
+                              <div className="text-[11px] font-medium text-zinc-400 truncate mt-0.5">
+                                {company.funding?.valuation ? (company.funding.valuation.startsWith('Val:') ? company.funding.valuation : `Val: ${company.funding.valuation}`) : 'SEC Form D Audited'}
                               </div>
                             </div>
 
-                            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/70">
-                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1">
-                                <Users className="w-3 h-3 text-blue-400" /> Headcount
+                            {/* Headcount */}
+                            <div className="pl-3 flex flex-col justify-between">
+                              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-mono">
+                                <Users className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                                <span>Headcount</span>
                               </div>
-                              <div className="text-xs font-extrabold text-white mt-0.5">
+                              <div className="text-base font-black text-white tracking-tight mt-1 truncate">
                                 {company.employees ? `${company.employees.toLocaleString()} team` : 'High Velocity'}
                               </div>
-                              <div className="text-[10px] text-emerald-400 truncate">
+                              <div className="text-[11px] font-bold text-emerald-400 truncate mt-0.5">
                                 {company.employeeGrowth90d || '+20% 90d growth'}
                               </div>
                             </div>
@@ -1368,15 +1380,19 @@ export default function Dashboard() {
 
                           {/* Latest Verified Signal Box */}
                           {topSignal && (
-                            <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 mb-4">
-                              <div className="flex items-center justify-between text-[10px] font-bold text-emerald-400 mb-1">
-                                <span>{topSignal.badge || topSignal.signalBadge || '⚡ RECENT SIGNAL'}</span>
-                                <span className="text-zinc-500 font-mono">{topSignal.date || topSignal.relativeTime}</span>
+                            <div className="p-3 rounded-2xl bg-zinc-950/70 border border-zinc-800/90 mb-3.5 relative overflow-hidden group/sig hover:border-emerald-500/40 transition-colors">
+                              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 to-emerald-600" />
+                              <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
+                                <span className="flex items-center gap-1.5 text-emerald-400 font-mono">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  {topSignal.badge || topSignal.signalBadge || '⚡ RECENT SIGNAL'}
+                                </span>
+                                <span className="text-zinc-500 font-mono text-[10px]">{topSignal.date || topSignal.relativeTime}</span>
                               </div>
-                              <p className="text-xs font-medium text-zinc-200 line-clamp-2 leading-snug">
-                                {topSignal.label || topSignal.title}
+                              <p className="text-xs font-semibold text-zinc-200 line-clamp-1 pl-1.5 leading-snug">
+                                {topSignal.label || topSignal.title || topSignal.event}
                               </p>
-                              <div className="text-[10px] text-zinc-400 mt-1 flex items-center gap-1">
+                              <div className="text-[10px] text-zinc-400 mt-1.5 pl-1.5 flex items-center gap-1 font-mono">
                                 <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
                                 <span className="truncate">Source: {topSignal.source || topSignal.evidenceSource || 'Regulatory Filings'}</span>
                               </div>
@@ -1386,20 +1402,20 @@ export default function Dashboard() {
                           {/* Backers Syndicate Chips */}
                           {company.investors && company.investors.length > 0 && (
                             <div className="mb-4">
-                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5 font-mono">
                                 Syndicate & Backers
                               </div>
-                              <div className="flex flex-wrap gap-1">
+                              <div className="flex flex-wrap gap-1.5">
                                 {company.investors.slice(0, 4).map((inv, idx) => (
                                   <span
                                     key={idx}
-                                    className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/60"
+                                    className="text-[10px] font-medium px-2.5 py-1 rounded-lg bg-zinc-950/80 text-zinc-300 border border-zinc-800/80 hover:border-zinc-700 transition-colors"
                                   >
                                     {inv}
                                   </span>
                                 ))}
                                 {company.investors.length > 4 && (
-                                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-zinc-900 text-zinc-500">
+                                  <span className="text-[10px] font-mono px-2 py-1 rounded-lg bg-zinc-900 text-zinc-500 border border-zinc-800/60">
                                     +{company.investors.length - 4} more
                                   </span>
                                 )}
@@ -1409,23 +1425,28 @@ export default function Dashboard() {
                         </div>
 
                         {/* Card Action Row */}
-                        <div className="pt-4 border-t border-zinc-800/80 space-y-2">
+                        <div className="pt-3.5 border-t border-zinc-800/80 space-y-2">
                           <div className="grid grid-cols-2 gap-2">
                             <button
                               type="button"
                               onClick={() => setSelectedCompanyModal(company.slug)}
-                              className="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-black font-black text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                              className="w-full py-2.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-xs transition-all shadow-md hover:shadow-emerald-500/20 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                             >
                               <Activity className="w-3.5 h-3.5" />
                               <span>Inspect Claims</span>
                             </button>
-                            <ExportMemoButton compact companyName={company.name} />
+                            <ExportMemoButton 
+                              compact 
+                              companyName={company.name} 
+                              className="w-full py-2.5 px-3 rounded-xl bg-zinc-950 hover:bg-zinc-850 text-zinc-200 hover:text-white border border-zinc-800 text-xs font-semibold"
+                            />
                           </div>
                           <Link
                             href={`/company/${company.slug}`}
-                            className="block text-center py-1.5 text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
+                            className="flex items-center justify-center gap-1 text-[11px] font-semibold text-zinc-400 hover:text-emerald-400 transition-colors py-1 group/link"
                           >
-                            Open Full SSR Dossier →
+                            <span>Open Full Intelligence Dossier</span>
+                            <ArrowUpRight className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                           </Link>
                         </div>
                       </div>

@@ -902,7 +902,7 @@
     },
     "signals": [
       {
-        "id": "sig-a16z-backed-eliseai-1790759801",
+        "id": "sig-a16z-backed-eliseai-1790761962",
         "badge": "💰 FUNDING",
         "title": "Raised $350M in Venture Round",
         "date": "Tue, 29 Se",
@@ -987,7 +987,7 @@
     },
     "signals": [
       {
-        "id": "sig-british-ai-neocloud-nscale-1790759801",
+        "id": "sig-british-ai-neocloud-nscale-1790761962",
         "badge": "💰 FUNDING",
         "title": "Raised $3.36B in Venture Round",
         "date": "Fri, 25 Se",
@@ -1072,7 +1072,7 @@
     },
     "signals": [
       {
-        "id": "sig-ex-tesla-team-1790759802",
+        "id": "sig-ex-tesla-team-1790761963",
         "badge": "💰 FUNDING",
         "title": "Raised $12.5M in Venture Round",
         "date": "Tue, 29 Se",
@@ -1157,7 +1157,7 @@
     },
     "signals": [
       {
-        "id": "sig-insurtech-outmarket-1790759802",
+        "id": "sig-insurtech-outmarket-1790761963",
         "badge": "💰 FUNDING",
         "title": "Raised $34.5M in Just Months After Prior Round",
         "date": "Mon, 28 Se",
@@ -1242,7 +1242,7 @@
     },
     "signals": [
       {
-        "id": "sig-reco-1790759803",
+        "id": "sig-reco-1790761964",
         "badge": "💰 FUNDING",
         "title": "Raised $55M in Venture Round",
         "date": "Tue, 29 Se",
@@ -1327,7 +1327,7 @@
     },
     "signals": [
       {
-        "id": "sig-eliseai-1790759807",
+        "id": "sig-eliseai-1790761969",
         "badge": "💰 FUNDING",
         "title": "Raised $350 MILLION in Venture Round",
         "date": "Tue, 29 Se",
@@ -1412,7 +1412,7 @@
     },
     "signals": [
       {
-        "id": "sig-tiny-health-1790759807",
+        "id": "sig-tiny-health-1790761969",
         "badge": "💰 FUNDING",
         "title": "Raised $33 MILLION in Series B To Expand Microbiome Intelligence Platform",
         "date": "Tue, 29 Se",
@@ -1497,7 +1497,7 @@
     },
     "signals": [
       {
-        "id": "sig-remotethreat-1790759807",
+        "id": "sig-remotethreat-1790761969",
         "badge": "💰 FUNDING",
         "title": "Raised $7 MILLION in Pre-Seed Funding And Emerges From Stealth With O",
         "date": "Tue, 29 Se",
@@ -1582,7 +1582,7 @@
     },
     "signals": [
       {
-        "id": "sig-draganfly-1790759807",
+        "id": "sig-draganfly-1790761969",
         "badge": "💰 FUNDING",
         "title": "Raised $10 MILLION in Venture Round",
         "date": "Tue, 29 Se",
@@ -1667,7 +1667,7 @@
     },
     "signals": [
       {
-        "id": "sig-erad-1790759807",
+        "id": "sig-erad-1790761969",
         "badge": "💰 FUNDING",
         "title": "Raised $22 MILLION in Series A Led By Mevp To Expand Sme Financing Across Gcc",
         "date": "Tue, 29 Se",
@@ -1689,6 +1689,91 @@
     "score_badge": "Verified Breakout",
     "pitch_hook": "When referencing erad to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
     "source_url": "https://pulse2.com/erad-raises-22-million-series-a-led-by-mevp-to-expand-sme-financing-across-gcc/"
+  },
+  "zenithon": {
+    "name": "Zenithon",
+    "slug": "zenithon",
+    "legal_name": "Zenithon, Inc.",
+    "domain": "zenithon.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "UK AI startup Zenithon has raised $10 million to build what it describes as the first world models for extreme physics and accelerate the development of technologies that will define the 21st century....",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$10M",
+    "last_round_amount": "$10M",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Wed, 30 Se",
+    "founders": [
+      {
+        "name": "Founders (Zenithon)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/zenithon"
+      }
+    ],
+    "investors": [
+      "Accel"
+    ],
+    "products": [
+      "Zenithon Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-zenithon-1790761971",
+        "badge": "💰 FUNDING",
+        "title": "Raised $10M in Venture Round",
+        "date": "Wed, 30 Se",
+        "source": "Tech.eu",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Wed, 30 Se",
+        "event": "Venture Round Financing ($10M)",
+        "evidence": "Zenithon secured $10M to accelerate platform expansion.",
+        "source": "Tech.eu",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing Zenithon to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://tech.eu/2026/09/30/zenithon-raises-10m-to-build-world-models-for-extreme-physics/"
   },
   "cotierra": {
     "name": "Cotierra",
@@ -1752,7 +1837,7 @@
     },
     "signals": [
       {
-        "id": "sig-cotierra-1790759809",
+        "id": "sig-cotierra-1790761971",
         "badge": "💰 FUNDING",
         "title": "Raised $3M in Venture Round",
         "date": "Tue, 29 Se",
@@ -1837,7 +1922,7 @@
     },
     "signals": [
       {
-        "id": "sig-otech-aptadir-therapeutics-1790759809",
+        "id": "sig-otech-aptadir-therapeutics-1790761971",
         "badge": "💰 FUNDING",
         "title": "Raised $45M in Seed Round",
         "date": "Tue, 29 Se",
@@ -1922,7 +2007,7 @@
     },
     "signals": [
       {
-        "id": "sig-e-fitness-tracker-ipercept-1790759809",
+        "id": "sig-e-fitness-tracker-ipercept-1790761971",
         "badge": "💰 FUNDING",
         "title": "Raised $16.5M in Venture Round",
         "date": "Tue, 29 Se",
