@@ -1,0 +1,1948 @@
+{
+  "cursor": {
+    "name": "Cursor",
+    "slug": "cursor",
+    "legal_name": "Anysphere, Inc.",
+    "domain": "cursor.com",
+    "tagline": "AI-first code editor designed for pair programming with frontier models",
+    "overview": "Next-generation developer environment built as an AI-native fork of VS Code. Features multi-file editing, codebase indexing, and shadow workspace speculative editing.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series A / Breakout",
+    "industry": "Developer Tools",
+    "total_raised": "$60M+",
+    "last_round_amount": "$60M",
+    "last_round_type": "Series A",
+    "valuation": "$2.5B Post-Money",
+    "round_date": "August 2024",
+    "founders": [
+      {
+        "name": "Michael Truell",
+        "role": "Co-Founder & CEO",
+        "pedigree": "MIT Alum, ICPC Competitive Programmer",
+        "linkedin": "https://linkedin.com/in/michaeltruell"
+      },
+      {
+        "name": "Sualeh Asif",
+        "role": "Co-Founder",
+        "pedigree": "MIT Alum",
+        "linkedin": "https://linkedin.com/in/sualeh-asif"
+      },
+      {
+        "name": "Arvid Lunnemark",
+        "role": "Co-Founder",
+        "pedigree": "MIT Alum",
+        "linkedin": "https://linkedin.com/in/arvid-lunnemark"
+      },
+      {
+        "name": "Aman Sanger",
+        "role": "Co-Founder",
+        "pedigree": "MIT Alum",
+        "linkedin": "https://linkedin.com/in/aman-sanger"
+      }
+    ],
+    "investors": [
+      "Benchmark",
+      "OpenAI Startup Fund",
+      "Nat Friedman",
+      "Daniel Gross",
+      "Patrick Collison",
+      "Arash Ferdowsi"
+    ],
+    "products": [
+      "Cursor IDE",
+      "Composer Multi-File Agent",
+      "Shadow Workspace",
+      "Codebase RAG Indexer"
+    ],
+    "customers": [
+      "OpenAI",
+      "Midjourney",
+      "Perplexity",
+      "Instacart",
+      "Over 1M+ active software engineers"
+    ],
+    "employees": 35,
+    "employee_growth_90d": "+45% headcount velocity",
+    "hiring": {
+      "status": "Hyper-growth",
+      "open_roles": 14,
+      "focus_areas": [
+        "Compilers & Language Servers",
+        "Distributed Caching",
+        "Model Fine-tuning"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "TypeScript",
+        "Rust",
+        "C++",
+        "PyTorch",
+        "Chromium/Electron"
+      ],
+      "moat": "Proprietary speculative multi-file editing tokens, local syntax graph indexing, zero-latency autocomplete models",
+      "github_velocity": "Leading global adoption curve in developer tooling"
+    },
+    "growth_signals": {
+      "revenue_run_rate": "$100M+ ARR (reported fastest SaaS growth in history)",
+      "user_velocity": "Over 1,000,000 active developers within 18 months of launch"
+    },
+    "signals": [
+      {
+        "id": "cur-1",
+        "badge": "💰 ROUND",
+        "title": "Series A at $2.5B Valuation",
+        "date": "2024-08-22",
+        "source": "Benchmark Disclosures",
+        "confidence": 0.98
+      },
+      {
+        "id": "cur-2",
+        "badge": "🚀 LAUNCH",
+        "title": "Launched Cursor Composer",
+        "date": "2024-08-15",
+        "source": "Cursor Release Notes",
+        "confidence": 0.99
+      },
+      {
+        "id": "cur-3",
+        "badge": "🔥 HIRING",
+        "title": "Added 12 Senior Compiler Engineers",
+        "date": "2024-09-01",
+        "source": "LinkedIn Talent Flow",
+        "confidence": 0.94
+      }
+    ],
+    "timeline": [
+      {
+        "date": "2024-08-22",
+        "event": "Series A Financing ($60M at $2.5B Post-Money)",
+        "evidence": "Benchmark led $60M financing round alongside OpenAI Startup Fund.",
+        "source": "Benchmark & TechCrunch",
+        "confidence": 0.98,
+        "category": "funding"
+      },
+      {
+        "date": "2024-08-15",
+        "event": "Launched Cursor Composer Autonomous Agent",
+        "evidence": "Released multi-file simultaneous code synthesis agent with streaming AST diffs.",
+        "source": "Official Product Changelog",
+        "confidence": 0.99,
+        "category": "product"
+      },
+      {
+        "date": "2024-09-01",
+        "event": "Aggressive Senior Systems Engineering Expansion",
+        "evidence": "Hired 12 top compiler and distributed systems engineers from Apple and Meta.",
+        "source": "Verified Employment Flow",
+        "confidence": 0.94,
+        "category": "talent"
+      }
+    ],
+    "openangels_score": 98.5,
+    "score_badge": "Tier 1 Decacorn Velocity",
+    "pitch_hook": "When evaluating AI developer environments, reference Cursor's user retention metrics, AST diff latency, and deep VS Code extension compatibility."
+  },
+  "cognition": {
+    "name": "Cognition",
+    "slug": "cognition",
+    "legal_name": "Cognition Labs, Inc.",
+    "domain": "cognition.ai",
+    "tagline": "Applied AI lab building Devin, the first autonomous software engineer",
+    "overview": "Frontier AI lab creating end-to-end autonomous software development agents capable of planning, executing complex engineering tasks, debugging, and deploying production code.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series A",
+    "industry": "Frontier AI & Reasoning",
+    "total_raised": "$196M",
+    "last_round_amount": "$175M",
+    "last_round_type": "Series A",
+    "valuation": "$2.0B Post-Money",
+    "round_date": "April 2024",
+    "founders": [
+      {
+        "name": "Scott Wu",
+        "role": "Co-Founder & CEO",
+        "pedigree": "3x IOI Gold Medalist, Harvard Alum, Former Lunchclub Co-Founder",
+        "linkedin": "https://linkedin.com/in/scott-wu-056a2981"
+      },
+      {
+        "name": "Steven Hao",
+        "role": "Co-Founder & CTO",
+        "pedigree": "IOI Gold Medalist, MIT Alum, Former Scale AI Engineer",
+        "linkedin": "https://linkedin.com/in/steven-hao-37b52473"
+      },
+      {
+        "name": "Walden Yan",
+        "role": "Co-Founder & Chief Scientist",
+        "pedigree": "Harvard Alum, IOI Gold Medalist",
+        "linkedin": "https://linkedin.com/in/waldenyan"
+      }
+    ],
+    "investors": [
+      "Founders Fund",
+      "Peter Thiel",
+      "Elad Gil",
+      "Sarah Guo",
+      "Patrick Collison",
+      "John Collison"
+    ],
+    "products": [
+      "Devin Autonomous Software Engineer",
+      "Devin Enterprise Workspace",
+      "Cognition Reasoning API"
+    ],
+    "customers": [
+      "Goldman Sachs",
+      "Nubank",
+      "Target",
+      "Fortune 500 Enterprise Beta Partners"
+    ],
+    "employees": 45,
+    "employee_growth_90d": "+50% headcount velocity",
+    "hiring": {
+      "status": "Selective High-Bar",
+      "open_roles": 8,
+      "focus_areas": [
+        "Inference-Time Search",
+        "Sandboxed Execution Environments",
+        "LLM Reasoning"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "Rust",
+        "Docker",
+        "Custom Container Sandboxes",
+        "PyTorch"
+      ],
+      "moat": "Pioneered long-horizon autonomous planning models with multi-step self-correction loops on SWE-bench",
+      "github_velocity": "Record benchmark scoring on SWE-bench real-world GitHub issue resolution"
+    },
+    "growth_signals": {
+      "revenue_run_rate": "$25M+ ARR contracted runtime",
+      "enterprise_adoption": "Enterprise waitlist exceeding 40,000 organizations"
+    },
+    "signals": [
+      {
+        "id": "cog-1",
+        "badge": "💰 ROUND",
+        "title": "Raised $175M Series A at $2B Valuation",
+        "date": "2024-04-24",
+        "source": "Founders Fund Disclosure",
+        "confidence": 0.99
+      },
+      {
+        "id": "cog-2",
+        "badge": "🚀 LAUNCH",
+        "title": "Unveiled Devin Autonomous AI Engineer",
+        "date": "2024-03-12",
+        "source": "Cognition Research Paper",
+        "confidence": 0.99
+      }
+    ],
+    "timeline": [
+      {
+        "date": "2024-04-24",
+        "event": "Series A Financing ($175M at $2.0B Post-Money)",
+        "evidence": "Founders Fund led $175M investment round with participation from Elad Gil.",
+        "source": "Founders Fund & SEC Form D",
+        "confidence": 0.99,
+        "category": "funding"
+      },
+      {
+        "date": "2024-03-12",
+        "event": "Public Launch of Devin",
+        "evidence": "Released SWE-bench benchmarks demonstrating 13.86% unassisted issue resolution.",
+        "source": "Cognition Research Release",
+        "confidence": 0.99,
+        "category": "product"
+      }
+    ],
+    "openangels_score": 97.4,
+    "score_badge": "High-Growth Scaleup",
+    "pitch_hook": "When discussing autonomous agents with syndicate investors, highlight long-horizon planning sandboxes and human-in-the-loop escalation workflows."
+  },
+  "poolside": {
+    "name": "Poolside",
+    "slug": "poolside",
+    "legal_name": "Poolside AI SAS / Poolside Inc.",
+    "domain": "poolside.ai",
+    "tagline": "Building the world's most capable foundation model for software development",
+    "overview": "Frontier AI lab developing specialized large foundation models trained specifically for code generation, software architecture design, and autonomous programming systems.",
+    "location": "Paris, France & San Francisco, CA",
+    "country": "France",
+    "stage": "Series B",
+    "industry": "Frontier AI & Reasoning",
+    "total_raised": "$626M",
+    "last_round_amount": "$500M",
+    "last_round_type": "Series B",
+    "valuation": "$3.0B Post-Money",
+    "round_date": "October 2024",
+    "founders": [
+      {
+        "name": "Jason Warner",
+        "role": "Co-Founder & CEO",
+        "pedigree": "Former CTO of GitHub, VP of Engineering at Heroku, Redpoint Partner",
+        "linkedin": "https://linkedin.com/in/jasoncwarner"
+      },
+      {
+        "name": "Eiso Kant",
+        "role": "Co-Founder & CTO",
+        "pedigree": "Founder of sourcerer.io, Athenian, Serial AI Infra Entrepreneur",
+        "linkedin": "https://linkedin.com/in/eisokant"
+      }
+    ],
+    "investors": [
+      "Bain Capital Ventures",
+      "DST Global",
+      "StepStone Group",
+      "Felicis",
+      "Air Street Capital",
+      "Rodolphe Saadé"
+    ],
+    "products": [
+      "Poolside Foundation Code Model",
+      "Enterprise Reasoning Sandbox"
+    ],
+    "customers": [
+      "Global Telecoms",
+      "Global Financial Institutions",
+      "Defense & Aerospace Labs"
+    ],
+    "employees": 75,
+    "employee_growth_90d": "+35% headcount velocity",
+    "hiring": {
+      "status": "Aggressive Research Hiring",
+      "open_roles": 22,
+      "focus_areas": [
+        "Pre-Training Scaling Laws",
+        "Synthetic Code Generation",
+        "H100/B200 Infrastructure"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "PyTorch",
+        "JAX",
+        "Triton",
+        "Nvidia NVLink Clusters",
+        "Kubernetes"
+      ],
+      "moat": "Massive proprietary synthetic pre-training corpus for software semantics and formal execution verification",
+      "github_velocity": "High density research output in RL on verifiable software environments"
+    },
+    "growth_signals": {
+      "compute_capacity": "Secured tens of thousands of Nvidia H100 and B200 GPUs in European data centers",
+      "valuation_stepup": "Grew from seed to $3B valuation within 16 months"
+    },
+    "signals": [
+      {
+        "id": "pol-1",
+        "badge": "💰 ROUND",
+        "title": "Closed $500M Series B at $3.0B Valuation",
+        "date": "2024-10-02",
+        "source": "Bain Capital Ventures Disclosure",
+        "confidence": 0.98
+      },
+      {
+        "id": "pol-2",
+        "badge": "🔥 COMPUTE",
+        "title": "Reserved Mega GPU Cluster in Iris Telecom",
+        "date": "2024-09-15",
+        "source": "European Infrastructure Filing",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "2024-10-02",
+        "event": "Closed $500M Series B Financing",
+        "evidence": "Bain Capital Ventures and DST Global led $500M equity investment.",
+        "source": "Bain Capital Disclosures",
+        "confidence": 0.98,
+        "category": "funding"
+      },
+      {
+        "date": "2024-09-15",
+        "event": "Major Compute Capacity Expansion",
+        "evidence": "Signed sovereign GPU hosting agreement for specialized model pre-training.",
+        "source": "Infrastructure Disclosures",
+        "confidence": 0.95,
+        "category": "expansion"
+      }
+    ],
+    "openangels_score": 96.8,
+    "score_badge": "High-Growth Scaleup",
+    "pitch_hook": "When approaching European or US deep-tech syndicates, focus on synthetic dataset generation quality and compute efficiency metrics."
+  },
+  "mercor": {
+    "name": "Mercor",
+    "slug": "mercor",
+    "legal_name": "Mercor Inc.",
+    "domain": "mercor.com",
+    "tagline": "AI-powered hiring platform vetting top global software engineering talent",
+    "overview": "Autonomous talent intelligence marketplace matching top software engineers, AI researchers, and technical leaders with frontier labs and high-growth technology companies.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series A",
+    "industry": "Marketplaces & Networks",
+    "total_raised": "$35M+",
+    "last_round_amount": "$32M",
+    "last_round_type": "Series A",
+    "valuation": "$250M Post-Money",
+    "round_date": "September 2024",
+    "founders": [
+      {
+        "name": "Brendan Foody",
+        "role": "Co-Founder & CEO",
+        "pedigree": "Georgetown Alum, Thiel Fellow Nominee",
+        "linkedin": "https://linkedin.com/in/brendanfoody"
+      },
+      {
+        "name": "Adarsh Hiremath",
+        "role": "Co-Founder & CTO",
+        "pedigree": "Harvard Alum, USAMO Qualifier",
+        "linkedin": "https://linkedin.com/in/adarsh-hiremath"
+      },
+      {
+        "name": "Surya Midha",
+        "role": "Co-Founder",
+        "pedigree": "Georgetown Alum, Investment Banking",
+        "linkedin": "https://linkedin.com/in/suryamidha"
+      }
+    ],
+    "investors": [
+      "Benchmark",
+      "Peter Thiel",
+      "Jack Dorsey",
+      "Naval Ravikant",
+      "Larry Summers"
+    ],
+    "products": [
+      "Mercor Automated AI Video Interviewer",
+      "Candidate Semantic Skill Index",
+      "Instant Payroll Compliance"
+    ],
+    "customers": [
+      "Leading Frontier AI Labs",
+      "OpenAI Ecosystem Companies",
+      "Series A/B Scaleups"
+    ],
+    "employees": 30,
+    "employee_growth_90d": "+40% headcount velocity",
+    "hiring": {
+      "status": "Rapid Growth",
+      "open_roles": 10,
+      "focus_areas": [
+        "Video AI Signal Processing",
+        "Marketplace Liquidity",
+        "Enterprise Sales"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "Next.js",
+        "PostgreSQL",
+        "Whisper",
+        "Computer Vision Audio Transformers"
+      ],
+      "moat": "Automated 20-minute AI technical interviews evaluating code quality, problem solving, and communication at zero marginal cost",
+      "github_velocity": "Rapid release cadence on candidate evaluation scoring models"
+    },
+    "growth_signals": {
+      "revenue_run_rate": "$50M+ annualized GMV run-rate",
+      "pool_size": "Over 300,000 vetted engineers across 120 countries"
+    },
+    "signals": [
+      {
+        "id": "mer-1",
+        "badge": "💰 ROUND",
+        "title": "Raised $32M Series A led by Benchmark",
+        "date": "2024-09-17",
+        "source": "Benchmark Announcement",
+        "confidence": 0.99
+      },
+      {
+        "id": "mer-2",
+        "badge": "🚀 PRODUCT",
+        "title": "Launched End-to-End Autonomous AI Recruiter",
+        "date": "2024-08-20",
+        "source": "Mercor Blog",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "2024-09-17",
+        "event": "Announced $32M Series A Financing",
+        "evidence": "Benchmark General Partner Victor Lazarte joined board following $32M round.",
+        "source": "Benchmark & Wall Street Journal",
+        "confidence": 0.99,
+        "category": "funding"
+      },
+      {
+        "date": "2024-08-20",
+        "event": "Rolled Out Autonomous Technical Interviewer",
+        "evidence": "Deployed multi-modal voice & coding assessment engine across 300k candidates.",
+        "source": "Company Announcement",
+        "confidence": 0.95,
+        "category": "product"
+      }
+    ],
+    "openangels_score": 95.9,
+    "score_badge": "High-Growth Scaleup",
+    "pitch_hook": "When pitching two-sided marketplaces, highlight AI assessment unit economics and zero-take-rate disintermediation prevention."
+  },
+  "harvey": {
+    "name": "Harvey",
+    "slug": "harvey",
+    "legal_name": "Counsel AI Corp. / Harvey",
+    "domain": "harvey.ai",
+    "tagline": "The legal AI platform trusted by elite global law firms and corporate legal teams",
+    "overview": "Domain-specific AI intelligence platform purpose-built for contract analysis, due diligence, litigation research, and regulatory compliance for global legal institutions.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series C",
+    "industry": "B2B SaaS",
+    "total_raised": "$206M",
+    "last_round_amount": "$100M",
+    "last_round_type": "Series C",
+    "valuation": "$1.5B Post-Money",
+    "round_date": "July 2024",
+    "founders": [
+      {
+        "name": "Winston Weinberg",
+        "role": "Co-Founder & CEO",
+        "pedigree": "Former Associate at O'Melveny & Myers LLP",
+        "linkedin": "https://linkedin.com/in/winstonweinberg"
+      },
+      {
+        "name": "Gabe Pereyra",
+        "role": "Co-Founder & President",
+        "pedigree": "Former Research Scientist at DeepMind, Meta AI Alum",
+        "linkedin": "https://linkedin.com/in/gabepereyra"
+      }
+    ],
+    "investors": [
+      "GV (Google Ventures)",
+      "OpenAI Startup Fund",
+      "Kleiner Perkins",
+      "Sequoia Capital",
+      "Elad Gil"
+    ],
+    "products": [
+      "Harvey Assistant",
+      "Contract Analysis Workflow Engine",
+      "Regulatory Compliance Scanner"
+    ],
+    "customers": [
+      "PwC",
+      "Allen & Overy",
+      "Paul Weiss",
+      "Latham & Watkins",
+      "LexisNexis"
+    ],
+    "employees": 150,
+    "employee_growth_90d": "+32% headcount velocity",
+    "hiring": {
+      "status": "Global Expansion",
+      "open_roles": 25,
+      "focus_areas": [
+        "Legal Knowledge Graphs",
+        "Enterprise Security",
+        "London & New York Go-To-Market"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Milvus",
+        "Fine-Tuned GPT-4o & Claude 3.5"
+      ],
+      "moat": "Exclusive training partnerships with Tier-1 law firms and strict zero-retention enterprise SOC2 Type II compliance",
+      "github_velocity": "Active SDK and enterprise API deployment"
+    },
+    "growth_signals": {
+      "revenue_run_rate": "$30M+ ARR with 3x annual enterprise contract expansion",
+      "global_expansion": "Live across 53 jurisdictions with localized legal precedents"
+    },
+    "signals": [
+      {
+        "id": "har-1",
+        "badge": "💰 ROUND",
+        "title": "Raised $100M Series C at $1.5B Valuation",
+        "date": "2024-07-23",
+        "source": "GV & OpenAI Disclosures",
+        "confidence": 0.99
+      },
+      {
+        "id": "har-2",
+        "badge": "🤝 PARTNERSHIP",
+        "title": "Signed Exclusive Alliance with LexisNexis",
+        "date": "2024-06-11",
+        "source": "LexisNexis Press Release",
+        "confidence": 0.98
+      }
+    ],
+    "timeline": [
+      {
+        "date": "2024-07-23",
+        "event": "Closed $100M Series C Financing",
+        "evidence": "GV led round with participation from OpenAI Startup Fund and Sequoia.",
+        "source": "GV Announcement & SEC Form D",
+        "confidence": 0.99,
+        "category": "funding"
+      },
+      {
+        "date": "2024-06-11",
+        "event": "Strategic Alliance with Legal Databases",
+        "evidence": "Integrated comprehensive statutory and case law citations directly into reasoning engine.",
+        "source": "Press Release",
+        "confidence": 0.98,
+        "category": "alliances"
+      }
+    ],
+    "openangels_score": 96.2,
+    "score_badge": "High-Growth Scaleup",
+    "pitch_hook": "When discussing vertical AI applications with enterprise VCs, highlight high ACVs ($200k+), low churn, and specialized proprietary training data."
+  },
+  "decagon": {
+    "name": "Decagon",
+    "slug": "decagon",
+    "legal_name": "Decagon AI, Inc.",
+    "domain": "decagon.ai",
+    "tagline": "AI customer service agents that think and act like human experts",
+    "overview": "Autonomous generative AI platform for enterprise customer experience, resolving complex multi-turn inquiries with native API integrations and safety guardrails.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series B",
+    "industry": "B2B SaaS",
+    "total_raised": "$100M",
+    "last_round_amount": "$65M",
+    "last_round_type": "Series B",
+    "valuation": "$600M Post-Money",
+    "round_date": "October 2024",
+    "founders": [
+      {
+        "name": "Jesse Zhang",
+        "role": "Co-Founder & CEO",
+        "pedigree": "Harvard Alum, Former Founder of Lowkey (acquired by Niantic)",
+        "linkedin": "https://linkedin.com/in/jesse-zhang-5561a0b3"
+      },
+      {
+        "name": "Ashwin Sreenivas",
+        "role": "Co-Founder & CTO",
+        "pedigree": "Cambridge CS Alum, Former Founder of Helia (acquired by Scale AI)",
+        "linkedin": "https://linkedin.com/in/ashwinsreenivas"
+      }
+    ],
+    "investors": [
+      "Bain Capital Ventures",
+      "Accel",
+      "Elad Gil",
+      "A* Capital",
+      "Harrison Metal"
+    ],
+    "products": [
+      "Decagon Agent Core",
+      "Voice AI Support Agent",
+      "Enterprise Knowledge Sync"
+    ],
+    "customers": [
+      "Substack",
+      "Eventbrite",
+      "Bilt Rewards",
+      "ClassPass",
+      "Duolingo"
+    ],
+    "employees": 60,
+    "employee_growth_90d": "+48% headcount velocity",
+    "hiring": {
+      "status": "Rapid Scaling",
+      "open_roles": 18,
+      "focus_areas": [
+        "Voice Synthesizer Latency",
+        "API Orchestration",
+        "Enterprise Integrations"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "Golang",
+        "Redis",
+        "Vector DBs",
+        "WebRTC"
+      ],
+      "moat": "Autonomous deterministic action taking (refunding, modifying flights, database writes) with 99.9% reliability",
+      "github_velocity": "High frequency connector library updates"
+    },
+    "growth_signals": {
+      "resolution_rate": "Resolving over 70% of inbound enterprise support tickets without human intervention",
+      "revenue_acceleration": "Grew ARR by 6x over past 12 months"
+    },
+    "signals": [
+      {
+        "id": "dec-1",
+        "badge": "💰 ROUND",
+        "title": "Closed $65M Series B led by Bain Capital",
+        "date": "2024-10-15",
+        "source": "Bain Capital Ventures",
+        "confidence": 0.99
+      },
+      {
+        "id": "dec-2",
+        "badge": "🚀 PRODUCT",
+        "title": "Launched Real-Time Voice CX Agents",
+        "date": "2024-09-05",
+        "source": "Decagon Launch",
+        "confidence": 0.96
+      }
+    ],
+    "timeline": [
+      {
+        "date": "2024-10-15",
+        "event": "Secured $65M Series B Financing",
+        "evidence": "Bain Capital Ventures and Accel co-led round valuing company at $600M.",
+        "source": "Bain Capital & TechCrunch",
+        "confidence": 0.99,
+        "category": "funding"
+      },
+      {
+        "date": "2024-09-05",
+        "event": "Released Autonomous Voice Support Agents",
+        "evidence": "Introduced ultra-low latency voice agents capable of resolving phone inquiries.",
+        "source": "Official Product Launch",
+        "confidence": 0.96,
+        "category": "product"
+      }
+    ],
+    "openangels_score": 95.1,
+    "score_badge": "High-Growth Scaleup",
+    "pitch_hook": "When discussing enterprise customer support with syndicate angels, highlight autonomous action resolution rather than simple conversational deflection."
+  },
+  "glean": {
+    "name": "Glean",
+    "slug": "glean",
+    "legal_name": "Glean Technologies, Inc.",
+    "domain": "glean.com",
+    "tagline": "The Work AI platform connecting enterprise knowledge with generative assistants",
+    "overview": "Enterprise search and knowledge intelligence platform indexing across Jira, Google Workspace, Slack, GitHub, Salesforce, and Microsoft 365 with deep permission controls.",
+    "location": "Palo Alto, CA, USA",
+    "country": "United States",
+    "stage": "Series E",
+    "industry": "B2B SaaS",
+    "total_raised": "$610M",
+    "last_round_amount": "$260M",
+    "last_round_type": "Series E",
+    "valuation": "$4.6B Post-Money",
+    "round_date": "September 2024",
+    "founders": [
+      {
+        "name": "Arvind Jain",
+        "role": "Founder & CEO",
+        "pedigree": "Ex-Google Distinguished Engineer, Co-Founder of Rubrik (IPO)",
+        "linkedin": "https://linkedin.com/in/arvind-jain-508544"
+      }
+    ],
+    "investors": [
+      "Altimeter Capital",
+      "DST Global",
+      "Sequoia Capital",
+      "Kleiner Perkins",
+      "Lightspeed Venture Partners",
+      "General Catalyst"
+    ],
+    "products": [
+      "Glean Search",
+      "Glean Work AI Assistant",
+      "Glean Apps",
+      "Enterprise Knowledge Graph"
+    ],
+    "customers": [
+      "Sony",
+      "Databricks",
+      "Samsara",
+      "Duolingo",
+      "Pinterest",
+      "Instacart"
+    ],
+    "employees": 500,
+    "employee_growth_90d": "+30% headcount velocity",
+    "hiring": {
+      "status": "Global Scaling",
+      "open_roles": 45,
+      "focus_areas": [
+        "RAG Vector Scaling",
+        "Security Governance",
+        "Enterprise Architecture"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Java",
+        "Go",
+        "Python",
+        "Kubernetes",
+        "Elasticsearch / OpenSearch",
+        "Custom Embeddings"
+      ],
+      "moat": "Sub-second cross-repository enterprise permission-aware vector indexing across 100+ integrations",
+      "github_velocity": "Enterprise connector framework supporting enterprise sync pipelines"
+    },
+    "growth_signals": {
+      "revenue_run_rate": "$100M+ ARR reached in record time",
+      "valuation_stepup": "Valuation more than doubled from $2.2B to $4.6B in six months"
+    },
+    "signals": [
+      {
+        "id": "gle-1",
+        "badge": "💰 ROUND",
+        "title": "Raised $260M Series E at $4.6B Valuation",
+        "date": "2024-09-10",
+        "source": "Altimeter & Sequoia",
+        "confidence": 0.99
+      },
+      {
+        "id": "gle-2",
+        "badge": "🚀 PRODUCT",
+        "title": "Introduced Glean Next-Gen Autonomous Work Apps",
+        "date": "2024-08-14",
+        "source": "Glean Announcements",
+        "confidence": 0.98
+      }
+    ],
+    "timeline": [
+      {
+        "date": "2024-09-10",
+        "event": "Series E Financing ($260M at $4.6B Post-Money)",
+        "evidence": "Altimeter Capital and DST Global led $260M round following 3x revenue growth.",
+        "source": "Sequoia Capital & SEC Form D",
+        "confidence": 0.99,
+        "category": "funding"
+      },
+      {
+        "date": "2024-08-14",
+        "event": "Unveiled Custom Work AI Agents",
+        "evidence": "Released no-code environment for enterprises to deploy internal AI copilots.",
+        "source": "Glean Keynote",
+        "confidence": 0.98,
+        "category": "product"
+      }
+    ],
+    "openangels_score": 97.9,
+    "score_badge": "Tier 1 Decacorn Velocity",
+    "pitch_hook": "When discussing enterprise generative AI, emphasize document-level security ACLs, real-time sync latency, and organic user retention."
+  },
+  "a16z-backed-eliseai": {
+    "name": "a16z-backed EliseAI",
+    "slug": "a16z-backed-eliseai",
+    "legal_name": "a16z-backed EliseAI, Inc.",
+    "domain": "a16zbackedeliseai.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "EliseAI raises $350M, doubles valuation in a year.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$350M",
+    "last_round_amount": "$350M",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (a16z-backed EliseAI)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/a16z-backed-eliseai"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "a16z-backed EliseAI Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-a16z-backed-eliseai-1790759801",
+        "badge": "💰 FUNDING",
+        "title": "Raised $350M in Venture Round",
+        "date": "Tue, 29 Se",
+        "source": "TechCrunch Venture",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Venture Round Financing ($350M)",
+        "evidence": "a16z-backed EliseAI secured $350M to accelerate platform expansion.",
+        "source": "TechCrunch Venture",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing a16z-backed EliseAI to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://techcrunch.com/2026/09/29/a16z-backed-eliseai-raises-350m-doubles-valuation-to-4b/"
+  },
+  "british-ai-neocloud-nscale": {
+    "name": "British AI neocloud Nscale",
+    "slug": "british-ai-neocloud-nscale",
+    "legal_name": "British AI neocloud Nscale, Inc.",
+    "domain": "britishaineocloudnscale.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "The funding, which comes from Third Point, Nvidia, and others, will fuel the company's massive AI data center buildout.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$3.36B",
+    "last_round_amount": "$3.36B",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Fri, 25 Se",
+    "founders": [
+      {
+        "name": "Founders (British AI neocloud Nscale)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/british-ai-neocloud-nscale"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "British AI neocloud Nscale Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-british-ai-neocloud-nscale-1790759801",
+        "badge": "💰 FUNDING",
+        "title": "Raised $3.36B in Venture Round",
+        "date": "Fri, 25 Se",
+        "source": "TechCrunch Venture",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Fri, 25 Se",
+        "event": "Venture Round Financing ($3.36B)",
+        "evidence": "British AI neocloud Nscale secured $3.36B to accelerate platform expansion.",
+        "source": "TechCrunch Venture",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing British AI neocloud Nscale to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://techcrunch.com/2026/09/25/ahead-of-u-s-ipo-british-ai-neocloud-nscale-secures-3-36b-in-convertible-finacing/"
+  },
+  "ex-tesla-team": {
+    "name": "Ex-Tesla team",
+    "slug": "ex-tesla-team",
+    "legal_name": "Ex-Tesla team, Inc.",
+    "domain": "exteslateam.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "Atomic's agentic supply chain software is now being used by companies like DoorDash and HelloFresh.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$12.5M",
+    "last_round_amount": "$12.5M",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (Ex-Tesla team)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/ex-tesla-team"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Ex-Tesla team Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-ex-tesla-team-1790759802",
+        "badge": "💰 FUNDING",
+        "title": "Raised $12.5M in Venture Round",
+        "date": "Tue, 29 Se",
+        "source": "TechCrunch Startups",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Venture Round Financing ($12.5M)",
+        "evidence": "Ex-Tesla team secured $12.5M to accelerate platform expansion.",
+        "source": "TechCrunch Startups",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing Ex-Tesla team to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://techcrunch.com/2026/09/29/ex-tesla-team-raises-12-5m-to-put-supply-chains-on-autopilot/"
+  },
+  "insurtech-outmarket": {
+    "name": "Insurtech Outmarket",
+    "slug": "insurtech-outmarket",
+    "legal_name": "Insurtech Outmarket, Inc.",
+    "domain": "insurtechoutmarket.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "The startup uses AI to automate tedious paperwork for insurance agencies and brokers.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Just Months After Prior Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$34.5M",
+    "last_round_amount": "$34.5M",
+    "last_round_type": "Just Months After Prior Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Mon, 28 Se",
+    "founders": [
+      {
+        "name": "Founders (Insurtech Outmarket)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/insurtech-outmarket"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Insurtech Outmarket Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Just Months After Prior Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-insurtech-outmarket-1790759802",
+        "badge": "💰 FUNDING",
+        "title": "Raised $34.5M in Just Months After Prior Round",
+        "date": "Mon, 28 Se",
+        "source": "TechCrunch Startups",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Mon, 28 Se",
+        "event": "Just Months After Prior Round Financing ($34.5M)",
+        "evidence": "Insurtech Outmarket secured $34.5M to accelerate platform expansion.",
+        "source": "TechCrunch Startups",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing Insurtech Outmarket to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://techcrunch.com/2026/09/28/insuretech-outmarket-raises-34-5m-just-months-after-prior-round/"
+  },
+  "reco": {
+    "name": "Reco",
+    "slug": "reco",
+    "legal_name": "Reco, Inc.",
+    "domain": "reco.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "The round builds on a $30 million fundraise in February, taking the company's total funding to $140 million.",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$55M",
+    "last_round_amount": "$55M",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (Reco)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/reco"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Reco Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-reco-1790759803",
+        "badge": "💰 FUNDING",
+        "title": "Raised $55M in Venture Round",
+        "date": "Tue, 29 Se",
+        "source": "TechCrunch AI",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Venture Round Financing ($55M)",
+        "evidence": "Reco secured $55M to accelerate platform expansion.",
+        "source": "TechCrunch AI",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing Reco to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://techcrunch.com/2026/09/29/reco-raises-55m-as-ai-agent-security-startups-crowd-the-market/"
+  },
+  "eliseai": {
+    "name": "EliseAI",
+    "slug": "eliseai",
+    "legal_name": "EliseAI, Inc.",
+    "domain": "eliseai.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "EliseAI has raised $350 million at a $4 billion valuation, doubling its valuation from its previous funding round in August 2025 as the company expands its vertical AI platform across the housing and healthcare industries. The financing was led by Andreessen Horowitz and Bessemer Venture Partners, with participation fr",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "Developer Tools",
+    "total_raised": "$350 MILLION",
+    "last_round_amount": "$350 MILLION",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (EliseAI)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/eliseai"
+      }
+    ],
+    "investors": [
+      "Andreessen Horowitz"
+    ],
+    "products": [
+      "EliseAI Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-eliseai-1790759807",
+        "badge": "💰 FUNDING",
+        "title": "Raised $350 MILLION in Venture Round",
+        "date": "Tue, 29 Se",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Venture Round Financing ($350 MILLION)",
+        "evidence": "EliseAI secured $350 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing EliseAI to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/eliseai-raises-350-million-at-4-billion-valuation/"
+  },
+  "tiny-health": {
+    "name": "Tiny Health",
+    "slug": "tiny-health",
+    "legal_name": "Tiny Health, Inc.",
+    "domain": "tinyhealth.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Tiny Health, a microbiome intelligence platform focused on scientifically validated gut and vaginal microbiome testing across the lifespan, announced that it has raised an oversubscribed $33 million Series B round led by B Capital, bringing the company’s total funding to $46 million. The post Tiny Health Raises $33 Mil",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series B To Expand Microbiome Intelligence Platform",
+    "industry": "Developer Tools",
+    "total_raised": "$33 MILLION",
+    "last_round_amount": "$33 MILLION",
+    "last_round_type": "Series B To Expand Microbiome Intelligence Platform",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (Tiny Health)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/tiny-health"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Tiny Health Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Series B To Expand Microbiome Intelligence Platform to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-tiny-health-1790759807",
+        "badge": "💰 FUNDING",
+        "title": "Raised $33 MILLION in Series B To Expand Microbiome Intelligence Platform",
+        "date": "Tue, 29 Se",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Series B To Expand Microbiome Intelligence Platform Financing ($33 MILLION)",
+        "evidence": "Tiny Health secured $33 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing Tiny Health to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/tiny-health-raises-33-million-series-b-to-expand-microbiome-intelligence-platform/"
+  },
+  "remotethreat": {
+    "name": "RemoteThreat",
+    "slug": "remotethreat",
+    "legal_name": "RemoteThreat, Inc.",
+    "domain": "remotethreat.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "RemoteThreat has emerged from stealth with $7 million in pre-seed funding and the launch of its O/C/O Platform, an AI-enabled platform designed for offensive cyber operations. The company is targeting enterprise and critical infrastructure red teams, U.S. government mission teams, and vetted defense partners, with the ",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Pre-Seed Funding And Emerges From Stealth With O",
+    "industry": "Developer Tools",
+    "total_raised": "$7 MILLION",
+    "last_round_amount": "$7 MILLION",
+    "last_round_type": "Pre-Seed Funding And Emerges From Stealth With O",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (RemoteThreat)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/remotethreat"
+      }
+    ],
+    "investors": [
+      "Accel"
+    ],
+    "products": [
+      "RemoteThreat Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Pre-Seed Funding And Emerges From Stealth With O to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-remotethreat-1790759807",
+        "badge": "💰 FUNDING",
+        "title": "Raised $7 MILLION in Pre-Seed Funding And Emerges From Stealth With O",
+        "date": "Tue, 29 Se",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Pre-Seed Funding And Emerges From Stealth With O Financing ($7 MILLION)",
+        "evidence": "RemoteThreat secured $7 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing RemoteThreat to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/remotethreat-raises-7-million-in-pre-seed-funding/"
+  },
+  "draganfly": {
+    "name": "Draganfly",
+    "slug": "draganfly",
+    "legal_name": "Draganfly, Inc.",
+    "domain": "draganfly.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "Draganfly has announced a $10 million strategic investment from Unusual Machines and a leading U.S. investment fund, with each investor committing $5 million to the drone technology company. The investment is intended to support Draganfly's growing position in the U.S. defense ecosystem while expanding opportunities in",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$10 MILLION",
+    "last_round_amount": "$10 MILLION",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (Draganfly)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/draganfly"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Draganfly Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-draganfly-1790759807",
+        "badge": "💰 FUNDING",
+        "title": "Raised $10 MILLION in Venture Round",
+        "date": "Tue, 29 Se",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Venture Round Financing ($10 MILLION)",
+        "evidence": "Draganfly secured $10 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing Draganfly to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://pulse2.com/draganfly-secures-10-million-strategic-investment-from-unusual-machines-and-u-s-investment-fund/"
+  },
+  "erad": {
+    "name": "erad",
+    "slug": "erad",
+    "legal_name": "erad, Inc.",
+    "domain": "erad.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "erad has raised $22 million (SAR 78.75 million) in Series A funding to expand its Shariah-compliant financing platform for small and medium-sized businesses across the Gulf Cooperation Council. The round was led by Middle East Venture Partners (MEVP). The post erad Raises $22 Million Series A Led By MEVP To Expand SME ",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series A Led By Mevp To Expand Sme Financing Across Gcc",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$22 MILLION",
+    "last_round_amount": "$22 MILLION",
+    "last_round_type": "Series A Led By Mevp To Expand Sme Financing Across Gcc",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (erad)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/erad"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "erad Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Series A Led By Mevp To Expand Sme Financing Across Gcc to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-erad-1790759807",
+        "badge": "💰 FUNDING",
+        "title": "Raised $22 MILLION in Series A Led By Mevp To Expand Sme Financing Across Gcc",
+        "date": "Tue, 29 Se",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Series A Led By Mevp To Expand Sme Financing Across Gcc Financing ($22 MILLION)",
+        "evidence": "erad secured $22 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing erad to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://pulse2.com/erad-raises-22-million-series-a-led-by-mevp-to-expand-sme-financing-across-gcc/"
+  },
+  "cotierra": {
+    "name": "Cotierra",
+    "slug": "cotierra",
+    "legal_name": "Cotierra, Inc.",
+    "domain": "cotierra.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "Zurich-based climate technology company Cotierra has raised $3 million to take its technology from successful field deployments to repeatable commercial scale. The company has raised $4.75 million sin...",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$3M",
+    "last_round_amount": "$3M",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (Cotierra)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/cotierra"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Cotierra Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-cotierra-1790759809",
+        "badge": "💰 FUNDING",
+        "title": "Raised $3M in Venture Round",
+        "date": "Tue, 29 Se",
+        "source": "Tech.eu",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Venture Round Financing ($3M)",
+        "evidence": "Cotierra secured $3M to accelerate platform expansion.",
+        "source": "Tech.eu",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing Cotierra to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://tech.eu/2026/09/29/cotierra-raises-3m-to-scale-decentralised-biochar-across-tropical-agriculture/"
+  },
+  "otech-aptadir-therapeutics": {
+    "name": "otech Aptadir Therapeutics",
+    "slug": "otech-aptadir-therapeutics",
+    "legal_name": "otech Aptadir Therapeutics, Inc.",
+    "domain": "otechaptadirtherapeutics.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "AMilan-based biotech company developing novel treatments for difficult to treat genetic conditions has raised a $45m seed round, it said today.Theseed round investment in Aptadir Therapeutics is one o...",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Seed Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$45M",
+    "last_round_amount": "$45M",
+    "last_round_type": "Seed Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (otech Aptadir Therapeutics)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/otech-aptadir-therapeutics"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "otech Aptadir Therapeutics Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Seed Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-otech-aptadir-therapeutics-1790759809",
+        "badge": "💰 FUNDING",
+        "title": "Raised $45M in Seed Round",
+        "date": "Tue, 29 Se",
+        "source": "Tech.eu",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Seed Round Financing ($45M)",
+        "evidence": "otech Aptadir Therapeutics secured $45M to accelerate platform expansion.",
+        "source": "Tech.eu",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing otech Aptadir Therapeutics to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://tech.eu/2026/09/29/milan-based-biotech-aptadir-therapeutics-raises-45m-seed-round/"
+  },
+  "e-fitness-tracker-ipercept": {
+    "name": "e fitness tracker IPercept",
+    "slug": "e-fitness-tracker-ipercept",
+    "legal_name": "e fitness tracker IPercept, Inc.",
+    "domain": "efitnesstrackeripercept.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "Swedish machine fitness tracker IPercepthas raised $16.5m in a Series A funding round, it said today.The funding round was co-led by IsogonVentures, the early-stage VC, and London-headquartered VC 215...",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$16.5M",
+    "last_round_amount": "$16.5M",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Tue, 29 Se",
+    "founders": [
+      {
+        "name": "Founders (e fitness tracker IPercept)",
+        "role": "Co-Founders & Leadership",
+        "pedigree": "Ex-FAANG & Top Engineering Alum",
+        "linkedin": "https://linkedin.com/company/e-fitness-tracker-ipercept"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "e fitness tracker IPercept Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-e-fitness-tracker-ipercept-1790759809",
+        "badge": "💰 FUNDING",
+        "title": "Raised $16.5M in Venture Round",
+        "date": "Tue, 29 Se",
+        "source": "Tech.eu",
+        "confidence": 0.95
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 29 Se",
+        "event": "Venture Round Financing ($16.5M)",
+        "evidence": "e fitness tracker IPercept secured $16.5M to accelerate platform expansion.",
+        "source": "Tech.eu",
+        "confidence": 0.95,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 88.5,
+    "score_badge": "Verified Breakout",
+    "pitch_hook": "When referencing e fitness tracker IPercept to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://tech.eu/2026/09/29/swedish-machine-fitness-tracker-ipercept-raises-165m/"
+  }
+}

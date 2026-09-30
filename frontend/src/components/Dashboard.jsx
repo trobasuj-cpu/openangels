@@ -21,6 +21,7 @@ import AiPitchModal from './AiPitchModal';
 import CompanyProfileModal from './CompanyProfileModal';
 import ExportMemoButton from './ExportMemoButton';
 import { KNOWN_COMPANIES } from '@/lib/companyData';
+import companiesCache from '@/lib/companies_cache.json';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
@@ -368,6 +369,14 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState('founders'); // 'founders' | 'investors'
   const [selectedCompanyModal, setSelectedCompanyModal] = useState(null);
   const [companyCategoryFilter, setCompanyCategoryFilter] = useState('all');
+  const [radarCompanies, setRadarCompanies] = useState(() => {
+    const map = new Map();
+    Object.values(KNOWN_COMPANIES || {}).forEach(c => { if (c?.slug) map.set(c.slug, c); });
+    if (companiesCache && typeof companiesCache === 'object') {
+      Object.values(companiesCache).forEach(c => { if (c?.slug) map.set(c.slug, c); });
+    }
+    return Array.from(map.values());
+  });
   const mainScrollRef = useRef(null);
   const isInitialMount = useRef(true);
   const activeFetchIdRef = useRef(0);
@@ -404,23 +413,87 @@ export default function Dashboard() {
     return counts;
   }, [investors]);
 
+  // Dynamic category counts for sidebar
+  const companyCategoryCounts = useMemo(() => {
+    const counts = { all: radarCompanies.length, ai: 0, devtools: 0, fintech: 0, marketplace: 0, saas: 0 };
+    radarCompanies.forEach(c => {
+      const ind = (c.industry || '').toLowerCase();
+      const slug = (c.slug || '').toLowerCase();
+      const tag = (c.tagline || '').toLowerCase();
+      if (ind.includes('ai') || ind.includes('reasoning') || ind.includes('machine learning') || tag.includes('ai') || ['openai', 'anthropic', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor'].includes(slug)) counts.ai++;
+      if (ind.includes('developer') || ind.includes('devtools') || ind.includes('compiler') || ind.includes('tools') || ['cursor', 'cognition', 'poolside'].includes(slug)) counts.devtools++;
+      if (ind.includes('fintech') || ind.includes('payment') || ind.includes('banking') || ['stripe'].includes(slug)) counts.fintech++;
+      if (ind.includes('marketplace') || ind.includes('network') || ind.includes('talent') || ['mercor', 'airbnb', 'uber', 'linkedin', 'twitter'].includes(slug)) counts.marketplace++;
+      if (ind.includes('saas') || ind.includes('enterprise') || ind.includes('b2b')) counts.saas++;
+    });
+    return counts;
+  }, [radarCompanies]);
+
+  // Fetch live radar companies from /api/companies (Supabase + discovery cache)
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveRadarCompanies() {
+      try {
+        const res = await fetch('/api/companies?limit=100');
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data && Array.isArray(data.companies) && data.companies.length > 0) {
+            setRadarCompanies(data.companies);
+          }
+        }
+      } catch (e) {
+        console.warn('Error loading live radar companies:', e);
+      }
+    }
+    loadLiveRadarCompanies();
+    return () => { isMounted = false; };
+  }, []);
+
   // Filtered companies for Investor Intelligence Radar
   const filteredCompanies = useMemo(() => {
-    const list = Object.values(KNOWN_COMPANIES || {});
+    let list = radarCompanies;
     if (companyCategoryFilter === 'ai') {
-      return list.filter(c => ['openai', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor', 'facebook'].includes(c.slug));
+      list = list.filter(c => {
+        const ind = (c.industry || '').toLowerCase();
+        const slug = (c.slug || '').toLowerCase();
+        const tag = (c.tagline || '').toLowerCase();
+        return ind.includes('ai') || ind.includes('reasoning') || ind.includes('machine learning') || tag.includes('ai') || ['openai', 'anthropic', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor'].includes(slug);
+      });
+    } else if (companyCategoryFilter === 'devtools') {
+      list = list.filter(c => {
+        const ind = (c.industry || '').toLowerCase();
+        const slug = (c.slug || '').toLowerCase();
+        return ind.includes('developer') || ind.includes('devtools') || ind.includes('compiler') || ind.includes('tools') || ['cursor', 'cognition', 'poolside'].includes(slug);
+      });
+    } else if (companyCategoryFilter === 'fintech') {
+      list = list.filter(c => {
+        const ind = (c.industry || '').toLowerCase();
+        const slug = (c.slug || '').toLowerCase();
+        return ind.includes('fintech') || ind.includes('payment') || ind.includes('banking') || ['stripe'].includes(slug);
+      });
+    } else if (companyCategoryFilter === 'marketplace') {
+      list = list.filter(c => {
+        const ind = (c.industry || '').toLowerCase();
+        const slug = (c.slug || '').toLowerCase();
+        return ind.includes('marketplace') || ind.includes('network') || ind.includes('talent') || ['mercor', 'airbnb', 'uber', 'linkedin', 'twitter'].includes(slug);
+      });
+    } else if (companyCategoryFilter === 'saas') {
+      list = list.filter(c => {
+        const ind = (c.industry || '').toLowerCase();
+        return ind.includes('saas') || ind.includes('enterprise') || ind.includes('b2b');
+      });
     }
-    if (companyCategoryFilter === 'devtools') {
-      return list.filter(c => ['cursor', 'cognition', 'poolside'].includes(c.slug));
+
+    if (search && search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter(c => {
+        const text = `${c.name || ''} ${c.tagline || ''} ${c.overview || ''} ${c.industry || ''} ${(c.investors || []).join(' ')}`.toLowerCase();
+        return text.includes(q);
+      });
     }
-    if (companyCategoryFilter === 'fintech') {
-      return list.filter(c => ['stripe'].includes(c.slug));
-    }
-    if (companyCategoryFilter === 'marketplace') {
-      return list.filter(c => ['airbnb', 'uber', 'linkedin', 'twitter', 'dropbox', 'mercor'].includes(c.slug));
-    }
+
     return list;
-  }, [companyCategoryFilter]);
+  }, [radarCompanies, companyCategoryFilter, search]);
 
   // Formatter for category names
   const formatCategoryLabel = (slug) => {
@@ -818,7 +891,7 @@ export default function Dashboard() {
                   <span>Venture Radar Active</span>
                 </div>
                 <p className="text-[11px] text-zinc-400 leading-relaxed">
-                  Screening 9 audited company dossiers with verified SEC Form D claims, 90-day signals, and one-click Due Diligence memos.
+                  Screening {radarCompanies.length} verified company dossiers with real-time funding rounds, 30/90-day signals, and Due Diligence memos.
                 </p>
               </div>
 
@@ -828,10 +901,12 @@ export default function Dashboard() {
                 </div>
                 <div className="space-y-1.5">
                   {[
-                    { id: 'all', label: 'All Companies', count: 9 },
-                    { id: 'ai', label: 'Frontier AI & Reasoning', count: 3 },
-                    { id: 'fintech', label: 'Fintech & Infra', count: 1 },
-                    { id: 'marketplace', label: 'Marketplaces & Networks', count: 5 }
+                    { id: 'all', label: 'All Companies', count: companyCategoryCounts.all },
+                    { id: 'ai', label: 'Frontier AI & Reasoning', count: companyCategoryCounts.ai },
+                    { id: 'devtools', label: 'Developer Tools & Agents', count: companyCategoryCounts.devtools },
+                    { id: 'fintech', label: 'Fintech & Infra', count: companyCategoryCounts.fintech },
+                    { id: 'marketplace', label: 'Marketplaces & Networks', count: companyCategoryCounts.marketplace },
+                    { id: 'saas', label: 'Enterprise B2B SaaS', count: companyCategoryCounts.saas }
                   ].map(cat => (
                     <button
                       key={cat.id}

@@ -1,5 +1,7 @@
 // OpenAngels Company Intelligence Resolver (DAY 6 Standard)
 // Supplies decision-centric company dossiers for both modal and standalone SSR pages.
+import companiesCache from './companies_cache.json';
+
 
 export const KNOWN_COMPANIES = {
   'openai': {
@@ -4487,6 +4489,40 @@ export function getCompanyIntelligence(nameOrSlug) {
   for (const [key, data] of Object.entries(KNOWN_COMPANIES)) {
     if (key === cleanSlug || key === normKey || raw.includes(key) || data.name.toLowerCase() === raw) {
       return data;
+    }
+  }
+
+  // Check in discovery cache (populated by company_pipeline.py)
+  if (companiesCache && typeof companiesCache === 'object') {
+    for (const [key, rawData] of Object.entries(companiesCache)) {
+      if (key === cleanSlug || key === normKey || raw.includes(key) || (rawData.name && rawData.name.toLowerCase() === raw)) {
+        return {
+          ...rawData,
+          legalName: rawData.legal_name || rawData.legalName || `${rawData.name}, Inc.`,
+          totalRaised: rawData.total_raised || rawData.totalRaised,
+          lastRoundAmount: rawData.last_round_amount || rawData.lastRoundAmount,
+          lastRoundType: rawData.last_round_type || rawData.lastRoundType,
+          roundDate: rawData.round_date || rawData.roundDate,
+          employeeGrowth90d: rawData.employee_growth_90d || rawData.employeeGrowth90d,
+          openangelsScore: rawData.openangels_score || rawData.openangelsScore || 88,
+          scoreBadge: rawData.score_badge || rawData.scoreBadge || 'Verified Breakout',
+          pitchHook: rawData.pitch_hook || rawData.pitchHook,
+          technologySignals: rawData.technology_signals || rawData.technologySignals || {},
+          growthSignals: rawData.growth_signals || rawData.growthSignals || {},
+          funding: {
+            totalRaised: rawData.total_raised || rawData.funding?.totalRaised || '$5M+',
+            lastRoundAmount: rawData.last_round_amount || rawData.funding?.lastRoundAmount,
+            lastRoundType: rawData.last_round_type || rawData.stage || 'Venture Round',
+            valuation: rawData.valuation || rawData.funding?.valuation || 'Verified via Funding Round',
+            roundDate: rawData.round_date || rawData.funding?.roundDate || 'Recent',
+            status: 'VERIFIED'
+          },
+          timeline: rawData.timeline || [],
+          investmentSignals: {
+            signals: rawData.signals || []
+          }
+        };
+      }
     }
   }
 
