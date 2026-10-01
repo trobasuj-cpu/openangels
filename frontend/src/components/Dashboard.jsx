@@ -21,6 +21,8 @@ import AiPitchModal from './AiPitchModal';
 import CompanyProfileModal from './CompanyProfileModal';
 import CompanyAvatar from './CompanyAvatar';
 import ExportMemoButton from './ExportMemoButton';
+import EmergingSignalsRadar from './EmergingSignalsRadar';
+import { computeSignalStats, filterCompaniesBySignal, matchCompanySignals, RADAR_SIGNAL_DEFINITIONS } from '../lib/radarSignals';
 import { KNOWN_COMPANIES } from '@/lib/companyData';
 import companiesCache from '@/lib/companies_cache.json';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
@@ -370,6 +372,7 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState('founders'); // 'founders' | 'investors'
   const [selectedCompanyModal, setSelectedCompanyModal] = useState(null);
   const [companyCategoryFilter, setCompanyCategoryFilter] = useState('all');
+  const [selectedSignalFilter, setSelectedSignalFilter] = useState('all');
   const [radarCompanies, setRadarCompanies] = useState(() => {
     const map = new Map();
     Object.values(KNOWN_COMPANIES || {}).forEach(c => { if (c?.slug) map.set(c.slug, c); });
@@ -414,20 +417,25 @@ export default function Dashboard() {
     return counts;
   }, [investors]);
 
-  // Dynamic category counts for sidebar
+  // Dynamic category counts for sidebar & sector chips
   const companyCategoryCounts = useMemo(() => {
     const counts = { all: radarCompanies.length, ai: 0, devtools: 0, fintech: 0, marketplace: 0, saas: 0 };
     radarCompanies.forEach(c => {
       const ind = (c.industry || '').toLowerCase();
       const slug = (c.slug || '').toLowerCase();
       const tag = (c.tagline || '').toLowerCase();
-      if (ind.includes('ai') || ind.includes('reasoning') || ind.includes('machine learning') || tag.includes('ai') || ['openai', 'anthropic', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor'].includes(slug)) counts.ai++;
-      if (ind.includes('developer') || ind.includes('devtools') || ind.includes('compiler') || ind.includes('tools') || ['cursor', 'cognition', 'poolside'].includes(slug)) counts.devtools++;
-      if (ind.includes('fintech') || ind.includes('payment') || ind.includes('banking') || ['stripe'].includes(slug)) counts.fintech++;
+      if (ind.includes('ai') || ind.includes('reasoning') || ind.includes('machine learning') || tag.includes('ai') || ['openai', 'anthropic', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor', 'sierra', 'figure-ai'].includes(slug)) counts.ai++;
+      if (ind.includes('developer') || ind.includes('devtools') || ind.includes('compiler') || ind.includes('tools') || ['cursor', 'cognition', 'poolside', 'groq'].includes(slug)) counts.devtools++;
+      if (ind.includes('fintech') || ind.includes('payment') || ind.includes('banking') || ['stripe', 'erad'].includes(slug)) counts.fintech++;
       if (ind.includes('marketplace') || ind.includes('network') || ind.includes('talent') || ['mercor', 'airbnb', 'uber', 'linkedin', 'twitter'].includes(slug)) counts.marketplace++;
-      if (ind.includes('saas') || ind.includes('enterprise') || ind.includes('b2b')) counts.saas++;
+      if (ind.includes('saas') || ind.includes('enterprise') || ind.includes('b2b') || ['harvey', 'decagon', 'glean', 'sierra'].includes(slug)) counts.saas++;
     });
     return counts;
+  }, [radarCompanies]);
+
+  // Live temporal signals telemetry stats (Day 5 Emerging Signals Radar)
+  const signalStats = useMemo(() => {
+    return computeSignalStats(radarCompanies);
   }, [radarCompanies]);
 
   // Fetch live radar companies from /api/companies (Supabase + discovery cache)
@@ -453,24 +461,31 @@ export default function Dashboard() {
   // Filtered companies for Investor Intelligence Radar
   const filteredCompanies = useMemo(() => {
     let list = radarCompanies;
+
+    // 1. Emerging Temporal Signal Filter (Hiring acceleration, New funding, Market expansion, Product launch, Leadership change)
+    if (selectedSignalFilter && selectedSignalFilter !== 'all') {
+      list = filterCompaniesBySignal(list, selectedSignalFilter);
+    }
+
+    // 2. Sector Focus Filter
     if (companyCategoryFilter === 'ai') {
       list = list.filter(c => {
         const ind = (c.industry || '').toLowerCase();
         const slug = (c.slug || '').toLowerCase();
         const tag = (c.tagline || '').toLowerCase();
-        return ind.includes('ai') || ind.includes('reasoning') || ind.includes('machine learning') || tag.includes('ai') || ['openai', 'anthropic', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor'].includes(slug);
+        return ind.includes('ai') || ind.includes('reasoning') || ind.includes('machine learning') || tag.includes('ai') || ['openai', 'anthropic', 'perplexity', 'poolside', 'glean', 'harvey', 'cursor', 'cognition', 'decagon', 'mercor', 'sierra', 'figure-ai', 'groq'].includes(slug);
       });
     } else if (companyCategoryFilter === 'devtools') {
       list = list.filter(c => {
         const ind = (c.industry || '').toLowerCase();
         const slug = (c.slug || '').toLowerCase();
-        return ind.includes('developer') || ind.includes('devtools') || ind.includes('compiler') || ind.includes('tools') || ['cursor', 'cognition', 'poolside'].includes(slug);
+        return ind.includes('developer') || ind.includes('devtools') || ind.includes('compiler') || ind.includes('tools') || ['cursor', 'cognition', 'poolside', 'groq'].includes(slug);
       });
     } else if (companyCategoryFilter === 'fintech') {
       list = list.filter(c => {
         const ind = (c.industry || '').toLowerCase();
         const slug = (c.slug || '').toLowerCase();
-        return ind.includes('fintech') || ind.includes('payment') || ind.includes('banking') || ['stripe'].includes(slug);
+        return ind.includes('fintech') || ind.includes('payment') || ind.includes('banking') || ['stripe', 'erad'].includes(slug);
       });
     } else if (companyCategoryFilter === 'marketplace') {
       list = list.filter(c => {
@@ -481,7 +496,8 @@ export default function Dashboard() {
     } else if (companyCategoryFilter === 'saas') {
       list = list.filter(c => {
         const ind = (c.industry || '').toLowerCase();
-        return ind.includes('saas') || ind.includes('enterprise') || ind.includes('b2b');
+        const slug = (c.slug || '').toLowerCase();
+        return ind.includes('saas') || ind.includes('enterprise') || ind.includes('b2b') || ['harvey', 'decagon', 'glean', 'sierra'].includes(slug);
       });
     }
 
@@ -496,7 +512,7 @@ export default function Dashboard() {
     }
 
     return list;
-  }, [radarCompanies, companyCategoryFilter, search]);
+  }, [radarCompanies, selectedSignalFilter, companyCategoryFilter, search]);
 
   // Formatter for category names
   const formatCategoryLabel = (slug) => {
@@ -1290,9 +1306,19 @@ export default function Dashboard() {
                   </div>
                 </div>
 
+                {/* Emerging Signals Radar Telemetry Deck (Day 5 Intelligence Radar) */}
+                <EmergingSignalsRadar
+                  activeSignal={selectedSignalFilter}
+                  onSelectSignal={(sigId) => setSelectedSignalFilter(sigId)}
+                  signalStats={signalStats}
+                  totalCount={radarCompanies.length}
+                />
+
                 {/* Company Intelligence Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredCompanies.map(company => {
+                    const signalMatches = matchCompanySignals(company);
+                    const activeSignalInfo = selectedSignalFilter !== 'all' ? signalMatches[selectedSignalFilter] : null;
                     const topSignal = company.investmentSignals?.signals?.[0] || company.timeline?.[0];
                     const score = company.openangelsScore || 88;
                     const scoreColor = score >= 95 
@@ -1380,8 +1406,28 @@ export default function Dashboard() {
                             </div>
                           </div>
 
-                          {/* Latest Verified Signal Box */}
-                          {topSignal && (
+                          {/* Active Verified Signal or Latest Verified Signal Box */}
+                          {activeSignalInfo?.matched ? (
+                            <div className="p-3 rounded-2xl bg-zinc-950/90 border border-emerald-500/40 mb-3.5 relative overflow-hidden group/sig shadow-inner">
+                              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 via-teal-400 to-emerald-600" />
+                              <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
+                                <span className="flex items-center gap-1.5 text-emerald-400 font-mono">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  {activeSignalInfo.badge}
+                                </span>
+                                <span className="text-emerald-400/80 font-mono text-[9px] bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">
+                                  ACTIVE SIGNAL MATCH
+                                </span>
+                              </div>
+                              <p className="text-xs font-bold text-zinc-100 line-clamp-2 pl-1.5 leading-snug">
+                                {activeSignalInfo.evidence}
+                              </p>
+                              <div className="text-[10px] text-zinc-400 mt-1.5 pl-1.5 flex items-center gap-1 font-mono">
+                                <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
+                                <span className="truncate">Source: Audited 90-Day Telemetry</span>
+                              </div>
+                            </div>
+                          ) : topSignal ? (
                             <div className="p-3 rounded-2xl bg-zinc-950/70 border border-zinc-800/90 mb-3.5 relative overflow-hidden group/sig hover:border-emerald-500/40 transition-colors">
                               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 to-emerald-600" />
                               <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
@@ -1399,7 +1445,7 @@ export default function Dashboard() {
                                 <span className="truncate">Source: {topSignal.source || topSignal.evidenceSource || 'Regulatory Filings'}</span>
                               </div>
                             </div>
-                          )}
+                          ) : null}
 
                           {/* Backers Syndicate Chips */}
                           {Array.isArray(company.investors) && company.investors.length > 0 && (
@@ -1454,11 +1500,44 @@ export default function Dashboard() {
                       </div>
                     );
                   })}
+                  {filteredCompanies.length === 0 && (
+                    <div className="col-span-full p-12 text-center rounded-3xl bg-zinc-900/40 border border-zinc-800">
+                      <div className="w-12 h-12 rounded-2xl bg-zinc-800/80 border border-zinc-700 flex items-center justify-center mx-auto mb-3 text-zinc-400">
+                        <Search className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-base font-bold text-white mb-1">No startups found for this filter</h3>
+                      <p className="text-xs text-zinc-400 mb-4 max-w-sm mx-auto">
+                        No companies currently match the combined signal and sector criteria.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => { setSelectedSignalFilter('all'); setCompanyCategoryFilter('all'); }}
+                        className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-xs cursor-pointer transition-all"
+                      >
+                        Reset All Filters ({radarCompanies.length} Startups)
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
               <>
                 <MarketingShowcase isPremium={profile?.is_premium} />
+
+                {/* Homepage Emerging Signals Radar Quick Teaser Bar */}
+                <div className="mb-6">
+                  <EmergingSignalsRadar
+                    isCompact
+                    activeSignal={selectedSignalFilter}
+                    onSelectSignal={(sigId) => {
+                      setSelectedSignalFilter(sigId);
+                      setViewMode('investors');
+                    }}
+                    signalStats={signalStats}
+                    totalCount={radarCompanies.length}
+                  />
+                </div>
+
                 <div className="flex flex-col xl:flex-row gap-6 mb-8">
               <div className="flex-1">
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
