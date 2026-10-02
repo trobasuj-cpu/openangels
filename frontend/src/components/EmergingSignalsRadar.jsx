@@ -21,54 +21,73 @@ export default function EmergingSignalsRadar({
   isCompact = false,
   totalCount = 0
 }) {
-  // Homepage Compact Teaser Bar (For Founders view)
+  // Homepage Compact Teaser Bar (For Founders view) - Sleek Ambient Telemetry Ribbon
   if (isCompact) {
     return (
-      <div className="w-full p-4 rounded-2xl bg-gradient-to-r from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 shadow-xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-2.5 w-2.5 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+      <div className="w-full relative group">
+        {/* Subtle background ambient glow on hover */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/10 via-zinc-800/20 to-emerald-500/10 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+        <div className="relative flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-zinc-950/75 hover:bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700/80 shadow-lg backdrop-blur-xl transition-all">
+          
+          {/* Left Anchor: Pulse beacon & Title */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="text-xs font-mono font-bold tracking-wider uppercase text-emerald-400">
-              Venture Intelligence Radar
+            <span className="text-xs font-bold text-zinc-200 tracking-tight whitespace-nowrap">
+              Startup Radar
             </span>
-            <span className="hidden sm:inline text-zinc-600">•</span>
-            <span className="hidden sm:inline text-xs text-zinc-400">
-              Verified 90-day emerging traction signals
+            <span className="hidden md:inline-flex text-[9px] font-mono uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              90d signals
             </span>
+            <span className="hidden lg:block h-3.5 w-px bg-zinc-800/80" />
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          {/* Center Ticker: 5 Micro-Pills in Single Row */}
+          <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-0.5 min-w-0 flex-1 justify-start sm:justify-center">
             {RADAR_SIGNAL_DEFINITIONS.map(sig => {
               const count = signalStats[sig.id] ?? 0;
+              const isSelected = activeSignal === sig.id;
               return (
                 <button
                   key={sig.id}
                   type="button"
                   onClick={() => onSelectSignal && onSelectSignal(sig.id)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-zinc-950/80 hover:bg-zinc-800/90 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 transition-all cursor-pointer group active:scale-95 shadow-sm"
+                  title={`${sig.name}: ${count} companies verified in last 90 days`}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 group/pill active:scale-95 ${
+                    isSelected
+                      ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-transparent hover:border-white/10'
+                  }`}
                 >
-                  <span>{sig.emoji}</span>
-                  <span>{sig.shortName}</span>
-                  <span className="px-1.5 py-0.2 rounded-md bg-zinc-800 group-hover:bg-zinc-700 text-[11px] font-mono font-bold text-emerald-400">
+                  <span className="text-[11px]">{sig.emoji}</span>
+                  <span className="text-[11px] group-hover/pill:text-zinc-200">{sig.shortName}</span>
+                  <span className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded-full border ${
+                    isSelected 
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' 
+                      : 'text-emerald-400/90 bg-emerald-500/10 border-emerald-500/20'
+                  }`}>
                     {count}
                   </span>
                 </button>
               );
             })}
+          </div>
 
+          {/* Right Anchor: Single-line Quick Action Link */}
+          <div className="shrink-0 flex items-center pl-2 sm:pl-3 border-l border-zinc-800/80">
             <button
               type="button"
               onClick={() => onSelectSignal && onSelectSignal('all')}
-              className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300 ml-1 transition-colors group cursor-pointer"
+              className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer whitespace-nowrap group/link"
             >
-              <span>Explore Radar</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+              <span>Explore</span>
+              <ArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
             </button>
           </div>
+
         </div>
       </div>
     );

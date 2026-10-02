@@ -1525,7 +1525,7 @@ export default function Dashboard() {
                 <MarketingShowcase isPremium={profile?.is_premium} />
 
                 {/* Homepage Emerging Signals Radar Quick Teaser Bar */}
-                <div className="mb-6">
+                <div className="mb-5">
                   <EmergingSignalsRadar
                     isCompact
                     activeSignal={selectedSignalFilter}
