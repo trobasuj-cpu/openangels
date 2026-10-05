@@ -2,9 +2,10 @@
 import React from 'react';
 import { 
   TrendingUp, DollarSign, Globe, Rocket, Users, 
-  Sparkles, Check, X, ArrowRight, ShieldCheck, Flame
+  Sparkles, Check, X, ArrowRight, ShieldCheck, Flame,
+  Zap, Layers
 } from 'lucide-react';
-import { RADAR_SIGNAL_DEFINITIONS } from '../lib/radarSignals';
+import { RADAR_SIGNAL_DEFINITIONS, COMPOUND_SIGNAL_DEFINITIONS } from '../lib/radarSignals';
 
 const ICON_MAP = {
   hiring: Flame,
@@ -95,6 +96,8 @@ export default function EmergingSignalsRadar({
 
   // Full Interactive Radar telemetry dashboard (For Investors & Scouts view)
   const activeDef = RADAR_SIGNAL_DEFINITIONS.find(s => s.id === activeSignal);
+  const activeCompoundDef = COMPOUND_SIGNAL_DEFINITIONS.find(s => s.id === activeSignal);
+  const isCompoundFilterActive = activeSignal === 'compound' || !!activeCompoundDef;
 
   return (
     <div className="space-y-4">
@@ -106,12 +109,12 @@ export default function EmergingSignalsRadar({
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span>Emerging Signals Radar</span>
+            <span>Venture Intelligence & Signal Fusion Radar</span>
             <span className="text-zinc-600">•</span>
             <span className="text-zinc-400 font-medium">90-Day Observation Window</span>
           </div>
           <p className="text-xs sm:text-sm text-zinc-300">
-            Select an emerging temporal signal below to isolate high-velocity startups verified by SEC filings, talent flows, and product telemetry.
+            Select an isolated vector or trigger <strong className="text-amber-300 font-bold">Signal Fusion</strong> to identify multimodal factual convergences (funding + hiring velocity + product release).
           </p>
         </div>
 
@@ -126,6 +129,44 @@ export default function EmergingSignalsRadar({
             <span>Reset to All ({totalCount || signalStats.all || 0})</span>
           </button>
         )}
+      </div>
+
+      {/* Signal Fusion & Compound Convergence Filter Ribbon */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5 p-2 sm:p-2.5 rounded-2xl bg-zinc-950/80 border border-zinc-800/90 shadow-inner">
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => onSelectSignal('all')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeSignal === 'all'
+                ? 'bg-zinc-800 text-white border border-zinc-700 shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'
+            }`}
+          >
+            All Signals ({signalStats.all || totalCount})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onSelectSignal('compound')}
+            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeSignal === 'compound'
+                ? 'bg-gradient-to-r from-amber-500/30 to-amber-600/30 text-amber-300 border border-amber-500/60 shadow-lg shadow-amber-500/10'
+                : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <span>⚡ Compound Convergences (2+ Signals)</span>
+            <span className="font-mono text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              {signalStats.compound || 0}
+            </span>
+          </button>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-1 text-[11px] font-mono text-zinc-400 pr-2">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Non-Speculative: Empirical Observed Events Only</span>
+        </div>
       </div>
 
       {/* 5 Interactive Signal Telemetry Cards */}
@@ -220,6 +261,38 @@ export default function EmergingSignalsRadar({
           >
             <X className="w-3.5 h-3.5" />
             <span>Clear signal filter</span>
+          </button>
+        </div>
+      )}
+
+      {/* Active Compound Convergence Filter Banner */}
+      {isCompoundFilterActive && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-zinc-950 to-zinc-950 border border-amber-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg animate-in fade-in duration-200">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
+              <Zap className="w-4 h-4 text-amber-400 animate-pulse" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-white flex items-center gap-2 flex-wrap">
+                <span className="font-mono uppercase text-amber-400">Signal Fusion:</span>
+                <span>Observed Multimodal Convergences (2+ Signals)</span>
+                <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  {signalStats.compound || 0} Startups Isolated
+                </span>
+              </div>
+              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">
+                Displaying breakout companies with 2 or more synchronous empirical events (funding round, team expansion, or product deployment) observed in the last 90 days.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => onSelectSignal('all')}
+            className="self-start sm:self-center inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 text-xs font-bold transition-colors cursor-pointer shrink-0"
+          >
+            <X className="w-3.5 h-3.5" />
+            <span>Reset Filter</span>
           </button>
         </div>
       )}

@@ -22,7 +22,7 @@ import CompanyProfileModal from './CompanyProfileModal';
 import CompanyAvatar from './CompanyAvatar';
 import ExportMemoButton from './ExportMemoButton';
 import EmergingSignalsRadar from './EmergingSignalsRadar';
-import { computeSignalStats, filterCompaniesBySignal, matchCompanySignals, RADAR_SIGNAL_DEFINITIONS } from '../lib/radarSignals';
+import { computeSignalStats, filterCompaniesBySignal, matchCompanySignals, detectCompoundSignals, RADAR_SIGNAL_DEFINITIONS, COMPOUND_SIGNAL_DEFINITIONS } from '../lib/radarSignals';
 import { KNOWN_COMPANIES } from '@/lib/companyData';
 import companiesCache from '@/lib/companies_cache.json';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
@@ -1318,6 +1318,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredCompanies.map(company => {
                     const signalMatches = matchCompanySignals(company);
+                    const compoundInfo = detectCompoundSignals(company);
                     const activeSignalInfo = selectedSignalFilter !== 'all' ? signalMatches[selectedSignalFilter] : null;
                     const topSignal = company.investmentSignals?.signals?.[0] || company.timeline?.[0];
                     const score = company.openangelsScore || 88;
@@ -1406,8 +1407,8 @@ export default function Dashboard() {
                             </div>
                           </div>
 
-                          {/* Active Verified Signal or Latest Verified Signal Box */}
-                          {activeSignalInfo?.matched ? (
+                          {/* Active Verified Signal or Compound Convergence Box */}
+                          {selectedSignalFilter !== 'all' && activeSignalInfo?.matched ? (
                             <div className="p-3 rounded-2xl bg-zinc-950/90 border border-emerald-500/40 mb-3.5 relative overflow-hidden group/sig shadow-inner">
                               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 via-teal-400 to-emerald-600" />
                               <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
@@ -1425,6 +1426,37 @@ export default function Dashboard() {
                               <div className="text-[10px] text-zinc-400 mt-1.5 pl-1.5 flex items-center gap-1 font-mono">
                                 <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
                                 <span className="truncate">Source: Audited 90-Day Telemetry</span>
+                              </div>
+                            </div>
+                          ) : compoundInfo.isCompound ? (
+                            <div className="p-3 rounded-2xl bg-zinc-950/90 border border-amber-500/40 mb-3.5 relative overflow-hidden group/sig shadow-inner hover:border-amber-400/60 transition-colors">
+                              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 via-orange-400 to-amber-600" />
+                              <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
+                                <span className="flex items-center gap-1.5 text-amber-400 font-mono">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                  {compoundInfo.primaryCompound?.badge || '⚡ COMPOUND CONVERGENCE'}
+                                </span>
+                                <span className="text-amber-300 font-mono text-[9px] bg-amber-500/15 px-1.5 py-0.2 rounded border border-amber-500/30">
+                                  {compoundInfo.count} SIGNALS IN 90D
+                                </span>
+                              </div>
+                              <p className="text-xs font-bold text-zinc-100 line-clamp-2 pl-1.5 leading-snug">
+                                {compoundInfo.primaryCompound?.narrative}
+                              </p>
+                              {/* Audit Trail Micro-Pills */}
+                              <div className="flex flex-wrap gap-1 mt-1.5 pt-1.5 border-t border-zinc-800/80 pl-1.5">
+                                {compoundInfo.auditTrail.slice(0, 3).map((item, idx) => (
+                                  <span key={idx} className="text-[9px] font-mono text-zinc-300 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">
+                                    {item.emoji} {item.name}: <strong className="text-amber-300 font-normal">{item.evidence.length > 25 ? `${item.evidence.slice(0, 25)}...` : item.evidence}</strong>
+                                  </span>
+                                ))}
+                              </div>
+                              <div className="text-[9px] text-zinc-400 mt-1.5 pl-1.5 flex items-center justify-between font-mono">
+                                <span className="flex items-center gap-1 text-emerald-400">
+                                  <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
+                                  <span>Observed Evidence • SEC / Registry</span>
+                                </span>
+                                <span className="text-zinc-500">Non-Speculative</span>
                               </div>
                             </div>
                           ) : topSignal ? (
