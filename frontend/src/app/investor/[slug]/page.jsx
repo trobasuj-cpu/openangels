@@ -36,17 +36,18 @@ export async function generateMetadata({ params }) {
 
   const investorName = investor.name;
   const firmText = investor.firm ? ` (${investor.firm})` : '';
+  const locText = investor.location ? ` in ${investor.location}` : '';
   
   let cleanBio = investor.bio || '';
   if (cleanBio.includes('Source: http')) {
     cleanBio = cleanBio.split('Source: http')[0].trim();
   }
   if (!cleanBio || cleanBio.includes("automated news") || cleanBio.includes("public investor list")) {
-    cleanBio = `${investorName} is an active early-stage angel investor${investor.firm ? ` at ${investor.firm}` : ''}${investor.location ? ` based in ${investor.location}` : ''}. View investment thesis, check sizes, focus industries, and contact info on OpenAngels.`;
+    cleanBio = `${investorName} is an active early-stage angel investor${investor.firm ? ` at ${investor.firm}` : ''}${investor.location ? ` based in ${investor.location}` : ''}. View investment thesis, typical check sizes, focus industries, and direct contact details on OpenAngels.`;
   }
 
-  const title = `${investorName}${firmText} - Angel Investor Profile | OpenAngels`;
-  const description = cleanBio.substring(0, 160);
+  const title = `${investorName}${firmText}: Portfolio, Check Size, Focus & Contact | OpenAngels`;
+  const description = `Verified angel investor profile for ${investorName}${firmText}${locText}. Target stage, check size, portfolio syndicate & direct founder pitch contact on OpenAngels.`.substring(0, 160);
 
   return {
     title,
@@ -134,14 +135,48 @@ export default async function StandaloneInvestorPage({ params }) {
   const rawInd = safeInvestor.industry || safeInvestor.industries;
   const industries = Array.isArray(rawInd) ? rawInd : (typeof rawInd === 'string' ? [rawInd] : []);
 
+  const sameAsLinks = [
+    safeInvestor.linkedin_url,
+    safeInvestor.twitter_url,
+    safeInvestor.website
+  ].filter(Boolean);
+
   const schemaData = {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": safeInvestor.name || "Angel Investor",
-    "description": cleanBio,
-    "url": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}`),
-    ...(safeInvestor.firm && { "worksFor": { "@type": "Organization", "name": safeInvestor.firm } }),
-    ...(safeInvestor.location && { "homeLocation": { "@type": "Place", "name": safeInvestor.location } })
+    "@graph": [
+      {
+        "@type": "ProfilePage",
+        "@id": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}#webpage`),
+        "url": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}`),
+        "name": `${safeInvestor.name} - Angel Investor Profile | OpenAngels`,
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": absoluteUrl('/#website'),
+          "name": "OpenAngels",
+          "url": absoluteUrl('/')
+        },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": absoluteUrl('/') },
+            { "@type": "ListItem", "position": 2, "name": "Directory", "item": absoluteUrl('/directory') },
+            { "@type": "ListItem", "position": 3, "name": safeInvestor.name, "item": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}`) }
+          ]
+        },
+        "mainEntity": {
+          "@type": "Person",
+          "@id": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}#person`),
+          "name": safeInvestor.name || "Angel Investor",
+          "jobTitle": "Angel Investor",
+          "description": cleanBio,
+          "url": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}`),
+          ...(sameAsLinks.length > 0 && { "sameAs": sameAsLinks }),
+          ...(safeInvestor.firm && { "worksFor": { "@type": "Organization", "name": safeInvestor.firm } }),
+          ...(safeInvestor.location && { "homeLocation": { "@type": "Place", "name": safeInvestor.location } }),
+          ...(industries.length > 0 && { "knowsAbout": industries })
+        }
+      }
+    ]
   };
 
   return (

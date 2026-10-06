@@ -61,7 +61,44 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
+      {/* Featured Indexed Angel Profiles & Startup Dossiers Internal Link Graph */}
+      <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-zinc-900">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="shrink-0 text-xs font-mono font-bold uppercase tracking-wider text-zinc-400">
+            Featured Angel Investors:
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-zinc-400">
+            <Link href="/investor/sam-altman" className="hover:text-amber-400 transition-colors">Sam Altman</Link>
+            <Link href="/investor/pieter-levels" className="hover:text-amber-400 transition-colors">Pieter Levels</Link>
+            <Link href="/investor/naval-ravikant" className="hover:text-amber-400 transition-colors">Naval Ravikant</Link>
+            <Link href="/investor/elad-gil" className="hover:text-amber-400 transition-colors">Elad Gil</Link>
+            <Link href="/investor/greg-brockman" className="hover:text-amber-400 transition-colors">Greg Brockman</Link>
+            <Link href="/investor/paul-graham" className="hover:text-amber-400 transition-colors">Paul Graham</Link>
+            <Link href="/investor/peter-thiel" className="hover:text-amber-400 transition-colors">Peter Thiel</Link>
+            <Link href="/investor/garry-tan" className="hover:text-amber-400 transition-colors">Garry Tan</Link>
+            <Link href="/investor/packy-mccormick" className="hover:text-amber-400 transition-colors">Packy McCormick</Link>
+            <Link href="/investor/reid-hoffman" className="hover:text-amber-400 transition-colors">Reid Hoffman</Link>
+            <Link href="/investor/balaji-srinivasan" className="hover:text-amber-400 transition-colors">Balaji Srinivasan</Link>
+            <Link href="/investor/dylan-field" className="hover:text-amber-400 transition-colors">Dylan Field</Link>
+            <Link href="/investor/jason-calacanis" className="hover:text-amber-400 transition-colors">Jason Calacanis</Link>
+          </div>
+        </div>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mt-4 pt-3 border-t border-zinc-900/60">
+          <div className="shrink-0 text-xs font-mono font-bold uppercase tracking-wider text-zinc-400">
+            Verified Company Dossiers:
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-zinc-400">
+            <Link href="/company/openai" className="hover:text-amber-400 transition-colors">OpenAI</Link>
+            <Link href="/company/stripe" className="hover:text-amber-400 transition-colors">Stripe</Link>
+            <Link href="/company/perplexity" className="hover:text-amber-400 transition-colors">Perplexity</Link>
+            <Link href="/company/cursor" className="hover:text-amber-400 transition-colors">Cursor</Link>
+            <Link href="/company/twitter" className="hover:text-amber-400 transition-colors">Twitter (X)</Link>
+            <Link href="/company/linkedin" className="hover:text-amber-400 transition-colors">LinkedIn</Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 mt-12 pt-6 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
         <p>Copyright {new Date().getFullYear()} OpenAngels. All rights reserved.</p>
         <p>Responsible founder-to-investor outreach, without spam.</p>
       </div>

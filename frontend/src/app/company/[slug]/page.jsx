@@ -12,6 +12,35 @@ import {
 import ExportMemoButton from '@/components/ExportMemoButton';
 import { detectCompoundSignals } from '@/lib/radarSignals';
 
+const KNOWN_INVESTOR_SLUGS = {
+  'Sam Altman': 'sam-altman',
+  'Greg Brockman': 'greg-brockman',
+  'Peter Thiel': 'peter-thiel',
+  'Reid Hoffman': 'reid-hoffman',
+  'Marc Andreessen': 'marc-andreessen',
+  'Elad Gil': 'elad-gil',
+  'Naval Ravikant': 'naval-ravikant',
+  'Paul Graham': 'paul-graham',
+  'Garry Tan': 'garry-tan',
+  'Ron Conway': 'ron-conway',
+  'Jason Calacanis': 'jason-calacanis',
+  'Vinod Khosla': 'vinod-khosla',
+  'Alexis Ohanian': 'alexis-ohanian',
+  'Balaji Srinivasan': 'balaji-srinivasan',
+  'Daniel Gross': 'daniel-gross',
+  'Chris Dixon': 'chris-dixon',
+  'Dylan Field': 'dylan-field',
+  'Fabrice Grinda': 'fabrice-grinda',
+  'Bill Gurley': 'bill-gurley',
+  'Chamath Palihapitiya': 'chamath-palihapitiya',
+  'David Sacks': 'david-sacks',
+  'Packy McCormick': 'packy-mccormick',
+  'Cyan Banister': 'cyan-banister',
+  'Amjad Masad': 'amjad-masad',
+  'Pieter Levels': 'pieter-levels',
+  'Y Combinator': 'y-combinator',
+};
+
 export async function generateStaticParams() {
   return Object.keys(KNOWN_COMPANIES).map((slug) => ({ slug }));
 }
@@ -505,17 +534,29 @@ export default async function CompanyIntelligencePage({ params }) {
                         {f.pedigree}
                       </p>
                     </div>
-                    {f.linkedin && (
-                      <a 
-                        href={f.linkedin} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="p-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition-all shrink-0"
-                        title="View LinkedIn Profile"
-                      >
-                        <span className="text-xs font-bold">in</span>
-                      </a>
-                    )}
+                    <div className="flex items-center gap-2 shrink-0">
+                      {KNOWN_INVESTOR_SLUGS[f.name] && (
+                        <Link
+                          href={`/investor/${KNOWN_INVESTOR_SLUGS[f.name]}`}
+                          className="px-2.5 py-1.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 transition-all text-[11px] font-mono font-bold flex items-center gap-1"
+                          title={`View ${f.name} Angel Investor Profile`}
+                        >
+                          <span>Angel Profile</span>
+                          <ArrowUpRight className="w-3 h-3" />
+                        </Link>
+                      )}
+                      {f.linkedin && (
+                        <a 
+                          href={f.linkedin} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="p-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition-all"
+                          title="View LinkedIn Profile"
+                        >
+                          <span className="text-xs font-bold">in</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -744,18 +785,22 @@ export default async function CompanyIntelligencePage({ params }) {
               Investors who participated in {company.name}&apos;s funding rounds. Click to open verified contact details and due diligence profiles:
             </p>
             <div className="flex flex-wrap gap-2.5">
-              {(company.investors || []).map((invName, idx) => (
-                <a
-                  key={idx}
-                  href={`/?search=${encodeURIComponent(invName)}`}
-                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-purple-950/40 hover:bg-purple-900/60 text-purple-200 hover:text-white border border-purple-500/30 hover:border-purple-500/60 transition-all flex items-center gap-2 group shadow-sm cursor-pointer"
-                  title={`Find ${invName} on OpenAngels`}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-125 transition-transform" />
-                  <span>{invName}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
-                </a>
-              ))}
+              {(company.investors || []).map((invName, idx) => {
+                const targetSlug = KNOWN_INVESTOR_SLUGS[invName];
+                const href = targetSlug ? `/investor/${targetSlug}` : `/?search=${encodeURIComponent(invName)}`;
+                return (
+                  <Link
+                    key={idx}
+                    href={href}
+                    className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-purple-950/40 hover:bg-purple-900/60 text-purple-200 hover:text-white border border-purple-500/30 hover:border-purple-500/60 transition-all flex items-center gap-2 group shadow-sm cursor-pointer"
+                    title={`View ${invName} profile on OpenAngels`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-125 transition-transform" />
+                    <span>{invName}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Founder Pitch Hook Card */}

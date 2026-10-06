@@ -79,6 +79,56 @@ export default async function DirectoryPage({ searchParams }) {
         </div>
 
         <div className="space-y-16">
+          {/* Featured Active Super-Angels Section — Instant Internal PageRank Boost */}
+          <section className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 shadow-inner">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-zinc-800">
+              <div>
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <span>Featured Active Angel Investors</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    Verified Portfolios
+                  </span>
+                </h2>
+                <p className="text-xs text-zinc-400 mt-1">
+                  Prominent early-stage backers actively deploying checks into pre-seed & seed rounds.
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+              {[
+                { name: 'Sam Altman', slug: 'sam-altman', firm: 'OpenAI / Hydrazine' },
+                { name: 'Pieter Levels', slug: 'pieter-levels', firm: 'Indie Hacker Angel' },
+                { name: 'Naval Ravikant', slug: 'naval-ravikant', firm: 'AngelList' },
+                { name: 'Elad Gil', slug: 'elad-gil', firm: 'Color / Ex-Twitter' },
+                { name: 'Greg Brockman', slug: 'greg-brockman', firm: 'OpenAI / Ex-Stripe' },
+                { name: 'Paul Graham', slug: 'paul-graham', firm: 'Y Combinator' },
+                { name: 'Peter Thiel', slug: 'peter-thiel', firm: 'Founders Fund' },
+                { name: 'Garry Tan', slug: 'garry-tan', firm: 'Y Combinator / Initialized' },
+                { name: 'Packy McCormick', slug: 'packy-mccormick', firm: 'Not Boring Capital' },
+                { name: 'Reid Hoffman', slug: 'reid-hoffman', firm: 'Greylock / LinkedIn' },
+                { name: 'Balaji Srinivasan', slug: 'balaji-srinivasan', firm: 'The Network State' },
+                { name: 'Dylan Field', slug: 'dylan-field', firm: 'Figma' },
+                { name: 'Jason Calacanis', slug: 'jason-calacanis', firm: 'LAUNCH Fund' },
+                { name: 'Vinod Khosla', slug: 'vinod-khosla', firm: 'Khosla Ventures' },
+                { name: 'Daniel Gross', slug: 'daniel-gross', firm: 'AI Grant / Pioneer' },
+                { name: 'Chris Dixon', slug: 'chris-dixon', firm: 'a16z crypto' }
+              ].map(inv => (
+                <Link
+                  key={inv.slug}
+                  href={`/investor/${inv.slug}`}
+                  className="p-3 rounded-xl bg-zinc-950/80 hover:bg-zinc-800/80 border border-zinc-800/80 hover:border-amber-500/40 transition-all group flex flex-col justify-between"
+                >
+                  <span className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors truncate">
+                    {inv.name}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 truncate mt-1">
+                    {inv.firm}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
           <section>
             <h2 className="text-2xl font-bold mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-2">Browse by Industry</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
