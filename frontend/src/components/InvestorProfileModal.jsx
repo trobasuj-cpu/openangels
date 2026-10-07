@@ -82,11 +82,19 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           .then(({ data: lead }) => {
             if (lead) setInCrm(true);
           });
-      } else {
-        setLoadingProfile(false);
       }
     });
   }, [investor]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isStandalone]);
 
   const handleClose = () => {
     if (isStandalone) {
@@ -167,45 +175,49 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200" onClick={handleClose}>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200" onClick={handleClose}>
         <div 
-          className="relative w-full max-w-2xl bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
+          className="relative w-full max-w-2xl lg:max-w-3xl bg-zinc-950 border border-zinc-800/90 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in zoom-in-95 duration-200"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
           <button 
             onClick={handleClose}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/40 text-zinc-400 hover:text-white hover:bg-zinc-800/80 transition-all border border-white/10"
+            className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-30 p-1.5 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all border border-white/10 shadow-sm"
+            title="Close modal (Esc)"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
 
-          {/* Dossier Header Banner */}
-          <div className="relative p-6 sm:p-8 pb-8 sm:pb-9 bg-gradient-to-r from-red-950/40 via-zinc-900/60 to-zinc-950 border-b border-zinc-800/80">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Dossier Header Banner — Sleek, Crisp & Compact */}
+          <div className="relative px-4 py-3 sm:px-6 sm:py-3.5 bg-gradient-to-r from-red-950/30 via-zinc-900/50 to-zinc-950 border-b border-zinc-800/80 shrink-0 pr-12">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
             
-            <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div className="relative z-10 flex items-center gap-3 sm:gap-4">
               <InvestorAvatar 
                 name={investor.name} 
                 avatarUrl={investor.avatar_url || investor.avatar} 
-                className="w-20 h-20 sm:w-22 sm:h-22 ring-2 ring-red-500/30 shadow-xl rounded-full overflow-hidden object-cover shrink-0" 
+                className="w-12 h-12 sm:w-14 sm:h-14 ring-1.5 ring-red-500/30 shadow-md rounded-2xl overflow-hidden object-cover shrink-0" 
               />
 
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{investor.name}</h2>
+                {/* Row 1: Name + Badges */}
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                  <h2 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug truncate">
+                    {investor.name}
+                  </h2>
                   {(() => {
                     const verifInfo = getVerificationInfo(investor);
                     return (
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" title="Direct MX record validation, SMTP handshake, zero bounce risk">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="inline-flex items-center gap-1 text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0" title="Direct MX record validation, SMTP handshake, zero bounce risk">
+                        <ShieldCheck className="w-3 h-3 text-emerald-400" />
                         {verifInfo.badgeText}
                       </span>
                     );
                   })()}
                   {investor.quality_score && investor.quality_score >= 70 ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                      <Sparkles className="w-3 h-3" /> {investor.quality_score}% Quality
+                    <span className="inline-flex items-center gap-1 text-[10.5px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">
+                      <Sparkles className="w-2.5 h-2.5" /> {investor.quality_score}%
                     </span>
                   ) : null}
                   {/* Investment Signal Archetype */}
@@ -215,7 +227,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                     const stages = Array.isArray(investor.stages) ? investor.stages : (Array.isArray(investor.stage) ? investor.stage : []);
                     const bio = (investor.bio || '').toLowerCase();
                     
-                    let badge = "🚀 High-Velocity Angel";
+                    let badge = "🚀 High-Velocity";
                     let badgeClass = "bg-red-500/10 text-red-400 border-red-500/20";
                     
                     if (checkMax >= 1000000 || bio.includes('lead') || bio.includes('general partner') || bio.includes('managing partner')) {
@@ -230,66 +242,81 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                     }
                     
                     return (
-                      <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full border ${badgeClass} shadow-sm`}>
+                      <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${badgeClass} shrink-0`}>
                         {badge}
                       </span>
                     );
                   })()}
                 </div>
 
-                {investor.firm ? (
-                  <p className="text-sm sm:text-base font-semibold text-amber-500 mb-2">
-                    {investor.title ? `${investor.title} at ` : ''}{investor.firm}
-                  </p>
-                ) : investor.location ? (
-                  <div className="flex items-center gap-1.5 text-xs text-zinc-400 mb-2">
-                    <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                    <span>{investor.location}</span>
+                {/* Row 2: Subtitle + Location + Socials */}
+                <div className="flex items-center justify-between gap-2 mt-0.5 flex-wrap">
+                  <div className="flex items-center gap-1.5 text-xs text-zinc-400 min-w-0">
+                    {investor.firm && (
+                      <span className="font-semibold text-amber-400/90 truncate">
+                        {investor.title ? `${investor.title} at ` : ''}{investor.firm}
+                      </span>
+                    )}
+                    {investor.firm && investor.location && (
+                      <span className="text-zinc-600">•</span>
+                    )}
+                    {investor.location && (
+                      <span className="flex items-center gap-1 text-zinc-400 truncate">
+                        <MapPin className="w-3 h-3 text-red-500 shrink-0" />
+                        <span>{investor.location}</span>
+                      </span>
+                    )}
                   </div>
-                ) : null}
 
-                {/* Social Links Bar — Direct Profiles Only */}
-                {(() => {
-                  const tw = formatTwitterUrl(unlockedContact || investor);
-                  const li = formatLinkedinUrl(unlockedContact || investor);
-                  const web = formatWebsiteUrl(unlockedContact || investor);
-                  if (!tw && !li && !web) return null;
+                  {/* Social Links Bar — Sleek micro-pills */}
+                  {(() => {
+                    const tw = formatTwitterUrl(unlockedContact || investor);
+                    const li = formatLinkedinUrl(unlockedContact || investor);
+                    const web = formatWebsiteUrl(unlockedContact || investor);
+                    if (!tw && !li && !web) return null;
 
-                  return (
-                    <div className="flex items-center gap-2 pt-2.5 flex-wrap relative z-20">
-                      {tw && (
-                        <a 
-                          href={tw} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
-                        >
-                          <span className="font-bold text-white">𝕏</span> Twitter/X
-                        </a>
-                      )}
-                      {li && (
-                        <a 
-                          href={li} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
-                        >
-                          <span className="font-bold text-blue-400">in</span> LinkedIn
-                        </a>
-                      )}
-                      {web && (
-                        <a 
-                          href={web} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 transition-all text-xs font-medium flex items-center gap-1.5 shadow-md"
-                        >
-                          <Globe className="w-3.5 h-3.5 text-zinc-400" /> Website
-                        </a>
-                      )}
-                    </div>
-                  );
-                })()}
+                    return (
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {tw && (
+                          <a 
+                            href={tw} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="h-6 px-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/60 transition-all text-[11px] font-medium flex items-center gap-1 shadow-sm"
+                            title="X / Twitter"
+                          >
+                            <span className="font-bold text-white text-[10px]">𝕏</span>
+                            <span className="hidden sm:inline">Twitter</span>
+                          </a>
+                        )}
+                        {li && (
+                          <a 
+                            href={li} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="h-6 px-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/60 transition-all text-[11px] font-medium flex items-center gap-1 shadow-sm"
+                            title="LinkedIn"
+                          >
+                            <span className="font-bold text-blue-400 text-[10px]">in</span>
+                            <span className="hidden sm:inline">LinkedIn</span>
+                          </a>
+                        )}
+                        {web && (
+                          <a 
+                            href={web} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="h-6 px-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/60 transition-all text-[11px] font-medium flex items-center gap-1 shadow-sm"
+                            title="Website"
+                          >
+                            <Globe className="w-3 h-3 text-zinc-400" />
+                            <span className="hidden sm:inline">Website</span>
+                          </a>
+                        )}
+                      </div>
+                    );
+                  })()}
+                </div>
               </div>
             </div>
           </div>
@@ -297,35 +324,35 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           {/* Content Area — Premium vs Upsell */}
           {isPremium ? (
             <>
-              {/* Dossier Body Content — Full Access */}
-              <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar">
+              {/* Dossier Body Content — Expanded Scrollable Viewport */}
+              <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3.5 sm:px-6 sm:py-4.5 space-y-3.5 sm:space-y-4 custom-scrollbar">
                 
                 {/* Parameters Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Check Size Box */}
-                  <div className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800/80">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                      <DollarSign className="w-4 h-4 text-emerald-400" /> Check Size Range
+                  <div className="p-3 sm:p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 flex flex-col justify-center">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-0.5">
+                      <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Check Size Range
                     </div>
-                    <p className="text-lg font-bold text-emerald-400">
+                    <p className="text-base font-bold text-emerald-400">
                       {checkSizeStr || "Flexible Check Size"}
                     </p>
                   </div>
 
                   {/* Stages Box */}
-                  <div className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800/80">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                      <Layers className="w-4 h-4 text-amber-500" /> Preferred Stages
+                  <div className="p-3 sm:p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 flex flex-col justify-center">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-0.5">
+                      <Layers className="w-3.5 h-3.5 text-amber-500" /> Preferred Stages
                     </div>
-                    <div className="flex flex-wrap gap-1.5 mt-1">
+                    <div className="flex flex-wrap gap-1 mt-0.5">
                       {stages.length > 0 ? (
                         stages.map(stg => (
-                          <span key={stg} className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                          <span key={stg} className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                             {stg}
                           </span>
                         ))
                       ) : (
-                        <span className="text-sm font-semibold text-zinc-300">Pre-seed & Seed</span>
+                        <span className="text-xs font-semibold text-zinc-300">Pre-seed & Seed</span>
                       )}
                     </div>
                   </div>
@@ -333,10 +360,10 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
                 {/* Bio & Investment Philosophy */}
                 <div>
-                  <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-red-500" /> Background & Investment Thesis
+                  <h3 className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <Briefcase className="w-3.5 h-3.5 text-red-500" /> Background & Investment Thesis
                   </h3>
-                  <div className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 leading-relaxed text-sm text-zinc-300">
+                  <div className="p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 leading-relaxed text-xs sm:text-sm text-zinc-300">
                     {cleanBio}
                   </div>
                 </div>
@@ -344,10 +371,10 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                 {/* Target Industries */}
                 {industries.length > 0 && (
                   <div>
-                    <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Focus Industries</h3>
-                    <div className="flex flex-wrap gap-2">
+                    <h3 className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Focus Industries</h3>
+                    <div className="flex flex-wrap gap-1.5">
                       {industries.map(ind => (
-                        <span key={ind} className="px-3 py-1 rounded-xl text-xs font-medium bg-zinc-900 text-zinc-300 border border-zinc-800">
+                        <span key={ind} className="px-2.5 py-1 rounded-lg text-xs font-medium bg-zinc-900 text-zinc-300 border border-zinc-800">
                           {ind}
                         </span>
                       ))}
@@ -365,16 +392,16 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
                   return (
                     <div>
-                      <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <h3 className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Notable Portfolio & Backed Deals
                       </h3>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5">
                         {portfolioList.map((item, idx) => (
                           <button 
                             key={idx} 
                             type="button"
                             onClick={() => setSelectedCompany(item)}
-                            className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 hover:text-amber-200 border border-amber-500/20 hover:border-amber-500/40 shadow-sm flex items-center gap-1.5 transition-all group cursor-pointer"
+                            className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 hover:text-amber-200 border border-amber-500/20 hover:border-amber-500/40 shadow-sm flex items-center gap-1.5 transition-all group cursor-pointer"
                             title={`Inspect ${item} Company Intelligence Profile`}
                           >
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 group-hover:scale-125 transition-transform" />
@@ -385,16 +412,16 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       </div>
 
                       {/* Knowledge Graph & Syndicate Intelligence */}
-                      <div className="mt-4 rounded-2xl bg-zinc-950/80 border border-purple-500/30 overflow-hidden shadow-lg shadow-purple-950/20">
+                      <div className="mt-3 rounded-xl bg-zinc-950/80 border border-purple-500/30 overflow-hidden shadow-lg shadow-purple-950/20">
                         {/* Clickable Header */}
                         <button
                           type="button"
                           onClick={() => setIsGraphExpanded(!isGraphExpanded)}
-                          className="w-full p-3.5 bg-purple-950/20 hover:bg-purple-950/30 flex items-center justify-between transition-all cursor-pointer border-b border-purple-500/20 group"
+                          className="w-full p-3 bg-purple-950/20 hover:bg-purple-950/30 flex items-center justify-between transition-all cursor-pointer border-b border-purple-500/20 group"
                         >
-                          <div className="flex items-center gap-2.5">
-                            <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 group-hover:scale-105 transition-transform">
-                              <Users className="w-4 h-4" />
+                          <div className="flex items-center gap-2">
+                            <div className="p-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 group-hover:scale-105 transition-transform">
+                              <Users className="w-3.5 h-3.5" />
                             </div>
                             <div className="text-left">
                               <div className="text-xs font-bold text-purple-200 flex items-center gap-1.5 uppercase tracking-wider">
@@ -407,7 +434,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                           </div>
 
                           <div className="flex items-center gap-2">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 shadow-sm">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 shadow-sm">
                               <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
                               2-Hop Intro Active
                             </span>
@@ -421,9 +448,9 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
                         {/* Expanded Visual Graph Content */}
                         {isGraphExpanded && (
-                          <div className="p-4 space-y-4 text-xs animate-fadeIn">
+                          <div className="p-3.5 space-y-3.5 text-xs animate-fadeIn">
                             {/* 1. Multi-Hop Warm Intro Chain */}
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                               <div className="flex items-center justify-between">
                                 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
                                   <Zap className="w-3 h-3 text-purple-400" /> Warm Intro Connection Route:
@@ -431,39 +458,39 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                                 <span className="text-[9.5px] font-mono text-purple-400/90">Fastest 2-Hop Path</span>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 flex flex-wrap sm:flex-nowrap items-center gap-2 text-xs">
+                              <div className="p-2.5 rounded-xl bg-purple-950/20 border border-purple-500/20 flex flex-wrap sm:flex-nowrap items-center gap-2 text-xs">
                                 {/* Step 1: Founder */}
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 shrink-0">
-                                  <span className="text-sm">👤</span>
-                                  <span className="font-semibold text-zinc-200">You (Founder)</span>
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 shrink-0">
+                                  <span className="text-xs">👤</span>
+                                  <span className="font-semibold text-zinc-200 text-xs">You (Founder)</span>
                                 </div>
 
                                 {/* Arrow 1 */}
-                                <div className="flex items-center gap-1 text-[10px] font-mono text-purple-400 font-bold px-1 shrink-0">
+                                <div className="flex items-center gap-1 text-[10px] font-mono text-purple-400 font-bold px-0.5 shrink-0">
                                   <span>→</span>
-                                  <span className="text-[9px] uppercase tracking-wider text-purple-400/80">Intro</span>
+                                  <span className="text-[8.5px] uppercase tracking-wider text-purple-400/80">Intro</span>
                                   <span>→</span>
                                 </div>
 
                                 {/* Step 2: Portfolio Bridge */}
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple-900/30 border border-purple-500/30 shrink-0 min-w-0">
-                                  <span className="text-sm">🏢</span>
-                                  <span className="font-semibold text-purple-200 truncate">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-900/30 border border-purple-500/30 shrink-0 min-w-0">
+                                  <span className="text-xs">🏢</span>
+                                  <span className="font-semibold text-purple-200 text-xs truncate">
                                     {portfolioList[0] || 'Portfolio'} Alumni
                                   </span>
                                 </div>
 
                                 {/* Arrow 2 */}
-                                <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 font-bold px-1 shrink-0">
+                                <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 font-bold px-0.5 shrink-0">
                                   <span>→</span>
-                                  <span className="text-[9px] uppercase tracking-wider text-emerald-400/80">Backs</span>
+                                  <span className="text-[8.5px] uppercase tracking-wider text-emerald-400/80">Backs</span>
                                   <span>→</span>
                                 </div>
 
                                 {/* Step 3: Target Investor */}
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 shrink-0 min-w-0">
-                                  <span className="text-sm">🎯</span>
-                                  <span className="font-semibold text-emerald-300 truncate">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-950/40 border border-emerald-500/30 shrink-0 min-w-0">
+                                  <span className="text-xs">🎯</span>
+                                  <span className="font-semibold text-emerald-300 text-xs truncate">
                                     {investor?.name || 'Target Investor'}
                                   </span>
                                 </div>
@@ -472,10 +499,10 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
                             {/* 2. Syndicate Co-Investors Clique */}
                             <div>
-                              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-2">
+                              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
                                 🤝 Frequent Syndicate Co-Investors (Shared Deals):
                               </span>
-                              <div className="flex flex-wrap gap-2">
+                              <div className="flex flex-wrap gap-1.5">
                                 {(() => {
                                   const realSyndicates = unlockedContact?.syndicate_partners || [];
                                   let displaySyndicates = [];
@@ -514,11 +541,11 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                                       key={sIdx}
                                       href={`/directory?q=${encodeURIComponent(synd.name)}`}
                                       onClick={() => handleClose()}
-                                      className="px-2.5 py-1.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 text-purple-200 hover:text-white transition-all flex items-center gap-1.5 text-xs cursor-pointer group"
+                                      className="px-2.5 py-1 rounded-lg bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 text-purple-200 hover:text-white transition-all flex items-center gap-1.5 text-xs cursor-pointer group"
                                       title={`View ${synd.name} in Directory`}
                                     >
                                       <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-125 transition-transform" />
-                                      <span className="font-semibold">{synd.name}</span>
+                                      <span className="font-semibold text-xs">{synd.name}</span>
                                       <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">
                                         {synd.deal || `${synd.count || 2} deals`}
                                       </span>
@@ -536,12 +563,12 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                 })()}
 
                 {/* AI Pitch Hook Recommendation */}
-                <div className="p-5 rounded-2xl bg-gradient-to-r from-red-950/30 to-zinc-900 border border-red-500/20 relative overflow-hidden">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4" /> AI Outreach Insight
+                <div className="p-3.5 rounded-xl bg-gradient-to-r from-red-950/30 to-zinc-900 border border-red-500/20 relative overflow-hidden">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" /> AI Outreach Insight
                     </span>
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300">
                       94% Match Score
                     </span>
                   </div>
@@ -550,20 +577,25 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   </p>
                 </div>
 
-              </div>
-
-              {/* Evidence & Data Lineage Proof */}
-              <div className="px-6 sm:px-8 pb-4">
+                {/* Evidence & Data Lineage Proof — Now seamlessly inside scrollable body! */}
                 <InvestorEvidenceSection investorId={investor.id} investor={investor} />
+
               </div>
 
-              {/* Action Footer — Full Access */}
-              <div className="p-4 bg-zinc-950 border-t border-zinc-800 flex flex-col gap-2 shrink-0">
-                {/* Copy Email Button for Premium Users */}
+              {/* Action Footer — Full Access Sleek Single-Row Bar */}
+              <div className="px-4 py-2.5 sm:px-6 sm:py-3 bg-zinc-950/95 backdrop-blur-md border-t border-zinc-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 shrink-0">
+                {/* Left: Email Copy / Quick Contact Pill */}
                 {(() => {
                   const emailToCopy = unlockedContact?.email || investor.email;
                   const hasAnyEmail = emailToCopy || investor.has_email;
-                  if (!hasAnyEmail) return null;
+                  if (!hasAnyEmail) {
+                    return (
+                      <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+                        <ShieldCheck className="w-3.5 h-3.5 text-zinc-600" />
+                        <span>Verified Deal Signals Active</span>
+                      </div>
+                    );
+                  }
 
                   return (
                     <button
@@ -576,47 +608,48 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                           setIsAiPitchOpen(true);
                         }
                       }}
-                      className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:border-emerald-500/40"
-                      title={emailToCopy ? "Click to copy email address" : "Open AI Pitch Drafter"}
+                      className="group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 hover:border-emerald-500/40 transition-all text-xs cursor-pointer min-w-0 max-w-full sm:max-w-xs shadow-sm"
+                      title={emailToCopy ? `Click to copy ${emailToCopy}` : "Open AI Pitch Drafter"}
                     >
                       {copied ? (
                         <>
-                          <Check className="w-4 h-4 text-emerald-400" />
-                          <span className="text-emerald-400 font-bold">Email Copied to Clipboard!</span>
+                          <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span className="text-emerald-400 font-bold text-xs truncate">Copied to clipboard!</span>
                         </>
                       ) : (
                         <>
-                          <Mail className="w-4 h-4 text-emerald-400" />
-                          <span className="font-mono text-zinc-200">
-                            {emailToCopy ? `${emailToCopy} (Click to copy)` : `✉️ Verified Direct Mailbox (${investor.name})`}
+                          <Mail className="w-3.5 h-3.5 text-emerald-400 shrink-0 group-hover:scale-110 transition-transform" />
+                          <span className="font-mono text-zinc-200 text-xs truncate">
+                            {emailToCopy ? emailToCopy : `Verified Mailbox (${investor.name})`}
                           </span>
+                          <Copy className="w-3 h-3 text-zinc-500 group-hover:text-zinc-300 ml-auto shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
                         </>
                       )}
                     </button>
                   );
                 })()}
 
-                {/* Stacked Elongated Action Buttons */}
-                <div className="grid grid-cols-2 gap-2 w-full">
-                  {/* Add to CRM (Elongated Secondary) */}
+                {/* Right: Actions Row */}
+                <div className="flex items-center gap-2 justify-end">
+                  {/* Add to CRM */}
                   <button
                     onClick={handleToggleCrm}
-                    className={`w-full py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all cursor-pointer ${
+                    className={`h-8 sm:h-8.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all cursor-pointer ${
                       inCrm 
                         ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" 
-                        : "bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border-zinc-800"
+                        : "bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border-zinc-800"
                     }`}
                   >
-                    {inCrm ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <UserPlus className="w-4 h-4 text-zinc-400" />}
-                    <span>{inCrm ? "In CRM" : "+ Add to CRM"}</span>
+                    {inCrm ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <UserPlus className="w-3.5 h-3.5 text-zinc-400" />}
+                    <span>{inCrm ? "In CRM" : "+ CRM"}</span>
                   </button>
 
-                  {/* AI Draft Email Button (Elongated Primary) */}
+                  {/* AI Draft Email Button */}
                   <button
                     onClick={() => setIsAiPitchOpen(true)}
-                    className="w-full crm-btn-oil py-2.5 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 border border-white/10 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+                    className="h-8 sm:h-8.5 px-3.5 crm-btn-oil rounded-xl text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-white/10 shadow-md shadow-amber-500/10 hover:brightness-110 active:scale-95 transition-all cursor-pointer"
                   >
-                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                     <span>AI Draft Email</span>
                   </button>
                 </div>
@@ -625,24 +658,24 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
           ) : (
             <>
               {/* NON-PREMIUM: Premium Upsell Screen */}
-              <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-5">
+              <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5 space-y-4 custom-scrollbar">
                 
                 {/* Teaser — blurred preview of check size + stages */}
                 <div className="relative">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 blur-[6px] opacity-30 select-none pointer-events-none">
-                    <div className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800/80">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                        <DollarSign className="w-4 h-4 text-emerald-400" /> Check Size Range
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 blur-[6px] opacity-30 select-none pointer-events-none">
+                    <div className="p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
+                        <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Check Size Range
                       </div>
-                      <p className="text-lg font-bold text-emerald-400">$••k – $••M</p>
+                      <p className="text-base font-bold text-emerald-400">$••k – $••M</p>
                     </div>
-                    <div className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800/80">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                        <Layers className="w-4 h-4 text-amber-500" /> Preferred Stages
+                    <div className="p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
+                        <Layers className="w-3.5 h-3.5 text-amber-500" /> Preferred Stages
                       </div>
-                      <div className="flex flex-wrap gap-1.5 mt-1">
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">•••••</span>
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">•••••</span>
+                      <div className="flex flex-wrap gap-1 mt-0.5">
+                        <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">•••••</span>
+                        <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">•••••</span>
                       </div>
                     </div>
                   </div>
@@ -661,33 +694,33 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
                   <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
                   
-                  <div className="relative z-10 p-6 sm:p-8">
+                  <div className="relative z-10 p-5 sm:p-6">
                     {/* Header */}
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="p-2.5 rounded-xl bg-gradient-to-br from-red-500/20 to-amber-500/10 border border-red-500/20">
-                        <Crown className="w-6 h-6 text-red-400" />
+                    <div className="flex items-center gap-2.5 mb-4">
+                      <div className="p-2 rounded-xl bg-gradient-to-br from-red-500/20 to-amber-500/10 border border-red-500/20">
+                        <Crown className="w-5 h-5 text-red-400" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-white">Unlock Full Investor Profile</h3>
+                        <h3 className="text-base font-bold text-white">Unlock Full Investor Profile</h3>
                         <p className="text-xs text-zinc-400">Get premium access to {investor.name}'s complete dossier</p>
                       </div>
                     </div>
 
                     {/* Features Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5">
                       {[
                         { icon: Mail, label: 'Verified Email & Contact', desc: 'Direct email addresses' },
                         { icon: Zap, label: 'AI Cold Email Drafts', desc: 'One-click personalized outreach' },
                         { icon: BarChart3, label: 'Investment Thesis & Check Size', desc: 'Full due diligence data' },
                         { icon: Users, label: 'CRM Pipeline & Tracking', desc: 'Manage your investor funnel' },
                       ].map((feat, i) => (
-                        <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/5">
-                          <div className="p-1.5 rounded-lg bg-red-500/10 shrink-0">
-                            <feat.icon className="w-4 h-4 text-red-400" />
+                        <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
+                          <div className="p-1 rounded-lg bg-red-500/10 shrink-0">
+                            <feat.icon className="w-3.5 h-3.5 text-red-400" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-white leading-tight">{feat.label}</p>
-                            <p className="text-[11px] text-zinc-500">{feat.desc}</p>
+                            <p className="text-xs font-semibold text-white leading-tight">{feat.label}</p>
+                            <p className="text-[10px] text-zinc-500">{feat.desc}</p>
                           </div>
                         </div>
                       ))}
@@ -696,12 +729,12 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                     {/* CTA Button */}
                     <button
                       onClick={handleUnlockClick}
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] group cursor-pointer"
+                      className="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] group cursor-pointer"
                     >
                       <Lock className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                       Unlock Full Access — Lifetime Deal
                     </button>
-                    <p className="text-center text-[11px] text-zinc-500 mt-2">
+                    <p className="text-center text-[10px] text-zinc-500 mt-2">
                       One-time payment • Lifetime access to {INVESTOR_COUNT} investor profiles
                     </p>
                   </div>
