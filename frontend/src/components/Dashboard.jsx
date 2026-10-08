@@ -61,24 +61,26 @@ export function getVerificationInfo(investor) {
 const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = false, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
   return (
-    <div className="border-b border-zinc-200/50 dark:border-zinc-800/50 last:border-0 pb-5 mb-5 last:pb-0 last:mb-0">
+    <div className="border-b border-white/[0.06] last:border-0 pb-4 mb-4 last:pb-0 last:mb-0">
       <button 
         onClick={() => setExpanded(!expanded)} 
-        className="flex items-center justify-between w-full text-left py-1 group outline-none"
+        className="flex items-center justify-between w-full text-left p-2 rounded-xl group outline-none transition-all hover:bg-white/[0.04] border border-transparent hover:border-white/[0.06] cursor-pointer"
       >
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Icon className="w-4 h-4 text-zinc-400 group-hover:text-red-500 transition-colors" />
+        <h3 className="text-xs sm:text-sm font-semibold text-zinc-300 group-hover:text-white flex items-center gap-2.5 transition-colors">
+          <div className="p-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] group-hover:bg-red-500/10 group-hover:border-red-500/25 transition-all">
+            <Icon className="w-3.5 h-3.5 text-zinc-400 group-hover:text-red-400 transition-colors" />
+          </div>
           <span>{title}</span>
           {activeCount > 0 && (
-            <span className="bg-red-500/20 text-red-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-red-500/30">
+            <span className="bg-red-500/20 text-red-400 text-[10px] font-bold px-1.5 py-0.2 rounded-full border border-red-500/30 shadow-sm">
               {activeCount}
             </span>
           )}
         </h3>
-        <ChevronDown className={cn("w-4 h-4 text-zinc-400 transition-transform duration-200", expanded ? "rotate-180" : "")} />
+        <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 transition-transform duration-200", expanded ? "rotate-180" : "")} />
       </button>
       {expanded && (
-        <div className="mt-3 animate-in slide-in-from-top-2 fade-in duration-200">
+        <div className="mt-2.5 px-1 animate-in slide-in-from-top-2 fade-in duration-200">
           {children}
         </div>
       )}
@@ -801,13 +803,13 @@ export default function Dashboard() {
               placeholder="Search 90+ categories..."
               value={industrySearch}
               onChange={(e) => setIndustrySearch(e.target.value)}
-              className="w-full bg-zinc-900/80 border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-red-500/50"
+              className="w-full bg-white/[0.03] backdrop-blur-md border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-red-500/50 focus:bg-white/[0.06] transition-all"
             />
           </div>
         )}
 
         {filteredOptions.length === 0 ? (
-          <span className="text-xs text-zinc-500">No matching categories</span>
+          <span className="text-xs text-zinc-500 px-2 py-1 block">No matching categories</span>
         ) : (
           <div className="space-y-1 max-h-56 overflow-y-auto custom-scrollbar pr-1">
             {filteredOptions.map((item) => {
@@ -819,22 +821,24 @@ export default function Dashboard() {
                 <div 
                   key={item} 
                   className={cn(
-                    "flex items-center justify-between gap-2 px-2 py-1 rounded-lg cursor-pointer group transition-colors",
-                    isSelected ? "bg-red-500/10 text-white font-medium" : "hover:bg-zinc-900/60 text-zinc-400 hover:text-zinc-200"
+                    "flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl cursor-pointer group transition-all",
+                    isSelected 
+                      ? "bg-red-500/15 text-white font-medium border border-red-500/25 shadow-sm" 
+                      : "hover:bg-white/[0.04] text-zinc-400 hover:text-zinc-200 border border-transparent"
                   )}
                   onClick={() => toggleFilter(setter, item)}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div className={cn(
-                      "w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors shrink-0",
-                      isSelected ? "bg-red-500 border-red-500" : "border-zinc-700 group-hover:border-zinc-500"
+                      "w-3.5 h-3.5 rounded-md border flex items-center justify-center transition-colors shrink-0",
+                      isSelected ? "bg-red-500 border-red-500 shadow-sm" : "border-white/20 bg-white/[0.02] group-hover:border-white/40"
                     )}>
                       {isSelected && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
                     </div>
                     <span className="text-xs truncate">{label}</span>
                   </div>
                   {count !== null && count > 0 && (
-                    <span className="text-[10px] text-zinc-500 font-mono shrink-0">
+                    <span className="text-[10px] text-zinc-500 group-hover:text-zinc-400 font-mono shrink-0 px-1.5 py-0.5 rounded-md bg-white/[0.03]">
                       {count}
                     </span>
                   )}
@@ -864,169 +868,186 @@ export default function Dashboard() {
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileFiltersOpen(false)} />
       )}
         <aside className={cn(
-          "w-72 border-r border-white/5 bg-black flex-col",
+          "w-72 flex-col relative z-20 shrink-0 overflow-hidden",
+          "bg-zinc-950/65 backdrop-blur-2xl border-r border-white/[0.08]",
+          "shadow-[4px_0_24px_rgba(0,0,0,0.5)]",
           isMobileFiltersOpen ? "fixed inset-y-0 left-0 z-50 flex shadow-2xl" : "hidden md:flex"
         )}>
-          <div className="h-16 flex items-center justify-between px-6 border-b border-white/5 shrink-0">
-          <a href="/" className="flex items-center gap-2 text-white font-semibold text-lg tracking-tight hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-black text-sm font-bold">OA</span>
-            </div>
-            OpenAngels
-          </a>
-          <button onClick={() => setIsMobileFiltersOpen(false)} className="md:hidden p-2 text-zinc-500 hover:text-white">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        
-        {/* Filter Bar Header */}
-        <div className="px-6 py-2.5 border-b border-white/5 flex items-center justify-between shrink-0 bg-zinc-950/40">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
-              {viewMode === 'investors' ? 'Intelligence Radar' : 'Filters'}
-            </span>
-            {viewMode === 'founders' && totalActiveFilters > 0 && (
-              <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
-                {totalActiveFilters}
+          {/* Subtle Ambient Glassmorphism Atmospheric Glows */}
+          <div className="absolute top-0 -left-12 w-56 h-72 bg-red-600/[0.07] rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-24 -left-12 w-48 h-48 bg-rose-900/[0.08] rounded-full blur-3xl pointer-events-none" />
+
+          {/* Logo Header */}
+          <div className="h-16 flex items-center justify-between px-6 border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-md shrink-0 relative z-10">
+            <a href="/" className="flex items-center gap-2.5 text-white font-semibold text-lg tracking-tight hover:opacity-90 transition-all group">
+              <div className="w-8 h-8 bg-gradient-to-br from-white via-zinc-200 to-zinc-400 rounded-xl flex items-center justify-center shadow-md shadow-white/10 group-hover:scale-105 transition-transform">
+                <span className="text-black text-xs font-black tracking-tighter">OA</span>
+              </div>
+              <span className="font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+                OpenAngels
               </span>
+            </a>
+            <button 
+              onClick={() => setIsMobileFiltersOpen(false)} 
+              className="md:hidden p-2 text-zinc-500 hover:text-white transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          
+          {/* Filter Bar Header */}
+          <div className="px-6 py-2.5 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-white/[0.015] backdrop-blur-sm relative z-10">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
+                <SlidersHorizontal className="w-3 h-3 text-red-500/80" />
+                {viewMode === 'investors' ? 'Intelligence Radar' : 'Filters'}
+              </span>
+              {viewMode === 'founders' && totalActiveFilters > 0 && (
+                <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full shadow-sm">
+                  {totalActiveFilters}
+                </span>
+              )}
+            </div>
+            {viewMode === 'founders' && totalActiveFilters > 0 && (
+              <button 
+                onClick={resetAllFilters} 
+                className="text-xs text-red-400 hover:text-red-300 font-semibold transition-colors underline cursor-pointer"
+              >
+                Reset All
+              </button>
             )}
           </div>
-          {viewMode === 'founders' && totalActiveFilters > 0 && (
-            <button 
-              onClick={resetAllFilters} 
-              className="text-xs text-red-400 hover:text-red-300 font-semibold transition-colors underline"
-            >
-              Reset All
-            </button>
-          )}
-        </div>
 
-        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-          {viewMode === 'investors' ? (
-            <div className="space-y-6">
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-zinc-950 border border-emerald-500/20 shadow-sm">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Venture Radar Active</span>
+          <div className="flex-1 overflow-y-auto p-5 sm:p-6 custom-scrollbar relative z-10 space-y-4">
+            {viewMode === 'investors' ? (
+              <div className="space-y-5">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/30 via-zinc-950/60 to-zinc-950/80 backdrop-blur-md border border-emerald-500/20 shadow-sm">
+                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Venture Radar Active</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-400 leading-relaxed">
+                    Screening {radarCompanies.length} verified company dossiers with real-time funding rounds, 30/90-day signals, and Due Diligence memos.
+                  </p>
                 </div>
-                <p className="text-[11px] text-zinc-400 leading-relaxed">
-                  Screening {radarCompanies.length} verified company dossiers with real-time funding rounds, 30/90-day signals, and Due Diligence memos.
+
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-2.5">
+                    Sector Coverage
+                  </div>
+                  <div className="space-y-1.5">
+                    {[
+                      { id: 'all', label: 'All Companies', count: companyCategoryCounts.all },
+                      { id: 'ai', label: 'Frontier AI & Reasoning', count: companyCategoryCounts.ai },
+                      { id: 'devtools', label: 'Developer Tools & Agents', count: companyCategoryCounts.devtools },
+                      { id: 'fintech', label: 'Fintech & Infra', count: companyCategoryCounts.fintech },
+                      { id: 'marketplace', label: 'Marketplaces & Networks', count: companyCategoryCounts.marketplace },
+                      { id: 'saas', label: 'Enterprise B2B SaaS', count: companyCategoryCounts.saas }
+                    ].map(cat => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setCompanyCategoryFilter(cat.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer backdrop-blur-sm ${
+                          companyCategoryFilter === cat.id
+                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold shadow-sm'
+                            : 'text-zinc-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                        }`}
+                      >
+                        <span>{cat.label}</span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/[0.05] text-zinc-400 border border-white/[0.05]">
+                          {cat.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-white/[0.06]">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('founders')}
+                    className="w-full py-2.5 px-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] text-xs font-semibold text-zinc-300 hover:text-white flex items-center justify-center gap-2 transition-all cursor-pointer backdrop-blur-sm shadow-sm"
+                  >
+                    <Rocket className="w-3.5 h-3.5 text-red-400" />
+                    <span>Switch to Founder Directory</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <FilterSection title="Industry" icon={Briefcase} activeCount={selectedIndustries.length} defaultExpanded={false}>
+                  {/* Quick Chips */}
+                  <div className="mb-3">
+                    <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2">Popular Categories</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { slug: 'ai', name: 'AI', Icon: Cpu, color: 'text-red-400' },
+                        { slug: 'saas', name: 'SaaS', Icon: Cloud, color: 'text-rose-400' },
+                        { slug: 'b2b', name: 'B2B', Icon: Building2, color: 'text-amber-400' },
+                        { slug: 'developer-tools', name: 'DevTools', Icon: Code2, color: 'text-orange-400' },
+                        { slug: 'fintech', name: 'Fintech', Icon: CreditCard, color: 'text-emerald-400' },
+                        { slug: 'consumer', name: 'Consumer', Icon: ShoppingBag, color: 'text-purple-400' },
+                      ].map(chip => {
+                        const active = selectedIndustries.includes(chip.slug);
+                        const IconComponent = chip.Icon;
+                        return (
+                          <button
+                            key={chip.slug}
+                            onClick={() => toggleFilter(setSelectedIndustries, chip.slug)}
+                            className={cn(
+                              "px-2.5 py-1.5 text-xs rounded-xl border transition-all font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer backdrop-blur-sm",
+                              active 
+                                ? "bg-gradient-to-r from-red-600 to-rose-600 text-white border-red-500 shadow-red-500/20 shadow-md" 
+                                : "bg-white/[0.03] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/20 hover:bg-white/[0.07]"
+                            )}
+                          >
+                            <IconComponent className={cn("w-3.5 h-3.5 transition-colors", active ? "text-white" : chip.color)} />
+                            <span>{chip.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  {renderFilterOptions(uniqueIndustries, selectedIndustries, setSelectedIndustries, true)}
+                </FilterSection>
+
+                <FilterSection title="Stage" icon={Layers} activeCount={selectedStages.length} defaultExpanded={false}>
+                  {renderFilterOptions(uniqueStages, selectedStages, setSelectedStages)}
+                </FilterSection>
+
+                <FilterSection title="Location" icon={MapPin} activeCount={selectedLocations.length} defaultExpanded={false}>
+                  {renderFilterOptions(uniqueLocations, selectedLocations, setSelectedLocations)}
+                </FilterSection>
+
+                <FilterSection title="Check Size" icon={DollarSign} activeCount={selectedCheckSizes.length} defaultExpanded={false}>
+                  {renderFilterOptions(uniqueCheckSizes, selectedCheckSizes, setSelectedCheckSizes)}
+                </FilterSection>
+              </>
+            )}
+          </div>
+          
+          {!profile?.is_premium && (
+            <div className="p-4 sm:p-5 border-t border-white/[0.06] bg-white/[0.015] backdrop-blur-md relative z-10 shrink-0">
+              <div className="bg-gradient-to-b from-red-950/30 via-zinc-900/40 to-zinc-950/70 rounded-2xl p-4 border border-red-500/20 shadow-xl shadow-red-950/20 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl pointer-events-none" />
+                <h4 className="text-xs font-bold text-white mb-1 relative flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  Premium (Lifetime Access)
+                </h4>
+                <p className="text-[11px] text-zinc-400 mb-3 leading-relaxed relative">
+                  Unlimited access to {INVESTOR_COUNT} investor contacts, CRM, and AI drafting.
                 </p>
-              </div>
-
-              <div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-2.5">
-                  Sector Coverage
-                </div>
-                <div className="space-y-1.5">
-                  {[
-                    { id: 'all', label: 'All Companies', count: companyCategoryCounts.all },
-                    { id: 'ai', label: 'Frontier AI & Reasoning', count: companyCategoryCounts.ai },
-                    { id: 'devtools', label: 'Developer Tools & Agents', count: companyCategoryCounts.devtools },
-                    { id: 'fintech', label: 'Fintech & Infra', count: companyCategoryCounts.fintech },
-                    { id: 'marketplace', label: 'Marketplaces & Networks', count: companyCategoryCounts.marketplace },
-                    { id: 'saas', label: 'Enterprise B2B SaaS', count: companyCategoryCounts.saas }
-                  ].map(cat => (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setCompanyCategoryFilter(cat.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                        companyCategoryFilter === cat.id
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold shadow-sm'
-                          : 'text-zinc-400 hover:text-white hover:bg-zinc-900 border border-transparent'
-                      }`}
-                    >
-                      <span>{cat.label}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400">
-                        {cat.count}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-zinc-800/80">
-                <button
-                  type="button"
-                  onClick={() => setViewMode('founders')}
-                  className="w-full py-2.5 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/60 text-xs font-semibold text-zinc-300 hover:text-white flex items-center justify-center gap-2 transition-all cursor-pointer"
+                <button 
+                  onClick={() => { setCheckoutDiscount(''); setIsCheckoutOpen(true); }}
+                  className="crm-btn-oil block text-center w-full text-white border border-white/10 text-xs font-bold py-2 rounded-xl transition-all active:scale-[0.98] relative cursor-pointer shadow-md hover:brightness-110"
                 >
-                  <Rocket className="w-3.5 h-3.5 text-red-400" />
-                  <span>Switch to Founder Directory</span>
+                  Upgrade Now
                 </button>
               </div>
             </div>
-          ) : (
-            <>
-              <FilterSection title="Industry" icon={Briefcase} activeCount={selectedIndustries.length} defaultExpanded={false}>
-                {/* Quick Chips */}
-                <div className="mb-3">
-                  <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2">Popular Categories</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[
-                      { slug: 'ai', name: 'AI', Icon: Cpu, color: 'text-red-400' },
-                      { slug: 'saas', name: 'SaaS', Icon: Cloud, color: 'text-rose-400' },
-                      { slug: 'b2b', name: 'B2B', Icon: Building2, color: 'text-amber-400' },
-                      { slug: 'developer-tools', name: 'DevTools', Icon: Code2, color: 'text-orange-400' },
-                      { slug: 'fintech', name: 'Fintech', Icon: CreditCard, color: 'text-emerald-400' },
-                      { slug: 'consumer', name: 'Consumer', Icon: ShoppingBag, color: 'text-purple-400' },
-                    ].map(chip => {
-                      const active = selectedIndustries.includes(chip.slug);
-                      const IconComponent = chip.Icon;
-                      return (
-                        <button
-                          key={chip.slug}
-                          onClick={() => toggleFilter(setSelectedIndustries, chip.slug)}
-                          className={cn(
-                            "px-2.5 py-1.5 text-xs rounded-xl border transition-all font-semibold flex items-center gap-1.5 shadow-sm active:scale-95",
-                            active 
-                              ? "bg-gradient-to-r from-red-600 to-rose-600 text-white border-red-500 shadow-red-500/20 shadow-md" 
-                              : "bg-zinc-900/90 border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 hover:bg-zinc-800/80"
-                          )}
-                        >
-                          <IconComponent className={cn("w-3.5 h-3.5 transition-colors", active ? "text-white" : chip.color)} />
-                          <span>{chip.name}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-                {renderFilterOptions(uniqueIndustries, selectedIndustries, setSelectedIndustries, true)}
-              </FilterSection>
-
-              <FilterSection title="Stage" icon={Layers} activeCount={selectedStages.length} defaultExpanded={false}>
-                {renderFilterOptions(uniqueStages, selectedStages, setSelectedStages)}
-              </FilterSection>
-
-              <FilterSection title="Location" icon={MapPin} activeCount={selectedLocations.length} defaultExpanded={false}>
-                {renderFilterOptions(uniqueLocations, selectedLocations, setSelectedLocations)}
-              </FilterSection>
-
-              <FilterSection title="Check Size" icon={DollarSign} activeCount={selectedCheckSizes.length} defaultExpanded={false}>
-                {renderFilterOptions(uniqueCheckSizes, selectedCheckSizes, setSelectedCheckSizes)}
-              </FilterSection>
-            </>
           )}
-        </div>
-        
-        {!profile?.is_premium && (
-          <div className="p-6 border-t border-white/5">
-            <div className="bg-white/5 rounded-xl p-4 border border-white/5 relative overflow-hidden group">
-              <h4 className="text-sm font-bold text-white mb-1 relative flex items-center gap-2">
-                Premium (Lifetime Access)
-              </h4>
-              <p className="text-xs text-zinc-400 mb-3 leading-relaxed relative">Get unlimited access to investor contacts, CRM, and AI drafting.</p>
-              <button 
-                onClick={() => { setCheckoutDiscount(''); setIsCheckoutOpen(true); }}
-                className="crm-btn-oil block text-center w-full text-white border border-white/10 text-sm font-medium py-2 rounded-lg transition-all active:scale-[0.98] relative cursor-pointer"
-              >
-                Upgrade Now
-              </button>
-            </div>
-          </div>
-        )}
-      </aside>
+        </aside>
 
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header className="relative z-50 h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/60 backdrop-blur-xl shrink-0">
