@@ -51,9 +51,12 @@ export default async function InterceptedInvestorModal({ params }) {
     notFound();
   }
 
+  // Strictly strip email and phone from public props to protect paywall integrity
+  // Authenticated premium users unlock real email securely client-side via /api/investor/contact
   const safeInvestor = {
     ...rawInvestor,
-    email: rawInvestor.email || null,
+    email: null,
+    phone: null,
     linkedin_url: rawInvestor.linkedin_url || null,
     twitter_url: rawInvestor.twitter_url || null,
     website: rawInvestor.website || null,
@@ -63,5 +66,5 @@ export default async function InterceptedInvestorModal({ params }) {
     has_website: rawInvestor.has_website !== undefined ? rawInvestor.has_website : !!rawInvestor.website,
   };
 
-  return <InvestorProfileModal investor={safeInvestor} isStandalone={false} />;
+  return <InvestorProfileModal investor={safeInvestor} isStandalone={false} isPremium={false} />;
 }

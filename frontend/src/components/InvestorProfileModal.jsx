@@ -20,7 +20,7 @@ const supabase = createClient(
 
 const GUMROAD_URL = 'https://beatsprom.gumroad.com/l/vgobnh';
 
-export default function InvestorProfileModal({ investor, isStandalone = false, isPremium: isPremiumProp = true }) {
+export default function InvestorProfileModal({ investor, isStandalone = false, isPremium: isPremiumProp = false }) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [inCrm, setInCrm] = useState(false);
@@ -175,19 +175,30 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200" onClick={handleClose}>
+      <div 
+        className={isStandalone 
+          ? "w-full relative" 
+          : "fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+        } 
+        onClick={isStandalone ? undefined : handleClose}
+      >
         <div 
-          className="relative w-full max-w-2xl lg:max-w-3xl bg-zinc-950 border border-zinc-800/90 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in zoom-in-95 duration-200"
+          className={isStandalone
+            ? "relative w-full bg-zinc-950 border border-zinc-800/90 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+            : "relative w-full max-w-2xl lg:max-w-3xl bg-zinc-950 border border-zinc-800/90 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in zoom-in-95 duration-200"
+          }
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close Button */}
-          <button 
-            onClick={handleClose}
-            className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-30 p-1.5 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all border border-white/10 shadow-sm"
-            title="Close modal (Esc)"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          {/* Close Button only if NOT standalone */}
+          {!isStandalone && (
+            <button 
+              onClick={handleClose}
+              className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-30 p-1.5 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all border border-white/10 shadow-sm cursor-pointer"
+              title="Close modal (Esc)"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Dossier Header Banner — Sleek, Crisp & Compact */}
           <div className="relative px-4 py-3 sm:px-6 sm:py-3.5 bg-gradient-to-r from-red-950/30 via-zinc-900/50 to-zinc-950 border-b border-zinc-800/80 shrink-0 pr-12">
@@ -321,11 +332,8 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
             </div>
           </div>
 
-          {/* Content Area — Premium vs Upsell */}
-          {isPremium ? (
-            <>
-              {/* Dossier Body Content — Expanded Scrollable Viewport */}
-              <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3.5 sm:px-6 sm:py-4.5 space-y-3.5 sm:space-y-4 custom-scrollbar">
+          {/* Dossier Body Content — Expands naturally in standalone mode */}
+          <div className={`flex-1 min-h-0 ${isStandalone ? 'p-4 sm:p-6 space-y-4' : 'overflow-y-auto px-4 py-3.5 sm:px-6 sm:py-4.5 space-y-3.5 sm:space-y-4 custom-scrollbar'}`}>
                 
                 {/* Parameters Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -577,8 +585,32 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                   </p>
                 </div>
 
-                {/* Evidence & Data Lineage Proof — Now seamlessly inside scrollable body! */}
+                {/* Evidence & Data Lineage Proof */}
                 <InvestorEvidenceSection investorId={investor.id} investor={investor} />
+
+                {/* Lifetime Access Teaser Banner for Non-Premium */}
+                {!isPremium && (
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-red-950/40 via-zinc-900/90 to-zinc-950 border border-red-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-xl bg-gradient-to-br from-red-500/20 to-amber-500/10 border border-red-500/20 shrink-0">
+                        <Crown className="w-4 h-4 text-red-400" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-bold text-white">Unlock Verified Direct Email & Founder Pitch Tools</h4>
+                        <p className="text-[11px] text-zinc-400 leading-snug mt-0.5">
+                          Get instant access to {investor.name}'s verified mailbox, personalized AI pitch drafts, and {INVESTOR_COUNT} active angel profiles.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleUnlockClick}
+                      className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-red-500/20 transition-all shrink-0 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Unlock Full Access</span>
+                    </button>
+                  </div>
+                )}
 
               </div>
 
@@ -586,14 +618,29 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
               <div className="px-4 py-2.5 sm:px-6 sm:py-3 bg-zinc-950/95 backdrop-blur-md border-t border-zinc-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 shrink-0">
                 {/* Left: Email Copy / Quick Contact Pill */}
                 {(() => {
-                  const emailToCopy = unlockedContact?.email || investor.email;
-                  const hasAnyEmail = emailToCopy || investor.has_email;
+                  const emailToCopy = isPremium ? (unlockedContact?.email || investor.email) : null;
+                  const hasAnyEmail = investor.has_email || !!investor.email || !!unlockedContact?.email;
                   if (!hasAnyEmail) {
                     return (
                       <div className="flex items-center gap-1.5 text-xs text-zinc-500">
                         <ShieldCheck className="w-3.5 h-3.5 text-zinc-600" />
                         <span>Verified Deal Signals Active</span>
                       </div>
+                    );
+                  }
+
+                  if (!isPremium) {
+                    return (
+                      <button
+                        onClick={handleUnlockClick}
+                        className="group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-red-950/80 to-zinc-900 hover:from-red-900/90 hover:to-zinc-800 text-zinc-200 border border-red-500/30 hover:border-red-500/60 transition-all text-xs cursor-pointer shadow-sm min-w-0"
+                        title="Unlock verified email and direct founder pitch contact"
+                      >
+                        <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0 group-hover:rotate-12 transition-transform" />
+                        <span className="font-mono text-zinc-300 text-xs truncate">
+                          Direct Email: Verified (Protected — Unlock)
+                        </span>
+                      </button>
                     );
                   }
 
@@ -633,12 +680,13 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                 <div className="flex items-center gap-2 justify-end">
                   {/* Add to CRM */}
                   <button
-                    onClick={handleToggleCrm}
+                    onClick={isPremium ? handleToggleCrm : handleUnlockClick}
                     className={`h-8 sm:h-8.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all cursor-pointer ${
                       inCrm 
                         ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" 
                         : "bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border-zinc-800"
                     }`}
+                    title={isPremium ? "Add to CRM" : "Unlock CRM pipeline access"}
                   >
                     {inCrm ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <UserPlus className="w-3.5 h-3.5 text-zinc-400" />}
                     <span>{inCrm ? "In CRM" : "+ CRM"}</span>
@@ -646,102 +694,24 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
                   {/* AI Draft Email Button */}
                   <button
-                    onClick={() => setIsAiPitchOpen(true)}
+                    onClick={isPremium ? () => setIsAiPitchOpen(true) : handleUnlockClick}
                     className="h-8 sm:h-8.5 px-3.5 crm-btn-oil rounded-xl text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-white/10 shadow-md shadow-amber-500/10 hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                    title={isPremium ? "Open AI Pitch Drafter" : "Unlock AI Pitch Generator"}
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    <span>AI Draft Email</span>
+                    {isPremium ? (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                        <span>AI Draft Email</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-3.5 h-3.5 text-amber-400" />
+                        <span>AI Draft Email</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
-            </>
-          ) : (
-            <>
-              {/* NON-PREMIUM: Premium Upsell Screen */}
-              <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5 space-y-4 custom-scrollbar">
-                
-                {/* Teaser — blurred preview of check size + stages */}
-                <div className="relative">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 blur-[6px] opacity-30 select-none pointer-events-none">
-                    <div className="p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                        <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Check Size Range
-                      </div>
-                      <p className="text-base font-bold text-emerald-400">$••k – $••M</p>
-                    </div>
-                    <div className="p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                        <Layers className="w-3.5 h-3.5 text-amber-500" /> Preferred Stages
-                      </div>
-                      <div className="flex flex-wrap gap-1 mt-0.5">
-                        <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">•••••</span>
-                        <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">•••••</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Lock className="w-5 h-5 text-zinc-600" />
-                  </div>
-                </div>
-
-                {/* Evidence & Data Lineage Proof */}
-                <InvestorEvidenceSection investorId={investor.id} investor={investor} />
-
-                {/* Premium Upsell Card */}
-                <div className="relative rounded-2xl overflow-hidden border border-red-500/20">
-                  {/* Background gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-950/60 via-zinc-900 to-zinc-950" />
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
-                  <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
-                  
-                  <div className="relative z-10 p-5 sm:p-6">
-                    {/* Header */}
-                    <div className="flex items-center gap-2.5 mb-4">
-                      <div className="p-2 rounded-xl bg-gradient-to-br from-red-500/20 to-amber-500/10 border border-red-500/20">
-                        <Crown className="w-5 h-5 text-red-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-base font-bold text-white">Unlock Full Investor Profile</h3>
-                        <p className="text-xs text-zinc-400">Get premium access to {investor.name}'s complete dossier</p>
-                      </div>
-                    </div>
-
-                    {/* Features Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5">
-                      {[
-                        { icon: Mail, label: 'Verified Email & Contact', desc: 'Direct email addresses' },
-                        { icon: Zap, label: 'AI Cold Email Drafts', desc: 'One-click personalized outreach' },
-                        { icon: BarChart3, label: 'Investment Thesis & Check Size', desc: 'Full due diligence data' },
-                        { icon: Users, label: 'CRM Pipeline & Tracking', desc: 'Manage your investor funnel' },
-                      ].map((feat, i) => (
-                        <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
-                          <div className="p-1 rounded-lg bg-red-500/10 shrink-0">
-                            <feat.icon className="w-3.5 h-3.5 text-red-400" />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-xs font-semibold text-white leading-tight">{feat.label}</p>
-                            <p className="text-[10px] text-zinc-500">{feat.desc}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* CTA Button */}
-                    <button
-                      onClick={handleUnlockClick}
-                      className="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] group cursor-pointer"
-                    >
-                      <Lock className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                      Unlock Full Access — Lifetime Deal
-                    </button>
-                    <p className="text-center text-[10px] text-zinc-500 mt-2">
-                      One-time payment • Lifetime access to {INVESTOR_COUNT} investor profiles
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
         </div>
       </div>
 

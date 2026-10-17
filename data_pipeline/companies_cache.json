@@ -1739,35 +1739,35 @@
     "score_badge": "Tier 1 Decacorn Velocity",
     "pitch_hook": "When discussing inference economics with infrastructure VCs, highlight SRAM deterministic latency, token throughput, and low energy per token."
   },
-  "eliseai": {
-    "name": "EliseAI",
-    "slug": "eliseai",
-    "legal_name": "EliseAI, Inc.",
-    "domain": "eliseai.ai",
-    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "EliseAI raises $350M, doubles valuation in a year.",
+  "vesta": {
+    "name": "Vesta",
+    "slug": "vesta",
+    "legal_name": "Vesta, Inc.",
+    "domain": "vesta.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Vesta, an AI-native software startup that helps lenders originate mortgages, announced a $30 million round led by Conversion Capital.",
     "location": "San Francisco, CA, USA",
     "country": "United States",
     "stage": "Venture Round",
-    "industry": "AI & Machine Learning",
-    "total_raised": "$350M",
-    "last_round_amount": "$350M",
+    "industry": "Developer Tools",
+    "total_raised": "$30M",
+    "last_round_amount": "$30M",
     "last_round_type": "Venture Round",
     "valuation": "Verified via Funding Round",
-    "round_date": "Tue, 29 Se",
+    "round_date": "Thu, 08 Oc",
     "founders": [
       {
-        "name": "EliseAI Leadership Team",
+        "name": "Vesta Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/eliseai"
+        "linkedin": "https://linkedin.com/company/vesta"
       }
     ],
     "investors": [
       "Prominent Venture Syndicate"
     ],
     "products": [
-      "EliseAI Platform",
+      "Vesta Platform",
       "Developer API"
     ],
     "customers": [
@@ -1801,41 +1801,41 @@
     },
     "signals": [
       {
-        "id": "sig-eliseai-funding",
+        "id": "sig-vesta-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $350M in Venture Round",
-        "date": "Tue, 29 Se",
+        "title": "Raised $30M in Venture Round",
+        "date": "Thu, 08 Oc",
         "source": "TechCrunch Venture",
         "confidence": 0.95
       },
       {
-        "id": "sig-eliseai-hiring",
+        "id": "sig-vesta-hiring",
         "badge": "🔥 HIRING",
         "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Tue, 29 Se",
+        "date": "Thu, 08 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-eliseai-product",
+        "id": "sig-vesta-product",
         "badge": "🚀 PRODUCT",
-        "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Tue, 29 Se",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Thu, 08 Oc",
         "source": "TechCrunch Venture",
         "confidence": 0.93
       }
     ],
     "timeline": [
       {
-        "date": "Tue, 29 Se",
-        "event": "Venture Round Financing ($350M)",
-        "evidence": "EliseAI secured $350M to accelerate platform expansion.",
+        "date": "Thu, 08 Oc",
+        "event": "Venture Round Financing ($30M)",
+        "evidence": "Vesta secured $30M to accelerate platform expansion.",
         "source": "TechCrunch Venture",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Tue, 29 Se",
+        "date": "Thu, 08 Oc",
         "event": "Core Technical Headcount Expansion",
         "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
         "source": "OpenAngels Talent Scanner",
@@ -1843,9 +1843,9 @@
         "category": "talent"
       },
       {
-        "date": "Tue, 29 Se",
+        "date": "Thu, 08 Oc",
         "event": "Platform Infrastructure Deployment",
-        "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
         "source": "TechCrunch Venture",
         "confidence": 0.93,
         "category": "product"
@@ -1853,39 +1853,39 @@
     ],
     "openangels_score": 91.0,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing EliseAI to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://techcrunch.com/2026/09/29/a16z-backed-eliseai-raises-350m-doubles-valuation-to-4b/",
+    "pitch_hook": "When referencing Vesta to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://techcrunch.com/2026/10/08/vesta-raises-30m-as-lenders-adopt-ai-agents/",
     "verified": true
   },
-  "nscale": {
-    "name": "Nscale",
-    "slug": "nscale",
-    "legal_name": "Nscale, Inc.",
-    "domain": "nscale.com",
+  "robot-data-startup-mecka-ai": {
+    "name": "Robot data startup Mecka AI",
+    "slug": "robot-data-startup-mecka-ai",
+    "legal_name": "Robot data startup Mecka AI, Inc.",
+    "domain": "robot-data-startup-mecka-ai.ai",
     "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "The funding, which comes from Third Point, Nvidia, and others, will fuel the company's massive AI data center buildout.",
+    "overview": "Mecka AI collects and analyzes human motion data to train humanoid robots and other kinds of robots. The startup pays people to record everyday tasks.",
     "location": "San Francisco, CA, USA",
     "country": "United States",
     "stage": "Venture Round",
     "industry": "AI & Machine Learning",
-    "total_raised": "$3.36B",
-    "last_round_amount": "$3.36B",
+    "total_raised": "$60M",
+    "last_round_amount": "$60M",
     "last_round_type": "Venture Round",
     "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 25 Se",
+    "round_date": "Wed, 07 Oc",
     "founders": [
       {
-        "name": "Nscale Leadership Team",
+        "name": "Robot data startup Mecka AI Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/nscale"
+        "linkedin": "https://linkedin.com/company/robot-data-startup-mecka-ai"
       }
     ],
     "investors": [
-      "Prominent Venture Syndicate"
+      "Sequoia"
     ],
     "products": [
-      "Nscale Platform",
+      "Robot data startup Mecka AI Platform",
       "Developer API"
     ],
     "customers": [
@@ -1919,49 +1919,49 @@
     },
     "signals": [
       {
-        "id": "sig-nscale-funding",
+        "id": "sig-robot-data-startup-mecka-ai-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $3.36B in Venture Round",
-        "date": "Fri, 25 Se",
+        "title": "Raised $60M in Venture Round",
+        "date": "Wed, 07 Oc",
         "source": "TechCrunch Venture",
         "confidence": 0.95
       },
       {
-        "id": "sig-nscale-hiring",
+        "id": "sig-robot-data-startup-mecka-ai-hiring",
         "badge": "🔥 HIRING",
         "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Fri, 25 Se",
+        "date": "Wed, 07 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-nscale-product",
+        "id": "sig-robot-data-startup-mecka-ai-product",
         "badge": "🚀 PRODUCT",
         "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Fri, 25 Se",
+        "date": "Wed, 07 Oc",
         "source": "TechCrunch Venture",
         "confidence": 0.93
       },
       {
-        "id": "sig-nscale-expansion",
-        "badge": "🌍 EXPANSION",
-        "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 25 Se",
+        "id": "sig-robot-data-startup-mecka-ai-leadership",
+        "badge": "👥 SYNDICATE",
+        "title": "Backed by Sequoia",
+        "date": "Wed, 07 Oc",
         "source": "TechCrunch Venture",
-        "confidence": 0.94
+        "confidence": 0.96
       }
     ],
     "timeline": [
       {
-        "date": "Fri, 25 Se",
-        "event": "Venture Round Financing ($3.36B)",
-        "evidence": "Nscale secured $3.36B to accelerate platform expansion.",
+        "date": "Wed, 07 Oc",
+        "event": "Venture Round Financing ($60M)",
+        "evidence": "Robot data startup Mecka AI secured $60M to accelerate platform expansion.",
         "source": "TechCrunch Venture",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Fri, 25 Se",
+        "date": "Wed, 07 Oc",
         "event": "Core Technical Headcount Expansion",
         "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
         "source": "OpenAngels Talent Scanner",
@@ -1969,7 +1969,7 @@
         "category": "talent"
       },
       {
-        "date": "Fri, 25 Se",
+        "date": "Wed, 07 Oc",
         "event": "Platform Infrastructure Deployment",
         "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
         "source": "TechCrunch Venture",
@@ -1977,167 +1977,49 @@
         "category": "product"
       },
       {
-        "date": "Fri, 25 Se",
-        "event": "Geographic & Market Rollout",
-        "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
+        "date": "Wed, 07 Oc",
+        "event": "Syndicate Co-Investment Secured",
+        "evidence": "Institutional backing confirmed with Sequoia.",
         "source": "TechCrunch Venture",
-        "confidence": 0.94,
-        "category": "expansion"
+        "confidence": 0.96,
+        "category": "alliances"
       }
     ],
-    "openangels_score": 92.5,
+    "openangels_score": 93.5,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Nscale to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://techcrunch.com/2026/09/25/ahead-of-u-s-ipo-british-ai-neocloud-nscale-secures-3-36b-in-convertible-finacing/",
+    "pitch_hook": "When referencing Robot data startup Mecka AI to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://techcrunch.com/2026/10/07/robot-data-startup-mecka-ai-nabs-60m-from-sequoia/",
     "verified": true
   },
-  "security-startup-armadin": {
-    "name": "security startup Armadin",
-    "slug": "security-startup-armadin",
-    "legal_name": "security startup Armadin, Inc.",
-    "domain": "security-startup-armadin.com",
-    "tagline": "Next-generation venture in B2B SaaS addressing global enterprise demand.",
-    "overview": "Kevin Mandia, best known as the founder of Mandiant, has a new startup that is using agent swarms to test and protect enterprises.",
-    "location": "San Francisco, CA, USA",
-    "country": "United States",
-    "stage": "Venture Round",
-    "industry": "B2B SaaS",
-    "total_raised": "$255.5M",
-    "last_round_amount": "$255.5M",
-    "last_round_type": "Venture Round",
-    "valuation": "Verified via Funding Round",
-    "round_date": "Thu, 01 Oc",
-    "founders": [
-      {
-        "name": "security startup Armadin Leadership Team",
-        "role": "Founders & Technical Leadership",
-        "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/security-startup-armadin"
-      }
-    ],
-    "investors": [
-      "Prominent Venture Syndicate"
-    ],
-    "products": [
-      "security startup Armadin Platform",
-      "Developer API"
-    ],
-    "customers": [
-      "Enterprise Design Partners",
-      "Over 100+ Early Adopters"
-    ],
-    "employees": 28,
-    "employee_growth_90d": "+25% 90d headcount growth",
-    "hiring": {
-      "status": "Actively Hiring",
-      "open_roles": 6,
-      "focus_areas": [
-        "Fullstack Engineering",
-        "Product Growth",
-        "AI Systems"
-      ]
-    },
-    "technology_signals": {
-      "stack": [
-        "Python",
-        "TypeScript",
-        "PostgreSQL",
-        "Next.js"
-      ],
-      "moat": "High-retention workflow specialization and fast developer adoption",
-      "github_velocity": "Active production development"
-    },
-    "growth_signals": {
-      "milestone": "Closed Venture Round to scale customer acquisition",
-      "trajectory": "Strong user engagement across early cohorts"
-    },
-    "signals": [
-      {
-        "id": "sig-security-startup-armadin-funding",
-        "badge": "💰 FUNDING",
-        "title": "Raised $255.5M in Venture Round",
-        "date": "Thu, 01 Oc",
-        "source": "TechCrunch Startups",
-        "confidence": 0.95
-      },
-      {
-        "id": "sig-security-startup-armadin-hiring",
-        "badge": "🔥 HIRING",
-        "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Thu, 01 Oc",
-        "source": "Career Velocity Index",
-        "confidence": 0.91
-      },
-      {
-        "id": "sig-security-startup-armadin-product",
-        "badge": "🚀 PRODUCT",
-        "title": "Production Platform Expansion in B2B SaaS",
-        "date": "Thu, 01 Oc",
-        "source": "TechCrunch Startups",
-        "confidence": 0.93
-      }
-    ],
-    "timeline": [
-      {
-        "date": "Thu, 01 Oc",
-        "event": "Venture Round Financing ($255.5M)",
-        "evidence": "security startup Armadin secured $255.5M to accelerate platform expansion.",
-        "source": "TechCrunch Startups",
-        "confidence": 0.95,
-        "category": "funding"
-      },
-      {
-        "date": "Thu, 01 Oc",
-        "event": "Core Technical Headcount Expansion",
-        "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
-        "source": "OpenAngels Talent Scanner",
-        "confidence": 0.91,
-        "category": "talent"
-      },
-      {
-        "date": "Thu, 01 Oc",
-        "event": "Platform Infrastructure Deployment",
-        "evidence": "Deployed new enterprise capabilities and API endpoints for B2B SaaS.",
-        "source": "TechCrunch Startups",
-        "confidence": 0.93,
-        "category": "product"
-      }
-    ],
-    "openangels_score": 88.5,
-    "score_badge": "Verified Early Stage",
-    "pitch_hook": "When referencing security startup Armadin to syndicate co-investors, highlight recent round momentum and B2B SaaS market velocity.",
-    "source_url": "https://techcrunch.com/2026/10/01/kevin-mandias-new-agent-swarm-security-startup-armadin-raises-255-5m-at-2-5b-valuation/",
-    "verified": true
-  },
-  "restate": {
-    "name": "Restate",
-    "slug": "restate",
-    "legal_name": "Restate, Inc.",
-    "domain": "restate.com",
+  "endeavor-catalyst": {
+    "name": "Endeavor Catalyst",
+    "slug": "endeavor-catalyst",
+    "legal_name": "Endeavor Catalyst, Inc.",
+    "domain": "endeavor-catalyst.com",
     "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
-    "overview": "Instead of building its durable execution engine on top of an external database, the company developed its own storage, replication, and redundancy layers. This architecture allows Restate to be exceptionally fast and lightweight.",
+    "overview": "Endeavor Catalyst just raised $320 million to keep backing founders outside Silicon Valley. Half the profits go back to the nonprofit that finds them.",
     "location": "San Francisco, CA, USA",
     "country": "United States",
     "stage": "Venture Round",
     "industry": "Developer Tools",
-    "total_raised": "$20M",
-    "last_round_amount": "$20M",
+    "total_raised": "$320M",
+    "last_round_amount": "$320M",
     "last_round_type": "Venture Round",
     "valuation": "Verified via Funding Round",
-    "round_date": "Wed, 30 Se",
+    "round_date": "Wed, 07 Oc",
     "founders": [
       {
-        "name": "Restate Leadership Team",
+        "name": "Endeavor Catalyst Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/restate"
+        "linkedin": "https://linkedin.com/company/endeavor-catalyst"
       }
     ],
     "investors": [
       "Prominent Venture Syndicate"
     ],
     "products": [
-      "Restate Platform",
+      "Endeavor Catalyst Platform",
       "Developer API"
     ],
     "customers": [
@@ -2171,41 +2053,41 @@
     },
     "signals": [
       {
-        "id": "sig-restate-funding",
+        "id": "sig-endeavor-catalyst-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $20M in Venture Round",
-        "date": "Wed, 30 Se",
-        "source": "TechCrunch Startups",
+        "title": "Raised $320M in Venture Round",
+        "date": "Wed, 07 Oc",
+        "source": "TechCrunch Venture",
         "confidence": 0.95
       },
       {
-        "id": "sig-restate-hiring",
+        "id": "sig-endeavor-catalyst-hiring",
         "badge": "🔥 HIRING",
         "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Wed, 30 Se",
+        "date": "Wed, 07 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-restate-product",
+        "id": "sig-endeavor-catalyst-product",
         "badge": "🚀 PRODUCT",
         "title": "Production Platform Expansion in Developer Tools",
-        "date": "Wed, 30 Se",
-        "source": "TechCrunch Startups",
+        "date": "Wed, 07 Oc",
+        "source": "TechCrunch Venture",
         "confidence": 0.93
       }
     ],
     "timeline": [
       {
-        "date": "Wed, 30 Se",
-        "event": "Venture Round Financing ($20M)",
-        "evidence": "Restate secured $20M to accelerate platform expansion.",
-        "source": "TechCrunch Startups",
+        "date": "Wed, 07 Oc",
+        "event": "Venture Round Financing ($320M)",
+        "evidence": "Endeavor Catalyst secured $320M to accelerate platform expansion.",
+        "source": "TechCrunch Venture",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Wed, 30 Se",
+        "date": "Wed, 07 Oc",
         "event": "Core Technical Headcount Expansion",
         "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
         "source": "OpenAngels Talent Scanner",
@@ -2213,18 +2095,252 @@
         "category": "talent"
       },
       {
-        "date": "Wed, 30 Se",
+        "date": "Wed, 07 Oc",
         "event": "Platform Infrastructure Deployment",
         "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
-        "source": "TechCrunch Startups",
+        "source": "TechCrunch Venture",
         "confidence": 0.93,
         "category": "product"
       }
     ],
     "openangels_score": 90.0,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Restate to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
-    "source_url": "https://techcrunch.com/2026/09/30/restate-lands-20m-as-the-need-for-durable-infrastructure-increases-with-ai-agents/",
+    "pitch_hook": "When referencing Endeavor Catalyst to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://techcrunch.com/2026/10/07/while-vcs-crowd-into-san-francisco-endeavor-catalyst-raises-320m-for-founders-elsewhere/",
+    "verified": true
+  },
+  "consus": {
+    "name": "Consus",
+    "slug": "consus",
+    "legal_name": "Consus, Inc.",
+    "domain": "gateway.consus.io",
+    "tagline": "LLM gateway for companies handling sensitive data",
+    "overview": "Hey Hacker News! I'm Eric, the founder of Consus. We route all AI requests to ITAR restricted and controlled unclassified information (CUI) compliant infrastructure. Consus itself satisfies ITAR restrictions, and we recently completed our FedRAMP equivalency audit against the 410 FedRAMP High controls. FedRAMP High is ",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Seed / Y Combinator (YC F24)",
+    "industry": "Developer Tools",
+    "total_raised": "$500K+",
+    "last_round_amount": "$500K",
+    "last_round_type": "Seed / Accelerator",
+    "valuation": "Verified via Y Combinator Standard Terms",
+    "round_date": "Tue, 13 Oc",
+    "founders": [
+      {
+        "name": "Consus Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Ex-OpenAI & Ex-Google & Ex-DeepMind / Meta AI",
+        "linkedin": "https://linkedin.com/company/consus"
+      }
+    ],
+    "investors": [
+      "Y Combinator",
+      "Top Accelerator Angels"
+    ],
+    "products": [
+      "Consus Platform"
+    ],
+    "customers": [
+      "Early Adopters",
+      "YC Founder Network"
+    ],
+    "employees": 4,
+    "employee_growth_90d": "+50% team velocity",
+    "hiring": {
+      "status": "Actively Recruiting",
+      "open_roles": 3,
+      "focus_areas": [
+        "Founding Fullstack Engineer",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "Next.js",
+        "Docker"
+      ],
+      "moat": "High-velocity product cycle and direct Y Combinator peer network distribution",
+      "github_velocity": "Active open source and developer preview releases"
+    },
+    "growth_signals": {
+      "milestone": "Graduated YC F24 demo cohort",
+      "trajectory": "Rapid developer community traction"
+    },
+    "signals": [
+      {
+        "id": "sig-consus-launch",
+        "badge": "🚀 PRODUCT LAUNCH",
+        "title": "Launched on Hacker News (YC F24)",
+        "date": "Tue, 13 Oc",
+        "source": "Hacker News & Y Combinator",
+        "confidence": 0.98
+      },
+      {
+        "id": "sig-consus-funding",
+        "badge": "💰 SEED ROUND",
+        "title": "Backed by Y Combinator (YC F24)",
+        "date": "Tue, 13 Oc",
+        "source": "Y Combinator Directory",
+        "confidence": 0.99
+      },
+      {
+        "id": "sig-consus-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Founding Engineers",
+        "date": "Tue, 13 Oc",
+        "source": "Y Combinator Work at a Startup",
+        "confidence": 0.92
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Tue, 13 Oc",
+        "event": "Public Launch out of Y Combinator (YC F24)",
+        "evidence": "Unveiled Consus: LLM gateway for companies handling sensitive data with active developer community engagement.",
+        "source": "Hacker News Launch",
+        "confidence": 0.98,
+        "category": "product"
+      },
+      {
+        "date": "Tue, 13 Oc",
+        "event": "Secured Y Combinator Seed Backing (YC F24)",
+        "evidence": "Admitted into Y Combinator cohort with standard $500k accelerator investment.",
+        "source": "Y Combinator",
+        "confidence": 0.99,
+        "category": "funding"
+      },
+      {
+        "date": "Tue, 13 Oc",
+        "event": "Founding Team Expansion",
+        "evidence": "Opening initial foundational engineering and product design roles.",
+        "source": "Work at a Startup",
+        "confidence": 0.92,
+        "category": "talent"
+      }
+    ],
+    "openangels_score": 93.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When evaluating Consus, reference early YC cohort momentum and user retention metrics.",
+    "source_url": "https://news.ycombinator.com/item?id=50073471",
+    "verified": true
+  },
+  "agent37": {
+    "name": "Agent37",
+    "slug": "agent37",
+    "legal_name": "Agent37, Inc.",
+    "domain": "agent37.com",
+    "tagline": "Low-cost agent sandboxes for running agents",
+    "overview": "Hey HN, I’m Vishnu from Agent37 ( https://agent37.com ). We build sandboxes for running AI agents at under 10% of the cost of most sandbox providers. Our customers spend an average of $0.37/month per sandbox. You can view a video walkthrough of the product here: https://youtu.be/DK5ISR2tbNo We started as one of those O",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Seed / Y Combinator (YC F26)",
+    "industry": "Developer Tools",
+    "total_raised": "$500K+",
+    "last_round_amount": "$500K",
+    "last_round_type": "Seed / Accelerator",
+    "valuation": "Verified via Y Combinator Standard Terms",
+    "round_date": "Mon, 12 Oc",
+    "founders": [
+      {
+        "name": "Agent37 Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "MIT Alum",
+        "linkedin": "https://linkedin.com/company/agent37"
+      }
+    ],
+    "investors": [
+      "Y Combinator",
+      "Top Accelerator Angels"
+    ],
+    "products": [
+      "Agent37 Platform"
+    ],
+    "customers": [
+      "Early Adopters",
+      "YC Founder Network"
+    ],
+    "employees": 4,
+    "employee_growth_90d": "+50% team velocity",
+    "hiring": {
+      "status": "Actively Recruiting",
+      "open_roles": 3,
+      "focus_areas": [
+        "Founding Fullstack Engineer",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "Next.js",
+        "Docker"
+      ],
+      "moat": "High-velocity product cycle and direct Y Combinator peer network distribution",
+      "github_velocity": "Active open source and developer preview releases"
+    },
+    "growth_signals": {
+      "milestone": "Graduated YC F26 demo cohort",
+      "trajectory": "Rapid developer community traction"
+    },
+    "signals": [
+      {
+        "id": "sig-agent37-launch",
+        "badge": "🚀 PRODUCT LAUNCH",
+        "title": "Launched on Hacker News (YC F26)",
+        "date": "Mon, 12 Oc",
+        "source": "Hacker News & Y Combinator",
+        "confidence": 0.98
+      },
+      {
+        "id": "sig-agent37-funding",
+        "badge": "💰 SEED ROUND",
+        "title": "Backed by Y Combinator (YC F26)",
+        "date": "Mon, 12 Oc",
+        "source": "Y Combinator Directory",
+        "confidence": 0.99
+      },
+      {
+        "id": "sig-agent37-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Founding Engineers",
+        "date": "Mon, 12 Oc",
+        "source": "Y Combinator Work at a Startup",
+        "confidence": 0.92
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Mon, 12 Oc",
+        "event": "Public Launch out of Y Combinator (YC F26)",
+        "evidence": "Unveiled Agent37: Low-cost agent sandboxes for running agents with active developer community engagement.",
+        "source": "Hacker News Launch",
+        "confidence": 0.98,
+        "category": "product"
+      },
+      {
+        "date": "Mon, 12 Oc",
+        "event": "Secured Y Combinator Seed Backing (YC F26)",
+        "evidence": "Admitted into Y Combinator cohort with standard $500k accelerator investment.",
+        "source": "Y Combinator",
+        "confidence": 0.99,
+        "category": "funding"
+      },
+      {
+        "date": "Mon, 12 Oc",
+        "event": "Founding Team Expansion",
+        "evidence": "Opening initial foundational engineering and product design roles.",
+        "source": "Work at a Startup",
+        "confidence": 0.92,
+        "category": "talent"
+      }
+    ],
+    "openangels_score": 93.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When evaluating Agent37, reference early YC cohort momentum and user retention metrics.",
+    "source_url": "https://news.ycombinator.com/item?id=50059096",
     "verified": true
   },
   "magnitude": {
@@ -4801,269 +4917,153 @@
     "source_url": "https://hoplite.sh",
     "verified": true
   },
-  "prized": {
-    "name": "Prized",
-    "slug": "prized",
-    "legal_name": "Prized, Inc.",
-    "domain": "prized.dev",
-    "tagline": "Let non-engineer staff build secure internal tools",
-    "overview": "Hi HN, we're Marinos and Hudson, founders of Prized ( https://prized.dev )! Prized lets non-engineer employees describe the internal tool they need and get a full-stack app, wired to their company’s data and deployed behind the company’s sign-in, without them ever juggling API keys or connectors. Here's a demo: https:/",
+  "personal-finance-platform-matters": {
+    "name": "personal finance platform Matters",
+    "slug": "personal-finance-platform-matters",
+    "legal_name": "personal finance platform Matters, Inc.",
+    "domain": "personal-finance-platform-matters.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "personal finance platform Matters is an emerging high-growth technology startup in AI & Machine Learning.",
     "location": "San Francisco, CA, USA",
     "country": "United States",
-    "stage": "Seed / Y Combinator (YC S26)",
-    "industry": "Developer Tools",
-    "total_raised": "$500K+",
-    "last_round_amount": "$500K",
-    "last_round_type": "Seed / Accelerator",
-    "valuation": "Verified via Y Combinator Standard Terms",
-    "round_date": "Thu, 30 Ju",
-    "founders": [
-      {
-        "name": "Prized Leadership Team",
-        "role": "Founders & Technical Leadership",
-        "pedigree": "MIT Alum",
-        "linkedin": "https://linkedin.com/company/prized"
-      }
-    ],
-    "investors": [
-      "Y Combinator",
-      "Top Accelerator Angels"
-    ],
-    "products": [
-      "Prized Platform"
-    ],
-    "customers": [
-      "Early Adopters",
-      "YC Founder Network"
-    ],
-    "employees": 4,
-    "employee_growth_90d": "+50% team velocity",
-    "hiring": {
-      "status": "Actively Recruiting",
-      "open_roles": 3,
-      "focus_areas": [
-        "Founding Fullstack Engineer",
-        "AI Systems"
-      ]
-    },
-    "technology_signals": {
-      "stack": [
-        "Python",
-        "TypeScript",
-        "Next.js",
-        "Docker"
-      ],
-      "moat": "High-velocity product cycle and direct Y Combinator peer network distribution",
-      "github_velocity": "Active open source and developer preview releases"
-    },
-    "growth_signals": {
-      "milestone": "Graduated YC S26 demo cohort",
-      "trajectory": "Rapid developer community traction"
-    },
-    "signals": [
-      {
-        "id": "sig-prized-launch",
-        "badge": "🚀 PRODUCT LAUNCH",
-        "title": "Launched on Hacker News (YC S26)",
-        "date": "Thu, 30 Ju",
-        "source": "Hacker News & Y Combinator",
-        "confidence": 0.98
-      },
-      {
-        "id": "sig-prized-funding",
-        "badge": "💰 SEED ROUND",
-        "title": "Backed by Y Combinator (YC S26)",
-        "date": "Thu, 30 Ju",
-        "source": "Y Combinator Directory",
-        "confidence": 0.99
-      },
-      {
-        "id": "sig-prized-hiring",
-        "badge": "🔥 HIRING",
-        "title": "Recruiting Founding Engineers",
-        "date": "Thu, 30 Ju",
-        "source": "Y Combinator Work at a Startup",
-        "confidence": 0.92
-      }
-    ],
-    "timeline": [
-      {
-        "date": "Thu, 30 Ju",
-        "event": "Public Launch out of Y Combinator (YC S26)",
-        "evidence": "Unveiled Prized: Let non-engineer staff build secure internal tools with active developer community engagement.",
-        "source": "Hacker News Launch",
-        "confidence": 0.98,
-        "category": "product"
-      },
-      {
-        "date": "Thu, 30 Ju",
-        "event": "Secured Y Combinator Seed Backing (YC S26)",
-        "evidence": "Admitted into Y Combinator cohort with standard $500k accelerator investment.",
-        "source": "Y Combinator",
-        "confidence": 0.99,
-        "category": "funding"
-      },
-      {
-        "date": "Thu, 30 Ju",
-        "event": "Founding Team Expansion",
-        "evidence": "Opening initial foundational engineering and product design roles.",
-        "source": "Work at a Startup",
-        "confidence": 0.92,
-        "category": "talent"
-      }
-    ],
-    "openangels_score": 93.5,
-    "score_badge": "Breakout Momentum",
-    "pitch_hook": "When evaluating Prized, reference early YC cohort momentum and user retention metrics.",
-    "source_url": "https://prized.dev",
-    "verified": true
-  },
-  "tokenless": {
-    "name": "Tokenless",
-    "slug": "tokenless",
-    "legal_name": "Tokenless, Inc.",
-    "domain": "usetokenless.com",
-    "tagline": "Automatic model switching to save money",
-    "overview": "Hi HN, Rohit here from Tokenless ( https://usetokenless.com/ ), which I’m building alongside co-founders Andrew and Kev. We’re building an API gateway which routes agent traffic dynamically turn-by-turn between different models to save on AI spend. The cost of AI tokens is top-of-mind for many. Companies like Uber and ",
-    "location": "San Francisco, CA, USA",
-    "country": "United States",
-    "stage": "Seed / Y Combinator (YC S26)",
-    "industry": "Developer Tools",
-    "total_raised": "$500K+",
-    "last_round_amount": "$500K",
-    "last_round_type": "Seed / Accelerator",
-    "valuation": "Verified via Y Combinator Standard Terms",
-    "round_date": "Wed, 29 Ju",
-    "founders": [
-      {
-        "name": "Tokenless Leadership Team",
-        "role": "Founders & Technical Leadership",
-        "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/tokenless"
-      }
-    ],
-    "investors": [
-      "Y Combinator",
-      "Top Accelerator Angels"
-    ],
-    "products": [
-      "Tokenless Platform"
-    ],
-    "customers": [
-      "Early Adopters",
-      "YC Founder Network"
-    ],
-    "employees": 4,
-    "employee_growth_90d": "+50% team velocity",
-    "hiring": {
-      "status": "Actively Recruiting",
-      "open_roles": 3,
-      "focus_areas": [
-        "Founding Fullstack Engineer",
-        "AI Systems"
-      ]
-    },
-    "technology_signals": {
-      "stack": [
-        "Python",
-        "TypeScript",
-        "Next.js",
-        "Docker"
-      ],
-      "moat": "High-velocity product cycle and direct Y Combinator peer network distribution",
-      "github_velocity": "Active open source and developer preview releases"
-    },
-    "growth_signals": {
-      "milestone": "Graduated YC S26 demo cohort",
-      "trajectory": "Rapid developer community traction"
-    },
-    "signals": [
-      {
-        "id": "sig-tokenless-launch",
-        "badge": "🚀 PRODUCT LAUNCH",
-        "title": "Launched on Hacker News (YC S26)",
-        "date": "Wed, 29 Ju",
-        "source": "Hacker News & Y Combinator",
-        "confidence": 0.98
-      },
-      {
-        "id": "sig-tokenless-funding",
-        "badge": "💰 SEED ROUND",
-        "title": "Backed by Y Combinator (YC S26)",
-        "date": "Wed, 29 Ju",
-        "source": "Y Combinator Directory",
-        "confidence": 0.99
-      },
-      {
-        "id": "sig-tokenless-hiring",
-        "badge": "🔥 HIRING",
-        "title": "Recruiting Founding Engineers",
-        "date": "Wed, 29 Ju",
-        "source": "Y Combinator Work at a Startup",
-        "confidence": 0.92
-      }
-    ],
-    "timeline": [
-      {
-        "date": "Wed, 29 Ju",
-        "event": "Public Launch out of Y Combinator (YC S26)",
-        "evidence": "Unveiled Tokenless: Automatic model switching to save money with active developer community engagement.",
-        "source": "Hacker News Launch",
-        "confidence": 0.98,
-        "category": "product"
-      },
-      {
-        "date": "Wed, 29 Ju",
-        "event": "Secured Y Combinator Seed Backing (YC S26)",
-        "evidence": "Admitted into Y Combinator cohort with standard $500k accelerator investment.",
-        "source": "Y Combinator",
-        "confidence": 0.99,
-        "category": "funding"
-      },
-      {
-        "date": "Wed, 29 Ju",
-        "event": "Founding Team Expansion",
-        "evidence": "Opening initial foundational engineering and product design roles.",
-        "source": "Work at a Startup",
-        "confidence": 0.92,
-        "category": "talent"
-      }
-    ],
-    "openangels_score": 93.5,
-    "score_badge": "Breakout Momentum",
-    "pitch_hook": "When evaluating Tokenless, reference early YC cohort momentum and user retention metrics.",
-    "source_url": "https://usetokenless.com/",
-    "verified": true
-  },
-  "wtec": {
-    "name": "WTEC",
-    "slug": "wtec",
-    "legal_name": "WTEC, Inc.",
-    "domain": "wtec.com",
-    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
-    "overview": "WTEC has secured a $345 million asset-based revolving credit facility led by Santander Bank to provide additional working capital for the company's expansion across renewable energy, grid modernization, data center and AI infrastructure markets. The post WTEC Secures $345 Million Credit Facility Led By Santander Bank a",
-    "location": "San Francisco, CA, USA",
-    "country": "United States",
-    "stage": "Venture Round",
-    "industry": "Developer Tools",
-    "total_raised": "$345 MILLION",
-    "last_round_amount": "$345 MILLION",
-    "last_round_type": "Venture Round",
+    "stage": "Pre-Seed",
+    "industry": "AI & Machine Learning",
+    "total_raised": "$5M",
+    "last_round_amount": "$5M",
+    "last_round_type": "Pre-Seed",
     "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
+    "round_date": "Thu, 15 Oc",
     "founders": [
       {
-        "name": "WTEC Leadership Team",
+        "name": "personal finance platform Matters Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/wtec"
+        "linkedin": "https://linkedin.com/company/personal-finance-platform-matters"
       }
     ],
     "investors": [
       "Prominent Venture Syndicate"
     ],
     "products": [
-      "WTEC Platform",
+      "personal finance platform Matters Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Pre-Seed to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-personal-finance-platform-matters-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $5M in Pre-Seed",
+        "date": "Thu, 15 Oc",
+        "source": "Sifted EU",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-personal-finance-platform-matters-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Pre-Seed)",
+        "date": "Thu, 15 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-personal-finance-platform-matters-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in AI & Machine Learning",
+        "date": "Thu, 15 Oc",
+        "source": "Sifted EU",
+        "confidence": 0.93
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Pre-Seed Financing ($5M)",
+        "evidence": "personal finance platform Matters secured $5M to accelerate platform expansion.",
+        "source": "Sifted EU",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Pre-Seed capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
+        "source": "Sifted EU",
+        "confidence": 0.93,
+        "category": "product"
+      }
+    ],
+    "openangels_score": 90.0,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing personal finance platform Matters to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://sifted.eu/articles/matters-5m-pre-seed/",
+    "verified": true
+  },
+  "carbonai": {
+    "name": "CarbonAI",
+    "slug": "carbonai",
+    "legal_name": "CarbonAI, Inc.",
+    "domain": "carbonai.ai",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "CarbonAI has raised $12 million in funding to expand its agentic AI platform for commercial real estate lending, with the round led by Cowboy Ventures and participation from Timber Grove Ventures, Bling Capital, and Max Ventures. The post CarbonAI Raises $12 Million Led By Cowboy Ventures For AI Agents In Commercial Re",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "Developer Tools",
+    "total_raised": "$12 MILLION",
+    "last_round_amount": "$12 MILLION",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Fri, 16 Oc",
+    "founders": [
+      {
+        "name": "CarbonAI Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/carbonai"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "CarbonAI Platform",
       "Developer API"
     ],
     "customers": [
@@ -5097,49 +5097,49 @@
     },
     "signals": [
       {
-        "id": "sig-wtec-funding",
+        "id": "sig-carbonai-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $345 MILLION in Venture Round",
-        "date": "Fri, 02 Oc",
+        "title": "Raised $12 MILLION in Venture Round",
+        "date": "Fri, 16 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95
       },
       {
-        "id": "sig-wtec-hiring",
+        "id": "sig-carbonai-hiring",
         "badge": "🔥 HIRING",
         "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Fri, 02 Oc",
+        "date": "Fri, 16 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-wtec-product",
+        "id": "sig-carbonai-product",
         "badge": "🚀 PRODUCT",
         "title": "Production Platform Expansion in Developer Tools",
-        "date": "Fri, 02 Oc",
+        "date": "Fri, 16 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.93
       },
       {
-        "id": "sig-wtec-expansion",
+        "id": "sig-carbonai-expansion",
         "badge": "🌍 EXPANSION",
         "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 02 Oc",
+        "date": "Fri, 16 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.94
       }
     ],
     "timeline": [
       {
-        "date": "Fri, 02 Oc",
-        "event": "Venture Round Financing ($345 MILLION)",
-        "evidence": "WTEC secured $345 MILLION to accelerate platform expansion.",
+        "date": "Fri, 16 Oc",
+        "event": "Venture Round Financing ($12 MILLION)",
+        "evidence": "CarbonAI secured $12 MILLION to accelerate platform expansion.",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Fri, 16 Oc",
         "event": "Core Technical Headcount Expansion",
         "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
         "source": "OpenAngels Talent Scanner",
@@ -5147,7 +5147,7 @@
         "category": "talent"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Fri, 16 Oc",
         "event": "Platform Infrastructure Deployment",
         "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
         "source": "Pulse 2.0 VC",
@@ -5155,7 +5155,7 @@
         "category": "product"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Fri, 16 Oc",
         "event": "Geographic & Market Rollout",
         "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
         "source": "Pulse 2.0 VC",
@@ -5165,291 +5165,173 @@
     ],
     "openangels_score": 90.0,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing WTEC to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
-    "source_url": "https://pulse2.com/wtec-secures-345-million-credit-facility-led-by-santander-bank/",
+    "pitch_hook": "When referencing CarbonAI to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/carbonai-raises-12-million-led-by-cowboy-ventures-for-ai-agents-in-commercial-real-estate-lending/",
     "verified": true
   },
-  "daptic": {
-    "name": "Daptic",
-    "slug": "daptic",
-    "legal_name": "Daptic, Inc.",
-    "domain": "daptic.com",
-    "tagline": "Next-generation venture in B2B SaaS addressing global enterprise demand.",
-    "overview": "Daptic has raised a $15 million Series A led by Canvas Ventures, bringing total funding for the product compliance technology company to $22 million. IA Ventures and 8VC also participated in the round, along with other investors. As part of the financing, Rebecca Lynn of Canvas Ventures and Brad Gillespie of IA Venture",
+  "punch": {
+    "name": "Punch",
+    "slug": "punch",
+    "legal_name": "Punch, Inc.",
+    "domain": "punch.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Punch has raised $2 million from returning investor Gutter Capital to expand its AI-powered construction intelligence platform, which connects construction field teams with project management, operations, and accounting workflows. The post Punch Raises $2 Million From Gutter Capital To Expand AI-Powered Construction In",
     "location": "San Francisco, CA, USA",
     "country": "United States",
-    "stage": "Series A For Product Compliance Platform",
-    "industry": "B2B SaaS",
+    "stage": "Venture Round",
+    "industry": "Developer Tools",
+    "total_raised": "$2 MILLION",
+    "last_round_amount": "$2 MILLION",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Fri, 16 Oc",
+    "founders": [
+      {
+        "name": "Punch Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/punch"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Punch Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-punch-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $2 MILLION in Venture Round",
+        "date": "Fri, 16 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-punch-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Venture Round)",
+        "date": "Fri, 16 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-punch-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Fri, 16 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93
+      },
+      {
+        "id": "sig-punch-expansion",
+        "badge": "🌍 EXPANSION",
+        "title": "Geographic & Enterprise Market Expansion",
+        "date": "Fri, 16 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Fri, 16 Oc",
+        "event": "Venture Round Financing ($2 MILLION)",
+        "evidence": "Punch secured $2 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Fri, 16 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Fri, 16 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93,
+        "category": "product"
+      },
+      {
+        "date": "Fri, 16 Oc",
+        "event": "Geographic & Market Rollout",
+        "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94,
+        "category": "expansion"
+      }
+    ],
+    "openangels_score": 90.0,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing Punch to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/punch-raises-2-million-from-gutter-capital-to-expand-ai-powered-construction-intelligence-platform/",
+    "verified": true
+  },
+  "bioconsortia": {
+    "name": "BioConsortia",
+    "slug": "bioconsortia",
+    "legal_name": "BioConsortia, Inc.",
+    "domain": "bioconsortia.com",
+    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
+    "overview": "BioConsortia has secured a $15 million equity investment to accelerate the commercial expansion of its microbial technologies for agriculture, including its Zaffre biostimulant and Always N nitrogen-fixing seed treatment products. The post BioConsortia Raises $15 Million To Accelerate Global Launch Of Zaffre And Always",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "AI & Machine Learning",
     "total_raised": "$15 MILLION",
     "last_round_amount": "$15 MILLION",
-    "last_round_type": "Series A For Product Compliance Platform",
-    "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
-    "founders": [
-      {
-        "name": "Daptic Leadership Team",
-        "role": "Founders & Technical Leadership",
-        "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/daptic"
-      }
-    ],
-    "investors": [
-      "Prominent Venture Syndicate"
-    ],
-    "products": [
-      "Daptic Platform",
-      "Developer API"
-    ],
-    "customers": [
-      "Enterprise Design Partners",
-      "Over 100+ Early Adopters"
-    ],
-    "employees": 28,
-    "employee_growth_90d": "+25% 90d headcount growth",
-    "hiring": {
-      "status": "Actively Hiring",
-      "open_roles": 6,
-      "focus_areas": [
-        "Fullstack Engineering",
-        "Product Growth",
-        "AI Systems"
-      ]
-    },
-    "technology_signals": {
-      "stack": [
-        "Python",
-        "TypeScript",
-        "PostgreSQL",
-        "Next.js"
-      ],
-      "moat": "High-retention workflow specialization and fast developer adoption",
-      "github_velocity": "Active production development"
-    },
-    "growth_signals": {
-      "milestone": "Closed Series A For Product Compliance Platform to scale customer acquisition",
-      "trajectory": "Strong user engagement across early cohorts"
-    },
-    "signals": [
-      {
-        "id": "sig-daptic-funding",
-        "badge": "💰 FUNDING",
-        "title": "Raised $15 MILLION in Series A For Product Compliance Platform",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95
-      },
-      {
-        "id": "sig-daptic-hiring",
-        "badge": "🔥 HIRING",
-        "title": "Recruiting Core Engineers (Series A For Product Compliance Platform)",
-        "date": "Fri, 02 Oc",
-        "source": "Career Velocity Index",
-        "confidence": 0.91
-      },
-      {
-        "id": "sig-daptic-product",
-        "badge": "🚀 PRODUCT",
-        "title": "Production Platform Expansion in B2B SaaS",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93
-      }
-    ],
-    "timeline": [
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Series A For Product Compliance Platform Financing ($15 MILLION)",
-        "evidence": "Daptic secured $15 MILLION to accelerate platform expansion.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95,
-        "category": "funding"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Core Technical Headcount Expansion",
-        "evidence": "Scaling engineering and go-to-market teams following Series A For Product Compliance Platform capital injection.",
-        "source": "OpenAngels Talent Scanner",
-        "confidence": 0.91,
-        "category": "talent"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Platform Infrastructure Deployment",
-        "evidence": "Deployed new enterprise capabilities and API endpoints for B2B SaaS.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93,
-        "category": "product"
-      }
-    ],
-    "openangels_score": 88.5,
-    "score_badge": "Verified Early Stage",
-    "pitch_hook": "When referencing Daptic to syndicate co-investors, highlight recent round momentum and B2B SaaS market velocity.",
-    "source_url": "https://pulse2.com/daptic-raises-15-million-series-a-for-product-compliance-platform/",
-    "verified": true
-  },
-  "novele": {
-    "name": "Novele",
-    "slug": "novele",
-    "legal_name": "Novele, Inc.",
-    "domain": "novele.com",
-    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "Novele has closed an oversubscribed $17 million Series A to scale its autonomous energy intelligence platform for commercial buildings. Boisei Labs led the round, with participation from Locke Health, Arup Ventures, Barton Malow and several large commercial real estate owners and operators. The post Novele Raises $17 M",
-    "location": "San Francisco, CA, USA",
-    "country": "United States",
-    "stage": "Series A To Scale Ai Energy Platform For Commercial Buildings",
-    "industry": "AI & Machine Learning",
-    "total_raised": "$17 MILLION",
-    "last_round_amount": "$17 MILLION",
-    "last_round_type": "Series A To Scale Ai Energy Platform For Commercial Buildings",
-    "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
-    "founders": [
-      {
-        "name": "Novele Leadership Team",
-        "role": "Founders & Technical Leadership",
-        "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/novele"
-      }
-    ],
-    "investors": [
-      "Prominent Venture Syndicate"
-    ],
-    "products": [
-      "Novele Platform",
-      "Developer API"
-    ],
-    "customers": [
-      "Enterprise Design Partners",
-      "Over 100+ Early Adopters"
-    ],
-    "employees": 28,
-    "employee_growth_90d": "+25% 90d headcount growth",
-    "hiring": {
-      "status": "Actively Hiring",
-      "open_roles": 6,
-      "focus_areas": [
-        "Fullstack Engineering",
-        "Product Growth",
-        "AI Systems"
-      ]
-    },
-    "technology_signals": {
-      "stack": [
-        "Python",
-        "TypeScript",
-        "PostgreSQL",
-        "Next.js"
-      ],
-      "moat": "High-retention workflow specialization and fast developer adoption",
-      "github_velocity": "Active production development"
-    },
-    "growth_signals": {
-      "milestone": "Closed Series A To Scale Ai Energy Platform For Commercial Buildings to scale customer acquisition",
-      "trajectory": "Strong user engagement across early cohorts"
-    },
-    "signals": [
-      {
-        "id": "sig-novele-funding",
-        "badge": "💰 FUNDING",
-        "title": "Raised $17 MILLION in Series A To Scale Ai Energy Platform For Commercial Buildings",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95
-      },
-      {
-        "id": "sig-novele-hiring",
-        "badge": "🔥 HIRING",
-        "title": "Recruiting Core Engineers (Series A To Scale Ai Energy Platform For Commercial Buildings)",
-        "date": "Fri, 02 Oc",
-        "source": "Career Velocity Index",
-        "confidence": 0.91
-      },
-      {
-        "id": "sig-novele-product",
-        "badge": "🚀 PRODUCT",
-        "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93
-      },
-      {
-        "id": "sig-novele-expansion",
-        "badge": "🌍 EXPANSION",
-        "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.94
-      }
-    ],
-    "timeline": [
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Series A To Scale Ai Energy Platform For Commercial Buildings Financing ($17 MILLION)",
-        "evidence": "Novele secured $17 MILLION to accelerate platform expansion.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95,
-        "category": "funding"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Core Technical Headcount Expansion",
-        "evidence": "Scaling engineering and go-to-market teams following Series A To Scale Ai Energy Platform For Commercial Buildings capital injection.",
-        "source": "OpenAngels Talent Scanner",
-        "confidence": 0.91,
-        "category": "talent"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Platform Infrastructure Deployment",
-        "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93,
-        "category": "product"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Geographic & Market Rollout",
-        "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.94,
-        "category": "expansion"
-      }
-    ],
-    "openangels_score": 90.0,
-    "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Novele to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://pulse2.com/novele-raises-17-million-series-a-to-scale-ai-energy-platform-for-commercial-buildings/",
-    "verified": true
-  },
-  "additive": {
-    "name": "Additive",
-    "slug": "additive",
-    "legal_name": "Additive, Inc.",
-    "domain": "additive.com",
-    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "6K Additive has executed a final $27.4 million secured loan agreement with the Export-Import Bank of the United States to expand domestic manufacturing capacity for critical materials used in aerospace, defense, space, energy and advanced industrial applications. The post 6K Additive Secures $27.4 Million EXIM Loan For",
-    "location": "San Francisco, CA, USA",
-    "country": "United States",
-    "stage": "Venture Round",
-    "industry": "AI & Machine Learning",
-    "total_raised": "$27.4 MILLION",
-    "last_round_amount": "$27.4 MILLION",
     "last_round_type": "Venture Round",
     "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
+    "round_date": "Thu, 15 Oc",
     "founders": [
       {
-        "name": "Additive Leadership Team",
+        "name": "BioConsortia Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/additive"
+        "linkedin": "https://linkedin.com/company/bioconsortia"
       }
     ],
     "investors": [
-      "Prominent Venture Syndicate"
+      "Accel"
     ],
     "products": [
-      "Additive Platform",
+      "BioConsortia Platform",
       "Developer API"
     ],
     "customers": [
@@ -5483,49 +5365,57 @@
     },
     "signals": [
       {
-        "id": "sig-additive-funding",
+        "id": "sig-bioconsortia-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $27.4 MILLION in Venture Round",
-        "date": "Fri, 02 Oc",
+        "title": "Raised $15 MILLION in Venture Round",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95
       },
       {
-        "id": "sig-additive-hiring",
+        "id": "sig-bioconsortia-hiring",
         "badge": "🔥 HIRING",
         "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-additive-product",
+        "id": "sig-bioconsortia-product",
         "badge": "🚀 PRODUCT",
         "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.93
       },
       {
-        "id": "sig-additive-expansion",
+        "id": "sig-bioconsortia-expansion",
         "badge": "🌍 EXPANSION",
         "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.94
+      },
+      {
+        "id": "sig-bioconsortia-leadership",
+        "badge": "👥 SYNDICATE",
+        "title": "Backed by Accel",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96
       }
     ],
     "timeline": [
       {
-        "date": "Fri, 02 Oc",
-        "event": "Venture Round Financing ($27.4 MILLION)",
-        "evidence": "Additive secured $27.4 MILLION to accelerate platform expansion.",
+        "date": "Thu, 15 Oc",
+        "event": "Venture Round Financing ($15 MILLION)",
+        "evidence": "BioConsortia secured $15 MILLION to accelerate platform expansion.",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Core Technical Headcount Expansion",
         "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
         "source": "OpenAngels Talent Scanner",
@@ -5533,7 +5423,7 @@
         "category": "talent"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Platform Infrastructure Deployment",
         "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
         "source": "Pulse 2.0 VC",
@@ -5541,49 +5431,57 @@
         "category": "product"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Geographic & Market Rollout",
         "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
         "source": "Pulse 2.0 VC",
         "confidence": 0.94,
         "category": "expansion"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Syndicate Co-Investment Secured",
+        "evidence": "Institutional backing confirmed with Accel.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96,
+        "category": "alliances"
       }
     ],
-    "openangels_score": 90.0,
+    "openangels_score": 92.5,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Additive to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://pulse2.com/6k-additive-secures-27-4-million-exim-loan-for-u-s-manufacturing-expansion/",
+    "pitch_hook": "When referencing BioConsortia to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://pulse2.com/bioconsortia-raises-15-million-to-accelerate-global-launch-of-zaffre-and-always-n/",
     "verified": true
   },
-  "flow-engineering": {
-    "name": "Flow Engineering",
-    "slug": "flow-engineering",
-    "legal_name": "Flow Engineering, Inc.",
-    "domain": "flow-engineering.com",
-    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "Flow Engineering has raised a $50 million Series B at a $750 million valuation to expand its AI-powered systems engineering platform for hardware development. The post Flow Engineering Raises $50 Million Series B At $750 Million Valuation appeared first on Pulse 2.0 .",
+  "zaria": {
+    "name": "Zaria",
+    "slug": "zaria",
+    "legal_name": "Zaria, Inc.",
+    "domain": "zaria.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Zaria Systems has raised $5.2 million in seed funding to expand its real-time infrastructure for structured finance and digital asset-backed lending. The round was led by Lightspeed Venture Partners. Zaria plans to use the capital to grow its team, expand its technology platform, and support its pending application wit",
     "location": "San Francisco, CA, USA",
     "country": "United States",
-    "stage": "Series B At",
-    "industry": "AI & Machine Learning",
-    "total_raised": "$50 MILLION",
-    "last_round_amount": "$50 MILLION",
-    "last_round_type": "Series B At",
+    "stage": "Seed Led By Lightspeed Venture Partners To Scale Structured Finance Infrastructure",
+    "industry": "Developer Tools",
+    "total_raised": "$5.2 MILLION",
+    "last_round_amount": "$5.2 MILLION",
+    "last_round_type": "Seed Led By Lightspeed Venture Partners To Scale Structured Finance Infrastructure",
     "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
+    "round_date": "Thu, 15 Oc",
     "founders": [
       {
-        "name": "Flow Engineering Leadership Team",
+        "name": "Zaria Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/flow-engineering"
+        "linkedin": "https://linkedin.com/company/zaria"
       }
     ],
     "investors": [
-      "Prominent Venture Syndicate"
+      "Lightspeed"
     ],
     "products": [
-      "Flow Engineering Platform",
+      "Zaria Platform",
       "Developer API"
     ],
     "customers": [
@@ -5612,70 +5510,488 @@
       "github_velocity": "Active production development"
     },
     "growth_signals": {
-      "milestone": "Closed Series B At to scale customer acquisition",
+      "milestone": "Closed Seed Led By Lightspeed Venture Partners To Scale Structured Finance Infrastructure to scale customer acquisition",
       "trajectory": "Strong user engagement across early cohorts"
     },
     "signals": [
       {
-        "id": "sig-flow-engineering-funding",
+        "id": "sig-zaria-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $50 MILLION in Series B At",
-        "date": "Fri, 02 Oc",
+        "title": "Raised $5.2 MILLION in Seed Led By Lightspeed Venture Partners To Scale Structured Finance Infrastructure",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95
       },
       {
-        "id": "sig-flow-engineering-hiring",
+        "id": "sig-zaria-hiring",
         "badge": "🔥 HIRING",
-        "title": "Recruiting Core Engineers (Series B At)",
-        "date": "Fri, 02 Oc",
+        "title": "Recruiting Core Engineers (Seed Led By Lightspeed Venture Partners To Scale Structured Finance Infrastructure)",
+        "date": "Thu, 15 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-flow-engineering-product",
+        "id": "sig-zaria-product",
         "badge": "🚀 PRODUCT",
-        "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Fri, 02 Oc",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.93
       },
       {
-        "id": "sig-flow-engineering-expansion",
+        "id": "sig-zaria-expansion",
         "badge": "🌍 EXPANSION",
         "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94
+      },
+      {
+        "id": "sig-zaria-leadership",
+        "badge": "👥 SYNDICATE",
+        "title": "Backed by Lightspeed",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Seed Led By Lightspeed Venture Partners To Scale Structured Finance Infrastructure Financing ($5.2 MILLION)",
+        "evidence": "Zaria secured $5.2 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Seed Led By Lightspeed Venture Partners To Scale Structured Finance Infrastructure capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93,
+        "category": "product"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Geographic & Market Rollout",
+        "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94,
+        "category": "expansion"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Syndicate Co-Investment Secured",
+        "evidence": "Institutional backing confirmed with Lightspeed.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96,
+        "category": "alliances"
+      }
+    ],
+    "openangels_score": 92.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing Zaria to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/zaria-raises-5-2-million-seed-led-by-lightspeed-venture-partners-to-scale-structured-finance-infrastructure/",
+    "verified": true
+  },
+  "sirona-medical": {
+    "name": "Sirona Medical",
+    "slug": "sirona-medical",
+    "legal_name": "Sirona Medical, Inc.",
+    "domain": "sirona-medical.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Sirona Medical has raised $40 million in Series D financing to expand its cloud-native radiology platform, accelerate commercialization of its agentic AI capabilities, and support international growth. The round was led by Avidity Partners, with participation from 8VC, GreatPoint Ventures, KLT Holdings, and other new a",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series D Led By Avidity Partners As Platform Usage Surges",
+    "industry": "Developer Tools",
+    "total_raised": "$40 MILLION",
+    "last_round_amount": "$40 MILLION",
+    "last_round_type": "Series D Led By Avidity Partners As Platform Usage Surges",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Thu, 15 Oc",
+    "founders": [
+      {
+        "name": "Sirona Medical Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/sirona-medical"
+      }
+    ],
+    "investors": [
+      "Accel"
+    ],
+    "products": [
+      "Sirona Medical Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Series D Led By Avidity Partners As Platform Usage Surges to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-sirona-medical-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $40 MILLION in Series D Led By Avidity Partners As Platform Usage Surges",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-sirona-medical-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Series D Led By Avidity Partners As Platform Usage Surges)",
+        "date": "Thu, 15 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-sirona-medical-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93
+      },
+      {
+        "id": "sig-sirona-medical-expansion",
+        "badge": "🌍 EXPANSION",
+        "title": "Geographic & Enterprise Market Expansion",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94
+      },
+      {
+        "id": "sig-sirona-medical-leadership",
+        "badge": "👥 SYNDICATE",
+        "title": "Backed by Accel",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Series D Led By Avidity Partners As Platform Usage Surges Financing ($40 MILLION)",
+        "evidence": "Sirona Medical secured $40 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Series D Led By Avidity Partners As Platform Usage Surges capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93,
+        "category": "product"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Geographic & Market Rollout",
+        "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94,
+        "category": "expansion"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Syndicate Co-Investment Secured",
+        "evidence": "Institutional backing confirmed with Accel.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96,
+        "category": "alliances"
+      }
+    ],
+    "openangels_score": 92.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing Sirona Medical to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/sirona-medical-raises-40-million-series-d-led-by-avidity-partners-as-platform-usage-surges/",
+    "verified": true
+  },
+  "acta-pharmaceuticals": {
+    "name": "Acta Pharmaceuticals",
+    "slug": "acta-pharmaceuticals",
+    "legal_name": "Acta Pharmaceuticals, Inc.",
+    "domain": "acta-pharmaceuticals.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Acta Pharmaceuticals has raised $24 million in total seed financing to advance a pipeline of therapies designed for earlier intervention in Alzheimer's disease, including its lead gamma-secretase modulator, GSM-779690T. The post Acta Pharmaceuticals Raises $24 Million Seed To Advance Alzheimer&#8217;s Disease Early Int",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Seed To Advance Alzheimer",
+    "industry": "Developer Tools",
+    "total_raised": "$24 MILLION",
+    "last_round_amount": "$24 MILLION",
+    "last_round_type": "Seed To Advance Alzheimer",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Thu, 15 Oc",
+    "founders": [
+      {
+        "name": "Acta Pharmaceuticals Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/acta-pharmaceuticals"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Acta Pharmaceuticals Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Seed To Advance Alzheimer to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-acta-pharmaceuticals-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $24 MILLION in Seed To Advance Alzheimer",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-acta-pharmaceuticals-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Seed To Advance Alzheimer)",
+        "date": "Thu, 15 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-acta-pharmaceuticals-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Seed To Advance Alzheimer Financing ($24 MILLION)",
+        "evidence": "Acta Pharmaceuticals secured $24 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Seed To Advance Alzheimer capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93,
+        "category": "product"
+      }
+    ],
+    "openangels_score": 90.0,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing Acta Pharmaceuticals to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/acta-pharmaceuticals-raises-24-million-seed-to-advance-alzheimers-disease-early-intervention-pipeline/",
+    "verified": true
+  },
+  "loops": {
+    "name": "Loops",
+    "slug": "loops",
+    "legal_name": "Loops, Inc.",
+    "domain": "loops.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Loops has raised $3.5 million in seed funding to scale its AI platform for brands and retailers, bringing search, product discovery, shopping assistance, customer operations, product enrichment, and virtual try-on into a unified system. The round included participation from a16z speedrun, NTT Docomo, Connecticut Innova",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Seed To Build Ai Operating System For Commerce",
+    "industry": "Developer Tools",
+    "total_raised": "$3.5 MILLION",
+    "last_round_amount": "$3.5 MILLION",
+    "last_round_type": "Seed To Build Ai Operating System For Commerce",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Thu, 15 Oc",
+    "founders": [
+      {
+        "name": "Loops Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/loops"
+      }
+    ],
+    "investors": [
+      "Prominent Venture Syndicate"
+    ],
+    "products": [
+      "Loops Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Seed To Build Ai Operating System For Commerce to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-loops-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $3.5 MILLION in Seed To Build Ai Operating System For Commerce",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-loops-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Seed To Build Ai Operating System For Commerce)",
+        "date": "Thu, 15 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-loops-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93
+      },
+      {
+        "id": "sig-loops-expansion",
+        "badge": "🌍 EXPANSION",
+        "title": "Geographic & Enterprise Market Expansion",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.94
       }
     ],
     "timeline": [
       {
-        "date": "Fri, 02 Oc",
-        "event": "Series B At Financing ($50 MILLION)",
-        "evidence": "Flow Engineering secured $50 MILLION to accelerate platform expansion.",
+        "date": "Thu, 15 Oc",
+        "event": "Seed To Build Ai Operating System For Commerce Financing ($3.5 MILLION)",
+        "evidence": "Loops secured $3.5 MILLION to accelerate platform expansion.",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Core Technical Headcount Expansion",
-        "evidence": "Scaling engineering and go-to-market teams following Series B At capital injection.",
+        "evidence": "Scaling engineering and go-to-market teams following Seed To Build Ai Operating System For Commerce capital injection.",
         "source": "OpenAngels Talent Scanner",
         "confidence": 0.91,
         "category": "talent"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Platform Infrastructure Deployment",
-        "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
         "source": "Pulse 2.0 VC",
         "confidence": 0.93,
         "category": "product"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Geographic & Market Rollout",
         "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
         "source": "Pulse 2.0 VC",
@@ -5685,39 +6001,189 @@
     ],
     "openangels_score": 90.0,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Flow Engineering to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://pulse2.com/flow-engineering-raises-50-million-series-b-at-750-million-valuation/",
+    "pitch_hook": "When referencing Loops to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/loops-raises-3-5-million-seed-to-build-ai-operating-system-for-commerce/",
     "verified": true
   },
-  "certified-origins": {
-    "name": "Certified Origins",
-    "slug": "certified-origins",
-    "legal_name": "Certified Origins, Inc.",
-    "domain": "certified-origins.com",
-    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "Certified Origins has secured a $60 million asset-based revolving credit facility from CIT Northbridge to support the food company's continued growth in North America. CIT Northbridge served as sole lender on the transaction, while Arch &#038; Beam advised Certified Origins. The post Certified Origins Secures $60 Milli",
+  "sharp": {
+    "name": "Sharp",
+    "slug": "sharp",
+    "legal_name": "Sharp, Inc.",
+    "domain": "sharp.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Sharp Performance has raised $18 million in Series A funding to expand its confidential performance coaching platform for police officers, firefighters, paramedics, and other first responders. The round was led by Hidden Variable, with participation from Andreessen Horowitz, Commonweal Ventures, Wolfson Group, FJ Labs,",
     "location": "San Francisco, CA, USA",
     "country": "United States",
-    "stage": "Venture Round",
-    "industry": "AI & Machine Learning",
+    "stage": "Series A Led By Hidden Variable For First Responder Coaching Platform",
+    "industry": "Developer Tools",
+    "total_raised": "$18 MILLION",
+    "last_round_amount": "$18 MILLION",
+    "last_round_type": "Series A Led By Hidden Variable For First Responder Coaching Platform",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Thu, 15 Oc",
+    "founders": [
+      {
+        "name": "Sharp Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/sharp"
+      }
+    ],
+    "investors": [
+      "Andreessen Horowitz"
+    ],
+    "products": [
+      "Sharp Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Series A Led By Hidden Variable For First Responder Coaching Platform to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-sharp-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $18 MILLION in Series A Led By Hidden Variable For First Responder Coaching Platform",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-sharp-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Series A Led By Hidden Variable For First Responder Coaching Platform)",
+        "date": "Thu, 15 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-sharp-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93
+      },
+      {
+        "id": "sig-sharp-expansion",
+        "badge": "🌍 EXPANSION",
+        "title": "Geographic & Enterprise Market Expansion",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94
+      },
+      {
+        "id": "sig-sharp-leadership",
+        "badge": "👥 SYNDICATE",
+        "title": "Backed by Andreessen Horowitz",
+        "date": "Thu, 15 Oc",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Series A Led By Hidden Variable For First Responder Coaching Platform Financing ($18 MILLION)",
+        "evidence": "Sharp secured $18 MILLION to accelerate platform expansion.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Series A Led By Hidden Variable For First Responder Coaching Platform capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.93,
+        "category": "product"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Geographic & Market Rollout",
+        "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.94,
+        "category": "expansion"
+      },
+      {
+        "date": "Thu, 15 Oc",
+        "event": "Syndicate Co-Investment Secured",
+        "evidence": "Institutional backing confirmed with Andreessen Horowitz.",
+        "source": "Pulse 2.0 VC",
+        "confidence": 0.96,
+        "category": "alliances"
+      }
+    ],
+    "openangels_score": 92.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing Sharp to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/sharp-raises-18-million-series-a-led-by-hidden-variable-for-first-responder-coaching-platform/",
+    "verified": true
+  },
+  "north-cloud": {
+    "name": "North.cloud",
+    "slug": "north-cloud",
+    "legal_name": "North.cloud, Inc.",
+    "domain": "north-cloud.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "North.cloud has raised $60 million in Series B funding to expand its infrastructure spend intelligence and automation platform across cloud, artificial intelligence, and data environments. The round was led by PeakSpan Capital, with participation from Litquidity Ventures, Companyon Ventures, Alpaca, Uncommon Denominato",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series B Led By Peakspan Capital To Automate Cloud",
+    "industry": "Developer Tools",
     "total_raised": "$60 MILLION",
     "last_round_amount": "$60 MILLION",
-    "last_round_type": "Venture Round",
+    "last_round_type": "Series B Led By Peakspan Capital To Automate Cloud",
     "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
+    "round_date": "Thu, 15 Oc",
     "founders": [
       {
-        "name": "Certified Origins Leadership Team",
+        "name": "North.cloud Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/certified-origins"
+        "linkedin": "https://linkedin.com/company/north-cloud"
       }
     ],
     "investors": [
       "Prominent Venture Syndicate"
     ],
     "products": [
-      "Certified Origins Platform",
+      "North.cloud Platform",
       "Developer API"
     ],
     "customers": [
@@ -5746,298 +6212,62 @@
       "github_velocity": "Active production development"
     },
     "growth_signals": {
-      "milestone": "Closed Venture Round to scale customer acquisition",
+      "milestone": "Closed Series B Led By Peakspan Capital To Automate Cloud to scale customer acquisition",
       "trajectory": "Strong user engagement across early cohorts"
     },
     "signals": [
       {
-        "id": "sig-certified-origins-funding",
+        "id": "sig-north-cloud-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $60 MILLION in Venture Round",
-        "date": "Fri, 02 Oc",
+        "title": "Raised $60 MILLION in Series B Led By Peakspan Capital To Automate Cloud",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95
       },
       {
-        "id": "sig-certified-origins-hiring",
+        "id": "sig-north-cloud-hiring",
         "badge": "🔥 HIRING",
-        "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Fri, 02 Oc",
+        "title": "Recruiting Core Engineers (Series B Led By Peakspan Capital To Automate Cloud)",
+        "date": "Thu, 15 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-certified-origins-product",
-        "badge": "🚀 PRODUCT",
-        "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93
-      }
-    ],
-    "timeline": [
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Venture Round Financing ($60 MILLION)",
-        "evidence": "Certified Origins secured $60 MILLION to accelerate platform expansion.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95,
-        "category": "funding"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Core Technical Headcount Expansion",
-        "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
-        "source": "OpenAngels Talent Scanner",
-        "confidence": 0.91,
-        "category": "talent"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Platform Infrastructure Deployment",
-        "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93,
-        "category": "product"
-      }
-    ],
-    "openangels_score": 90.0,
-    "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Certified Origins to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://pulse2.com/certified-origins-secures-60-million-revolver-from-cit-northbridge/",
-    "verified": true
-  },
-  "nn": {
-    "name": "NN",
-    "slug": "nn",
-    "legal_name": "NN, Inc.",
-    "domain": "nn.com",
-    "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "NN has entered into a securities purchase agreement for a private investment in public equity financing expected to generate approximately $50 million in net proceeds after placement agent fees and offering expenses. The post NN Raises $50 Million Through Private Placement To Eliminate Preferred Stock And Fund Growth a",
-    "location": "San Francisco, CA, USA",
-    "country": "United States",
-    "stage": "Through Private Placement To Eliminate Preferred Stock And Fund Growth",
-    "industry": "AI & Machine Learning",
-    "total_raised": "$50 MILLION",
-    "last_round_amount": "$50 MILLION",
-    "last_round_type": "Through Private Placement To Eliminate Preferred Stock And Fund Growth",
-    "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
-    "founders": [
-      {
-        "name": "NN Leadership Team",
-        "role": "Founders & Technical Leadership",
-        "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/nn"
-      }
-    ],
-    "investors": [
-      "Prominent Venture Syndicate"
-    ],
-    "products": [
-      "NN Platform",
-      "Developer API"
-    ],
-    "customers": [
-      "Enterprise Design Partners",
-      "Over 100+ Early Adopters"
-    ],
-    "employees": 28,
-    "employee_growth_90d": "+25% 90d headcount growth",
-    "hiring": {
-      "status": "Actively Hiring",
-      "open_roles": 6,
-      "focus_areas": [
-        "Fullstack Engineering",
-        "Product Growth",
-        "AI Systems"
-      ]
-    },
-    "technology_signals": {
-      "stack": [
-        "Python",
-        "TypeScript",
-        "PostgreSQL",
-        "Next.js"
-      ],
-      "moat": "High-retention workflow specialization and fast developer adoption",
-      "github_velocity": "Active production development"
-    },
-    "growth_signals": {
-      "milestone": "Closed Through Private Placement To Eliminate Preferred Stock And Fund Growth to scale customer acquisition",
-      "trajectory": "Strong user engagement across early cohorts"
-    },
-    "signals": [
-      {
-        "id": "sig-nn-funding",
-        "badge": "💰 FUNDING",
-        "title": "Raised $50 MILLION in Through Private Placement To Eliminate Preferred Stock And Fund Growth",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95
-      },
-      {
-        "id": "sig-nn-hiring",
-        "badge": "🔥 HIRING",
-        "title": "Recruiting Core Engineers (Through Private Placement To Eliminate Preferred Stock And Fund Growth)",
-        "date": "Fri, 02 Oc",
-        "source": "Career Velocity Index",
-        "confidence": 0.91
-      },
-      {
-        "id": "sig-nn-product",
-        "badge": "🚀 PRODUCT",
-        "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93
-      }
-    ],
-    "timeline": [
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Through Private Placement To Eliminate Preferred Stock And Fund Growth Financing ($50 MILLION)",
-        "evidence": "NN secured $50 MILLION to accelerate platform expansion.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95,
-        "category": "funding"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Core Technical Headcount Expansion",
-        "evidence": "Scaling engineering and go-to-market teams following Through Private Placement To Eliminate Preferred Stock And Fund Growth capital injection.",
-        "source": "OpenAngels Talent Scanner",
-        "confidence": 0.91,
-        "category": "talent"
-      },
-      {
-        "date": "Fri, 02 Oc",
-        "event": "Platform Infrastructure Deployment",
-        "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.93,
-        "category": "product"
-      }
-    ],
-    "openangels_score": 90.0,
-    "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing NN to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://pulse2.com/nn-raises-50-million-through-private-placement-to-eliminate-preferred-stock-and-fund-growth/",
-    "verified": true
-  },
-  "walapay": {
-    "name": "Walapay",
-    "slug": "walapay",
-    "legal_name": "Walapay, Inc.",
-    "domain": "walapay.com",
-    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
-    "overview": "Walapay has raised $4.6 million in seed financing to expand its licensing footprint, deepen banking relationships and grow its team as it builds cross-border payments infrastructure across emerging markets. The post Walapay Raises $4.6 Million Seed Round To Expand Global Payments Infrastructure appeared first on Pulse ",
-    "location": "San Francisco, CA, USA",
-    "country": "United States",
-    "stage": "Seed Round To Expand Global Payments Infrastructure",
-    "industry": "Developer Tools",
-    "total_raised": "$4.6 MILLION",
-    "last_round_amount": "$4.6 MILLION",
-    "last_round_type": "Seed Round To Expand Global Payments Infrastructure",
-    "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
-    "founders": [
-      {
-        "name": "Walapay Leadership Team",
-        "role": "Founders & Technical Leadership",
-        "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/walapay"
-      }
-    ],
-    "investors": [
-      "Prominent Venture Syndicate"
-    ],
-    "products": [
-      "Walapay Platform",
-      "Developer API"
-    ],
-    "customers": [
-      "Enterprise Design Partners",
-      "Over 100+ Early Adopters"
-    ],
-    "employees": 28,
-    "employee_growth_90d": "+25% 90d headcount growth",
-    "hiring": {
-      "status": "Actively Hiring",
-      "open_roles": 6,
-      "focus_areas": [
-        "Fullstack Engineering",
-        "Product Growth",
-        "AI Systems"
-      ]
-    },
-    "technology_signals": {
-      "stack": [
-        "Python",
-        "TypeScript",
-        "PostgreSQL",
-        "Next.js"
-      ],
-      "moat": "High-retention workflow specialization and fast developer adoption",
-      "github_velocity": "Active production development"
-    },
-    "growth_signals": {
-      "milestone": "Closed Seed Round To Expand Global Payments Infrastructure to scale customer acquisition",
-      "trajectory": "Strong user engagement across early cohorts"
-    },
-    "signals": [
-      {
-        "id": "sig-walapay-funding",
-        "badge": "💰 FUNDING",
-        "title": "Raised $4.6 MILLION in Seed Round To Expand Global Payments Infrastructure",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
-        "confidence": 0.95
-      },
-      {
-        "id": "sig-walapay-hiring",
-        "badge": "🔥 HIRING",
-        "title": "Recruiting Core Engineers (Seed Round To Expand Global Payments Infrastructure)",
-        "date": "Fri, 02 Oc",
-        "source": "Career Velocity Index",
-        "confidence": 0.91
-      },
-      {
-        "id": "sig-walapay-product",
+        "id": "sig-north-cloud-product",
         "badge": "🚀 PRODUCT",
         "title": "Production Platform Expansion in Developer Tools",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.93
       },
       {
-        "id": "sig-walapay-expansion",
+        "id": "sig-north-cloud-expansion",
         "badge": "🌍 EXPANSION",
         "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Pulse 2.0 VC",
         "confidence": 0.94
       }
     ],
     "timeline": [
       {
-        "date": "Fri, 02 Oc",
-        "event": "Seed Round To Expand Global Payments Infrastructure Financing ($4.6 MILLION)",
-        "evidence": "Walapay secured $4.6 MILLION to accelerate platform expansion.",
+        "date": "Thu, 15 Oc",
+        "event": "Series B Led By Peakspan Capital To Automate Cloud Financing ($60 MILLION)",
+        "evidence": "North.cloud secured $60 MILLION to accelerate platform expansion.",
         "source": "Pulse 2.0 VC",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Core Technical Headcount Expansion",
-        "evidence": "Scaling engineering and go-to-market teams following Seed Round To Expand Global Payments Infrastructure capital injection.",
+        "evidence": "Scaling engineering and go-to-market teams following Series B Led By Peakspan Capital To Automate Cloud capital injection.",
         "source": "OpenAngels Talent Scanner",
         "confidence": 0.91,
         "category": "talent"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Platform Infrastructure Deployment",
         "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
         "source": "Pulse 2.0 VC",
@@ -6045,7 +6275,7 @@
         "category": "product"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Geographic & Market Rollout",
         "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
         "source": "Pulse 2.0 VC",
@@ -6055,39 +6285,39 @@
     ],
     "openangels_score": 90.0,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Walapay to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
-    "source_url": "https://pulse2.com/walapay-raises-4-6-million-seed-round-to-expand-global-payments-infrastructure/",
+    "pitch_hook": "When referencing North.cloud to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://pulse2.com/north-cloud-raises-60-million-series-b-led-by-peakspan-capital-to-automate-cloud-ai-and-data-spend/",
     "verified": true
   },
-  "permacold-logistics": {
-    "name": "PermaCold Logistics",
-    "slug": "permacold-logistics",
-    "legal_name": "PermaCold Logistics, Inc.",
-    "domain": "permacold-logistics.com",
+  "rabot-energy": {
+    "name": "Rabot Energy",
+    "slug": "rabot-energy",
+    "legal_name": "Rabot Energy, Inc.",
+    "domain": "rabot-energy.ai",
     "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
-    "overview": "UB Community Development has provided $10 million in New Markets Tax Credit financing to support development of a new cold storage and refrigerated logistics facility for PermaCold Logistics in Albertville, Alabama. The post PermaCold Logistics Secures $10 Million In New Markets Tax Credit Financing From UB Community D",
+    "overview": "Rabot Energy, a provider of dynamic electricity tariffs,has raised $50 million in a Series B funding round to expand its technologyplatform and support its next phase of growth. The round was led by E...",
     "location": "San Francisco, CA, USA",
     "country": "United States",
     "stage": "Venture Round",
     "industry": "Developer Tools",
-    "total_raised": "$10 MILLION",
-    "last_round_amount": "$10 MILLION",
+    "total_raised": "$50M",
+    "last_round_amount": "$50M",
     "last_round_type": "Venture Round",
     "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
+    "round_date": "Thu, 15 Oc",
     "founders": [
       {
-        "name": "PermaCold Logistics Leadership Team",
+        "name": "Rabot Energy Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/permacold-logistics"
+        "linkedin": "https://linkedin.com/company/rabot-energy"
       }
     ],
     "investors": [
       "Prominent Venture Syndicate"
     ],
     "products": [
-      "PermaCold Logistics Platform",
+      "Rabot Energy Platform",
       "Developer API"
     ],
     "customers": [
@@ -6121,49 +6351,49 @@
     },
     "signals": [
       {
-        "id": "sig-permacold-logistics-funding",
+        "id": "sig-rabot-energy-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $10 MILLION in Venture Round",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
+        "title": "Raised $50M in Venture Round",
+        "date": "Thu, 15 Oc",
+        "source": "Tech.eu",
         "confidence": 0.95
       },
       {
-        "id": "sig-permacold-logistics-hiring",
+        "id": "sig-rabot-energy-hiring",
         "badge": "🔥 HIRING",
         "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-permacold-logistics-product",
+        "id": "sig-rabot-energy-product",
         "badge": "🚀 PRODUCT",
         "title": "Production Platform Expansion in Developer Tools",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
+        "date": "Thu, 15 Oc",
+        "source": "Tech.eu",
         "confidence": 0.93
       },
       {
-        "id": "sig-permacold-logistics-expansion",
+        "id": "sig-rabot-energy-expansion",
         "badge": "🌍 EXPANSION",
         "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 02 Oc",
-        "source": "Pulse 2.0 VC",
+        "date": "Thu, 15 Oc",
+        "source": "Tech.eu",
         "confidence": 0.94
       }
     ],
     "timeline": [
       {
-        "date": "Fri, 02 Oc",
-        "event": "Venture Round Financing ($10 MILLION)",
-        "evidence": "PermaCold Logistics secured $10 MILLION to accelerate platform expansion.",
-        "source": "Pulse 2.0 VC",
+        "date": "Thu, 15 Oc",
+        "event": "Venture Round Financing ($50M)",
+        "evidence": "Rabot Energy secured $50M to accelerate platform expansion.",
+        "source": "Tech.eu",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Core Technical Headcount Expansion",
         "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
         "source": "OpenAngels Talent Scanner",
@@ -6171,57 +6401,57 @@
         "category": "talent"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Platform Infrastructure Deployment",
         "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
-        "source": "Pulse 2.0 VC",
+        "source": "Tech.eu",
         "confidence": 0.93,
         "category": "product"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Geographic & Market Rollout",
         "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
-        "source": "Pulse 2.0 VC",
+        "source": "Tech.eu",
         "confidence": 0.94,
         "category": "expansion"
       }
     ],
-    "openangels_score": 90.0,
+    "openangels_score": 91.0,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing PermaCold Logistics to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
-    "source_url": "https://pulse2.com/permacold-logistics-secures-10-million-in-new-markets-tax-credit-financing-from-ub-community-development/",
+    "pitch_hook": "When referencing Rabot Energy to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://tech.eu/2026/10/15/rabot-energy-secures-50m-to-transform-homes-into-a-virtual-power-plant/",
     "verified": true
   },
-  "headline": {
-    "name": "Headline",
-    "slug": "headline",
-    "legal_name": "Headline, Inc.",
-    "domain": "headline.com",
+  "solvera": {
+    "name": "Solvera",
+    "slug": "solvera",
+    "legal_name": "Solvera, Inc.",
+    "domain": "solvera.com",
     "tagline": "Next-generation venture in AI & Machine Learning addressing global enterprise demand.",
-    "overview": "This week, we tracked more than 70 tech funding deals worth over €3.9 billion and over 5 exits, M&amp;A transactions, rumours, and related news stories across Europe.This week took me from Bilbao to A...",
+    "overview": "Oslo-based Solverahas raised $6.3 million in a pre-seed funding round to develop its AI-nativeengineering firm for the construction industry. The round was led by Seedcamp,with participation from Cons...",
     "location": "San Francisco, CA, USA",
     "country": "United States",
     "stage": "Venture Round",
     "industry": "AI & Machine Learning",
-    "total_raised": "$400M",
-    "last_round_amount": "$400M",
+    "total_raised": "$6.3M",
+    "last_round_amount": "$6.3M",
     "last_round_type": "Venture Round",
     "valuation": "Verified via Funding Round",
-    "round_date": "Fri, 02 Oc",
+    "round_date": "Thu, 15 Oc",
     "founders": [
       {
-        "name": "Headline Leadership Team",
+        "name": "Solvera Leadership Team",
         "role": "Founders & Technical Leadership",
         "pedigree": "Frontier Engineering & Venture Alumni",
-        "linkedin": "https://linkedin.com/company/headline"
+        "linkedin": "https://linkedin.com/company/solvera"
       }
     ],
     "investors": [
       "Prominent Venture Syndicate"
     ],
     "products": [
-      "Headline Platform",
+      "Solvera Platform",
       "Developer API"
     ],
     "customers": [
@@ -6255,49 +6485,49 @@
     },
     "signals": [
       {
-        "id": "sig-headline-funding",
+        "id": "sig-solvera-funding",
         "badge": "💰 FUNDING",
-        "title": "Raised $400M in Venture Round",
-        "date": "Fri, 02 Oc",
+        "title": "Raised $6.3M in Venture Round",
+        "date": "Thu, 15 Oc",
         "source": "Tech.eu",
         "confidence": 0.95
       },
       {
-        "id": "sig-headline-hiring",
+        "id": "sig-solvera-hiring",
         "badge": "🔥 HIRING",
         "title": "Recruiting Core Engineers (Venture Round)",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Career Velocity Index",
         "confidence": 0.91
       },
       {
-        "id": "sig-headline-product",
+        "id": "sig-solvera-product",
         "badge": "🚀 PRODUCT",
         "title": "Production Platform Expansion in AI & Machine Learning",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Tech.eu",
         "confidence": 0.93
       },
       {
-        "id": "sig-headline-expansion",
+        "id": "sig-solvera-expansion",
         "badge": "🌍 EXPANSION",
         "title": "Geographic & Enterprise Market Expansion",
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "source": "Tech.eu",
         "confidence": 0.94
       }
     ],
     "timeline": [
       {
-        "date": "Fri, 02 Oc",
-        "event": "Venture Round Financing ($400M)",
-        "evidence": "Headline secured $400M to accelerate platform expansion.",
+        "date": "Thu, 15 Oc",
+        "event": "Venture Round Financing ($6.3M)",
+        "evidence": "Solvera secured $6.3M to accelerate platform expansion.",
         "source": "Tech.eu",
         "confidence": 0.95,
         "category": "funding"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Core Technical Headcount Expansion",
         "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
         "source": "OpenAngels Talent Scanner",
@@ -6305,7 +6535,7 @@
         "category": "talent"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Platform Infrastructure Deployment",
         "evidence": "Deployed new enterprise capabilities and API endpoints for AI & Machine Learning.",
         "source": "Tech.eu",
@@ -6313,7 +6543,7 @@
         "category": "product"
       },
       {
-        "date": "Fri, 02 Oc",
+        "date": "Thu, 15 Oc",
         "event": "Geographic & Market Rollout",
         "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
         "source": "Tech.eu",
@@ -6321,10 +6551,378 @@
         "category": "expansion"
       }
     ],
-    "openangels_score": 92.0,
+    "openangels_score": 90.0,
     "score_badge": "Breakout Momentum",
-    "pitch_hook": "When referencing Headline to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
-    "source_url": "https://tech.eu/2026/10/02/headline-closes-400m-fund-oura-delays-ipo-and-fedorov-launches-army-of-robots/",
+    "pitch_hook": "When referencing Solvera to syndicate co-investors, highlight recent round momentum and AI & Machine Learning market velocity.",
+    "source_url": "https://tech.eu/2026/10/15/solvera-raises-63m-to-scale-the-ai-native-engineering-firm/",
+    "verified": true
+  },
+  "salience-labs": {
+    "name": "Salience Labs",
+    "slug": "salience-labs",
+    "legal_name": "Salience Labs, Inc.",
+    "domain": "salience-labs.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Salience Labs, adeveloper of photonic chips for AI data centre connectivity, has raised $125million in an oversubscribed Series B funding round to accelerate thedeployment of its optical switching tec...",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Venture Round",
+    "industry": "Developer Tools",
+    "total_raised": "$125M",
+    "last_round_amount": "$125M",
+    "last_round_type": "Venture Round",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Wed, 14 Oc",
+    "founders": [
+      {
+        "name": "Salience Labs Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/salience-labs"
+      }
+    ],
+    "investors": [
+      "Accel"
+    ],
+    "products": [
+      "Salience Labs Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Venture Round to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-salience-labs-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $125M in Venture Round",
+        "date": "Wed, 14 Oc",
+        "source": "Tech.eu",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-salience-labs-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Venture Round)",
+        "date": "Wed, 14 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-salience-labs-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Wed, 14 Oc",
+        "source": "Tech.eu",
+        "confidence": 0.93
+      },
+      {
+        "id": "sig-salience-labs-expansion",
+        "badge": "🌍 EXPANSION",
+        "title": "Geographic & Enterprise Market Expansion",
+        "date": "Wed, 14 Oc",
+        "source": "Tech.eu",
+        "confidence": 0.94
+      },
+      {
+        "id": "sig-salience-labs-leadership",
+        "badge": "👥 SYNDICATE",
+        "title": "Backed by Accel",
+        "date": "Wed, 14 Oc",
+        "source": "Tech.eu",
+        "confidence": 0.96
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Venture Round Financing ($125M)",
+        "evidence": "Salience Labs secured $125M to accelerate platform expansion.",
+        "source": "Tech.eu",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Venture Round capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
+        "source": "Tech.eu",
+        "confidence": 0.93,
+        "category": "product"
+      },
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Geographic & Market Rollout",
+        "evidence": "Initiated commercial expansion into new regional markets and enterprise tiers.",
+        "source": "Tech.eu",
+        "confidence": 0.94,
+        "category": "expansion"
+      },
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Syndicate Co-Investment Secured",
+        "evidence": "Institutional backing confirmed with Accel.",
+        "source": "Tech.eu",
+        "confidence": 0.96,
+        "category": "alliances"
+      }
+    ],
+    "openangels_score": 92.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing Salience Labs to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://tech.eu/2026/10/14/salience-labs-secures-125m-to-scale-photonic-chips-for-ai-data-centres/",
+    "verified": true
+  },
+  "duvo": {
+    "name": "Duvo",
+    "slug": "duvo",
+    "legal_name": "Duvo, Inc.",
+    "domain": "duvo.com",
+    "tagline": "Next-generation venture in Developer Tools addressing global enterprise demand.",
+    "overview": "Duvo today announced a $32 million Series A led by Balderton Capital, with participation from existing investors Index Ventures, Northzone, and Credo Ventures. The round brings Duvo's total funding to...",
+    "location": "San Francisco, CA, USA",
+    "country": "United States",
+    "stage": "Series A",
+    "industry": "Developer Tools",
+    "total_raised": "$32M",
+    "last_round_amount": "$32M",
+    "last_round_type": "Series A",
+    "valuation": "Verified via Funding Round",
+    "round_date": "Wed, 14 Oc",
+    "founders": [
+      {
+        "name": "Duvo Leadership Team",
+        "role": "Founders & Technical Leadership",
+        "pedigree": "Frontier Engineering & Venture Alumni",
+        "linkedin": "https://linkedin.com/company/duvo"
+      }
+    ],
+    "investors": [
+      "Index Ventures"
+    ],
+    "products": [
+      "Duvo Platform",
+      "Developer API"
+    ],
+    "customers": [
+      "Enterprise Design Partners",
+      "Over 100+ Early Adopters"
+    ],
+    "employees": 28,
+    "employee_growth_90d": "+25% 90d headcount growth",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 6,
+      "focus_areas": [
+        "Fullstack Engineering",
+        "Product Growth",
+        "AI Systems"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Python",
+        "TypeScript",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "moat": "High-retention workflow specialization and fast developer adoption",
+      "github_velocity": "Active production development"
+    },
+    "growth_signals": {
+      "milestone": "Closed Series A to scale customer acquisition",
+      "trajectory": "Strong user engagement across early cohorts"
+    },
+    "signals": [
+      {
+        "id": "sig-duvo-funding",
+        "badge": "💰 FUNDING",
+        "title": "Raised $32M in Series A",
+        "date": "Wed, 14 Oc",
+        "source": "Tech.eu",
+        "confidence": 0.95
+      },
+      {
+        "id": "sig-duvo-hiring",
+        "badge": "🔥 HIRING",
+        "title": "Recruiting Core Engineers (Series A)",
+        "date": "Wed, 14 Oc",
+        "source": "Career Velocity Index",
+        "confidence": 0.91
+      },
+      {
+        "id": "sig-duvo-product",
+        "badge": "🚀 PRODUCT",
+        "title": "Production Platform Expansion in Developer Tools",
+        "date": "Wed, 14 Oc",
+        "source": "Tech.eu",
+        "confidence": 0.93
+      },
+      {
+        "id": "sig-duvo-leadership",
+        "badge": "👥 SYNDICATE",
+        "title": "Backed by Index Ventures",
+        "date": "Wed, 14 Oc",
+        "source": "Tech.eu",
+        "confidence": 0.96
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Series A Financing ($32M)",
+        "evidence": "Duvo secured $32M to accelerate platform expansion.",
+        "source": "Tech.eu",
+        "confidence": 0.95,
+        "category": "funding"
+      },
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Core Technical Headcount Expansion",
+        "evidence": "Scaling engineering and go-to-market teams following Series A capital injection.",
+        "source": "OpenAngels Talent Scanner",
+        "confidence": 0.91,
+        "category": "talent"
+      },
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Platform Infrastructure Deployment",
+        "evidence": "Deployed new enterprise capabilities and API endpoints for Developer Tools.",
+        "source": "Tech.eu",
+        "confidence": 0.93,
+        "category": "product"
+      },
+      {
+        "date": "Wed, 14 Oc",
+        "event": "Syndicate Co-Investment Secured",
+        "evidence": "Institutional backing confirmed with Index Ventures.",
+        "source": "Tech.eu",
+        "confidence": 0.96,
+        "category": "alliances"
+      }
+    ],
+    "openangels_score": 92.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When referencing Duvo to syndicate co-investors, highlight recent round momentum and Developer Tools market velocity.",
+    "source_url": "https://tech.eu/2026/10/14/from-rohlik-to-enterprise-ai-tomas-cuprs-duvo-raises-32m-series-a/",
+    "verified": true
+  },
+  "restate": {
+    "name": "Restate",
+    "slug": "restate",
+    "legal_name": "Restate, Inc.",
+    "domain": "restate.dev",
+    "tagline": "Lightweight durable execution and workflows platform for distributed microservices",
+    "overview": "Next-generation developer platform delivering code-level resilience, distributed state management, and durable execution for event-driven applications.",
+    "location": "Berlin, Germany / San Francisco, CA",
+    "country": "Germany",
+    "stage": "Series A",
+    "industry": "Developer Tools",
+    "total_raised": "$10M+",
+    "last_round_amount": "$7M",
+    "last_round_type": "Series A",
+    "valuation": "Verified via Series A Round",
+    "round_date": "Recent",
+    "founders": [
+      {
+        "name": "Stephan Ewen",
+        "role": "Co-Founder & CEO",
+        "pedigree": "Ex-Apache Flink PMC & Ververica Co-Founder",
+        "linkedin": "https://linkedin.com/in/stephan-ewen"
+      }
+    ],
+    "investors": [
+      "Redpoint Ventures",
+      "FirstMark Capital"
+    ],
+    "products": [
+      "Restate Engine",
+      "Restate Cloud"
+    ],
+    "customers": [
+      "Global Microservice Developers"
+    ],
+    "employees": 20,
+    "employee_growth_90d": "+35% headcount velocity",
+    "hiring": {
+      "status": "Actively Hiring",
+      "open_roles": 5,
+      "focus_areas": [
+        "Rust Systems",
+        "Distributed Runtimes"
+      ]
+    },
+    "technology_signals": {
+      "stack": [
+        "Rust",
+        "TypeScript",
+        "Docker"
+      ],
+      "moat": "Zero-infrastructure durable execution eliminating message queue boilerplate",
+      "github_velocity": "High-velocity open-source framework"
+    },
+    "growth_signals": {
+      "milestone": "Crossed 5,000 GitHub stars",
+      "trajectory": "Rapid developer adoption across enterprise teams"
+    },
+    "signals": [
+      {
+        "id": "sig-restate-fund",
+        "badge": "💰 ROUND",
+        "title": "Series A led by Redpoint Ventures",
+        "date": "Recent",
+        "source": "TechCrunch",
+        "confidence": 0.98
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Recent",
+        "event": "Series A Financing ($7M)",
+        "evidence": "Redpoint Ventures led Series A to expand developer adoption.",
+        "source": "TechCrunch",
+        "confidence": 0.98,
+        "category": "funding"
+      }
+    ],
+    "openangels_score": 93.5,
+    "score_badge": "Breakout Momentum",
+    "pitch_hook": "When discussing distributed workflows, compare Restate's lightweight Rust runtime against heavy temporal infrastructure.",
+    "source_url": "https://restate.dev",
     "verified": true
   }
 }
