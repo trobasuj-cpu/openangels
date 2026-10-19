@@ -1072,6 +1072,36 @@ export default function Dashboard() {
               <SlidersHorizontal className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3 relative">
+              {/* Active Investors Count Capsule (Positioned neatly between search and Recently Added) */}
+              <div 
+                className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 shadow-inner backdrop-blur-md transition-all select-none"
+                title={`${totalDatabaseCount ? totalDatabaseCount.toLocaleString() : '9,807'} active angel investors in directory`}
+              >
+                <div className="flex -space-x-2 shrink-0">
+                  <img className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
+                  <img className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
+                  <img className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
+                </div>
+                {(totalActiveFilters > 0 || (search && search.trim() !== '')) ? (
+                  <div className="flex items-center gap-1.5 text-xs font-medium leading-none">
+                    <span className="font-extrabold text-blue-400 tracking-tight font-mono">
+                      {matchingCount.toLocaleString()}
+                    </span>
+                    <span className="text-[11px] text-zinc-400">matching</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-xs font-medium leading-none">
+                    <span className="font-extrabold text-white tracking-tight font-mono">
+                      {totalDatabaseCount ? totalDatabaseCount.toLocaleString() : '9,807'}
+                    </span>
+                    <span className="text-[11px] text-emerald-400 flex items-center gap-1 font-semibold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      active
+                    </span>
+                  </div>
+                )}
+              </div>
+
               {showNewOnly ? (
                 <button 
                   onClick={() => {
@@ -1577,101 +1607,103 @@ export default function Dashboard() {
               <>
                 <MarketingShowcase isPremium={profile?.is_premium} />
 
-                <div className="flex flex-col xl:flex-row gap-6 mb-8">
-              <div className="flex-1">
-                {/* Premium Marketing Header - Horizontal Wide Layout */}
-                <div className="h-full p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
-                  {/* Decorative glow effects */}
-                  <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-red-500/5 blur-[100px] pointer-events-none"></div>
-                  <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-rose-500/5 blur-[100px] pointer-events-none"></div>
-                  
-                  <div className="relative z-10 flex-1">
-                    {isAiMatch ? (
-                      <>
-                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                          Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">AI Matched</span> Investors
-                        </h1>
-                        <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
-                          Based on your startup's context, we've filtered the directory to show the most relevant investors. Add them to your CRM to start pitching.
-                        </p>
-                      </>
-                    ) : showNewOnly ? (
-                      <>
-                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                          Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">100 Investors</span>
-                        </h1>
-                        <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
-                          The most recently added active investors in our database. Fresh opportunities for your next fundraising round.
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                          Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">Angel Investor</span>
-                        </h1>
-                        <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
-                          Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match. No warm introductions needed.
-                        </p>
-                      </>
-                    )}
-                  </div>
-                  
-                  {isAiMatch ? (
-                    <div className="relative z-10 flex flex-col items-center justify-center shrink-0 bg-red-500/10 px-8 py-4 rounded-2xl border border-red-500/30 animate-in fade-in zoom-in duration-500">
-                      <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500 tracking-tighter mb-1 filter drop-shadow-sm">
-                        {matchingCount}
-                      </div>
-                      <div className="text-xs md:text-sm font-bold text-red-500/90 uppercase tracking-[0.2em]">
-                        Perfect Matches
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 bg-white/5 p-4 rounded-xl border border-white/10">
-                      <div className="flex -space-x-3">
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
-                        <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
-                      </div>
-                      <div className="flex flex-col text-left sm:text-right">
-                        <div className="text-sm font-medium text-zinc-300">
-                          <span className="text-white font-bold text-xl">{totalDatabaseCount.toLocaleString()}</span> active
+                {(!profile?.is_premium || isAiMatch) && (
+                  <div className="flex flex-col xl:flex-row gap-6 mb-8">
+                    <div className="flex-1">
+                      {/* Premium Marketing Header - Horizontal Wide Layout */}
+                      <div className="h-full p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
+                        {/* Decorative glow effects */}
+                        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-red-500/5 blur-[100px] pointer-events-none"></div>
+                        <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-rose-500/5 blur-[100px] pointer-events-none"></div>
+                        
+                        <div className="relative z-10 flex-1">
+                          {isAiMatch ? (
+                            <>
+                              <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                                Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">AI Matched</span> Investors
+                              </h1>
+                              <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
+                                Based on your startup's context, we've filtered the directory to show the most relevant investors. Add them to your CRM to start pitching.
+                              </p>
+                            </>
+                          ) : showNewOnly ? (
+                            <>
+                              <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                                Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">100 Investors</span>
+                              </h1>
+                              <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
+                                The most recently added active investors in our database. Fresh opportunities for your next fundraising round.
+                              </p>
+                            </>
+                          ) : (
+                            <>
+                              <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                                Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">Angel Investor</span>
+                              </h1>
+                              <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
+                                Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match. No warm introductions needed.
+                              </p>
+                            </>
+                          )}
                         </div>
-                        {(totalActiveFilters > 0 || (search && search.trim() !== '')) && (
-                          <div className="text-xs font-medium text-blue-400">
-                            {matchingCount.toLocaleString()} matching
+                        
+                        {isAiMatch ? (
+                          <div className="relative z-10 flex flex-col items-center justify-center shrink-0 bg-red-500/10 px-8 py-4 rounded-2xl border border-red-500/30 animate-in fade-in zoom-in duration-500">
+                            <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500 tracking-tighter mb-1 filter drop-shadow-sm">
+                              {matchingCount}
+                            </div>
+                            <div className="text-xs md:text-sm font-bold text-red-500/90 uppercase tracking-[0.2em]">
+                              Perfect Matches
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 bg-white/5 p-4 rounded-xl border border-white/10">
+                            <div className="flex -space-x-3">
+                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
+                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
+                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
+                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
+                            </div>
+                            <div className="flex flex-col text-left sm:text-right">
+                              <div className="text-sm font-medium text-zinc-300">
+                                <span className="text-white font-bold text-xl">{totalDatabaseCount.toLocaleString()}</span> active
+                              </div>
+                              {(totalActiveFilters > 0 || (search && search.trim() !== '')) && (
+                                <div className="text-xs font-medium text-blue-400">
+                                  {matchingCount.toLocaleString()} matching
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>
                     </div>
-                  )}
-                </div>
-              </div>
 
-              {!profile?.is_premium && (
-                <div className="w-full xl:w-1/3 shrink-0">
-                  {/* Product Hunt Welcome Banner */}
-                  <div className="h-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-5 shadow-lg flex flex-col justify-center text-white relative overflow-hidden">
-                    <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div className="flex items-center gap-4 relative z-10 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
-                        P
+                    {!profile?.is_premium && (
+                      <div className="w-full xl:w-1/3 shrink-0">
+                        {/* Product Hunt Welcome Banner */}
+                        <div className="h-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-5 shadow-lg flex flex-col justify-center text-white relative overflow-hidden">
+                          <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                          <div className="flex items-center gap-4 relative z-10 mb-3">
+                            <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
+                              P
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt!</h3>
+                            </div>
+                          </div>
+                          <p className="text-white/90 text-sm mb-4 relative z-10">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
+                          <button 
+                            onClick={() => { setCheckoutDiscount('PHLAUNCH'); setIsCheckoutOpen(true); }}
+                            className="block text-center w-full py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10 cursor-pointer"
+                          >
+                            Claim Discount
+                          </button>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt!</h3>
-                      </div>
-                    </div>
-                    <p className="text-white/90 text-sm mb-4 relative z-10">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
-                    <button 
-                      onClick={() => { setCheckoutDiscount('PHLAUNCH'); setIsCheckoutOpen(true); }}
-                      className="block text-center w-full py-2 bg-white text-[#DA552F] hover:bg-zinc-50 font-bold rounded-lg text-sm transition-colors shadow-sm relative z-10 cursor-pointer"
-                    >
-                      Claim Discount
-                    </button>
+                    )}
                   </div>
-                </div>
-              )}
-            </div>
+                )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {loading ? (
