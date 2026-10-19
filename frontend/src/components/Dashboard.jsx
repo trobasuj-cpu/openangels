@@ -1577,20 +1577,6 @@ export default function Dashboard() {
               <>
                 <MarketingShowcase isPremium={profile?.is_premium} />
 
-                {/* Homepage Emerging Signals Radar Quick Teaser Bar */}
-                <div className="mb-5">
-                  <EmergingSignalsRadar
-                    isCompact
-                    activeSignal={selectedSignalFilter}
-                    onSelectSignal={(sigId) => {
-                      setSelectedSignalFilter(sigId);
-                      setViewMode('investors');
-                    }}
-                    signalStats={signalStats}
-                    totalCount={radarCompanies.length}
-                  />
-                </div>
-
                 <div className="flex flex-col xl:flex-row gap-6 mb-8">
               <div className="flex-1">
                 {/* Premium Marketing Header - Horizontal Wide Layout */}
