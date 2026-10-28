@@ -1095,7 +1095,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                 </div>
                 {(totalActiveFilters > 0 || (search && search.trim() !== '')) ? (
                   <div className="flex items-center gap-1.5 text-xs font-medium leading-none">
-                    <span className="font-extrabold text-blue-400 tracking-tight font-mono">
+                    <span className="font-extrabold text-amber-400 tracking-tight font-mono">
                       {matchingCount.toLocaleString()}
                     </span>
                     <span className="text-[11px] text-zinc-400">matching</span>

@@ -13,12 +13,12 @@ function cn(...inputs) {
 import { supabase } from '../../lib/supabase.js';
 
 const COLUMNS = {
-  inbox: { name: 'Saved', color: 'border-blue-500/40', dot: 'bg-blue-500' },
+  inbox: { name: 'Saved', color: 'border-amber-500/40', dot: 'bg-amber-500' },
   contacted: { name: 'Contacted', color: 'border-purple-500/40', dot: 'bg-purple-500' },
   meeting_set: { name: 'Meeting', color: 'border-red-500/40', dot: 'bg-red-500' },
   dd: { name: 'Due Diligence', color: 'border-rose-500/40', dot: 'bg-rose-500' },
   won: { name: 'Committed', color: 'border-emerald-500/40', dot: 'bg-emerald-500' },
-  lost: { name: 'Passed', color: 'border-red-500/40', dot: 'bg-red-500' }
+  lost: { name: 'Passed', color: 'border-zinc-700/60', dot: 'bg-zinc-600' }
 };
 
 export default function KanbanBoard() {
