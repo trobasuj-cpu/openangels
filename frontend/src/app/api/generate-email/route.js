@@ -4,8 +4,6 @@ import { globalRateLimiter } from '@/lib/rateLimiter';
 
 export const dynamic = 'force-dynamic';
 
-const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-
 function getClientIp(request) {
   const forwarded = request.headers.get('x-forwarded-for');
   if (forwarded) {
@@ -17,10 +15,7 @@ function getClientIp(request) {
 export async function GET(request) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
-    let serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!serviceKey || serviceKey.startsWith('sb_publishable_')) {
-      serviceKey = DEFAULT_SERVICE_ROLE;
-    }
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 
     const supabaseAdmin = createClient(supabaseUrl, serviceKey, {
       auth: { persistSession: false },
@@ -114,11 +109,13 @@ export async function POST(request) {
       );
     }
 
+    // Input bounds validation to prevent prompt injection / token exhaustion
+    const safeInvestorName = String(investorName).slice(0, 100).trim();
+    const safeStartupDescription = String(startupDescription).slice(0, 1500).trim();
+    const safeInvestorBio = String(investorBio || '').slice(0, 1000).trim();
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
-    let serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!serviceKey || serviceKey.startsWith('sb_publishable_')) {
-      serviceKey = DEFAULT_SERVICE_ROLE;
-    }
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 
     const supabaseAdmin = createClient(supabaseUrl, serviceKey, {
       auth: { persistSession: false },

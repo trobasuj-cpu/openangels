@@ -91,7 +91,10 @@ export default function KanbanBoard() {
   const columns = Object.keys(COLUMNS).map(statusKey => ({
     id: statusKey,
     ...COLUMNS[statusKey],
-    items: filteredLeads.filter(l => l.status === statusKey)
+    items: filteredLeads.filter(l => 
+      l.status === statusKey || 
+      (statusKey === 'inbox' && (l.status === 'saved' || !COLUMNS[l.status]))
+    )
   }));
 
   const onDragEnd = async (result) => {

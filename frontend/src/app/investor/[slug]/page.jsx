@@ -32,11 +32,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  let decodedSlug = slug;
+  try { decodedSlug = decodeURIComponent(slug); } catch {}
   
   const { data: investors } = await supabaseAdmin
     .from('investors_public')
     .select('*')
-    .eq('slug', slug)
+    .eq('slug', decodedSlug)
     .limit(1);
 
   const investor = investors?.[0];
@@ -60,7 +62,7 @@ export async function generateMetadata({ params }) {
   return {
     title,
     description,
-    alternates: { canonical: absoluteUrl(`/investor/${slug}`) },
+    alternates: { canonical: absoluteUrl(`/investor/${decodedSlug}`) },
     robots: {
       index: true,
       follow: true,
@@ -70,7 +72,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title,
       description,
-      url: absoluteUrl(`/investor/${slug}`),
+      url: absoluteUrl(`/investor/${decodedSlug}`),
       siteName: 'OpenAngels',
       type: 'profile',
     },
@@ -93,33 +95,35 @@ function getCompanyLink(companyName) {
 
 export default async function StandaloneInvestorPage({ params }) {
   const { slug } = await params;
+  let decodedSlug = slug;
+  try { decodedSlug = decodeURIComponent(slug); } catch {}
   
   let rawInvestor = null;
-  const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-  let serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
-  if (!serviceKey || serviceKey.startsWith('sb_publishable_')) serviceKey = DEFAULT_SERVICE_ROLE;
+  const serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
 
-  try {
-    const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodeURIComponent(slug)}&select=*`;
-    const res = await fetch(restUrl, {
-      headers: {
-        'apikey': serviceKey,
-        'Authorization': `Bearer ${serviceKey}`,
-        'Content-Type': 'application/json'
-      },
-      cache: 'no-store'
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.length > 0) rawInvestor = data[0];
-    }
-  } catch (e) {}
+  if (serviceKey && !serviceKey.startsWith('sb_publishable_')) {
+    try {
+      const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodeURIComponent(decodedSlug)}&select=*`;
+      const res = await fetch(restUrl, {
+        headers: {
+          'apikey': serviceKey,
+          'Authorization': `Bearer ${serviceKey}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.length > 0) rawInvestor = data[0];
+      }
+    } catch (e) {}
+  }
 
   if (!rawInvestor) {
     let { data: investorsData } = await supabaseAdmin
       .from('investors_public')
       .select('*')
-      .eq('slug', slug)
+      .eq('slug', decodedSlug)
       .limit(1);
     rawInvestor = investorsData?.[0];
   }
@@ -182,9 +186,9 @@ export default async function StandaloneInvestorPage({ params }) {
   try {
     const { data: relData } = await supabaseAdmin
       .from('investors_public')
-      .select('id,name,slug,firm,location,avatar_url,avatar,check_min,check_max')
+      .select('id,name,slug,location,avatar_url,stages,industries')
       .contains('industries', [primaryIndustry])
-      .neq('slug', slug)
+      .neq('slug', decodedSlug)
       .limit(3);
     relatedInvestors = relData || [];
   } catch (e) {}
@@ -485,9 +489,7 @@ export default async function StandaloneInvestorPage({ params }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {relatedInvestors.map((rel) => {
-                const relMin = formatMoney(rel.check_min);
-                const relMax = formatMoney(rel.check_max);
-                const relCheck = relMin && relMax ? `${relMin} – ${relMax}` : (relMin ? `${relMin}+` : '');
+                const relStages = Array.isArray(rel.stages) ? rel.stages : [];
                 return (
                   <Link
                     key={rel.id}
@@ -497,26 +499,23 @@ export default async function StandaloneInvestorPage({ params }) {
                     <div className="flex items-center gap-3 mb-2">
                       <InvestorAvatar
                         name={rel.name}
-                        avatarUrl={rel.avatar_url || rel.avatar}
+                        avatarUrl={rel.avatar_url}
                         className="w-10 h-10 rounded-xl ring-1 ring-zinc-700 shrink-0"
                       />
                       <div className="min-w-0">
                         <h3 className="text-xs sm:text-sm font-bold text-zinc-200 group-hover:text-white truncate">
                           {rel.name}
                         </h3>
-                        {rel.firm && (
-                          <p className="text-[11px] text-amber-400/90 truncate">{rel.firm}</p>
-                        )}
                         {rel.location && (
                           <p className="text-[10px] text-zinc-500 truncate">{rel.location}</p>
                         )}
                       </div>
                     </div>
 
-                    {relCheck && (
+                    {relStages.length > 0 && (
                       <div className="pt-2 border-t border-zinc-800/60 flex items-center justify-between text-[10.5px]">
-                        <span className="text-zinc-500">Check Size:</span>
-                        <span className="font-semibold text-emerald-400">{relCheck}</span>
+                        <span className="text-zinc-500">Stages:</span>
+                        <span className="font-semibold text-amber-400">{relStages.slice(0, 2).join(', ')}</span>
                       </div>
                     )}
                   </Link>

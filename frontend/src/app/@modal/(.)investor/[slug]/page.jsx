@@ -1,37 +1,38 @@
 import InvestorProfileModal from '@/components/InvestorProfileModal';
 import { notFound } from 'next/navigation';
 
-const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-
 export default async function InterceptedInvestorModal({ params }) {
   const { slug } = await params;
+  let decodedSlug = slug;
+  try { decodedSlug = decodeURIComponent(slug); } catch {}
   
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
   let serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
-  if (!serviceKey || serviceKey.startsWith('sb_publishable_')) serviceKey = DEFAULT_SERVICE_ROLE;
 
   let rawInvestor = null;
 
-  try {
-    const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodeURIComponent(slug)}&select=*`;
-    const res = await fetch(restUrl, {
-      headers: {
-        'apikey': serviceKey,
-        'Authorization': `Bearer ${serviceKey}`,
-        'Content-Type': 'application/json'
-      },
-      cache: 'no-store'
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.length > 0) rawInvestor = data[0];
-    }
-  } catch (e) {}
+  if (serviceKey && !serviceKey.startsWith('sb_publishable_')) {
+    try {
+      const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodeURIComponent(decodedSlug)}&select=*`;
+      const res = await fetch(restUrl, {
+        headers: {
+          'apikey': serviceKey,
+          'Authorization': `Bearer ${serviceKey}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.length > 0) rawInvestor = data[0];
+      }
+    } catch (e) {}
+  }
 
   if (!rawInvestor) {
     try {
-      const pubUrl = `${supabaseUrl}/rest/v1/investors_public?slug=eq.${encodeURIComponent(slug)}&select=*`;
+      const pubUrl = `${supabaseUrl}/rest/v1/investors_public?slug=eq.${encodeURIComponent(decodedSlug)}&select=*`;
       const resPub = await fetch(pubUrl, {
         headers: {
           'apikey': anonKey,

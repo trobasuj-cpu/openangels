@@ -2,8 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
-const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-
 function calculateQualityScore(inv) {
   let score = 0;
   if (inv.email || inv.has_email) score += 30;
@@ -36,10 +34,7 @@ export async function GET(request) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
     const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
     
-    let envServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
-    if (!envServiceKey || envServiceKey.startsWith('sb_publishable_')) {
-      envServiceKey = DEFAULT_SERVICE_ROLE;
-    }
+    let envServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 
     let isPremium = false;
     if (token) {
@@ -74,7 +69,7 @@ export async function GET(request) {
 
     // Search query across name, bio, location
     if (search) {
-      const cleanSearch = encodeURIComponent(search.replace(/[%*]/g, ''));
+      const cleanSearch = encodeURIComponent(search.replace(/[()\\.,%*]/g, ''));
       queryParts.push(`or=(name.ilike.*${cleanSearch}*,bio.ilike.*${cleanSearch}*,location.ilike.*${cleanSearch}*)`);
     }
 
@@ -189,8 +184,17 @@ export async function GET(request) {
     }
 
     const sanitized = (data || []).map((inv, idx) => {
-      const isTeaserUnlocked = from === 0 && idx < 6;
+      // Teaser unlock ONLY applies to the first 6 investors on the default, unfiltered, non-search landing view
+      const isTeaserUnlocked = !hasActiveFilters && !orderParam && from === 0 && idx < 6;
       const canAccessFullData = isPremium || isTeaserUnlocked;
+
+      let cleanBio = inv.bio || '';
+      if (cleanBio.includes('Source: http')) {
+        cleanBio = cleanBio.split('Source: http')[0].trim();
+      }
+      if (cleanBio === "Found via automated news parsing." || cleanBio === "Extracted from public investor list.") {
+        cleanBio = "Active early-stage angel investor.";
+      }
 
       const has_email = inv.has_email !== undefined ? inv.has_email : !!inv.email;
       const has_linkedin = inv.has_linkedin !== undefined ? inv.has_linkedin : !!inv.linkedin_url;
@@ -200,6 +204,7 @@ export async function GET(request) {
 
       return {
         ...inv,
+        bio: cleanBio,
         quality_score,
         email: canAccessFullData ? (inv.email || null) : null,
         linkedin_url: canAccessFullData ? (inv.linkedin_url || null) : null,

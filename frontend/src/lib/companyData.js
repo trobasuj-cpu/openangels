@@ -4485,9 +4485,9 @@ export function getCompanyIntelligence(nameOrSlug) {
   const cleanSlug = raw.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const normKey = raw.replace(/[^a-z0-9]/g, '');
 
-  // Check in curated knowledge base
+  // Check in curated knowledge base (KNOWN_COMPANIES)
   for (const [key, data] of Object.entries(KNOWN_COMPANIES)) {
-    if (key === cleanSlug || key === normKey || raw.includes(key) || data.name.toLowerCase() === raw) {
+    if (key === cleanSlug || key === normKey || data.name.toLowerCase() === raw || (data.slug && data.slug.toLowerCase() === cleanSlug)) {
       return data;
     }
   }
@@ -4495,10 +4495,10 @@ export function getCompanyIntelligence(nameOrSlug) {
   // Check in discovery cache (populated by company_pipeline.py)
   if (companiesCache && typeof companiesCache === 'object') {
     for (const [key, rawData] of Object.entries(companiesCache)) {
-      if (key === cleanSlug || key === normKey || raw.includes(key) || (rawData.name && rawData.name.toLowerCase() === raw)) {
+      if (key === cleanSlug || key === normKey || (rawData.name && rawData.name.toLowerCase() === raw) || (rawData.slug && rawData.slug.toLowerCase() === cleanSlug)) {
         return {
           ...rawData,
-          legalName: rawData.legal_name || rawData.legalName || `${rawData.name}, Inc.`,
+          legalName: rawData.legal_name || rawData.legalName || (rawData.name + ', Inc.'),
           totalRaised: rawData.total_raised || rawData.totalRaised,
           lastRoundAmount: rawData.last_round_amount || rawData.lastRoundAmount,
           lastRoundType: rawData.last_round_type || rawData.lastRoundType,
@@ -4526,128 +4526,6 @@ export function getCompanyIntelligence(nameOrSlug) {
     }
   }
 
-  // Real Angel Pool from our database (so links work and NEVER say "OpenAngels Syndicate Network"!)
-  const REAL_ANGEL_POOL = [
-    { name: 'Peter Thiel', firm: 'Founders Fund' },
-    { name: 'Naval Ravikant', firm: 'AngelList' },
-    { name: 'Paul Graham', firm: 'Y Combinator' },
-    { name: 'Reid Hoffman', firm: 'Greylock' },
-    { name: 'Elad Gil', firm: 'Angel Investor' },
-    { name: 'Marc Andreessen', firm: 'Andreessen Horowitz' },
-    { name: 'Ron Conway', firm: 'SV Angel' },
-    { name: 'Keith Rabois', firm: 'Khosla Ventures' },
-    { name: 'Garry Tan', firm: 'Y Combinator' },
-    { name: 'Alexis Ohanian', firm: 'Seven Seven Six' }
-  ];
-
-  // Dynamic Synthesis: Calculate deterministic multi-signal score and varied metrics from company name
-  const titleName = String(nameOrSlug).trim();
-  const domain = `${cleanSlug.replace(/-/g, '')}.com`;
-
-  // Deterministic seed hash
-  const hash = cleanSlug.split('').reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 17), 0);
-
-  // Varied OpenAngels Score (ranges between 74.2 and 91.8, never identical)
-  const baseScore = 74.0 + ((hash % 178) / 10.0);
-  const calculatedScore = Math.round(baseScore * 10) / 10;
-
-  let scoreBadge = 'High Velocity Growth';
-  if (calculatedScore >= 90) scoreBadge = 'Tier 1 Decacorn Velocity';
-  else if (calculatedScore >= 84) scoreBadge = 'High-Growth Scaleup';
-  else if (calculatedScore >= 78) scoreBadge = 'Venture Traction';
-  else scoreBadge = 'Promising Syndicate Deal';
-
-  const primaryAngel = REAL_ANGEL_POOL[hash % REAL_ANGEL_POOL.length].name;
-  const secondaryAngel = REAL_ANGEL_POOL[(hash + 3) % REAL_ANGEL_POOL.length].name;
-
-  const stageOptions = ['Series A', 'Seed Stage', 'Series B', 'Early Stage', 'Pre-Seed Growth'];
-  const stage = stageOptions[hash % stageOptions.length];
-
-  const foundedYear = 2017 + (hash % 6);
-  const headcount = 24 + (hash % 85);
-  const openRoles = 3 + (hash % 8);
-  const capitalRaised = `$${(4 + (hash % 16)).toFixed(1)}M`;
-  const valuation = `$${(20 + (hash % 45)).toFixed(0)}M - $${(60 + (hash % 80)).toFixed(0)}M`;
-  const arr = `$${(1 + (hash % 8)).toFixed(1)}M ARR`;
-
-  return {
-    name: titleName,
-    slug: cleanSlug,
-    legalName: `${titleName}, Inc.`,
-    domain: domain,
-    tagline: `Emerging technology venture in ${titleName} ecosystem`,
-    overview: `${titleName} is an active technology company identified in prominent angel and venture syndicate portfolios, backed by early venture partners.`,
-    foundedYear: foundedYear,
-    location: 'San Francisco, CA, USA',
-    country: 'United States',
-    stage: stage,
-    openangelsScore: calculatedScore,
-    scoreBadge: scoreBadge,
-    funding: {
-      totalRaised: capitalRaised,
-      lastRoundType: stage,
-      lastRoundAmount: `$${(2 + (hash % 6)).toFixed(1)}M`,
-      valuation: valuation,
-      roundDate: 'Recent Syndicate Deal',
-      status: 'VERIFIED',
-      verificationProof: 'Angel Syndicate Portfolio Records'
-    },
-    founders: [
-      { name: `Founder (${titleName})`, role: 'Co-Founder & CEO', pedigree: 'Ex-FAANG Senior Engineer, Stanford CS Alum', linkedin: `https://linkedin.com/company/${cleanSlug}` }
-    ],
-    investors: [primaryAngel, secondaryAngel],
-    products: [`${titleName} Platform`, 'Developer API'],
-    customers: ['Early Enterprise Design Partners', 'Over 500+ Pilot Teams'],
-    employees: headcount,
-    employeeGrowth90d: `+${18 + (hash % 15)}% headcount velocity`,
-    hiring: {
-      status: 'Actively Hiring',
-      openRoles: openRoles,
-      focusAreas: ['Fullstack AI', 'Infrastructure', 'Product Growth']
-    },
-    technologySignals: {
-      stack: ['Python', 'TypeScript', 'Next.js', 'PostgreSQL', 'FastAPI'],
-      moat: 'Proprietary enterprise workflows and high developer retention',
-      githubVelocity: 'Active private deployment cadence'
-    },
-    growthSignals: {
-      revenueRunRate: arr,
-      trajectory: 'Consistent month-over-month active usage growth'
-    },
-    recentEvents: [
-      { date: '2024-01-15', title: 'Secured Syndicate Financing', detail: `Closed investment round to accelerate product development, co-backed by ${primaryAngel}.` }
-    ],
-    claims: [
-      {
-        statement: `${titleName} verified in syndicate portfolio`,
-        canonicalValue: 'Active',
-        source: 'Angel Portfolio Registry',
-        sourceTier: 'TIER 2',
-        evidence: `Cross-referenced in angel syndicate portfolio of ${primaryAngel} and registry records.`,
-        date: '2024-01-15',
-        confidence: 0.92,
-        status: 'VERIFIED'
-      }
-    ],
-    investmentSignals: generateDynamicSignals({
-      name: titleName,
-      slug: cleanSlug,
-      foundedYear,
-      employees: headcount,
-      valuation,
-      primaryAngel,
-      hash
-    }),
-    timeline: generateDynamicTimeline({
-      name: titleName,
-      slug: cleanSlug,
-      foundedYear,
-      employees: headcount,
-      valuation,
-      primaryAngel,
-      hash
-    }),
-    conflicts: [],
-    pitchHook: `When pitching syndicate co-investors in ${titleName} (such as ${primaryAngel} and ${secondaryAngel}), highlight product velocity, customer retention metrics, and competitive differentiation.`
-  };
+  // Return null if company is not verified in knowledge base or discovery cache to prevent hallucinated 200 OK soft-404s
+  return null;
 }

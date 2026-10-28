@@ -5,7 +5,6 @@ export async function GET() {
   const staticPages = [
     '/',
     '/directory',
-    '/crm',
     '/contact',
     '/privacy',
     '/terms',

@@ -1,15 +1,10 @@
 export const dynamic = 'force-dynamic';
 
-const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-
 export async function GET() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
-  let envServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
-  if (!envServiceKey || envServiceKey.startsWith('sb_publishable_')) {
-    envServiceKey = DEFAULT_SERVICE_ROLE;
-  }
+  const envServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  let totalInvestors = 7430;
+  let totalInvestors = 10407;
   try {
     const res = await fetch(`${supabaseUrl}/rest/v1/investors_public?select=slug&limit=1`, {
       headers: {
@@ -33,6 +28,8 @@ export async function GET() {
   const numSitemaps = Math.max(1, Math.ceil(totalInvestors / 1000));
   const sitemaps = [
     'https://openangels.xyz/sitemap-static.xml',
+    'https://openangels.xyz/sitemap-hubs.xml',
+    'https://openangels.xyz/sitemap-companies.xml',
   ];
   for (let i = 1; i <= numSitemaps; i++) {
     sitemaps.push(`https://openangels.xyz/sitemap-${i}.xml`);

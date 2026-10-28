@@ -2,20 +2,21 @@ import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
-const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-
 export async function POST(request) {
   try {
     const { searchParams } = new URL(request.url);
     const providedSecret = searchParams.get('secret') || request.headers.get('x-gumroad-secret') || '';
     const configuredSecret = process.env.GUMROAD_WEBHOOK_SECRET;
 
-    // 1. Webhook Secret Validation
-    if (configuredSecret && configuredSecret.trim()) {
-      if (providedSecret !== configuredSecret.trim()) {
-        console.warn('[Gumroad Webhook] Rejected: Invalid or missing webhook secret.');
-        return Response.json({ error: 'Unauthorized: Invalid webhook secret' }, { status: 401 });
-      }
+    // 1. Fail-Closed Webhook Secret Validation
+    if (!configuredSecret || !configuredSecret.trim()) {
+      console.error('[Gumroad Webhook] Server configuration error: GUMROAD_WEBHOOK_SECRET is not configured in environment.');
+      return Response.json({ error: 'Server misconfiguration: Webhook secret not set' }, { status: 500 });
+    }
+
+    if (!providedSecret || providedSecret.trim() !== configuredSecret.trim()) {
+      console.warn('[Gumroad Webhook] Rejected: Invalid or missing webhook secret.');
+      return Response.json({ error: 'Unauthorized: Invalid webhook secret' }, { status: 401 });
     }
 
     const contentType = request.headers.get('content-type') || '';
@@ -68,10 +69,7 @@ export async function POST(request) {
     const cleanEmail = email.trim().toLowerCase();
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
     
-    let envServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
-    if (!envServiceKey || envServiceKey.startsWith('sb_publishable_')) {
-      envServiceKey = DEFAULT_SERVICE_ROLE;
-    }
+    let envServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 
     const supabaseAdmin = createClient(supabaseUrl, envServiceKey, {
       auth: { persistSession: false },
@@ -91,6 +89,23 @@ export async function POST(request) {
 
     if (updateError) {
       console.error('[Gumroad Webhook] Database update error:', updateError);
+    }
+
+    // 5. Pre-activate or record in pending purchases table so pre-signup purchases aren't lost
+    try {
+      await supabaseAdmin
+        .from('gumroad_sales')
+        .upsert({
+          email: cleanEmail,
+          sale_id: saleId || null,
+          price: price ? String(price) : null,
+          is_premium: isPremium,
+          refunded: refunded,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'email' });
+    } catch (saleErr) {
+      // Non-fatal if table not yet created
+      console.warn('[Gumroad Webhook] Pending sales log notice:', saleErr.message);
     }
 
     console.log(`[Gumroad Webhook] Success: Verified ping for email=${cleanEmail}, is_premium=${isPremium}, sale_id=${saleId || 'N/A'}, price=${price || 'N/A'}`);

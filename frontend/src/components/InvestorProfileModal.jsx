@@ -132,7 +132,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         .insert({
           user_id: user.id,
           investor_id: investor.id,
-          status: 'saved',
+          status: 'inbox',
           notes: ''
         });
       setInCrm(true);
@@ -214,9 +214,15 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
               <div className="flex-1 min-w-0">
                 {/* Row 1: Name + Badges */}
                 <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                  <h2 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug truncate">
-                    {investor.name}
-                  </h2>
+                  {isStandalone ? (
+                    <h1 className="text-base sm:text-xl font-bold text-white tracking-tight leading-snug truncate">
+                      {investor.name}
+                    </h1>
+                  ) : (
+                    <h2 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug truncate">
+                      {investor.name}
+                    </h2>
+                  )}
                   {(() => {
                     const verifInfo = getVerificationInfo(investor);
                     return (

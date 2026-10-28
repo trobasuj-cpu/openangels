@@ -51,8 +51,8 @@ export async function generateMetadata({ params }) {
 
   if (!company) {
     return {
-      title: 'Company Intelligence Dossier | OpenAngels',
-      description: 'Audited startup and company intelligence for venture founders and investors.'
+      title: 'Company Not Found | OpenAngels',
+      robots: { index: false, follow: false }
     };
   }
 
@@ -156,7 +156,7 @@ export default async function CompanyIntelligencePage({ params }) {
             <span>Institutional Due Diligence Memo</span>
             <span>Confidential</span>
           </div>
-          <h1 className="text-3xl font-black text-black tracking-tight">{company.name}</h1>
+          <div className="text-3xl font-black text-black tracking-tight">{company.name}</div>
           <p className="text-sm text-zinc-700 mt-1">{company.tagline || company.legalName}</p>
         </div>
 

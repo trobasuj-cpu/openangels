@@ -1,10 +1,8 @@
 export const SITE_URL = 'https://openangels.xyz';
 export const PRODUCT_NAME = 'OpenAngels';
-export const INVESTOR_COUNT = '7,400+';
-export const LEGAL_UPDATED_LABEL = 'July 1, 2026';
-export const SEO_LASTMOD = '2026-07-01';
-
-const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
+export const INVESTOR_COUNT = '10,000+';
+export const LEGAL_UPDATED_LABEL = 'October 28, 2026';
+export const SEO_LASTMOD = '2026-10-28';
 
 /**
  * Server-side dynamic investor count fetcher with Next.js ISR cache (1 hour).
@@ -14,15 +12,13 @@ const DEFAULT_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbF
 export async function getDynamicInvestorCount() {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
-    let envServiceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
-    if (!envServiceKey || envServiceKey.startsWith('sb_publishable_')) {
-      envServiceKey = DEFAULT_SERVICE_ROLE;
-    }
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
+    const apiKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || anonKey;
 
     const res = await fetch(`${supabaseUrl}/rest/v1/investors_public?select=slug&limit=1`, {
       headers: {
-        'apikey': envServiceKey,
-        'Authorization': `Bearer ${envServiceKey}`,
+        'apikey': apiKey,
+        'Authorization': `Bearer ${apiKey}`,
         'Prefer': 'count=exact'
       },
       next: { revalidate: 3600 }
@@ -48,10 +44,10 @@ export async function getDynamicInvestorCount() {
   }
 
   return {
-    total: 7430,
-    formatted: '7,430',
-    seoLabel: '7,400+',
-    exactPlus: '7,430+'
+    total: 10400,
+    formatted: '10,400',
+    seoLabel: '10,000+',
+    exactPlus: '10,400+'
   };
 }
 
