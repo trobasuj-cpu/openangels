@@ -286,10 +286,10 @@ const MarketingShowcase = ({ isPremium }) => {
   );
 };
 
-export default function Dashboard() {
-  const [investors, setInvestors] = useState([]);
-  const [totalDatabaseCount, setTotalDatabaseCount] = useState(7430);
-  const [loading, setLoading] = useState(true);
+export default function Dashboard({ initialInvestors = [], initialCount = 10400 }) {
+  const [investors, setInvestors] = useState(initialInvestors);
+  const [totalDatabaseCount, setTotalDatabaseCount] = useState(initialCount);
+  const [loading, setLoading] = useState(initialInvestors.length === 0);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -368,7 +368,7 @@ export default function Dashboard() {
   const [selectedStages, setSelectedStages] = useState([]);
   const [industrySearch, setIndustrySearch] = useState('');
   const [copiedEmailId, setCopiedEmailId] = useState(null);
-  const [matchingCount, setMatchingCount] = useState(4267);
+  const [matchingCount, setMatchingCount] = useState(initialCount);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [viewMode, setViewMode] = useState('founders'); // 'founders' | 'investors'
@@ -650,6 +650,17 @@ export default function Dashboard() {
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
+      const hasActiveParams = search || 
+        selectedIndustries.length > 0 || 
+        selectedLocations.length > 0 || 
+        selectedStages.length > 0 || 
+        selectedCheckSizes.length > 0 || 
+        showNewOnly ||
+        (typeof window !== 'undefined' && (new URLSearchParams(window.location.search).get('search') || new URLSearchParams(window.location.search).get('q')));
+      
+      if (initialInvestors && initialInvestors.length > 0 && !hasActiveParams) {
+        return;
+      }
       fetchInvestors({ offset: 0, isAppend: false });
       return;
     }
@@ -1760,24 +1771,11 @@ export default function Dashboard() {
                             <div className="flex items-center gap-3 min-w-0">
                               <InvestorAvatar name={investor.name} avatarUrl={displayAvatar} className="w-11 h-11" />
                               <div className="min-w-0">
-                                {isUnlocked ? (
-                                  <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
-                                    <h3 className="text-base font-bold text-zinc-900 dark:text-white truncate">{investor.name}</h3>
-                                  </Link>
-                                ) : (
-                                  <h3 
-                                    className="text-base font-bold text-zinc-900 dark:text-white truncate cursor-pointer hover:text-red-400 transition-colors"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      if (user) {
-                                        openGumroadOverlay(user.email);
-                                      } else {
-                                        openGumroadOverlay();
-                                      }
-                                    }}
-                                    title="Unlock Premium to view full profile"
-                                  >{investor.name}</h3>
-                                )}
+                                <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
+                                  <h3 className="text-base font-bold text-zinc-900 dark:text-white truncate hover:text-red-500 transition-colors">
+                                    {investor.name}
+                                  </h3>
+                                </Link>
                                 {investor.firm ? (
                                   <p className="text-xs font-medium text-amber-600 dark:text-amber-400 truncate">
                                     {investor.title ? `${investor.title} at ` : ''}{investor.firm}

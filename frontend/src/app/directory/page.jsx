@@ -3,39 +3,38 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata = {
-  title: 'Investor Directory | OpenAngels',
-  description: 'Browse our complete directory of angel investors and VCs by industry, stage, and location.',
+  title: 'Investor Directory — Complete Database of 10,000+ Angel Investors | OpenAngels',
+  description: 'Browse our complete directory of 10,000+ verified angel investors and venture capital syndicates by industry, stage, and location.',
   alternates: { canonical: absoluteUrl('/directory') },
 };
 
 async function fetchInvestors() {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) return [];
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
 
     const headers = {
       'apikey': supabaseKey,
       'Authorization': `Bearer ${supabaseKey}`,
     };
 
-    // Fetch in batches of 1000 to bypass Supabase row limit
-    const all = [];
-    for (let offset = 0; offset < 5000; offset += 1000) {
-      const res = await fetch(
-        `${supabaseUrl}/rest/v1/investors_public?select=slug,name&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
-        { headers, next: { revalidate: 3600 } }
-      );
-      if (!res.ok) break;
-      const data = await res.json();
-      if (!data || data.length === 0) break;
-      all.push(...data);
-    }
-    return all;
+    // Parallel fetch in batches of 1000 across all 12 pages (covers 10,400+ profiles)
+    const offsets = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000];
+    const results = await Promise.all(
+      offsets.map(offset =>
+        fetch(
+          `${supabaseUrl}/rest/v1/investors_public?select=slug,name&slug=not.is.null&order=id.asc&offset=${offset}&limit=1000`,
+          { headers, next: { revalidate: 3600 } }
+        )
+          .then(res => (res.ok ? res.json() : []))
+          .catch(() => [])
+      )
+    );
+
+    return results.flat().filter(inv => inv && inv.slug && inv.name);
   } catch (err) {
     console.error('[DirectoryPage] Error:', err.message);
     return [];
