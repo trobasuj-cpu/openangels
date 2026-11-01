@@ -163,7 +163,7 @@ export default function KanbanBoard() {
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
               <span className="text-black text-sm font-bold">OA</span>
             </div>
-            <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400 truncate">
+            <span className="text-lg font-semibold text-white tracking-tight truncate">
               OpenAngels
             </span>
           </Link>

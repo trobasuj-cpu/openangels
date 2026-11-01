@@ -58,7 +58,7 @@ export default function CompanyProfileModal({ companyName, companyData: initialD
 
         {/* Header Dossier Hero Banner */}
         <div className="relative p-6 sm:p-7 pb-6 bg-gradient-to-r from-red-950/30 via-zinc-900/70 to-zinc-950 border-b border-zinc-800/80">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Clean neutral header backing */}
 
           <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div className="flex items-start sm:items-center gap-4 min-w-0">

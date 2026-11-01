@@ -152,7 +152,7 @@ const MarketingShowcase = ({ isPremium }) => {
       content: (
         <div className="flex-1 w-full flex items-center justify-center p-2">
           <div className="w-full max-w-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"></div>
+            
             <div className="relative z-10">
                <div className="flex items-center justify-between mb-3">
                  <div className="flex items-center gap-1.5">
@@ -234,8 +234,8 @@ const MarketingShowcase = ({ isPremium }) => {
       >
         <X className="w-3 h-3" />
       </button>
-      <div className="p-[1px] rounded-[24px] bg-gradient-to-r from-red-500/20 via-rose-500/20 to-red-500/20 relative overflow-hidden flex-1 group">
-        <div className="bg-black/80 rounded-[23px] p-4 md:p-5 border border-white/5 h-full backdrop-blur-xl">
+      <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 relative overflow-hidden flex-1">
+        <div className="p-4 md:p-5 h-full">
           <div className="flex gap-2 mb-4 overflow-x-auto custom-scrollbar pb-1 relative">
             {slides.map((s, i) => (
               <button
@@ -263,9 +263,7 @@ const MarketingShowcase = ({ isPremium }) => {
           <div key={activeSlide} className="flex flex-col lg:flex-row gap-6 items-center animate-in fade-in duration-300">
             <div className="flex-1 space-y-3">
               <h2 className="text-xl md:text-2xl font-bold text-white leading-tight">
-                {current.title.split(' ').map((word, i, arr) => 
-                  i === arr.length - 2 || i === arr.length - 3 ? <span key={i} className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">{word} </span> : word + ' '
-                )}
+                {current.title}
               </h2>
               <p className="text-sm text-zinc-400 max-w-md">
                 {current.desc}
@@ -884,17 +882,15 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
           "shadow-[4px_0_24px_rgba(0,0,0,0.5)]",
           isMobileFiltersOpen ? "fixed inset-y-0 left-0 z-50 flex shadow-2xl" : "hidden md:flex"
         )}>
-          {/* Subtle Ambient Glassmorphism Atmospheric Glows */}
-          <div className="absolute top-0 -left-12 w-56 h-72 bg-red-600/[0.07] rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-24 -left-12 w-48 h-48 bg-rose-900/[0.08] rounded-full blur-3xl pointer-events-none" />
+          {/* Clean neutral sidebar backing */}
 
           {/* Logo Header */}
           <div className="h-16 flex items-center justify-between px-6 border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-md shrink-0 relative z-10">
             <a href="/" className="flex items-center gap-2.5 text-white font-semibold text-lg tracking-tight hover:opacity-90 transition-all group">
-              <div className="w-8 h-8 bg-gradient-to-br from-white via-zinc-200 to-zinc-400 rounded-xl flex items-center justify-center shadow-md shadow-white/10 group-hover:scale-105 transition-transform">
-                <span className="text-black text-xs font-black tracking-tighter">OA</span>
+              <div className="w-8 h-8 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-white">
+                <span className="text-xs font-bold tracking-tight">OA</span>
               </div>
-              <span className="font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+              <span className="font-semibold text-white tracking-tight text-base">
                 OpenAngels
               </span>
             </a>
@@ -1041,7 +1037,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
           {!profile?.is_premium && (
             <div className="p-4 sm:p-5 border-t border-white/[0.06] bg-white/[0.015] backdrop-blur-md relative z-10 shrink-0">
               <div className="bg-gradient-to-b from-red-950/30 via-zinc-900/40 to-zinc-950/70 rounded-2xl p-4 border border-red-500/20 shadow-xl shadow-red-950/20 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl pointer-events-none" />
+                {/* Clean card backing */}
                 <h4 className="text-xs font-bold text-white mb-1 relative flex items-center gap-2">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   Premium (Lifetime Access)
@@ -1062,7 +1058,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
 
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header className="relative z-50 h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/60 backdrop-blur-xl shrink-0">
-          <div className="absolute inset-0 bg-red-500/5 [mask-image:radial-gradient(circle_at_top,white,transparent_70%)] pointer-events-none"></div>
+          {/* Quiet header chrome */}
           <div className="flex-1 max-w-xl">
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-white transition-colors" />
@@ -1071,7 +1067,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search by name, industry, or portfolio company..." 
-                className="w-full bg-black/50 border border-white/5 focus:bg-black focus:border-red-500/50 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder:text-zinc-500 transition-all outline-none"
+                className="w-full bg-zinc-900/60 border border-zinc-800 focus:bg-zinc-900 focus:border-zinc-600 rounded-xl pl-10 pr-4 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 transition-colors outline-none"
               />
             </div>
           </div>
@@ -1106,7 +1102,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                       {totalDatabaseCount ? totalDatabaseCount.toLocaleString() : '9,807'}
                     </span>
                     <span className="text-[11px] text-emerald-400 flex items-center gap-1 font-semibold">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       active
                     </span>
                   </div>
@@ -1119,7 +1115,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                     setShowNewOnly(false);
                     if (typeof window !== 'undefined') window.history.replaceState(null, '', '/');
                   }}
-                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-red-500 text-white border-red-500 shadow-sm"
                 >
                   Show All
                 </button>
@@ -1130,9 +1126,9 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                     if (typeof window !== 'undefined') window.history.replaceState(null, '', '/?newest=true');
                     fetchInvestors(true);
                   }}
-                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm font-bold uppercase tracking-wider rounded-lg transition-all border cursor-pointer bg-zinc-900 text-zinc-300 border-zinc-800 hover:border-zinc-700 hover:text-white"
                 >
-                  Recently Added 🔥
+                  Recently Added
                 </button>
               )}
               
@@ -1254,7 +1250,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
         </header>
 
         <div ref={mainScrollRef} className="flex-1 overflow-y-auto p-6 md:p-8 relative custom-scrollbar">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+          {/* Clean main canvas without blurred color orbs */}
           <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
             {/* WORKSPACE MODE SEGMENTED CONTROL — ABOVE ALL BANNERS */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/5">
@@ -1262,10 +1258,10 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                 <button
                   type="button"
                   onClick={() => setViewMode('founders')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     viewMode === 'founders'
-                      ? 'bg-gradient-to-r from-red-600 via-rose-600 to-red-600 text-white shadow-lg shadow-red-600/30'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                      ? 'bg-zinc-800 text-white border border-zinc-700/60 shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850'
                   }`}
                 >
                   <Rocket className="w-3.5 h-3.5" />
@@ -1280,10 +1276,10 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                 <button
                   type="button"
                   onClick={() => setViewMode('investors')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     viewMode === 'investors'
-                      ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 text-white shadow-lg shadow-emerald-600/30'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                      ? 'bg-zinc-800 text-white border border-zinc-700/60 shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850'
                   }`}
                 >
                   <Zap className="w-3.5 h-3.5" />
@@ -1301,7 +1297,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
               <div className="flex items-center gap-2 text-xs text-zinc-400">
                 {viewMode === 'founders' ? (
                   <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                     Target active angels with direct verified emails & AI pitch drafts
                   </span>
                 ) : (
@@ -1317,7 +1313,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
               <div className="space-y-6">
                 {/* Investor Intelligence Radar Hero */}
                 <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-zinc-900/80 to-zinc-950 border border-emerald-500/20 shadow-2xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+                  {/* Clean radar canvas */}
                   <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div className="max-w-2xl">
                       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold mb-3 font-mono">
@@ -1475,7 +1471,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 via-teal-400 to-emerald-600" />
                               <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
                                 <span className="flex items-center gap-1.5 text-emerald-400 font-mono">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                                   {activeSignalInfo.badge}
                                 </span>
                                 <span className="text-emerald-400/80 font-mono text-[9px] bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">
@@ -1495,7 +1491,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 via-orange-400 to-amber-600" />
                               <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
                                 <span className="flex items-center gap-1.5 text-amber-400 font-mono">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                                   {compoundInfo.primaryCompound?.badge || '⚡ COMPOUND CONVERGENCE'}
                                 </span>
                                 <span className="text-amber-300 font-mono text-[9px] bg-amber-500/15 px-1.5 py-0.2 rounded border border-amber-500/30">
@@ -1526,7 +1522,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 to-emerald-600" />
                               <div className="flex items-center justify-between text-[10px] font-bold pl-1.5 mb-1">
                                 <span className="flex items-center gap-1.5 text-emerald-400 font-mono">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                                   {topSignal.badge || topSignal.signalBadge || '⚡ RECENT SIGNAL'}
                                 </span>
                                 <span className="text-zinc-500 font-mono text-[10px]">{topSignal.date || topSignal.relativeTime}</span>
@@ -1624,35 +1620,28 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                       {/* Premium Marketing Header - Horizontal Wide Layout */}
                       <div className="h-full p-5 md:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 shadow-xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between gap-6">
                         {/* Decorative glow effects */}
-                        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-red-500/5 blur-[100px] pointer-events-none"></div>
-                        <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-rose-500/5 blur-[100px] pointer-events-none"></div>
+                        {/* Clean unslop banner canvas */}
                         
                         <div className="relative z-10 flex-1">
                           {isAiMatch ? (
                             <>
-                              <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                                Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">AI Matched</span> Investors
-                              </h1>
+                              <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight mb-1.5">AI-Matched Investors</h1>
                               <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
                                 Based on your startup's context, we've filtered the directory to show the most relevant investors. Add them to your CRM to start pitching.
                               </p>
                             </>
                           ) : showNewOnly ? (
                             <>
-                              <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                                Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">100 Investors</span>
-                              </h1>
+                              <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight mb-1.5">Latest 100 Investors</h1>
                               <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
                                 The most recently added active investors in our database. Fresh opportunities for your next fundraising round.
                               </p>
                             </>
                           ) : (
                             <>
-                              <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-                                Find Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-500">Angel Investor</span>
-                              </h1>
+                              <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight mb-1.5">Angel Investor Directory</h1>
                               <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
-                                Access an extensive, curated directory of active early-stage investors. Filter by industry, check size, and stage to find the perfect match. No warm introductions needed.
+                                Verified database of 10,400+ early-stage angel investors and venture syndicates. Filter by industry, stage, and check size to find relevant backers.
                               </p>
                             </>
                           )}
@@ -1694,7 +1683,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                       <div className="w-full xl:w-1/3 shrink-0">
                         {/* Product Hunt Welcome Banner */}
                         <div className="h-full rounded-xl bg-gradient-to-r from-[#DA552F] to-[#ea6e4b] p-5 shadow-lg flex flex-col justify-center text-white relative overflow-hidden">
-                          <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                          
                           <div className="flex items-center gap-4 relative z-10 mb-3">
                             <div className="w-10 h-10 rounded-full bg-white text-[#DA552F] flex items-center justify-center font-bold text-xl shadow-inner shrink-0">
                               P
@@ -1763,7 +1752,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                   const verifInfo = getVerificationInfo(investor);
 
                   return (
-                    <div key={investor.id} className="group flex flex-col bg-white/70 dark:bg-zinc-900/40 backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-black/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">
+                    <div key={investor.id} className="group flex flex-col bg-zinc-900/40 hover:bg-zinc-900/70 border border-zinc-800/80 hover:border-zinc-700 rounded-xl overflow-hidden transition-colors duration-150">
                       <div className="p-5 flex-1 flex flex-col justify-between">
                         {/* Header: Avatar + Info + Socials */}
                         <div>
@@ -1772,7 +1761,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                               <InvestorAvatar name={investor.name} avatarUrl={displayAvatar} className="w-11 h-11" />
                               <div className="min-w-0">
                                 <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
-                                  <h3 className="text-base font-bold text-zinc-900 dark:text-white truncate hover:text-red-500 transition-colors">
+                                  <h3 className="text-sm sm:text-base font-semibold text-white truncate hover:text-amber-400 transition-colors">
                                     {investor.name}
                                   </h3>
                                 </Link>
@@ -1918,7 +1907,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                             ));
                           })()}
                           {displayCheckSize && (
-                            <span className="px-2 py-0.5 text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-md border border-emerald-500/20">
+                            <span className="px-2 py-0.5 text-[11px] font-mono font-medium text-emerald-400 bg-emerald-500/10 rounded border border-emerald-500/20 tabular-nums">
                               {displayCheckSize}
                             </span>
                           )}
@@ -2197,7 +2186,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                   <Link
                     key={page.slug}
                     href={`/investors/${page.slug}`}
-                    className="group relative px-4 py-2 rounded-full bg-white/50 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-white/5 backdrop-blur-md overflow-hidden hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all duration-300"
+                    className="group relative px-4 py-2 rounded-full bg-white/50 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-white/5 backdrop-blur-md overflow-hidden hover:border-zinc-700 hover:bg-zinc-800/80 transition-colors duration-150"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/0 to-red-500/0 group-hover:from-red-500/5 group-hover:via-red-500/10 group-hover:to-red-500/5 transition-all duration-500"></div>
                     <span className="relative z-10 text-xs font-semibold text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{page.label}</span>

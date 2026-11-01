@@ -1,32 +1,18 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
+/**
+ * Quiet Ambient Background (Unslop craft)
+ * Replaces heavy, repainting purple-blue mouse-follower with a calm, static, high-contrast dark surface.
+ */
 export default function BackgroundAnimation() {
-  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      // Use requestAnimationFrame for smoother performance
-      requestAnimationFrame(() => {
-        setMousePos({
-          x: e.clientX,
-          y: e.clientY,
-        });
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-white dark:bg-zinc-950">
-      {/* Dynamic mouse-following glow (Spotlight effect) */}
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-zinc-950">
+      {/* Subtle, calm static top ambient vignette */}
       <div 
-        className="absolute w-[800px] h-[800px] rounded-full blur-[120px] transition-transform duration-700 ease-out will-change-transform"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] opacity-40 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(59,130,246,0.1) 40%, transparent 70%)',
-          transform: `translate(${mousePos.x - 400}px, ${mousePos.y - 400}px)`
+          background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 80%)'
         }}
       />
     </div>

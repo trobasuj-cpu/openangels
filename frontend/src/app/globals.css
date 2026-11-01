@@ -130,29 +130,17 @@
   to { width: 100%; }
 }
 
-@keyframes oil-slick {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
+/* Quiet, tactile button styling adhering to unslop design craft */
 .crm-btn-oil {
-  background: linear-gradient(
-    135deg,
-    #18181b 0%,
-    #450a0a 20%,
-    #7f1d1d 40%,
-    #ef4444 55%,
-    #7f1d1d 70%,
-    #450a0a 85%,
-    #18181b 100%
-  );
-  background-size: 400% 400%;
-  animation: oil-slick 6s ease infinite;
+  background-color: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f4f4f5;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 .crm-btn-oil:hover {
-  animation-duration: 2s;
-  filter: brightness(1.15);
+  background-color: #27272a;
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
 }
 
 /* Institutional Due Diligence Memo Print Styles */

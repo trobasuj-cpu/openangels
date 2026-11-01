@@ -202,7 +202,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
 
           {/* Dossier Header Banner — Sleek, Crisp & Compact */}
           <div className="relative px-4 py-3 sm:px-6 sm:py-3.5 bg-gradient-to-r from-red-950/30 via-zinc-900/50 to-zinc-950 border-b border-zinc-800/80 shrink-0 pr-12">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
+            {/* Clean neutral modal backing */}
             
             <div className="relative z-10 flex items-center gap-3 sm:gap-4">
               <InvestorAvatar 

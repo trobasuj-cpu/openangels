@@ -162,7 +162,7 @@ export default async function CompanyIntelligencePage({ params }) {
 
         {/* HERO SECTION */}
         <section className="relative p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-red-950/30 via-zinc-900/60 to-zinc-950 border border-zinc-800/80 shadow-2xl overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Clean neutral company header */}
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-start sm:items-center gap-5 min-w-0">
