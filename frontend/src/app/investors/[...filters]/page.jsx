@@ -133,7 +133,8 @@ export async function generateMetadata({ params }) {
 
   const description = `Looking for ${stageLabel || ''} funding? Access our verified list of ${numInvestors > 0 ? numInvestors : ''} ${typeStr} angel investors and VCs${geoStr}. Get emails, LinkedIn profiles, and investment focus on OpenAngels.`.replace(/\s+/g, ' ').trim();
 
-  const canonicalPath = `/investors/${filters.join('/')}`;
+  const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
+  const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
 
   return {
     title,
@@ -196,7 +197,8 @@ export default async function FilteredInvestorsPage({ params }) {
   const parts = [industryLabel, stageLabel].filter(Boolean);
   const typeStr = parts.length > 0 ? parts.join(' ') : '';
   const geoStr = geoLabel ? ` in ${geoLabel}` : '';
-  const canonicalPath = `/investors/${filters.join('/')}`;
+  const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
+  const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
 
   // Build Schema.org structured data
   const pageSchema = {
@@ -210,12 +212,21 @@ export default async function FilteredInvestorsPage({ params }) {
       name: PRODUCT_NAME,
       url: SITE_URL,
     },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+        { '@type': 'ListItem', position: 2, name: 'Directory', item: absoluteUrl('/directory') },
+        { '@type': 'ListItem', position: 3, name: `${typeStr || 'Angel'} Investors${geoStr}`, item: absoluteUrl(canonicalPath) }
+      ]
+    },
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: Math.min(investors.length, 50),
       itemListElement: investors.slice(0, 10).map((investor, index) => ({
         '@type': 'ListItem',
         position: index + 1,
+        url: absoluteUrl(`/investor/${investor.slug || investor.id}`),
         name: investor.name,
         description: investor.bio || `${typeStr} investor on OpenAngels`,
       })),

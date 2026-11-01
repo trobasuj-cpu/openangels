@@ -112,8 +112,13 @@ export function parseFilters(filtersArray) {
   const result = { industry: null, stage: null, geo: null };
   if (!filtersArray || filtersArray.length === 0) return result;
   
+  const PREFIX_MARKERS = new Set(['industry', 'sector', 'stage', 'location', 'geo', 'city', 'region', 'country']);
+
   for (const segment of filtersArray) {
     const lower = segment.toLowerCase();
+    if (PREFIX_MARKERS.has(lower)) {
+      continue; // Skip prefix keywords like /industry/ or /stage/ so /investors/industry/fintech resolves to fintech
+    }
     if (!result.stage && STAGE_SLUGS[lower]) {
       result.stage = lower;
     } else if (!result.geo && GEO_REGIONS[lower]) {

@@ -1,0 +1,22 @@
+# OpenAngels
+
+> OpenAngels is an open directory and intelligence platform of 10,400+ early-stage angel investors, venture capital funds, and startup syndicates.
+
+## Mission & Purpose
+OpenAngels helps startup founders find, evaluate, and connect with active angel investors without paying recurring monthly subscription fees. Founders can filter investors by sector (90+ industries including AI, SaaS, Fintech, Healthcare, Consumer, Hardware, Web3), stage (Pre-seed, Seed, Series A), check size ($5k to $1M+), and geography (Silicon Valley, New York, London, Europe, Global).
+
+## Core Data & Services
+- **10,400+ Verified Investor Dossiers**: Detailed investment thesis, confirmed typical check sizes, preferred stages, backed startups, and verified direct contact details.
+- **Programmatic Directory Hubs**: Curated thematic directories categorized by sector, investment stage, and geography for targeted fundraising.
+- **Company Portfolio Intelligence**: Verified lists of angel backers and early investors behind iconic technology companies (OpenAI, Stripe, Figma, Airbnb, Uber, etc.).
+- **AI Cold Email Pitch Assistant**: Personalized outreach generator tailored to each investor's portfolio and focus sectors.
+
+## Key Links & Resources
+- Homepage: https://openangels.xyz
+- Directory & Search: https://openangels.xyz/directory
+- AI Investors: https://openangels.xyz/investors/ai
+- SaaS Investors: https://openangels.xyz/investors/saas
+- Fintech Investors: https://openangels.xyz/investors/fintech
+- Seed Stage Investors: https://openangels.xyz/investors/seed
+- Pre-Seed Investors: https://openangels.xyz/investors/pre-seed
+- XML Sitemap Index: https://openangels.xyz/sitemap.xml
