@@ -324,7 +324,7 @@ export default async function StandaloneInvestorPage({ params }) {
         >
           <div className="flex items-center justify-between gap-3 mb-5 border-b border-zinc-800/80 pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <div className="p-2 rounded-lg bg-zinc-800 text-zinc-300 border border-zinc-750">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
@@ -337,8 +337,8 @@ export default async function StandaloneInvestorPage({ params }) {
               </div>
             </div>
 
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-750">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               Verified Deal Signals
             </span>
           </div>
@@ -364,7 +364,7 @@ export default async function StandaloneInvestorPage({ params }) {
               </div>
               <div className="flex flex-wrap gap-1 mt-0.5">
                 {stages.map((stg) => (
-                  <span key={stg} className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  <span key={stg} className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-zinc-850 text-zinc-300 border border-zinc-750">
                     {stg}
                   </span>
                 ))}
@@ -373,8 +373,8 @@ export default async function StandaloneInvestorPage({ params }) {
             </div>
 
             {/* Fact 3: Direct Pitch Contact */}
-            <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-red-500/20 flex flex-col justify-between">
-              <div className="flex items-center gap-1.5 text-red-400 font-semibold uppercase tracking-wider text-[10.5px] mb-1">
+            <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800/80 flex flex-col justify-between">
+              <div className="flex items-center gap-1.5 text-zinc-400 font-medium uppercase tracking-wider text-[10.5px] mb-1">
                 <Lock className="w-3.5 h-3.5 text-red-400" />
                 <span>Founder Pitch Contact</span>
               </div>
