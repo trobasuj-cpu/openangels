@@ -14,6 +14,7 @@ const nextConfig = {
     return [
       { source: '/sitemap.xml', destination: '/api/sitemap-root' },
       { source: '/sitemap-index.xml', destination: '/api/sitemap-root' },
+      { source: '/sitemap_index.xml', destination: '/api/sitemap-root' },
       { source: '/sitemap-static.xml', destination: '/api/sitemap-static' },
       { source: '/sitemap-hubs.xml', destination: '/api/sitemap-hubs' },
       { source: '/sitemap-companies.xml', destination: '/api/sitemap-companies' },
@@ -27,6 +28,8 @@ const nextConfig = {
       { source: '/sitemap-8.xml', destination: '/api/sitemap/8' },
       { source: '/sitemap-9.xml', destination: '/api/sitemap/9' },
       { source: '/sitemap-10.xml', destination: '/api/sitemap/10' },
+      { source: '/sitemap-11.xml', destination: '/api/sitemap/11' },
+      { source: '/sitemap-12.xml', destination: '/api/sitemap/12' },
       { source: '/sitemap-:page(\\d+).xml', destination: '/api/sitemap/:page' },
     ];
   },
