@@ -1,10 +1,13 @@
 export const dynamic = 'force-dynamic';
 import { absoluteUrl } from '@/seo';
 
+const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
 export async function GET() {
   const staticPages = [
     '/',
     '/directory',
+    ...LETTERS.map((l) => `/directory/${l}`),
     '/contact',
     '/privacy',
     '/terms',
@@ -18,7 +21,7 @@ ${staticPages.map(path => `  <url>
     <loc>${absoluteUrl(path)}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>daily</changefreq>
-    <priority>${path === '/' ? '1.0' : '0.8'}</priority>
+    <priority>${path === '/' ? '1.0' : path.startsWith('/directory') ? '0.9' : '0.7'}</priority>
   </url>`).join('\n')}
 </urlset>`;
 

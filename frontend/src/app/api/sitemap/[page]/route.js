@@ -33,7 +33,7 @@ export async function GET(request, { params }) {
       .from('investors_public')
       .select('slug, created_at')
       .not('slug', 'is', null)
-      .order('created_at', { ascending: false })
+      .order('created_at', { ascending: false }).order('id', { ascending: true })
       .range(from, to);
 
     if (error) throw error;
@@ -53,7 +53,7 @@ ${urls}
     return new Response(xml, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
       },
     });
   } catch (e) {

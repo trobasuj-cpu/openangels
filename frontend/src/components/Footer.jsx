@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Mail, Sparkles } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { INDUSTRY_PAGES, INVESTOR_COUNT } from '../seo.js';
 
 export default function Footer() {
@@ -21,7 +21,7 @@ export default function Footer() {
           <p className="text-sm leading-relaxed">
             A curated database of {INVESTOR_COUNT} angel investors and VCs for founders raising pre-seed and seed rounds.
           </p>
-          <a href="mailto:tackssignals@gmail.com" className="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-amber-500 transition-colors">
+          <a href="mailto:tackssignals@gmail.com" className="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors">
             <Mail className="w-4 h-4" />
             tackssignals@gmail.com
           </a>
@@ -30,11 +30,11 @@ export default function Footer() {
         <div>
           <h2 className="text-white font-semibold mb-4">Company and Legal</h2>
           <ul className="space-y-3 text-sm">
-            <li><Link href="/contact" className="hover:text-amber-500 transition-colors">Contact</Link></li>
-            <li><Link href="/terms" className="hover:text-amber-500 transition-colors">Terms of service</Link></li>
-            <li><Link href="/refund" className="hover:text-amber-500 transition-colors">Refund policy</Link></li>
-            <li><Link href="/privacy" className="hover:text-amber-500 transition-colors">Privacy policy</Link></li>
-            <li><Link href="/gdpr" className="hover:text-amber-500 transition-colors">GDPR</Link></li>
+            <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+            <li><Link href="/terms" className="hover:text-white transition-colors">Terms of service</Link></li>
+            <li><Link href="/refund" className="hover:text-white transition-colors">Refund policy</Link></li>
+            <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy policy</Link></li>
+            <li><Link href="/gdpr" className="hover:text-white transition-colors">GDPR</Link></li>
           </ul>
         </div>
 
@@ -43,20 +43,30 @@ export default function Footer() {
           <ul className="space-y-3 text-sm">
             {footerIndustries.map((page) => (
               <li key={page.slug}>
-                <Link href={`/investors/${page.slug}`} className="hover:text-amber-500 transition-colors">
+                <Link href={`/investors/${page.slug}`} className="hover:text-white transition-colors">
                   {page.label} investors
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href="/investors/ai/seed" className="hover:text-white transition-colors">
+                AI Seed investors
+              </Link>
+            </li>
+            <li>
+              <Link href="/investors/saas/pre-seed" className="hover:text-white transition-colors">
+                SaaS Pre-Seed investors
+              </Link>
+            </li>
           </ul>
         </div>
 
         <div>
           <h2 className="text-white font-semibold mb-4">Fundraising Tools</h2>
           <ul className="space-y-3 text-sm">
-            <li><Link href="/directory" className="hover:text-amber-500 transition-colors">Investor directory (All)</Link></li>
-            <li><Link href="/crm" className="hover:text-amber-500 transition-colors">Fundraising CRM</Link></li>
-            <li><a href="mailto:tackssignals@gmail.com" className="hover:text-amber-500 transition-colors">Suggest an investor</a></li>
+            <li><Link href="/directory" className="hover:text-white transition-colors">Investor directory (A–Z)</Link></li>
+            <li><Link href="/crm" className="hover:text-white transition-colors">Fundraising CRM</Link></li>
+            <li><a href="mailto:tackssignals@gmail.com" className="hover:text-white transition-colors">Suggest an investor</a></li>
           </ul>
         </div>
       </div>
@@ -64,36 +74,50 @@ export default function Footer() {
       {/* Featured Indexed Angel Profiles & Startup Dossiers Internal Link Graph */}
       <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-zinc-900">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="shrink-0 text-xs font-mono font-bold uppercase tracking-wider text-zinc-400">
+          <div className="shrink-0 text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">
             Featured Angel Investors:
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-zinc-400">
-            <Link href="/investor/sam-altman" className="hover:text-amber-400 transition-colors">Sam Altman</Link>
-            <Link href="/investor/pieter-levels" className="hover:text-amber-400 transition-colors">Pieter Levels</Link>
-            <Link href="/investor/naval-ravikant" className="hover:text-amber-400 transition-colors">Naval Ravikant</Link>
-            <Link href="/investor/elad-gil" className="hover:text-amber-400 transition-colors">Elad Gil</Link>
-            <Link href="/investor/greg-brockman" className="hover:text-amber-400 transition-colors">Greg Brockman</Link>
-            <Link href="/investor/paul-graham" className="hover:text-amber-400 transition-colors">Paul Graham</Link>
-            <Link href="/investor/peter-thiel" className="hover:text-amber-400 transition-colors">Peter Thiel</Link>
-            <Link href="/investor/garry-tan" className="hover:text-amber-400 transition-colors">Garry Tan</Link>
-            <Link href="/investor/packy-mccormick" className="hover:text-amber-400 transition-colors">Packy McCormick</Link>
-            <Link href="/investor/reid-hoffman" className="hover:text-amber-400 transition-colors">Reid Hoffman</Link>
-            <Link href="/investor/balaji-srinivasan" className="hover:text-amber-400 transition-colors">Balaji Srinivasan</Link>
-            <Link href="/investor/dylan-field" className="hover:text-amber-400 transition-colors">Dylan Field</Link>
-            <Link href="/investor/jason-calacanis" className="hover:text-amber-400 transition-colors">Jason Calacanis</Link>
+            <Link href="/investor/sam-altman" className="hover:text-white transition-colors">Sam Altman</Link>
+            <Link href="/investor/naval-ravikant" className="hover:text-white transition-colors">Naval Ravikant</Link>
+            <Link href="/investor/lenny-rachitsky" className="hover:text-white transition-colors">Lenny Rachitsky</Link>
+            <Link href="/investor/pieter-levels" className="hover:text-white transition-colors">Pieter Levels</Link>
+            <Link href="/investor/elad-gil" className="hover:text-white transition-colors">Elad Gil</Link>
+            <Link href="/investor/greg-brockman" className="hover:text-white transition-colors">Greg Brockman</Link>
+            <Link href="/investor/paul-graham" className="hover:text-white transition-colors">Paul Graham</Link>
+            <Link href="/investor/peter-thiel" className="hover:text-white transition-colors">Peter Thiel</Link>
+            <Link href="/investor/garry-tan" className="hover:text-white transition-colors">Garry Tan</Link>
+            <Link href="/investor/packy-mccormick" className="hover:text-white transition-colors">Packy McCormick</Link>
+            <Link href="/investor/reid-hoffman" className="hover:text-white transition-colors">Reid Hoffman</Link>
+            <Link href="/investor/balaji-srinivasan" className="hover:text-white transition-colors">Balaji Srinivasan</Link>
+            <Link href="/investor/dylan-field" className="hover:text-white transition-colors">Dylan Field</Link>
+            <Link href="/investor/jason-calacanis" className="hover:text-white transition-colors">Jason Calacanis</Link>
+            <Link href="/investor/howard-hartenbaum" className="hover:text-white transition-colors">Howard Hartenbaum</Link>
           </div>
         </div>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mt-4 pt-3 border-t border-zinc-900/60">
-          <div className="shrink-0 text-xs font-mono font-bold uppercase tracking-wider text-zinc-400">
+          <div className="shrink-0 text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">
             Verified Company Dossiers:
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-zinc-400">
-            <Link href="/company/openai" className="hover:text-amber-400 transition-colors">OpenAI</Link>
-            <Link href="/company/stripe" className="hover:text-amber-400 transition-colors">Stripe</Link>
-            <Link href="/company/perplexity" className="hover:text-amber-400 transition-colors">Perplexity</Link>
-            <Link href="/company/cursor" className="hover:text-amber-400 transition-colors">Cursor</Link>
-            <Link href="/company/twitter" className="hover:text-amber-400 transition-colors">Twitter (X)</Link>
-            <Link href="/company/linkedin" className="hover:text-amber-400 transition-colors">LinkedIn</Link>
+            <Link href="/company/openai" className="hover:text-white transition-colors">OpenAI</Link>
+            <Link href="/company/stripe" className="hover:text-white transition-colors">Stripe</Link>
+            <Link href="/company/perplexity" className="hover:text-white transition-colors">Perplexity</Link>
+            <Link href="/company/cursor" className="hover:text-white transition-colors">Cursor</Link>
+            <Link href="/company/twitter" className="hover:text-white transition-colors">Twitter (X)</Link>
+            <Link href="/company/linkedin" className="hover:text-white transition-colors">LinkedIn</Link>
+          </div>
+        </div>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mt-4 pt-3 border-t border-zinc-900/60">
+          <div className="shrink-0 text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">
+            Browse Directory A–Z:
+          </div>
+          <div className="flex flex-wrap gap-x-2.5 gap-y-1.5 text-xs font-mono text-zinc-400">
+            {'abcdefghijklmnopqrstuvwxyz'.split('').map((l) => (
+              <Link key={l} href={`/directory/${l}`} className="hover:text-white transition-colors uppercase">
+                {l}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

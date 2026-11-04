@@ -6,13 +6,67 @@ import {
   parseFilters, getStageInfo, getGeoInfo, isUSLocation,
 } from '@/seo.js';
 import Link from 'next/link';
-import { ArrowLeft, Mail, MapPin, DollarSign, Sparkles, Filter } from 'lucide-react';
+import { ArrowLeft, MapPin, Filter, ChevronRight } from 'lucide-react';
 import Footer from '@/components/Footer';
 import AddToCrmButton from '@/components/AddToCrmButton';
 import InvestorAvatar from '@/components/InvestorAvatar';
 import { notFound } from 'next/navigation';
 
 const CURRENT_YEAR = new Date().getFullYear();
+
+function hashString(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h);
+}
+
+/**
+ * Score and deterministically order investors so each hub showcases
+ * its highest-signal, sector-relevant verified profiles first — without
+ * duplicating the same alphabetical "A" names across every hub page.
+ */
+function rankInvestorsForHub(investors, parsed, canonicalPath) {
+  const indKeyword = (parsed.industry || '').toLowerCase().replace(/-/g, ' ');
+  const stageKeyword = (parsed.stage || '').toLowerCase().replace(/-/g, ' ');
+
+  return [...investors]
+    .map((inv) => {
+      let score = 0;
+      const bio = (inv.bio || '').toLowerCase();
+      const rawPort = inv.portfolio || inv.past_investments;
+      const portArr = Array.isArray(rawPort)
+        ? rawPort.filter(Boolean)
+        : typeof rawPort === 'string' && rawPort.trim()
+        ? rawPort.split(',').map((s) => s.trim()).filter(Boolean)
+        : [];
+
+      // 1. Explicit mention of target industry in bio or portfolio
+      if (indKeyword && (bio.includes(indKeyword) || portArr.some((p) => p.toLowerCase().includes(indKeyword)))) {
+        score += 90;
+      }
+      if (stageKeyword && bio.includes(stageKeyword)) {
+        score += 35;
+      }
+
+      // 2. Profile completeness & authority signals
+      if (inv.avatar_url) score += 25;
+      if (portArr.length > 0) score += Math.min(portArr.length * 8, 40);
+      if (bio.length > 60 && !bio.includes('public investor list')) score += 30;
+      if (inv.has_email) score += 15;
+      if (inv.has_twitter || inv.has_linkedin) score += 15;
+
+      // 3. Deterministic hub-specific variation (breaks ties uniquely per hub URL)
+      const tieBreaker = hashString(`${inv.slug || inv.id}::${canonicalPath}`) % 45;
+      score += tieBreaker;
+
+      return { inv, score, portArr };
+    })
+    .sort((a, b) => b.score - a.score)
+    .map((item) => item.inv);
+}
 
 /**
  * Build a Supabase query based on parsed filters.
@@ -27,18 +81,13 @@ function buildQuery(parsed, selectClause = '*', countOnly = false) {
   const stageInfo = parsed.stage ? getStageInfo(parsed.stage) : null;
   const geoInfo = parsed.geo ? getGeoInfo(parsed.geo) : null;
 
-  // Industry filter
   if (parsed.industry) {
     query = query.contains('industries', [parsed.industry]);
   }
 
-  // Stage filter
   if (stageInfo) {
     query = query.contains('stages', [stageInfo.dbValue]);
   }
-
-  // Geo filter — handled after query since we need to filter in JS for complex regions
-  // We'll apply location filter via .in() for known locations, or post-filter for USA
 
   if (geoInfo && !geoInfo.countryMatch && geoInfo.locations) {
     query = query.in('location', geoInfo.locations);
@@ -53,57 +102,61 @@ function buildQuery(parsed, selectClause = '*', countOnly = false) {
   };
 }
 
-function ConversationalFAQ({ industryLabel, stageLabel, geoLabel, totalMatches }) {
-  // Safe defaults if filters are missing
-  const i = industryLabel || "early-stage";
-  const s = stageLabel ? `${stageLabel} ` : "";
-  const g = geoLabel ? ` in ${geoLabel}` : "";
-  const c = totalMatches > 0 ? totalMatches : "many";
+function ConversationalFAQ({ industryLabel, stageLabel, geoLabel, totalMatches, topInvestorNames }) {
+  const i = industryLabel || 'early-stage';
+  const s = stageLabel ? `${stageLabel} ` : '';
+  const g = geoLabel ? ` in ${geoLabel}` : '';
+  const c = totalMatches > 0 ? totalMatches.toLocaleString() : 'verified';
+  const topNamesStr = topInvestorNames && topInvestorNames.length > 0
+    ? topInvestorNames.slice(0, 5).join(', ')
+    : 'prominent operator-angels and syndicate leads';
 
   const questions = [
     {
-      q: `How to find ${s}${i} angel investors${g}?`,
-      a: `If you are raising a ${s}round for your ${i} startup${g}, you can use the OpenAngels database to access ${c} verified active investors. We provide direct emails and LinkedIn profiles to help you pitch directly.`
+      q: `Who are the top ${s}${i} angel investors${g} in ${CURRENT_YEAR}?`,
+      a: `OpenAngels tracks ${c} verified ${s}${i} angel investors and early-stage venture backers${g}, including ${topNamesStr}. Each profile includes typical check sizes, preferred stages, portfolio startups, and verified founder pitch channels.`,
     },
     {
-      q: `Who are the top ${i} investors for early-stage startups right now?`,
-      a: `Currently, our database tracks ${c} highly active ${i} investors. The list includes prominent angels and micro-VCs actively deploying capital this year.`
+      q: `What is the typical check size for ${s}${i} angel investors${g}?`,
+      a: `Most individual ${s}${i} angel investors${g} write checks between $10,000 and $100,000, while super-angels and syndicate leads typically deploy $100,000 to $500,000+ into pre-seed and seed rounds.`,
     },
     {
-      q: `Where can I get verified contact details for ${i} VCs?`,
-      a: `OpenAngels aggregates and verifies contact information, including direct emails, for ${c} ${i} investors, saving founders hundreds of hours of manual research.`
-    }
+      q: `How can startup founders contact and pitch ${i} angel investors${g}?`,
+      a: `Founders can filter our ${c} ${i} investor profiles${g} on OpenAngels, inspect their past investments to verify thesis alignment, and unlock direct verified email addresses and AI-personalized cold pitch drafts.`,
+    },
   ];
 
   const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": questions.map(q => ({
-      "@type": "Question",
-      "name": q.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": q.a
-      }
-    }))
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: questions.map((q) => ({
+      '@type': 'Question',
+      name: q.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: q.a,
+      },
+    })),
   };
 
   return (
-    <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+    <section className="mt-14 pt-8 border-t border-zinc-800/80" aria-labelledby="faq-heading">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">Frequently Asked Questions</h2>
-      <div className="space-y-4">
+      <h2 id="faq-heading" className="text-xl font-semibold text-white tracking-tight mb-5">
+        Frequently Asked Questions — {s}{i} Investors{g}
+      </h2>
+      <div className="space-y-3">
         {questions.map((q, idx) => (
-          <div key={idx} className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5">
-            <h3 className="text-base font-semibold text-zinc-900 dark:text-white mb-2">{q.q}</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">{q.a}</p>
+          <div key={idx} className="bg-zinc-900/40 border border-zinc-800/80 rounded-xl p-4 sm:p-5">
+            <h3 className="text-sm sm:text-base font-semibold text-white mb-1.5">{q.q}</h3>
+            <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">{q.a}</p>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -111,27 +164,23 @@ export async function generateMetadata({ params }) {
   const { filters } = await params;
   const parsed = parseFilters(filters);
 
-  // At least one filter must be valid
   if (!parsed.industry && !parsed.stage && !parsed.geo) {
     return {};
   }
 
-  const { query, industryLabel, stageLabel, geoLabel, geoInfo } = buildQuery(parsed, '*', true);
+  const { query, industryLabel, stageLabel, geoLabel } = buildQuery(parsed, '*', true);
   const { count } = await query;
 
-  // Apply USA post-filter for count (approximate — use the DB count as-is for non-USA)
-  let numInvestors = count || 0;
-
-  // Build dynamic labels
+  const numInvestors = count || 0;
   const parts = [industryLabel, stageLabel].filter(Boolean);
   const typeStr = parts.length > 0 ? parts.join(' ') : '';
   const geoStr = geoLabel ? ` in ${geoLabel}` : '';
 
   const title = numInvestors > 0
-    ? `Top ${numInvestors} ${typeStr} Angel Investors${geoStr} (${CURRENT_YEAR}) | OpenAngels`
-    : `${typeStr} Angel Investors${geoStr} | OpenAngels`;
+    ? `${numInvestors.toLocaleString()} Best ${typeStr} Angel Investors${geoStr} (${CURRENT_YEAR} List & Emails)`
+    : `${typeStr} Angel Investors${geoStr} (${CURRENT_YEAR}) | OpenAngels`;
 
-  const description = `Looking for ${stageLabel || ''} funding? Access our verified list of ${numInvestors > 0 ? numInvestors : ''} ${typeStr} angel investors and VCs${geoStr}. Get emails, LinkedIn profiles, and investment focus on OpenAngels.`.replace(/\s+/g, ' ').trim();
+  const description = `Verified ${CURRENT_YEAR} directory of ${numInvestors > 0 ? numInvestors.toLocaleString() : 'active'} ${typeStr} angel investors & seed VCs${geoStr}. Compare check sizes, backed startups, and direct founder pitch emails on OpenAngels.`.replace(/\s+/g, ' ').trim();
 
   const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
   const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
@@ -142,12 +191,15 @@ export async function generateMetadata({ params }) {
     alternates: { canonical: absoluteUrl(canonicalPath) },
     ...(numInvestors === 0 && { robots: { index: false, follow: true } }),
     openGraph: {
-      title: `${typeStr} Angel Investors${geoStr} | OpenAngels`,
+      title,
       description,
       url: absoluteUrl(canonicalPath),
+      siteName: 'OpenAngels',
+      type: 'website',
     },
     twitter: {
-      title: `${typeStr} Angel Investors${geoStr} | OpenAngels`,
+      card: 'summary_large_image',
+      title,
       description,
     },
   };
@@ -157,33 +209,33 @@ export default async function FilteredInvestorsPage({ params }) {
   const { filters } = await params;
   const parsed = parseFilters(filters);
 
-  // At least one valid filter must exist
   if (!parsed.industry && !parsed.stage && !parsed.geo) {
     notFound();
   }
 
   const { query, industryLabel, stageLabel, geoLabel, geoInfo } = buildQuery(parsed);
+  const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
+  const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
 
-  // Fetch data
   let investors = [];
   let totalMatches = 0;
 
   try {
-    const result = await query.order('name', { ascending: true }).limit(100);
+    // Fetch a broader pool of 350 matching profiles so hub-specific ranking can surface the best profiles
+    const result = await query.order('has_email', { ascending: false }).limit(350);
     if (result.error) throw result.error;
-    
+
     let data = result.data || [];
-    
-    // Post-filter for USA (locations matching US state codes)
+
     if (geoInfo?.countryMatch) {
-      data = data.filter(inv => isUSLocation(inv.location));
+      data = data.filter((inv) => isUSLocation(inv.location));
     }
-    
-    investors = data;
-    
-    // For total count with USA, we need a separate approach
+
+    const ranked = rankInvestorsForHub(data, parsed, canonicalPath);
+    investors = ranked.slice(0, 100);
+
     if (geoInfo?.countryMatch) {
-      totalMatches = investors.length; // approximate from the fetched set
+      totalMatches = data.length;
     } else {
       totalMatches = result.count || data.length;
     }
@@ -191,22 +243,16 @@ export default async function FilteredInvestorsPage({ params }) {
     console.error('Error fetching filtered investors:', err);
   }
 
-  // If no exact matches, don't throw 404, just let the page render with 0 state and suggestions below
-
-  // Build display strings
   const parts = [industryLabel, stageLabel].filter(Boolean);
   const typeStr = parts.length > 0 ? parts.join(' ') : '';
   const geoStr = geoLabel ? ` in ${geoLabel}` : '';
-  const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
-  const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
 
-  // Build Schema.org structured data
   const pageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${typeStr} Angel Investors${geoStr}`,
+    name: `${typeStr} Angel Investors${geoStr} (${CURRENT_YEAR})`,
     url: absoluteUrl(canonicalPath),
-    description: `Find ${totalMatches} verified ${typeStr} angel investors and VCs${geoStr} on OpenAngels.`,
+    description: `Verified directory of ${totalMatches} ${typeStr} angel investors and VCs${geoStr} on OpenAngels.`,
     isPartOf: {
       '@type': 'WebSite',
       name: PRODUCT_NAME,
@@ -217,242 +263,365 @@ export default async function FilteredInvestorsPage({ params }) {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
         { '@type': 'ListItem', position: 2, name: 'Directory', item: absoluteUrl('/directory') },
-        { '@type': 'ListItem', position: 3, name: `${typeStr || 'Angel'} Investors${geoStr}`, item: absoluteUrl(canonicalPath) }
-      ]
+        { '@type': 'ListItem', position: 3, name: `${typeStr || 'Angel'} Investors${geoStr}`, item: absoluteUrl(canonicalPath) },
+      ],
     },
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: Math.min(investors.length, 50),
-      itemListElement: investors.slice(0, 10).map((investor, index) => ({
+      itemListElement: investors.slice(0, 15).map((investor, index) => ({
         '@type': 'ListItem',
         position: index + 1,
         url: absoluteUrl(`/investor/${investor.slug || investor.id}`),
         name: investor.name,
-        description: investor.bio || `${typeStr} investor on OpenAngels`,
+        description: investor.bio || `${typeStr} angel investor on OpenAngels`,
       })),
     },
   };
 
-  // Build faceted navigation links
-  const stageLinks = !parsed.stage ? Object.entries(STAGE_SLUGS).map(([slug, info]) => ({
-    href: parsed.industry
-      ? `/investors/${parsed.industry}/${slug}${parsed.geo ? `/${parsed.geo}` : ''}`
-      : `/investors/${slug}${parsed.geo ? `/${parsed.geo}` : ''}`,
-    label: info.label,
-  })) : [];
+  const stageLinks = !parsed.stage
+    ? Object.entries(STAGE_SLUGS).map(([slug, info]) => ({
+        href: parsed.industry
+          ? `/investors/${parsed.industry}/${slug}${parsed.geo ? `/${parsed.geo}` : ''}`
+          : `/investors/${slug}${parsed.geo ? `/${parsed.geo}` : ''}`,
+        label: info.label,
+      }))
+    : [];
 
-  const geoLinks = !parsed.geo ? Object.entries(GEO_REGIONS).slice(0, 12).map(([slug, info]) => ({
-    href: parsed.industry
-      ? `/investors/${parsed.industry}${parsed.stage ? `/${parsed.stage}` : ''}/${slug}`
-      : `/investors/${parsed.stage || ''}/${slug}`.replace('//', '/'),
-    label: info.label.replace(/^the /, ''),
-  })) : [];
+  const geoLinks = !parsed.geo
+    ? Object.entries(GEO_REGIONS)
+        .slice(0, 12)
+        .map(([slug, info]) => ({
+          href: parsed.industry
+            ? `/investors/${parsed.industry}${parsed.stage ? `/${parsed.stage}` : ''}/${slug}`
+            : `/investors/${parsed.stage || ''}/${slug}`.replace('//', '/'),
+          label: info.label.replace(/^the /, ''),
+        }))
+    : [];
 
-  // Related hubs for cross-linking
-  const relatedHubs = POPULAR_HUBS
-    .filter(hub => {
-      const hubParsed = parseFilters(hub.filters);
-      // Show hubs that share at least one dimension but aren't identical
-      const shares = (hubParsed.industry === parsed.industry) ||
-                     (hubParsed.stage === parsed.stage) ||
-                     (hubParsed.geo === parsed.geo);
-      const identical = hubParsed.industry === parsed.industry &&
-                        hubParsed.stage === parsed.stage &&
-                        hubParsed.geo === parsed.geo;
-      return shares && !identical;
-    })
-    .slice(0, 8);
+  const relatedHubs = POPULAR_HUBS.filter((hub) => {
+    const hubParsed = parseFilters(hub.filters);
+    const shares =
+      hubParsed.industry === parsed.industry ||
+      hubParsed.stage === parsed.stage ||
+      hubParsed.geo === parsed.geo;
+    const identical =
+      hubParsed.industry === parsed.industry &&
+      hubParsed.stage === parsed.stage &&
+      hubParsed.geo === parsed.geo;
+    return shares && !identical;
+  }).slice(0, 8);
+
+  const tableInvestors = investors.slice(0, 12);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans flex flex-col selection:bg-amber-500/30">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }} />
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
 
-      <main className="flex-1 max-w-5xl mx-auto px-6 py-12 w-full">
-        <div className="mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to all investors
+      <header className="h-14 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md sticky top-0 z-40">
+        <div className="max-w-5xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-3">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-zinc-400 min-w-0">
+            <Link href="/" className="hover:text-white transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+            <Link href="/directory" className="hover:text-white transition-colors">
+              Directory
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+            <span className="text-zinc-200 font-medium truncate">
+              {typeStr || 'Angel'} Investors{geoStr}
+            </span>
+          </nav>
+
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-colors text-xs font-medium shrink-0"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>All Investors</span>
           </Link>
         </div>
+      </header>
 
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-5xl mb-4">
-            Find {totalMatches} {typeStr} Angel Investors{geoStr}
+      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 py-10 w-full">
+        {/* Hero & GEO Direct Answer Block */}
+        <div className="mb-8">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-400 mb-3 tabular-nums">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>{totalMatches.toLocaleString()} Verified Profiles • {CURRENT_YEAR} Dataset</span>
+          </div>
+          <h1 className="text-2xl sm:text-4xl font-semibold tracking-tight text-white mb-3">
+            Top {totalMatches.toLocaleString()} {typeStr} Angel Investors{geoStr} ({CURRENT_YEAR})
           </h1>
-          <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl">
-            {`We found ${totalMatches} verified angel investors and VCs${industryLabel ? ` actively investing in ${industryLabel} startups` : ''}${stageLabel ? ` at the ${stageLabel} stage` : ''}${geoStr}.`}
+          <p className="text-sm sm:text-base text-zinc-400 max-w-3xl leading-relaxed">
+            OpenAngels tracks <strong className="text-zinc-200 font-medium">{totalMatches.toLocaleString()} verified angel investors and early-stage venture backers</strong>
+            {industryLabel ? ` actively funding ${industryLabel} startups` : ''}
+            {stageLabel ? ` at the ${stageLabel} stage` : ''}
+            {geoStr}. Notable active investors in this cohort include{' '}
+            <span className="text-zinc-300">
+              {investors.slice(0, 5).map((i) => i.name).join(', ')}
+            </span>
+            . Compare typical check sizes, past portfolio deals, and direct founder pitch emails below.
           </p>
         </div>
 
-        {/* Faceted Navigation — Stage Refinement */}
-        {stageLinks.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-              <Filter className="w-4 h-4" />
-              Filter by Stage
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {stageLinks.map(link => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-4 py-2 rounded-full text-sm font-medium border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-amber-500/50 hover:text-amber-600 dark:hover:text-amber-500 transition-all hover:shadow-sm"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+        {/* Faceted Navigation — Stage & Geo Refinement */}
+        {(stageLinks.length > 0 || geoLinks.length > 0) && (
+          <div className="mb-8 p-4 rounded-xl bg-zinc-900/30 border border-zinc-800/80 space-y-4">
+            {stageLinks.length > 0 && (
+              <div>
+                <h2 className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Filter className="w-3.5 h-3.5 text-zinc-500" />
+                  <span>Filter by Funding Stage</span>
+                </h2>
+                <div className="flex flex-wrap gap-1.5">
+                  {stageLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="px-3 py-1 rounded-md text-xs font-medium border border-zinc-800 bg-zinc-900 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {geoLinks.length > 0 && (
+              <div>
+                <h2 className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-zinc-500" />
+                  <span>Filter by Location</span>
+                </h2>
+                <div className="flex flex-wrap gap-1.5">
+                  {geoLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="px-3 py-1 rounded-md text-xs font-medium border border-zinc-800 bg-zinc-900 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
-        {/* Faceted Navigation — Geo Refinement */}
-        {geoLinks.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
-              Filter by Location
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {geoLinks.map(link => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-4 py-2 rounded-full text-sm font-medium border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-amber-500/50 hover:text-amber-600 dark:hover:text-amber-500 transition-all hover:shadow-sm"
-                >
-                  {link.label}
-                </Link>
-              ))}
+        {/* Featured Snippet Comparison Table (Position #0 & AI Overviews Target) */}
+        {tableInvestors.length > 0 && (
+          <section className="mb-10" aria-labelledby="comparison-table-heading">
+            <div className="flex items-center justify-between mb-3">
+              <h2 id="comparison-table-heading" className="text-base sm:text-lg font-semibold text-white tracking-tight">
+                Featured {typeStr} Angel Investors{geoStr} — Quick Comparison
+              </h2>
+              <span className="text-xs font-mono text-zinc-500 hidden sm:inline">
+                Showing Top {tableInvestors.length} of {totalMatches.toLocaleString()}
+              </span>
             </div>
-          </div>
+            <div className="overflow-x-auto rounded-xl border border-zinc-800/80 bg-zinc-900/30">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-zinc-800 bg-zinc-900/60 text-zinc-400 uppercase tracking-wider text-[10.5px]">
+                    <th className="py-2.5 px-3.5 font-medium">Investor</th>
+                    <th className="py-2.5 px-3.5 font-medium">Location</th>
+                    <th className="py-2.5 px-3.5 font-medium">Stages</th>
+                    <th className="py-2.5 px-3.5 font-medium">Core Sectors &amp; Portfolio</th>
+                    <th className="py-2.5 px-3.5 font-medium text-right">Dossier</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-800/60">
+                  {tableInvestors.map((inv) => {
+                    const rawStages = inv.stages || inv.stage;
+                    const stgArr = Array.isArray(rawStages) ? rawStages : typeof rawStages === 'string' ? [rawStages] : ['Pre-seed', 'Seed'];
+                    const rawInd = inv.industries || inv.industry;
+                    const indArr = Array.isArray(rawInd) ? rawInd : typeof rawInd === 'string' ? [rawInd] : [];
+                    return (
+                      <tr key={inv.id} className="hover:bg-zinc-900/60 transition-colors">
+                        <td className="py-2.5 px-3.5 font-medium text-white whitespace-nowrap">
+                          <Link href={`/investor/${inv.slug || inv.id}`} className="hover:underline">
+                            {inv.name}
+                          </Link>
+                        </td>
+                        <td className="py-2.5 px-3.5 text-zinc-400 whitespace-nowrap">
+                          {inv.location || 'Global / US'}
+                        </td>
+                        <td className="py-2.5 px-3.5 text-zinc-300 whitespace-nowrap">
+                          {stgArr.slice(0, 2).join(', ')}
+                        </td>
+                        <td className="py-2.5 px-3.5 text-zinc-400 max-w-xs truncate">
+                          {indArr.slice(0, 4).join(', ')}
+                        </td>
+                        <td className="py-2.5 px-3.5 text-right whitespace-nowrap">
+                          <Link
+                            href={`/investor/${inv.slug || inv.id}`}
+                            className="text-zinc-300 hover:text-white font-medium underline-offset-2 hover:underline"
+                          >
+                            View Profile →
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
         )}
 
-        {/* Investor Cards */}
-        <div className="space-y-4">
+        {/* Investor Dossier Cards */}
+        <section aria-label="Investor Profiles" className="space-y-3">
           {investors.length === 0 ? (
-            <div className="text-center py-16 px-6 bg-zinc-50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <div className="text-center py-14 px-6 bg-zinc-900/40 rounded-xl border border-zinc-800">
+              <h3 className="text-base font-semibold text-white mb-2">
                 No investors found matching this exact filter combination
               </h3>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto mb-6">
-                {parsed.industry ? `We don't have active ${stageLabel || ''} investors matching ${industryLabel}${geoLabel ? ` in ${geoLabel}` : ''} yet.` : `No investors found matching your filter criteria.`}
+              <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto mb-5">
+                {parsed.industry
+                  ? `We don't have active ${stageLabel || ''} investors matching ${industryLabel}${geoLabel ? ` in ${geoLabel}` : ''} yet.`
+                  : `No investors found matching your filter criteria.`}
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-2.5">
                 {parsed.industry && (
                   <Link
                     href={`/investors/${parsed.industry}`}
-                    className="px-5 py-2.5 rounded-xl bg-amber-500 text-black text-sm font-semibold hover:bg-amber-400 transition-colors shadow-sm"
+                    className="px-4 py-2 rounded-lg bg-white text-zinc-950 text-xs font-semibold hover:bg-zinc-200 transition-colors"
                   >
                     View all {industryLabel} Investors →
                   </Link>
                 )}
                 <Link
-                  href="/"
-                  className="px-5 py-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm font-medium hover:opacity-80 transition-opacity"
+                  href="/directory"
+                  className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs font-medium hover:bg-zinc-800 transition-colors"
                 >
-                  Back to Main Directory
+                  Browse Directory
                 </Link>
               </div>
             </div>
           ) : (
-            investors.map((investor) => (
-            <div
-              key={investor.id}
-              className="group relative bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 transition-all hover:shadow-lg hover:border-amber-500/50"
-            >
-              <div className="flex flex-col md:flex-row gap-6">
-                {/* Left Column - Core Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <div className="flex items-center gap-3">
-                      <InvestorAvatar 
-                        name={investor.name} 
-                        avatarUrl={investor.avatar_url || investor.avatar || (investor.twitter_url ? `https://unavatar.io/x/${investor.twitter_url.split('/').pop().split('?')[0]}?ttl=30d` : null)} 
-                        className="w-11 h-11" 
-                      />
-                      <div>
-                        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                          <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
-                            {investor.name}
-                          </Link>
-                          {(investor.has_linkedin || investor.has_twitter || investor.linkedin_url || investor.twitter_url) && (
-                            <Sparkles className="w-4 h-4 text-amber-500 shrink-0" title="Verified Social Presence" />
-                          )}
-                        </h2>
-                        {investor.firm && (
-                          <div className="text-sm font-medium text-zinc-600 dark:text-zinc-400 mt-1">
-                            {investor.title ? `${investor.title} at ` : ''}{investor.firm}
+            investors.map((investor) => {
+              const rawPort = investor.portfolio || investor.past_investments;
+              const portList = Array.isArray(rawPort)
+                ? rawPort.filter(Boolean)
+                : typeof rawPort === 'string' && rawPort.trim()
+                ? rawPort.split(',').map((s) => s.trim()).filter(Boolean)
+                : [];
+              const rawInd = investor.industries || investor.industry;
+              const indList = Array.isArray(rawInd) ? rawInd : typeof rawInd === 'string' ? [rawInd] : [];
+
+              return (
+                <div
+                  key={investor.id}
+                  className="group bg-zinc-900/40 hover:bg-zinc-900/70 border border-zinc-800/80 hover:border-zinc-700 rounded-xl p-4 sm:p-5 transition-colors duration-150"
+                >
+                  <div className="flex flex-col md:flex-row gap-4 justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3">
+                        <InvestorAvatar
+                          name={investor.name}
+                          avatarUrl={investor.avatar_url || investor.avatar}
+                          className="w-11 h-11 rounded-xl shrink-0"
+                        />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h2 className="text-base font-semibold text-white truncate">
+                              <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
+                                {investor.name}
+                              </Link>
+                            </h2>
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-zinc-800/80 border border-zinc-700/60 text-[10.5px] font-medium text-zinc-300">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                              Verified
+                            </span>
                           </div>
-                        )}
+                          <div className="flex items-center gap-2 text-xs text-zinc-400 mt-0.5 flex-wrap">
+                            {investor.firm && <span className="text-zinc-300 font-medium">{investor.firm}</span>}
+                            {investor.location && (
+                              <span className="inline-flex items-center gap-1">
+                                <MapPin className="w-3 h-3 text-zinc-500" /> {investor.location}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {investor.bio && (
+                        <p className="text-xs sm:text-sm text-zinc-400 mt-3 line-clamp-2 leading-relaxed">
+                          {investor.bio}
+                        </p>
+                      )}
+
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {(() => {
+                          const rawStages = investor.stages || investor.stage;
+                          const stagesArr = Array.isArray(rawStages) ? rawStages : typeof rawStages === 'string' ? [rawStages] : [];
+                          return stagesArr.slice(0, 3).map((s) => (
+                            <span key={s} className="text-[11px] font-medium text-zinc-300 bg-zinc-800/80 border border-zinc-700/60 px-2 py-0.5 rounded-md">
+                              {STAGE_SLUGS[s]?.label || s}
+                            </span>
+                          ));
+                        })()}
+                        {indList.slice(0, 4).map((ind) => (
+                          <span key={ind} className="text-[11px] text-zinc-400 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded-md">
+                            {ind}
+                          </span>
+                        ))}
+                        {portList.slice(0, 3).map((comp) => (
+                          <span key={comp} className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
+                            Backed: {comp}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                  </div>
 
-                  {investor.bio && (
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-3 line-clamp-2 leading-relaxed">
-                      {investor.bio}
-                    </p>
-                  )}
-
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {investor.location && (
-                      <span className="inline-flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-full">
-                        <MapPin className="w-3 h-3" /> {investor.location}
-                      </span>
-                    )}
-                    {(() => {
-                      const rawStages = investor.stages || investor.stage;
-                      const stagesArr = Array.isArray(rawStages) ? rawStages : (typeof rawStages === 'string' ? [rawStages] : []);
-                      return stagesArr.slice(0, 3).map(s => (
-                        <span key={s} className="text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-full">
-                          {STAGE_SLUGS[s]?.label || s}
-                        </span>
-                      ));
-                    })()}
+                    <div className="flex sm:items-center gap-2 shrink-0 pt-2 md:pt-0">
+                      <AddToCrmButton investorId={investor.id} />
+                      <Link
+                        href={`/investor/${investor.slug || investor.id}`}
+                        className="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold transition-colors shadow-sm"
+                      >
+                        View Dossier
+                      </Link>
+                    </div>
                   </div>
                 </div>
-
-                {/* Right Column - Actions */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 shrink-0">
-                  <AddToCrmButton investorId={investor.id} />
-                  <Link
-                    href={`/investor/${investor.slug || investor.id}`}
-                    className="inline-flex items-center justify-center h-10 px-5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium transition-transform hover:scale-105 shadow-sm"
-                  >
-                    <Sparkles className="w-4 h-4 mr-2 text-amber-500" />
-                    View Profile
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))
+              );
+            })
           )}
-        </div>
+        </section>
 
         {/* Related Hubs Section for Cross-Linking */}
         {relatedHubs.length > 0 && (
-          <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-4">
-              Related Investor Lists
+          <section className="mt-14 pt-8 border-t border-zinc-800/80" aria-labelledby="related-hubs-heading">
+            <h2 id="related-hubs-heading" className="text-base sm:text-lg font-semibold text-white mb-4">
+              Related Investor Directories
             </h2>
-            <div className="flex flex-wrap gap-3">
-              {relatedHubs.map(hub => (
+            <div className="flex flex-wrap gap-2">
+              {relatedHubs.map((hub) => (
                 <Link
                   key={hub.filters.join('/')}
                   href={`/investors/${hub.filters.join('/')}`}
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 text-zinc-700 dark:text-zinc-300 hover:border-amber-500/50 hover:bg-amber-50 dark:hover:bg-amber-500/5 hover:text-amber-700 dark:hover:text-amber-400 transition-all"
+                  className="px-3.5 py-2 rounded-lg text-xs font-medium border border-zinc-800 bg-zinc-900/50 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800 hover:text-white transition-colors"
                 >
-                  {hub.label} →
+                  {hub.label} Investors →
                 </Link>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        <ConversationalFAQ 
-          industryLabel={industryLabel} 
-          stageLabel={stageLabel} 
-          geoLabel={geoLabel} 
-          totalMatches={totalMatches} 
+        <ConversationalFAQ
+          industryLabel={industryLabel}
+          stageLabel={stageLabel}
+          geoLabel={geoLabel}
+          totalMatches={totalMatches}
+          topInvestorNames={investors.slice(0, 5).map((i) => i.name)}
         />
       </main>
 

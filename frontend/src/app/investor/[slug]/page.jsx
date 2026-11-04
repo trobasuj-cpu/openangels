@@ -47,17 +47,23 @@ export async function generateMetadata({ params }) {
   const investorName = investor.name;
   const firmText = investor.firm ? ` (${investor.firm})` : '';
   const locText = investor.location ? ` in ${investor.location}` : '';
-  
-  let cleanBio = investor.bio || '';
-  if (cleanBio.includes('Source: http')) {
-    cleanBio = cleanBio.split('Source: http')[0].trim();
-  }
-  if (!cleanBio || cleanBio.includes("automated news") || cleanBio.includes("public investor list")) {
-    cleanBio = `${investorName} is an active early-stage angel investor${investor.firm ? ` at ${investor.firm}` : ''}${investor.location ? ` based in ${investor.location}` : ''}. View verified investment check sizes, portfolio startups, syndicates & founder pitch details on OpenAngels.`;
-  }
 
-  const title = `${investorName}${firmText} — Angel Investor: Portfolio, Check Size & Investments (2026) | OpenAngels`;
-  const description = `Verified 2026 angel investor dossier for ${investorName}${firmText}. Typical check sizes, preferred stages, backed startups & direct founder pitch contact.`.substring(0, 160);
+  const rawInd = investor.industry || investor.industries;
+  const indArr = Array.isArray(rawInd) ? rawInd.filter(Boolean) : (typeof rawInd === 'string' && rawInd ? [rawInd] : []);
+  const indStr = indArr.length > 0 ? indArr.slice(0, 4).join(', ') : 'early-stage technology';
+
+  const rawStg = investor.stages || investor.stage;
+  const stgArr = Array.isArray(rawStg) ? rawStg.filter(Boolean) : (typeof rawStg === 'string' && rawStg ? [rawStg] : ['Pre-Seed', 'Seed']);
+  const stgStr = stgArr.slice(0, 2).join(' & ');
+
+  const rawPort = investor.portfolio || investor.past_investments;
+  const portArr = Array.isArray(rawPort)
+    ? rawPort.filter(Boolean)
+    : (typeof rawPort === 'string' && rawPort.trim() ? rawPort.split(',').map(s => s.trim()).filter(Boolean) : []);
+  const portSnippet = portArr.length > 0 ? ` Backed ${portArr.slice(0, 3).join(', ')}.` : '';
+
+  const title = `${investorName}${firmText} — Angel Investor Portfolio, Check Size & Email (2026)`;
+  const description = `${investorName}${firmText} angel investor profile${locText}: ${stgStr} investments in ${indStr}.${portSnippet} View check size & verified founder pitch email on OpenAngels.`.substring(0, 160);
 
   return {
     title,
@@ -182,7 +188,7 @@ export default async function StandaloneInvestorPage({ params }) {
     ? rawPort.filter(Boolean) 
     : (typeof rawPort === 'string' && rawPort.trim() ? rawPort.split(',').map(s => s.trim()).filter(Boolean) : []);
 
-  // Fetch 3 related active angels in the same sector for rich internal links
+  // Fetch a pool of active angels in the same sector and deterministically select 9 unique peers for dense internal linking
   let relatedInvestors = [];
   try {
     const { data: relData } = await supabaseAdmin
@@ -190,9 +196,23 @@ export default async function StandaloneInvestorPage({ params }) {
       .select('id,name,slug,location,avatar_url,stages,industries')
       .contains('industries', [primaryIndustry])
       .neq('slug', decodedSlug)
-      .limit(3);
-    relatedInvestors = relData || [];
+      .limit(60);
+    if (relData && relData.length > 0) {
+      const slugHash = (decodedSlug || '').split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+      const picked = [];
+      for (let i = 0; i < Math.min(9, relData.length); i++) {
+        const idx = (slugHash + i * 7) % relData.length;
+        const candidate = relData[idx];
+        if (candidate && !picked.some((p) => p.slug === candidate.slug)) {
+          picked.push(candidate);
+        }
+      }
+      relatedInvestors = picked;
+    }
   } catch (e) {}
+
+  const firstChar = ((safeInvestor.name || 'a').trim()[0] || 'a').toLowerCase();
+  const directoryLetter = /^[a-z]$/.test(firstChar) ? firstChar : 'a';
 
   const sameAsLinks = [
     safeInvestor.linkedin_url,
@@ -240,7 +260,8 @@ export default async function StandaloneInvestorPage({ params }) {
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Home", "item": absoluteUrl('/') },
             { "@type": "ListItem", "position": 2, "name": "Directory", "item": absoluteUrl('/directory') },
-            { "@type": "ListItem", "position": 3, "name": safeInvestor.name, "item": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}`) }
+            { "@type": "ListItem", "position": 3, "name": `Investors (${directoryLetter.toUpperCase()})`, "item": absoluteUrl(`/directory/${directoryLetter}`) },
+            { "@type": "ListItem", "position": 4, "name": safeInvestor.name, "item": absoluteUrl(`/investor/${safeInvestor.slug || safeInvestor.id}`) }
           ]
         },
         "mainEntity": {
@@ -274,7 +295,7 @@ export default async function StandaloneInvestorPage({ params }) {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col selection:bg-red-500/30 selection:text-white">
+    <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
@@ -292,6 +313,10 @@ export default async function StandaloneInvestorPage({ params }) {
               Directory
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+            <Link href={`/directory/${directoryLetter}`} className="hover:text-white transition-colors shrink-0">
+              {directoryLetter.toUpperCase()}
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
             <span className="text-zinc-200 font-semibold truncate">
               {safeInvestor.name}
             </span>
@@ -299,7 +324,7 @@ export default async function StandaloneInvestorPage({ params }) {
 
           <Link
             href="/directory"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all text-xs font-semibold shrink-0 cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-colors text-xs font-medium shrink-0 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Back to Directory</span>
@@ -477,14 +502,14 @@ export default async function StandaloneInvestorPage({ params }) {
           <section aria-labelledby="related-heading" className="space-y-4 pt-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-purple-400" />
-                <h2 id="related-heading" className="text-base sm:text-lg font-bold text-white tracking-tight">
+                <Users className="w-4 h-4 text-zinc-400" />
+                <h2 id="related-heading" className="text-base sm:text-lg font-semibold text-white tracking-tight">
                   Other Active Angels in {primaryIndustry}
                 </h2>
               </div>
               <Link
                 href={`/investors/${primaryIndustry.toLowerCase().replace(/[\s/]+/g, '-')}`}
-                className="text-xs font-semibold text-zinc-400 hover:text-white transition-colors"
+                className="text-xs font-medium text-zinc-400 hover:text-white transition-colors"
               >
                 View all →
               </Link>
@@ -497,7 +522,7 @@ export default async function StandaloneInvestorPage({ params }) {
                   <Link
                     key={rel.id}
                     href={`/investor/${rel.slug}`}
-                    className="group p-4 rounded-2xl bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between"
+                    className="group p-4 rounded-xl bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700 transition-colors flex flex-col justify-between"
                   >
                     <div className="flex items-center gap-3 mb-2">
                       <InvestorAvatar
@@ -506,7 +531,7 @@ export default async function StandaloneInvestorPage({ params }) {
                         className="w-10 h-10 rounded-xl ring-1 ring-zinc-700 shrink-0"
                       />
                       <div className="min-w-0">
-                        <h3 className="text-xs sm:text-sm font-bold text-zinc-200 group-hover:text-white truncate">
+                        <h3 className="text-xs sm:text-sm font-semibold text-zinc-200 group-hover:text-white truncate">
                           {rel.name}
                         </h3>
                         {rel.location && (
@@ -518,7 +543,7 @@ export default async function StandaloneInvestorPage({ params }) {
                     {relStages.length > 0 && (
                       <div className="pt-2 border-t border-zinc-800/60 flex items-center justify-between text-[10.5px]">
                         <span className="text-zinc-500">Stages:</span>
-                        <span className="font-semibold text-amber-400">{relStages.slice(0, 2).join(', ')}</span>
+                        <span className="font-medium text-zinc-300">{relStages.slice(0, 2).join(', ')}</span>
                       </div>
                     )}
                   </Link>
