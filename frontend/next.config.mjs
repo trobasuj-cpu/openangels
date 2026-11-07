@@ -1,5 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs/config";
-
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -35,10 +33,4 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
-  org: "beatsprom",
-  project: "openangels",
-  silent: !process.env.CI,
-  widenClientFileUpload: true,
-  hideSourceMaps: true,
-});
+export default nextConfig;

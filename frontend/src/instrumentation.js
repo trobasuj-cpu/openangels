@@ -1,13 +1,3 @@
-import * as Sentry from "@sentry/nextjs";
-
 export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    await import("../sentry.server.config");
-  }
-
-  if (process.env.NEXT_RUNTIME === "edge") {
-    await import("../sentry.edge.config");
-  }
+  // Lightweight runtime hook compatible with both Node.js and Cloudflare Workers (workerd)
 }
-
-export const onRequestError = Sentry.captureRequestError;
