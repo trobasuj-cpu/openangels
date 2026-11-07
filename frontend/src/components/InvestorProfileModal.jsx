@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, X, Copy, Mail, Globe, MapPin, Check, Briefcase, DollarSign, Layers, ShieldCheck, UserPlus, CheckCircle2, Lock, Crown, Zap, Users, BarChart3, ChevronDown, ChevronUp, ExternalLink, GitFork, User, Building2, Target } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import GumroadIframeModal from './GumroadIframeModal';
 import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
@@ -12,11 +12,6 @@ import CompanyProfileModal from './CompanyProfileModal';
 import { INVESTOR_COUNT } from '@/seo';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { getVerificationInfo } from './Dashboard';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
 
 const GUMROAD_URL = 'https://beatsprom.gumroad.com/l/vgobnh';
 

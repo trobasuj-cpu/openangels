@@ -8,6 +8,10 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+  env: {
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3',
+  },
   async rewrites() {
     return [
       { source: '/sitemap.xml', destination: '/api/sitemap-root' },

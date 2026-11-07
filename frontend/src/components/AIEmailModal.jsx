@@ -2,12 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, X, Copy, Mail, Loader2, Save } from 'lucide-react';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+import { supabase } from '@/lib/supabase';
 
 export default function AIEmailModal({ isOpen, onClose, investor, profile, user, allInvestors = [], crmLeadIds, setCrmLeadIds }) {
   const [startupDescription, setStartupDescription] = useState('');
