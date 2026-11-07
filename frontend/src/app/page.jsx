@@ -1,7 +1,7 @@
 import Dashboard from "@/components/Dashboard";
 import { getDynamicInvestorCount, absoluteUrl } from "@/seo";
 
-export const revalidate = 3600; // ISR 1 hour
+export const revalidate = 86400; // ISR 24 hours
 
 export const metadata = {
   title: 'OpenAngels — Verified Angel Investors & Venture Backers (2026)',
@@ -40,7 +40,7 @@ async function getInitialInvestors() {
           apikey: anonKey,
           Authorization: `Bearer ${anonKey}`,
         },
-        next: { revalidate: 3600 },
+        next: { revalidate: 86400 },
       }
     );
 

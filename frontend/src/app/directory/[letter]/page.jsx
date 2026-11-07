@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ChevronRight, Users } from 'lucide-react';
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
@@ -52,7 +52,7 @@ async function fetchInvestorsByLetter(letter) {
           apikey: supabaseKey,
           Authorization: `Bearer ${supabaseKey}`,
         },
-        next: { revalidate: 3600 },
+        next: { revalidate: 86400 },
       }
     );
 

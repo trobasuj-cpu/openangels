@@ -21,7 +21,7 @@ export async function getDynamicInvestorCount() {
         'Authorization': `Bearer ${apiKey}`,
         'Prefer': 'count=exact'
       },
-      next: { revalidate: 3600 }
+      next: { revalidate: 86400 }
     });
 
     if (res.ok) {

@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { absoluteUrl, INVESTOR_COUNT } from '@/seo';
 import InvestorProfileModal from '@/components/InvestorProfileModal';
@@ -12,36 +13,62 @@ import {
   HelpCircle, CheckCircle2, Users
 } from 'lucide-react';
 
+export const revalidate = 86400; // Cache on Vercel Edge/ISR CDN for 24h to prevent serverless quota spikes
+export const dynamicParams = true;
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
-const serviceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || anonKey;
+const FALLBACK_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
+const serviceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || FALLBACK_SERVICE_ROLE;
 
-const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
+const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey || anonKey, {
   auth: { persistSession: false },
 });
 
-export async function generateStaticParams() {
-  const { data } = await supabaseAdmin
-    .from('investors_public')
-    .select('slug')
-    .not('slug', 'is', null)
-    .limit(1000);
+const getInvestorBySlug = cache(async (decodedSlug) => {
+  if (!decodedSlug) return null;
+  if (serviceRoleKey && !serviceRoleKey.startsWith('sb_publishable_')) {
+    try {
+      const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodeURIComponent(decodedSlug)}&select=*&limit=1`;
+      const res = await fetch(restUrl, {
+        headers: {
+          apikey: serviceRoleKey,
+          Authorization: `Bearer ${serviceRoleKey}`,
+          'Content-Type': 'application/json',
+        },
+        next: { revalidate: 86400 },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.length > 0) return data[0];
+      }
+    } catch (e) {}
+  }
 
-  return (data || []).map((inv) => ({ slug: inv.slug }));
+  const { data: investorsData } = await supabaseAdmin
+    .from('investors_public')
+    .select('*')
+    .eq('slug', decodedSlug)
+    .limit(1);
+  return investorsData?.[0] || null;
+});
+
+const TOP_FEATURED_SLUGS = [
+  'naval-ravikant', 'sam-altman', 'lenny-rachitsky', 'elad-gil',
+  'paul-graham', 'garry-tan', 'peter-thiel', 'reid-hoffman',
+  'balaji-srinivasan', 'jason-calacanis', 'greg-brockman', 'pieter-levels',
+];
+
+export async function generateStaticParams() {
+  return TOP_FEATURED_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   let decodedSlug = slug;
   try { decodedSlug = decodeURIComponent(slug); } catch {}
-  
-  const { data: investors } = await supabaseAdmin
-    .from('investors_public')
-    .select('*')
-    .eq('slug', decodedSlug)
-    .limit(1);
 
-  const investor = investors?.[0];
+  const investor = await getInvestorBySlug(decodedSlug);
   if (!investor) return {};
 
   const investorName = investor.name;
@@ -96,44 +123,15 @@ function getCompanyLink(companyName) {
   if (KNOWN_COMPANIES && KNOWN_COMPANIES[cleanSlug]) {
     return { href: `/company/${cleanSlug}`, isInternal: true };
   }
-  return { href: `/directory?search=${encodeURIComponent(companyName)}`, isInternal: false };
+  return { href: `/?search=${encodeURIComponent(companyName)}`, isInternal: false };
 }
 
 export default async function StandaloneInvestorPage({ params }) {
   const { slug } = await params;
   let decodedSlug = slug;
   try { decodedSlug = decodeURIComponent(slug); } catch {}
-  
-  let rawInvestor = null;
-  const FALLBACK_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-  const serviceKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || FALLBACK_SERVICE_ROLE;
 
-  if (serviceKey && !serviceKey.startsWith('sb_publishable_')) {
-    try {
-      const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodeURIComponent(decodedSlug)}&select=*`;
-      const res = await fetch(restUrl, {
-        headers: {
-          'apikey': serviceKey,
-          'Authorization': `Bearer ${serviceKey}`,
-          'Content-Type': 'application/json'
-        },
-        cache: 'no-store'
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.length > 0) rawInvestor = data[0];
-      }
-    } catch (e) {}
-  }
-
-  if (!rawInvestor) {
-    let { data: investorsData } = await supabaseAdmin
-      .from('investors_public')
-      .select('*')
-      .eq('slug', decodedSlug)
-      .limit(1);
-    rawInvestor = investorsData?.[0];
-  }
+  const rawInvestor = await getInvestorBySlug(decodedSlug);
 
   if (!rawInvestor) {
     notFound();
@@ -188,15 +186,19 @@ export default async function StandaloneInvestorPage({ params }) {
     ? rawPort.filter(Boolean) 
     : (typeof rawPort === 'string' && rawPort.trim() ? rawPort.split(',').map(s => s.trim()).filter(Boolean) : []);
 
-  // Fetch a pool of active angels in the same sector and deterministically select 9 unique peers for dense internal linking
+  // Fetch a pool of active angels in the same sector (cached 24h) and deterministically select 9 unique peers
   let relatedInvestors = [];
   try {
-    const { data: relData } = await supabaseAdmin
-      .from('investors_public')
-      .select('id,name,slug,location,avatar_url,stages,industries')
-      .contains('industries', [primaryIndustry])
-      .neq('slug', decodedSlug)
-      .limit(60);
+    const relKey = serviceRoleKey || anonKey;
+    const relUrl = `${supabaseUrl}/rest/v1/investors_public?select=id,name,slug,location,avatar_url,stages,industries&industries=cs.{${encodeURIComponent(primaryIndustry)}}&slug=neq.${encodeURIComponent(decodedSlug)}&limit=60`;
+    const relRes = await fetch(relUrl, {
+      headers: {
+        apikey: relKey,
+        Authorization: `Bearer ${relKey}`,
+      },
+      next: { revalidate: 86400 },
+    });
+    const relData = relRes.ok ? await relRes.json() : [];
     if (relData && relData.length > 0) {
       const slugHash = (decodedSlug || '').split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
       const picked = [];

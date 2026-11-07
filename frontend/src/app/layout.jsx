@@ -51,7 +51,7 @@ export default async function RootLayout({ children, modal }) {
         "description": `The largest open database of ${seoLabel} verified angel investors and VCs.`,
         "potentialAction": {
           "@type": "SearchAction",
-          "target": "https://openangels.xyz/directory?search={search_term_string}",
+          "target": "https://openangels.xyz/?search={search_term_string}",
           "query-input": "required name=search_term_string",
         },
       },

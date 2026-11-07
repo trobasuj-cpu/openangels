@@ -40,6 +40,5 @@ export default withSentryConfig(nextConfig, {
   project: "openangels",
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  tunnelRoute: "/monitoring",
   hideSourceMaps: true,
 });

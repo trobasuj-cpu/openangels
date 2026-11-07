@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { supabase } from '@/lib/supabase';
 import {
   absoluteUrl, formatIndustryLabel, getIndustryPage,
@@ -11,6 +12,13 @@ import Footer from '@/components/Footer';
 import AddToCrmButton from '@/components/AddToCrmButton';
 import InvestorAvatar from '@/components/InvestorAvatar';
 import { notFound } from 'next/navigation';
+
+export const revalidate = 86400; // Cache hub pages on Vercel Edge CDN for 24h
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  return POPULAR_HUBS.slice(0, 12).map((h) => ({ filters: h.filters }));
+}
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -160,6 +168,37 @@ function ConversationalFAQ({ industryLabel, stageLabel, geoLabel, totalMatches, 
   );
 }
 
+const HUB_COLUMNS = '*';
+
+const fetchHubInvestors = cache(async (filterKey) => {
+  const filters = filterKey.split('/').filter(Boolean);
+  const parsed = parseFilters(filters);
+  const { query, industryLabel, stageLabel, geoLabel, geoInfo } = buildQuery(parsed, HUB_COLUMNS, false);
+  const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
+  const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
+
+  let investors = [];
+  let totalMatches = 0;
+
+  try {
+    const result = await query.order('has_email', { ascending: false }).limit(300);
+    if (result.error) throw result.error;
+
+    let data = result.data || [];
+    if (geoInfo?.countryMatch) {
+      data = data.filter((inv) => isUSLocation(inv.location));
+    }
+
+    const ranked = rankInvestorsForHub(data, parsed, canonicalPath);
+    investors = ranked.slice(0, 100);
+    totalMatches = geoInfo?.countryMatch ? data.length : (result.count || data.length);
+  } catch (err) {
+    console.error('Error fetching filtered investors:', err);
+  }
+
+  return { parsed, investors, totalMatches, industryLabel, stageLabel, geoLabel, canonicalPath };
+});
+
 export async function generateMetadata({ params }) {
   const { filters } = await params;
   const parsed = parseFilters(filters);
@@ -168,10 +207,8 @@ export async function generateMetadata({ params }) {
     return {};
   }
 
-  const { query, industryLabel, stageLabel, geoLabel } = buildQuery(parsed, '*', true);
-  const { count } = await query;
+  const { totalMatches: numInvestors, industryLabel, stageLabel, geoLabel, canonicalPath } = await fetchHubInvestors(filters.join('/'));
 
-  const numInvestors = count || 0;
   const parts = [industryLabel, stageLabel].filter(Boolean);
   const typeStr = parts.length > 0 ? parts.join(' ') : '';
   const geoStr = geoLabel ? ` in ${geoLabel}` : '';
@@ -181,9 +218,6 @@ export async function generateMetadata({ params }) {
     : `${typeStr} Angel Investors${geoStr} (${CURRENT_YEAR}) | OpenAngels`;
 
   const description = `Verified ${CURRENT_YEAR} directory of ${numInvestors > 0 ? numInvestors.toLocaleString() : 'active'} ${typeStr} angel investors & seed VCs${geoStr}. Compare check sizes, backed startups, and direct founder pitch emails on OpenAngels.`.replace(/\s+/g, ' ').trim();
-
-  const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
-  const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
 
   return {
     title,
@@ -213,35 +247,7 @@ export default async function FilteredInvestorsPage({ params }) {
     notFound();
   }
 
-  const { query, industryLabel, stageLabel, geoLabel, geoInfo } = buildQuery(parsed);
-  const canonicalSegments = [parsed.industry, parsed.stage, parsed.geo].filter(Boolean);
-  const canonicalPath = `/investors/${canonicalSegments.length > 0 ? canonicalSegments.join('/') : filters.join('/')}`;
-
-  let investors = [];
-  let totalMatches = 0;
-
-  try {
-    // Fetch a broader pool of 350 matching profiles so hub-specific ranking can surface the best profiles
-    const result = await query.order('has_email', { ascending: false }).limit(350);
-    if (result.error) throw result.error;
-
-    let data = result.data || [];
-
-    if (geoInfo?.countryMatch) {
-      data = data.filter((inv) => isUSLocation(inv.location));
-    }
-
-    const ranked = rankInvestorsForHub(data, parsed, canonicalPath);
-    investors = ranked.slice(0, 100);
-
-    if (geoInfo?.countryMatch) {
-      totalMatches = data.length;
-    } else {
-      totalMatches = result.count || data.length;
-    }
-  } catch (err) {
-    console.error('Error fetching filtered investors:', err);
-  }
+  const { investors, totalMatches, industryLabel, stageLabel, geoLabel, canonicalPath } = await fetchHubInvestors(filters.join('/'));
 
   const parts = [industryLabel, stageLabel].filter(Boolean);
   const typeStr = parts.length > 0 ? parts.join(' ') : '';

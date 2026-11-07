@@ -1,10 +1,9 @@
 import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS, absoluteUrl, PRODUCT_NAME, SITE_URL } from '@/seo';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
-import { redirect } from 'next/navigation';
 import { ChevronRight, Users, ArrowUpRight } from 'lucide-react';
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
@@ -54,12 +53,7 @@ export const metadata = {
   },
 };
 
-export default async function DirectoryPage({ searchParams }) {
-  const params = await searchParams;
-  const q = params?.q || params?.search;
-  if (q && q.trim()) {
-    redirect(`/?search=${encodeURIComponent(q.trim())}`);
-  }
+export default function DirectoryPage() {
 
   const schemaData = {
     '@context': 'https://schema.org',
