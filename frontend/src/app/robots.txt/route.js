@@ -53,6 +53,7 @@ Disallow: /
 User-Agent: DataForSeoBot
 Disallow: /
 
+Sitemap: https://openangels.xyz/sitemap-main.xml
 Sitemap: https://openangels.xyz/sitemap.xml
 `;
 

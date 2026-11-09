@@ -17,6 +17,8 @@ const nextConfig = {
       { source: '/sitemap.xml', destination: '/api/sitemap-root' },
       { source: '/sitemap-index.xml', destination: '/api/sitemap-root' },
       { source: '/sitemap_index.xml', destination: '/api/sitemap-root' },
+      // Fresh URL never seen by Google Search Console (bypasses stale "Couldn't fetch" state from the Vercel 402 outage)
+      { source: '/sitemap-main.xml', destination: '/api/sitemap-root' },
       { source: '/sitemap-static.xml', destination: '/api/sitemap-static' },
       { source: '/sitemap-hubs.xml', destination: '/api/sitemap-hubs' },
       { source: '/sitemap-companies.xml', destination: '/api/sitemap-companies' },
