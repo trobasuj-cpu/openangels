@@ -4,8 +4,8 @@ import { getDynamicInvestorCount, absoluteUrl } from "@/seo";
 export const revalidate = 86400; // ISR 24 hours
 
 export const metadata = {
-  title: 'OpenAngels — Verified Angel Investors & Venture Backers (2026)',
-  description: 'Search over 10,000+ verified angel investors and venture capital syndicates. Direct pitch contacts, check sizes, and investment history.',
+  title: 'OpenAngels: 10,400+ Verified Angel Investors & VCs',
+  description: 'Search 10,400+ verified angel investors and seed VCs. Filter by sector, check size, and thesis. Unlock direct founder pitch emails and AI pitches.',
   alternates: { canonical: absoluteUrl('/') },
   robots: {
     index: true,
@@ -14,16 +14,16 @@ export const metadata = {
     'max-snippet': -1,
   },
   openGraph: {
-    title: 'OpenAngels — Verified Angel Investors & Venture Backers (2026)',
-    description: 'Search over 10,000+ verified angel investors and venture capital syndicates. Direct pitch contacts, check sizes, and investment history.',
+    title: 'OpenAngels: 10,400+ Verified Angel Investors & VCs',
+    description: 'Search 10,400+ verified angel investors and seed VCs. Filter by sector, check size, and thesis. Unlock direct founder pitch emails and AI pitches.',
     url: absoluteUrl('/'),
     siteName: 'OpenAngels',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OpenAngels — Verified Angel Investors & Venture Backers (2026)',
-    description: 'Search over 10,000+ verified angel investors and venture capital syndicates. Direct pitch contacts, check sizes, and investment history.',
+    title: 'OpenAngels: 10,400+ Verified Angel Investors & VCs',
+    description: 'Search 10,400+ verified angel investors and seed VCs. Filter by sector, check size, and thesis. Unlock direct founder pitch emails and AI pitches.',
   }
 };
 

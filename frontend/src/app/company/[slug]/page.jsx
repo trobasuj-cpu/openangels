@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { absoluteUrl } from '@/seo';
 import { getCompanyIntelligence, KNOWN_COMPANIES } from '@/lib/companyData';
+import Footer from '@/components/Footer';
 import { 
   Building2, Globe, MapPin, ShieldCheck, DollarSign, 
   Users, Cpu, TrendingUp, Award, Zap, ArrowUpRight, 
@@ -45,6 +46,12 @@ export async function generateStaticParams() {
   return Object.keys(KNOWN_COMPANIES).map((slug) => ({ slug }));
 }
 
+function buildCompanyTitle(name) {
+  const candidate = `${name}: Angel Investors, Seed Rounds & Backers`;
+  if (candidate.length <= 58) return candidate;
+  return `${name}: Angel Investors & Backers`.slice(0, 58);
+}
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const company = getCompanyIntelligence(slug);
@@ -56,7 +63,7 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const title = `${company.name} — Company Intelligence, Funding & Syndicate | OpenAngels`;
+  const title = buildCompanyTitle(company.name);
   const description = `${company.name}: ${company.tagline || company.overview.substring(0, 140)}. OpenAngels Score: ${company.openangelsScore}/100. Backers: ${(company.investors || []).slice(0, 3).join(', ')}.`;
 
   return {
@@ -102,21 +109,34 @@ export default async function CompanyIntelligencePage({ params }) {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: company.name,
-    legalName: company.legalName,
-    url: `https://${company.domain}`,
-    description: company.overview,
-    foundingDate: String(company.foundedYear),
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: company.location
-    },
-    founders: (company.founders || []).map(f => ({
-      '@type': 'Person',
-      name: f.name,
-      jobTitle: f.role
-    }))
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': absoluteUrl(`/company/${slug}#organization`),
+        name: company.name,
+        legalName: company.legalName,
+        url: `https://${company.domain}`,
+        description: company.overview,
+        foundingDate: String(company.foundedYear),
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: company.location
+        },
+        founders: (company.founders || []).map(f => ({
+          '@type': 'Person',
+          name: f.name,
+          jobTitle: f.role
+        }))
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+          { '@type': 'ListItem', position: 2, name: 'Directory', item: absoluteUrl('/directory') },
+          { '@type': 'ListItem', position: 3, name: `${company.name} Investors`, item: absoluteUrl(`/company/${slug}`) }
+        ]
+      }
+    ]
   };
 
   return (
@@ -817,18 +837,30 @@ export default async function CompanyIntelligencePage({ params }) {
                 {company.pitchHook || `When pitching co-investors in ${company.name}, highlight customer retention velocity and defensible technical moats.`}
               </p>
 
-              <a
-                href={`/?search=${encodeURIComponent((company.investors || [])[0] || company.name)}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition-all shadow-lg shadow-red-600/20 cursor-pointer"
-              >
-                <span>Pitch Syndicate Co-Investors {company.investors?.[0] ? `(${company.investors[0]})` : ''}</span>
-                <ChevronRight className="w-4 h-4" />
-              </a>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href="https://beatsprom.gumroad.com/l/vgobnh"
+                  className="gumroad-button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition-all shadow-lg shadow-red-600/20 cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Unlock Verified Founder Pitch Emails ($49)</span>
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+
+                <a
+                  href={`/?search=${encodeURIComponent((company.investors || [])[0] || company.name)}`}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white font-semibold text-xs border border-zinc-700 transition-colors"
+                >
+                  <span>Search Co-Investors on OpenAngels</span>
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
       </main>
+
+      <Footer />
     </div>
   );
 }

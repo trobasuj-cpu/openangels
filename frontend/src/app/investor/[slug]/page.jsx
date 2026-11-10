@@ -520,6 +520,56 @@ export default async function StandaloneInvestorPage({ params }) {
           </div>
         </section>
 
+        {/* Founder Outreach & Monetization Card (High-Converting CRO) */}
+        <section 
+          aria-label="Unlock Pitch Contact"
+          className="rounded-2xl sm:rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-red-950/30 border border-zinc-800 p-6 sm:p-8 relative overflow-hidden shadow-2xl"
+        >
+          <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Founder Pitch Acceleration</span>
+              </div>
+              
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Want to pitch {safeInvestor.name}?
+              </h3>
+              
+              <p className="text-sm text-zinc-300 leading-relaxed">
+                Unlock {safeInvestor.name}&apos;s verified direct pitch email address, AI-personalized cold pitch drafter tailored to their portfolio thesis, plus instant lifetime access to our entire database of 10,400+ angel investors and seed VCs.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-400 pt-1">
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Verified direct email
+                </span>
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> AI pitch email drafter
+                </span>
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> One-time $49 payment
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 w-full md:w-auto shrink-0">
+              <a
+                href="https://beatsprom.gumroad.com/l/vgobnh"
+                className="gumroad-button inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition-all shadow-xl shadow-red-600/25 hover:scale-[1.02] cursor-pointer"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Unlock Pitch Email ($49)</span>
+              </a>
+              <p className="text-[11px] text-zinc-500 text-center">
+                Instant unlock • 10,400+ contacts
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Visible Frequently Asked Questions (FAQ) Section */}
         <section aria-labelledby="faq-heading" className="space-y-4">
           <div className="flex items-center gap-2 mb-1">

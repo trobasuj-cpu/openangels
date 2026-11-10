@@ -1,7 +1,7 @@
 import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS, absoluteUrl, PRODUCT_NAME, SITE_URL } from '@/seo';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
-import { ChevronRight, Users, ArrowUpRight } from 'lucide-react';
+import { ChevronRight, Users, ArrowUpRight, Sparkles, Lock, CheckCircle2 } from 'lucide-react';
 
 export const revalidate = 86400;
 
@@ -35,8 +35,8 @@ const FEATURED_ANGELS = [
 ];
 
 export const metadata = {
-  title: 'Angel Investor Directory (2026) — 10,800+ Verified Startup Backers | OpenAngels',
-  description: 'Explore 10,800+ verified angel investors, syndicate leads, and early-stage VCs organized by industry (AI, SaaS, Fintech), stage (Pre-Seed, Seed), location, and A–Z index.',
+  title: 'Angel Investor Directory: 10,400+ Verified Startup Backers',
+  description: 'Explore 10,400+ verified angel investors, syndicate leads, and early-stage VCs organized by industry (AI, SaaS, Fintech), stage (Pre-Seed, Seed), and A–Z index.',
   alternates: { canonical: absoluteUrl('/directory') },
   robots: {
     index: true,
@@ -45,8 +45,8 @@ export const metadata = {
     'max-snippet': -1,
   },
   openGraph: {
-    title: 'Angel Investor Directory (2026) — 10,800+ Verified Backers | OpenAngels',
-    description: 'Explore 10,800+ verified angel investors and early-stage VCs by industry, stage, location, and A–Z index.',
+    title: 'Angel Investor Directory: 10,400+ Verified Startup Backers',
+    description: 'Explore 10,400+ verified angel investors and early-stage VCs by industry, stage, location, and A–Z index.',
     url: absoluteUrl('/directory'),
     siteName: 'OpenAngels',
     type: 'website',
@@ -122,6 +122,48 @@ export default function DirectoryPage() {
             OpenAngels indexes over 10,800 active early-stage angel investors, operator-angels, and venture syndicates. Browse below by alphabetical index (A–Z), target industry, investment stage, or geographic hub to inspect verified check sizes, backed startups, and direct founder pitch contacts.
           </p>
         </div>
+
+        {/* Directory Pitch & Access Banner */}
+        <section 
+          aria-label="Unlock Full Investor Database"
+          className="rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-red-950/30 border border-zinc-800 p-6 sm:p-7 relative overflow-hidden shadow-xl"
+        >
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>All 10,400+ Investor Profiles</span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                Want Direct Pitch Email Access to the Full Database?
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                Unlock direct verified founder pitch emails, AI cold pitch generator, check sizes, and complete CSV export for all 10,400+ angel investors and seed VCs across every sector.
+              </p>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 pt-1">
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 10,400+ verified contacts
+                </span>
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Full CSV export
+                </span>
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> $49 one-time lifetime
+                </span>
+              </div>
+            </div>
+
+            <div className="shrink-0 w-full md:w-auto">
+              <a
+                href="https://beatsprom.gumroad.com/l/vgobnh"
+                className="gumroad-button inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition-all shadow-lg shadow-red-600/25 hover:scale-[1.02] cursor-pointer"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Unlock Full Database ($49)</span>
+              </a>
+            </div>
+          </div>
+        </section>
 
         {/* 1. Alphabetical Directory A-Z Subpages */}
         <section aria-labelledby="az-heading" className="p-5 sm:p-6 rounded-xl bg-zinc-900/40 border border-zinc-800/80">

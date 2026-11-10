@@ -55,6 +55,20 @@ const CORE_URLS = [
   'https://openangels.xyz/investor/daniel-gross',
   'https://openangels.xyz/investor/hiten-shah',
   'https://openangels.xyz/investor/daniel-ek',
+  // Company Intelligence Pages
+  'https://openangels.xyz/company/openai',
+  'https://openangels.xyz/company/stripe',
+  'https://openangels.xyz/company/perplexity',
+  'https://openangels.xyz/company/uber',
+  'https://openangels.xyz/company/airbnb',
+  'https://openangels.xyz/company/cursor',
+  // Directory Letters
+  'https://openangels.xyz/directory/a',
+  'https://openangels.xyz/directory/b',
+  'https://openangels.xyz/directory/c',
+  'https://openangels.xyz/directory/m',
+  'https://openangels.xyz/directory/n',
+  'https://openangels.xyz/directory/s',
 ];
 
 async function pingIndexNow() {

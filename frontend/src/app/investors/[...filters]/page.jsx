@@ -7,7 +7,7 @@ import {
   parseFilters, getStageInfo, getGeoInfo, isUSLocation,
 } from '@/seo.js';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, Filter, ChevronRight } from 'lucide-react';
+import { ArrowLeft, MapPin, Filter, ChevronRight, Sparkles, Lock, CheckCircle2 } from 'lucide-react';
 import Footer from '@/components/Footer';
 import AddToCrmButton from '@/components/AddToCrmButton';
 import InvestorAvatar from '@/components/InvestorAvatar';
@@ -426,6 +426,48 @@ export default async function FilteredInvestorsPage({ params }) {
             )}
           </div>
         )}
+
+        {/* Cohort Pitch & Monetization Banner (High-Converting CRO) */}
+        <section 
+          aria-label="Unlock All Investor Contacts"
+          className="mb-10 rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-red-950/30 border border-zinc-800 p-6 sm:p-7 relative overflow-hidden shadow-xl"
+        >
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Direct Founder Outreach</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                Fundraising for a {typeStr || 'Tech'} Startup{geoStr}?
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                Unlock direct verified pitch emails, check size data, and LinkedIn profiles for all {totalMatches.toLocaleString()} {typeStr} investors{geoStr}, plus our AI pitch drafter trained on their actual deal history.
+              </p>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 pt-1">
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> All {totalMatches.toLocaleString()} contacts included
+                </span>
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Instant CSV &amp; CRM export
+                </span>
+                <span className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> $49 one-time lifetime access
+                </span>
+              </div>
+            </div>
+
+            <div className="shrink-0 w-full md:w-auto">
+              <a
+                href="https://beatsprom.gumroad.com/l/vgobnh"
+                className="gumroad-button inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-red-600/25 hover:scale-[1.02] cursor-pointer"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Unlock All {typeStr || 'Angel'} Contacts ($49)</span>
+              </a>
+            </div>
+          </div>
+        </section>
 
         {/* Featured Snippet Comparison Table (Position #0 & AI Overviews Target) */}
         {tableInvestors.length > 0 && (

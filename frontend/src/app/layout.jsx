@@ -9,7 +9,7 @@ export async function generateMetadata() {
     alternates: {
       canonical: 'https://openangels.xyz',
     },
-    title: `OpenAngels — Find Angel Investors for Your Startup | ${seoLabel} VC & Angel Database`,
+    title: `OpenAngels: Find Angel Investors & VCs (${seoLabel} Database)`,
     description: `The largest open database of ${seoLabel} verified angel investors and VCs. Filter by industry, stage, and check size. Draft personalized AI pitch emails. One lifetime payment — no subscriptions.`,
     keywords: "find angel investors, angel investor database, list of angel investors, startup investors, VC database, seed funding, pre-seed investors, how to find investors for startup, AI cold email generator, pitch investors, angel investor directory, venture capital list, openvc alternative, signal nfx alternative, investor contact database",
     openGraph: {
