@@ -1,6 +1,8 @@
 export const dynamic = 'force-dynamic';
 import { absoluteUrl, INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS } from '@/seo';
 
+const HUBS_LASTMOD = '2026-11-09T12:00:00.000Z';
+
 export async function GET() {
   const hubs = new Set();
 
@@ -28,7 +30,7 @@ export async function GET() {
 
   const urls = Array.from(hubs).map(path => `  <url>
     <loc>${absoluteUrl(path)}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
+    <lastmod>${HUBS_LASTMOD}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>`).join('\n');

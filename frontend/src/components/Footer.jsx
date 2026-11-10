@@ -4,7 +4,7 @@ import { Mail } from 'lucide-react';
 import { INDUSTRY_PAGES, INVESTOR_COUNT } from '../seo.js';
 
 export default function Footer() {
-  const footerIndustries = INDUSTRY_PAGES.slice(0, 6);
+  const footerIndustries = INDUSTRY_PAGES.slice(0, 8);
 
   return (
     <footer className="bg-zinc-950 text-zinc-400 py-16 border-t border-zinc-900 mt-auto">
@@ -39,8 +39,8 @@ export default function Footer() {
         </div>
 
         <div>
-          <h2 className="text-white font-semibold mb-4">Investor Lists</h2>
-          <ul className="space-y-3 text-sm">
+          <h2 className="text-white font-semibold mb-4">Investor Lists by Sector</h2>
+          <ul className="space-y-2.5 text-sm">
             {footerIndustries.map((page) => (
               <li key={page.slug}>
                 <Link href={`/investors/${page.slug}`} className="hover:text-white transition-colors">
@@ -49,24 +49,23 @@ export default function Footer() {
               </li>
             ))}
             <li>
-              <Link href="/investors/ai/seed" className="hover:text-white transition-colors">
-                AI Seed investors
-              </Link>
-            </li>
-            <li>
-              <Link href="/investors/saas/pre-seed" className="hover:text-white transition-colors">
-                SaaS Pre-Seed investors
+              <Link href="/directory" className="text-amber-400 hover:text-amber-300 transition-colors font-medium text-xs">
+                View all sector &amp; geo lists →
               </Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h2 className="text-white font-semibold mb-4">Fundraising Tools</h2>
-          <ul className="space-y-3 text-sm">
-            <li><Link href="/directory" className="hover:text-white transition-colors">Investor directory (A–Z)</Link></li>
+          <h2 className="text-white font-semibold mb-4">Key Hubs &amp; Directory</h2>
+          <ul className="space-y-2.5 text-sm">
+            <li><Link href="/directory" className="hover:text-white transition-colors">A–Z Investor Directory</Link></li>
+            <li><Link href="/investors/silicon-valley" className="hover:text-white transition-colors">Silicon Valley angels</Link></li>
+            <li><Link href="/investors/san-francisco" className="hover:text-white transition-colors">San Francisco angels</Link></li>
+            <li><Link href="/investors/new-york" className="hover:text-white transition-colors">New York angels</Link></li>
+            <li><Link href="/investors/ai/seed" className="hover:text-white transition-colors">AI Seed investors</Link></li>
+            <li><Link href="/investors/saas/pre-seed" className="hover:text-white transition-colors">SaaS Pre-Seed investors</Link></li>
             <li><Link href="/crm" className="hover:text-white transition-colors">Fundraising CRM</Link></li>
-            <li><a href="mailto:tackssignals@gmail.com" className="hover:text-white transition-colors">Suggest an investor</a></li>
           </ul>
         </div>
       </div>

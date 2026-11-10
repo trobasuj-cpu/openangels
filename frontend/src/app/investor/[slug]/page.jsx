@@ -63,6 +63,44 @@ export async function generateStaticParams() {
   return TOP_FEATURED_SLUGS.map((slug) => ({ slug }));
 }
 
+function buildInvestorTitle(name, firm) {
+  if (firm && `${name} (${firm}): Portfolio & Pitch Email`.length <= 58) {
+    return `${name} (${firm}): Portfolio & Pitch Email`;
+  }
+  const candidate = `${name}: Angel Portfolio, Check Size & Pitch Email`;
+  if (candidate.length <= 58) return candidate;
+  return `${name}: Angel Portfolio & Pitch Email`.slice(0, 58);
+}
+
+function generateUniqueBio(investor, industries, stages, checkSizeStr, portfolioList) {
+  const name = investor.name || 'Angel Investor';
+  const firm = investor.firm ? `affiliated with ${investor.firm}` : 'an independent operator-angel';
+  const loc = investor.location ? `based in ${investor.location}` : 'operating across primary startup hubs';
+  const ind = industries.length > 0 ? industries.slice(0, 3).join(', ') : 'software and technology';
+  const stg = stages.length > 0 ? stages.slice(0, 2).join(' and ') : 'early-stage';
+
+  const hash = (name || '').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  const variant = hash % 3;
+
+  let bio = '';
+  if (variant === 0) {
+    bio = `${name} is an active venture investor ${firm}, ${loc}. Primarily backing ${stg} founders, focusing on high-growth opportunities across ${ind}.`;
+  } else if (variant === 1) {
+    bio = `Operating as ${firm} ${loc}, ${name} deploys venture capital and angel funding into ${stg} startups. Core sector focus spans ${ind}.`;
+  } else {
+    bio = `${name} is a venture backer and angel investor ${loc} (${firm}). Partnering with early-stage founding teams at ${stg} rounds throughout ${ind}.`;
+  }
+
+  if (portfolioList.length > 0) {
+    bio += ` Notable portfolio investments and syndicate deals include ${portfolioList.slice(0, 4).join(', ')}.`;
+  }
+  if (checkSizeStr && !checkSizeStr.includes('Undisclosed')) {
+    bio += ` Typical angel check size ranges around ${checkSizeStr}.`;
+  }
+
+  return bio;
+}
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   let decodedSlug = slug;
@@ -89,15 +127,20 @@ export async function generateMetadata({ params }) {
     : (typeof rawPort === 'string' && rawPort.trim() ? rawPort.split(',').map(s => s.trim()).filter(Boolean) : []);
   const portSnippet = portArr.length > 0 ? ` Backed ${portArr.slice(0, 3).join(', ')}.` : '';
 
-  const title = `${investorName}${firmText} — Angel Investor Portfolio, Check Size & Email (2026)`;
-  const description = `${investorName}${firmText} angel investor profile${locText}: ${stgStr} investments in ${indStr}.${portSnippet} View check size & verified founder pitch email on OpenAngels.`.substring(0, 160);
+  const isThinProfile = (!investor.bio || investor.bio.includes('Active early-stage angel investor and technology backer.')) &&
+    portArr.length === 0 &&
+    !investor.avatar_url &&
+    !investor.firm;
+
+  const title = buildInvestorTitle(investorName, investor.firm);
+  const description = `${investorName}${firmText} angel portfolio${locText}: ${stgStr} check sizes in ${indStr}.${portSnippet} Direct verified founder pitch contact on OpenAngels.`.substring(0, 155);
 
   return {
     title,
     description,
     alternates: { canonical: absoluteUrl(`/investor/${decodedSlug}`) },
     robots: {
-      index: true,
+      index: !isThinProfile,
       follow: true,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -152,14 +195,6 @@ export default async function StandaloneInvestorPage({ params }) {
     has_website: rawInvestor.has_website !== undefined ? rawInvestor.has_website : !!rawInvestor.website,
   };
 
-  let cleanBio = safeInvestor.bio || '';
-  if (cleanBio.includes('Source: http')) {
-    cleanBio = cleanBio.split('Source: http')[0].trim();
-  }
-  if (!cleanBio || cleanBio.includes("automated news") || cleanBio.includes("public investor list")) {
-    cleanBio = `${safeInvestor.name} is an active early-stage angel investor${safeInvestor.firm ? ` at ${safeInvestor.firm}` : ''}${safeInvestor.location ? ` based in ${safeInvestor.location}` : ''}. View verified investment thesis, check sizes, focus industries, and contact details on OpenAngels.`;
-  }
-
   const formatMoney = (val) => {
     if (!val) return '';
     if (val >= 1000000) return `$${val / 1000000}M`;
@@ -185,6 +220,21 @@ export default async function StandaloneInvestorPage({ params }) {
   const portfolioList = Array.isArray(rawPort) 
     ? rawPort.filter(Boolean) 
     : (typeof rawPort === 'string' && rawPort.trim() ? rawPort.split(',').map(s => s.trim()).filter(Boolean) : []);
+
+  let cleanBio = safeInvestor.bio || '';
+  if (cleanBio.includes('Source: http')) {
+    cleanBio = cleanBio.split('Source: http')[0].trim();
+  }
+  const isGenericBio = !cleanBio || 
+    cleanBio === 'Active early-stage angel investor and technology backer.' ||
+    cleanBio.includes('automated news') || 
+    cleanBio.includes('public investor list') ||
+    cleanBio.startsWith('Founder @');
+
+  if (isGenericBio) {
+    cleanBio = generateUniqueBio(safeInvestor, industries, stages, checkSizeStr, portfolioList);
+  }
+  safeInvestor.bio = cleanBio;
 
   // Fetch a pool of active angels in the same sector (cached 24h) and deterministically select 9 unique peers
   let relatedInvestors = [];

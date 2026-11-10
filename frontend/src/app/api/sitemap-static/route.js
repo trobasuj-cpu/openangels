@@ -3,6 +3,8 @@ import { absoluteUrl } from '@/seo';
 
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
+const STATIC_LASTMOD = '2026-11-09T12:00:00.000Z';
+
 export async function GET() {
   const staticPages = [
     '/',
@@ -19,8 +21,8 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${staticPages.map(path => `  <url>
     <loc>${absoluteUrl(path)}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>${STATIC_LASTMOD}</lastmod>
+    <changefreq>${path === '/' ? 'daily' : 'weekly'}</changefreq>
     <priority>${path === '/' ? '1.0' : path.startsWith('/directory') ? '0.9' : '0.7'}</priority>
   </url>`).join('\n')}
 </urlset>`;

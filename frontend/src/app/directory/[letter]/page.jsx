@@ -12,19 +12,26 @@ export async function generateStaticParams() {
   return LETTERS.map((letter) => ({ letter }));
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params, searchParams }) {
   const { letter } = await params;
+  const sp = searchParams ? await searchParams : {};
+  const page = Math.max(1, parseInt(sp?.page || '1', 10));
   const cleanLetter = (letter || '').toLowerCase();
   if (!LETTERS.includes(cleanLetter)) return {};
 
   const upper = cleanLetter.toUpperCase();
-  const title = `Angel Investors Starting with "${upper}" — Verified Directory (2026) | OpenAngels`;
-  const description = `Browse active early-stage angel investors, venture partners, and syndicate backers whose names start with the letter ${upper}. View check sizes, portfolios, and verified emails.`;
+  const pageSuffix = page > 1 ? ` (Page ${page})` : '';
+  const title = `Angel Investors Starting with "${upper}"${pageSuffix} — Verified Directory (2026) | OpenAngels`;
+  const description = `Browse active early-stage angel investors, venture partners, and syndicate backers whose names start with the letter ${upper}${pageSuffix}. View check sizes, portfolios, and verified emails.`;
+
+  const canonicalUrl = page > 1
+    ? absoluteUrl(`/directory/${cleanLetter}?page=${page}`)
+    : absoluteUrl(`/directory/${cleanLetter}`);
 
   return {
     title,
     description,
-    alternates: { canonical: absoluteUrl(`/directory/${cleanLetter}`) },
+    alternates: { canonical: canonicalUrl },
     robots: {
       index: true,
       follow: true,
@@ -32,7 +39,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title,
       description,
-      url: absoluteUrl(`/directory/${cleanLetter}`),
+      url: canonicalUrl,
       siteName: 'OpenAngels',
       type: 'website',
     },
@@ -65,8 +72,9 @@ async function fetchInvestorsByLetter(letter) {
   }
 }
 
-export default async function DirectoryLetterPage({ params }) {
+export default async function DirectoryLetterPage({ params, searchParams }) {
   const { letter } = await params;
+  const sp = searchParams ? await searchParams : {};
   const cleanLetter = (letter || '').toLowerCase();
 
   if (!LETTERS.includes(cleanLetter)) {
@@ -74,14 +82,24 @@ export default async function DirectoryLetterPage({ params }) {
   }
 
   const upper = cleanLetter.toUpperCase();
-  const investors = await fetchInvestorsByLetter(cleanLetter);
+  const allInvestors = await fetchInvestorsByLetter(cleanLetter);
+  const totalInvestors = allInvestors.length;
+  
+  const PAGE_SIZE = 120;
+  const totalPages = Math.max(1, Math.ceil(totalInvestors / PAGE_SIZE));
+  const currentPage = Math.min(totalPages, Math.max(1, parseInt(sp?.page || '1', 10)));
+  const investors = allInvestors.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const canonicalUrl = currentPage > 1
+    ? absoluteUrl(`/directory/${cleanLetter}?page=${currentPage}`)
+    : absoluteUrl(`/directory/${cleanLetter}`);
 
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Angel Investors Starting with ${upper} | OpenAngels`,
-    url: absoluteUrl(`/directory/${cleanLetter}`),
-    description: `Directory of ${investors.length} verified angel investors and VCs starting with the letter ${upper}.`,
+    url: canonicalUrl,
+    description: `Directory of ${totalInvestors} verified angel investors and VCs starting with the letter ${upper}.`,
     isPartOf: {
       '@type': 'WebSite',
       name: PRODUCT_NAME,
@@ -92,7 +110,7 @@ export default async function DirectoryLetterPage({ params }) {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
         { '@type': 'ListItem', position: 2, name: 'Directory', item: absoluteUrl('/directory') },
-        { '@type': 'ListItem', position: 3, name: `Investors (${upper})`, item: absoluteUrl(`/directory/${cleanLetter}`) },
+        { '@type': 'ListItem', position: 3, name: `Investors (${upper})`, item: canonicalUrl },
       ],
     },
     mainEntity: {
@@ -142,13 +160,13 @@ export default async function DirectoryLetterPage({ params }) {
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-400 mb-3">
             <Users className="w-3.5 h-3.5 text-emerald-400" />
-            <span>{investors.length} Verified Profiles</span>
+            <span>{totalInvestors.toLocaleString()} Verified Profiles • Page {currentPage} of {totalPages}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight">
-            Angel Investors Starting with &ldquo;{upper}&rdquo;
+            Angel Investors Starting with &ldquo;{upper}&rdquo;{currentPage > 1 ? ` (Page ${currentPage})` : ''}
           </h1>
           <p className="text-sm text-zinc-400 mt-1.5 max-w-2xl leading-relaxed">
-            Browse {investors.length} verified early-stage angel investors, venture partners, and syndicate backers alphabetically under {upper}. Click any profile to inspect check sizes, portfolio startups, and direct pitch contact details.
+            Showing {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, totalInvestors)} of {totalInvestors.toLocaleString()} verified early-stage angel investors, venture partners, and syndicate backers alphabetically under {upper}. Click any profile to inspect check sizes, portfolio startups, and direct pitch contact details.
           </p>
         </div>
 
@@ -207,6 +225,45 @@ export default async function DirectoryLetterPage({ params }) {
               );
             })}
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between pt-6 border-t border-zinc-800/80 mt-6">
+              <div>
+                {currentPage > 1 ? (
+                  <Link
+                    href={`/directory/${cleanLetter}${currentPage - 1 > 1 ? `?page=${currentPage - 1}` : ''}`}
+                    className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 text-xs font-medium transition-colors"
+                  >
+                    ← Previous Page
+                  </Link>
+                ) : (
+                  <span className="px-4 py-2 rounded-lg bg-zinc-950 text-zinc-600 border border-zinc-900 text-xs font-medium cursor-not-allowed">
+                    ← Previous Page
+                  </span>
+                )}
+              </div>
+
+              <div className="text-xs font-mono text-zinc-500">
+                Page {currentPage} of {totalPages}
+              </div>
+
+              <div>
+                {currentPage < totalPages ? (
+                  <Link
+                    href={`/directory/${cleanLetter}?page=${currentPage + 1}`}
+                    className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 text-xs font-medium transition-colors"
+                  >
+                    Next Page →
+                  </Link>
+                ) : (
+                  <span className="px-4 py-2 rounded-lg bg-zinc-950 text-zinc-600 border border-zinc-900 text-xs font-medium cursor-not-allowed">
+                    Next Page →
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
         </section>
       </main>
 

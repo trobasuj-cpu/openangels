@@ -24,7 +24,8 @@ export async function GET() {
       .from('investors_public')
       .select('slug, created_at')
       .not('slug', 'is', null)
-      .order('created_at', { ascending: false }).order('id', { ascending: true })
+      .order('has_email', { ascending: false })
+      .order('created_at', { ascending: false })
       .range(0, 999);
 
     if (error) throw error;

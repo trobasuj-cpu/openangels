@@ -3,6 +3,8 @@ import { absoluteUrl } from '@/seo';
 import { KNOWN_COMPANIES } from '@/lib/companyData';
 import companiesCache from '@/lib/companies_cache.json';
 
+const COMPANIES_LASTMOD = '2026-11-09T12:00:00.000Z';
+
 export async function GET() {
   const companySlugs = new Set();
 
@@ -16,7 +18,7 @@ export async function GET() {
 
   const urls = Array.from(companySlugs).map(slug => `  <url>
     <loc>${absoluteUrl(`/company/${encodeURIComponent(slug)}`)}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
+    <lastmod>${COMPANIES_LASTMOD}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>`).join('\n');

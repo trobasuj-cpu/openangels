@@ -35,11 +35,13 @@ export async function GET() {
     sitemaps.push(`https://openangels.xyz/sitemap-${i}.xml`);
   }
 
+  const SITEMAP_LASTMOD = '2026-11-10T00:00:00.000Z';
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemaps.map((url) => `  <sitemap>
     <loc>${url}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
+    <lastmod>${SITEMAP_LASTMOD}</lastmod>
   </sitemap>`).join('\n')}
 </sitemapindex>`;
 
