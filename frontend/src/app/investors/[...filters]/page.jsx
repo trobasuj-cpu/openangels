@@ -200,12 +200,12 @@ const fetchHubInvestors = cache(async (filterKey) => {
 });
 
 function buildHubTitle(numInvestors, typeStr, geoStr, currentYear) {
-  const base = typeStr || 'Startup';
+  const base = typeStr ? `${typeStr} Angel` : 'Angel';
   let cand = `Top ${numInvestors > 0 ? numInvestors + ' ' : ''}${base} Investors${geoStr} (${currentYear})`;
   if (cand.length <= 58) return cand;
-  cand = `${base} Angel Investors${geoStr} (${currentYear} List)`;
+  cand = `${typeStr || 'Startup'} Angel Investors${geoStr} (${currentYear})`;
   if (cand.length <= 58) return cand;
-  return `${base} Investors${geoStr} (${currentYear})`.slice(0, 58);
+  return `${typeStr || 'Angel'} Investors${geoStr} (${currentYear})`.slice(0, 58);
 }
 
 export async function generateMetadata({ params }) {
@@ -224,7 +224,7 @@ export async function generateMetadata({ params }) {
 
   const title = buildHubTitle(numInvestors, typeStr, geoStr, CURRENT_YEAR);
 
-  const description = `Verified ${CURRENT_YEAR} directory of ${numInvestors > 0 ? numInvestors.toLocaleString() : 'active'} ${typeStr} angel investors & seed VCs${geoStr}. Compare check sizes, backed startups, and direct founder pitch emails on OpenAngels.`.replace(/\s+/g, ' ').trim();
+  const description = `Free ${CURRENT_YEAR} directory of ${numInvestors > 0 ? numInvestors.toLocaleString() : 'active'} ${typeStr} angel investors & seed VCs${geoStr}. Compare check sizes, backed startups, and direct founder pitch emails on OpenAngels.`.replace(/\s+/g, ' ').trim();
 
   return {
     title,

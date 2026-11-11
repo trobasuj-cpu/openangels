@@ -28,6 +28,10 @@ const CORE_URLS = [
   'https://openangels.xyz/investors/gaming',
   'https://openangels.xyz/investors/ai/seed',
   'https://openangels.xyz/investors/saas/pre-seed',
+  'https://openangels.xyz/investors/saas/seed',
+  'https://openangels.xyz/investors/marketplace/pre-seed',
+  'https://openangels.xyz/investors/marketplace/seed',
+  'https://openangels.xyz/investors/developer-tools/seed',
   'https://openangels.xyz/investors/fintech/seed',
   'https://openangels.xyz/investors/silicon-valley',
   'https://openangels.xyz/investors/san-francisco',
@@ -81,24 +85,29 @@ async function pingIndexNow() {
     urlList: CORE_URLS,
   };
 
-  try {
-    const res = await fetch('https://api.indexnow.org/indexnow', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      body: JSON.stringify(payload),
-    });
+  const endpoints = [
+    'https://yandex.com/indexnow',
+    'https://api.indexnow.org/indexnow',
+    'https://www.bing.com/indexnow',
+  ];
 
-    console.log(`[IndexNow] api.indexnow.org response status: ${res.status} ${res.statusText}`);
-    if (res.status === 200 || res.status === 202) {
-      console.log('✅ [IndexNow] Batch submitted successfully! Search engines will prioritize these URLs.');
-    } else {
-      const text = await res.text();
-      console.log(`[IndexNow] Response body: ${text}`);
+  for (const endpoint of endpoints) {
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      console.log(`[IndexNow] ${endpoint} -> status ${res.status} ${res.statusText}`);
+      if (res.status === 200 || res.status === 202) {
+        console.log(`✅ [IndexNow] Successfully processed by ${endpoint}`);
+      }
+    } catch (err) {
+      console.warn(`[IndexNow] Endpoint ${endpoint} notice:`, err.message);
     }
-  } catch (err) {
-    console.error('❌ [IndexNow] Error submitting batch:', err.message);
   }
 
   // Ping Google Sitemap Ping Endpoint
