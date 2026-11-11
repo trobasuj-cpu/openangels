@@ -110,7 +110,7 @@ function buildQuery(parsed, selectClause = '*', countOnly = false) {
   };
 }
 
-function ConversationalFAQ({ industryLabel, stageLabel, geoLabel, totalMatches, topInvestorNames }) {
+function getHubFaqQuestions(industryLabel, stageLabel, geoLabel, totalMatches, topInvestorNames) {
   const i = industryLabel || 'early-stage';
   const s = stageLabel ? `${stageLabel} ` : '';
   const g = geoLabel ? ` in ${geoLabel}` : '';
@@ -119,10 +119,14 @@ function ConversationalFAQ({ industryLabel, stageLabel, geoLabel, totalMatches, 
     ? topInvestorNames.slice(0, 5).join(', ')
     : 'prominent operator-angels and syndicate leads';
 
-  const questions = [
+  return [
     {
       q: `Who are the top ${s}${i} angel investors${g} in ${CURRENT_YEAR}?`,
       a: `OpenAngels tracks ${c} verified ${s}${i} angel investors and early-stage venture backers${g}, including ${topNamesStr}. Each profile includes typical check sizes, preferred stages, portfolio startups, and verified founder pitch channels.`,
+    },
+    {
+      q: `How can founders find ${s}${i} angel investors${g} for free?`,
+      a: `Founders can use OpenAngels to search and filter ${c} active ${s}${i} angel investors${g} completely free. Filter by sector, check size ($10k to $250k+), and portfolio deals, and review verified angel profiles without paywalls or subscriptions.`,
     },
     {
       q: `What is the typical check size for ${s}${i} angel investors${g}?`,
@@ -133,26 +137,15 @@ function ConversationalFAQ({ industryLabel, stageLabel, geoLabel, totalMatches, 
       a: `Founders can filter our ${c} ${i} investor profiles${g} on OpenAngels, inspect their past investments to verify thesis alignment, and unlock direct verified email addresses and AI-personalized cold pitch drafts.`,
     },
   ];
+}
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: questions.map((q) => ({
-      '@type': 'Question',
-      name: q.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: q.a,
-      },
-    })),
-  };
+function ConversationalFAQ({ questions, industryLabel, stageLabel, geoLabel }) {
+  const i = industryLabel || 'early-stage';
+  const s = stageLabel ? `${stageLabel} ` : '';
+  const g = geoLabel ? ` in ${geoLabel}` : '';
 
   return (
     <section className="mt-14 pt-8 border-t border-zinc-800/80" aria-labelledby="faq-heading">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <h2 id="faq-heading" className="text-xl font-semibold text-white tracking-tight mb-5">
         Frequently Asked Questions — {s}{i} Investors{g}
       </h2>
@@ -260,36 +253,59 @@ export default async function FilteredInvestorsPage({ params }) {
   const typeStr = parts.length > 0 ? parts.join(' ') : '';
   const geoStr = geoLabel ? ` in ${geoLabel}` : '';
 
-  const pageSchema = {
+  const questions = getHubFaqQuestions(
+    industryLabel,
+    stageLabel,
+    geoLabel,
+    totalMatches,
+    investors.slice(0, 5).map((i) => i.name)
+  );
+
+  const unifiedSchema = {
     '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: `${typeStr} Angel Investors${geoStr} (${CURRENT_YEAR})`,
-    url: absoluteUrl(canonicalPath),
-    description: `Verified directory of ${totalMatches} ${typeStr} angel investors and VCs${geoStr} on OpenAngels.`,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: PRODUCT_NAME,
-      url: SITE_URL,
-    },
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
-        { '@type': 'ListItem', position: 2, name: 'Directory', item: absoluteUrl('/directory') },
-        { '@type': 'ListItem', position: 3, name: `${typeStr || 'Angel'} Investors${geoStr}`, item: absoluteUrl(canonicalPath) },
-      ],
-    },
-    mainEntity: {
-      '@type': 'ItemList',
-      numberOfItems: Math.min(investors.length, 50),
-      itemListElement: investors.slice(0, 15).map((investor, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        url: absoluteUrl(`/investor/${investor.slug || investor.id}`),
-        name: investor.name,
-        description: investor.bio || `${typeStr} angel investor on OpenAngels`,
-      })),
-    },
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        name: `${typeStr} Angel Investors${geoStr} (${CURRENT_YEAR})`,
+        url: absoluteUrl(canonicalPath),
+        description: `Verified directory of ${totalMatches} ${typeStr} angel investors and VCs${geoStr} on OpenAngels.`,
+        isPartOf: {
+          '@type': 'WebSite',
+          name: PRODUCT_NAME,
+          url: SITE_URL,
+        },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+            { '@type': 'ListItem', position: 2, name: 'Directory', item: absoluteUrl('/directory') },
+            { '@type': 'ListItem', position: 3, name: `${typeStr || 'Angel'} Investors${geoStr}`, item: absoluteUrl(canonicalPath) },
+          ],
+        },
+        mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: Math.min(investors.length, 50),
+          itemListElement: investors.slice(0, 15).map((investor, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            url: absoluteUrl(`/investor/${investor.slug || investor.id}`),
+            name: investor.name,
+            description: investor.bio || `${typeStr} angel investor on OpenAngels`,
+          })),
+        },
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: questions.map((q) => ({
+          '@type': 'Question',
+          name: q.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: q.a,
+          },
+        })),
+      },
+    ],
   };
 
   const stageLinks = !parsed.stage
@@ -331,7 +347,7 @@ export default async function FilteredInvestorsPage({ params }) {
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans flex flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(unifiedSchema) }}
       />
 
       <header className="h-14 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md sticky top-0 z-40">
@@ -672,12 +688,57 @@ export default async function FilteredInvestorsPage({ params }) {
         )}
 
         <ConversationalFAQ
+          questions={questions}
           industryLabel={industryLabel}
           stageLabel={stageLabel}
           geoLabel={geoLabel}
-          totalMatches={totalMatches}
-          topInvestorNames={investors.slice(0, 5).map((i) => i.name)}
         />
+
+        {/* Editorial Due Diligence & Outreach Guide (Targets Position #0 & AI Overviews) */}
+        <section className="mt-14 pt-8 border-t border-zinc-800/80" aria-labelledby="pitch-guide-heading">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <h2 id="pitch-guide-heading" className="text-xl font-semibold text-white tracking-tight">
+              How to Pitch {typeStr || 'Tech'} Angel Investors &amp; Secure Backing
+            </h2>
+          </div>
+          <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed max-w-3xl mb-6">
+            Early-stage angel investors and syndicate leads look for distinct traction indicators depending on their sector focus. Here is how to structure your diligence memo and outreach when pitching {typeStr || 'startup'} investors:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 space-y-2">
+              <div className="flex items-center gap-1.5 text-zinc-200 font-semibold text-xs">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono flex items-center justify-center text-[11px]">1</span>
+                <span>Thesis &amp; Check Alignment</span>
+              </div>
+              <p className="text-zinc-400 leading-relaxed">
+                Ensure your startup fits within the investor&apos;s active check range and target round ({stageLabel || 'Pre-Seed and Seed'}). Angels rarely invest outside their defined sector expertise.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 space-y-2">
+              <div className="flex items-center gap-1.5 text-zinc-200 font-semibold text-xs">
+                <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 font-mono flex items-center justify-center text-[11px]">2</span>
+                <span>Lead with Defensible Moats</span>
+              </div>
+              <p className="text-zinc-400 leading-relaxed">
+                {industryLabel?.toLowerCase().includes('marketplace')
+                  ? 'For marketplaces, highlight liquidity velocity, net GMV growth, repeat transaction cohorts, and take-rate sustainability.'
+                  : industryLabel?.toLowerCase().includes('saas')
+                  ? 'For SaaS, lead with Annual Recurring Revenue (ARR) growth, Net Revenue Retention (NRR > 110%), and low customer acquisition costs.'
+                  : 'Lead with rapid user retention, defensible technical differentiation, customer love, and capital-efficient product velocity.'}
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 space-y-2">
+              <div className="flex items-center gap-1.5 text-zinc-200 font-semibold text-xs">
+                <span className="w-5 h-5 rounded-full bg-purple-500/20 text-purple-400 font-mono flex items-center justify-center text-[11px]">3</span>
+                <span>Personalized Founder Pitch</span>
+              </div>
+              <p className="text-zinc-400 leading-relaxed">
+                Reference past investments from their portfolio. Explain specifically why their operational background makes them an ideal early syndicate partner for your round.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />

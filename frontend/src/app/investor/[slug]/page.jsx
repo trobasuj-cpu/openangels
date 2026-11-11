@@ -476,9 +476,11 @@ export default async function StandaloneInvestorPage({ params }) {
                       <Link
                         key={ind}
                         href={`/investors/${filterSlug}`}
-                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-amber-500/40 transition-colors"
+                        title={`Browse all ${ind} angel investors and venture backers`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-amber-500/40 transition-colors"
                       >
-                        {ind}
+                        <span>{ind} Investors</span>
+                        <ChevronRight className="w-3 h-3 text-zinc-500" />
                       </Link>
                     );
                   })
