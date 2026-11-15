@@ -4,9 +4,9 @@ export async function GET() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
   const envServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  let totalInvestors = 10407;
+  let totalInvestors = 6087;
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/investors_public?select=slug&limit=1`, {
+    const res = await fetch(`${supabaseUrl}/rest/v1/investors_public?select=slug&slug=not.is.null&or=(avatar_url.not.is.null,has_email.eq.true)&limit=1`, {
       headers: {
         'apikey': envServiceKey,
         'Authorization': `Bearer ${envServiceKey}`,
@@ -35,7 +35,7 @@ export async function GET() {
     sitemaps.push(`https://openangels.xyz/sitemap-${i}.xml`);
   }
 
-  const SITEMAP_LASTMOD = '2026-11-10T00:00:00.000Z';
+  const SITEMAP_LASTMOD = '2026-11-15T08:00:00.000Z';
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

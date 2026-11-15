@@ -11,6 +11,12 @@ import { ArrowLeft, MapPin, Filter, ChevronRight, Sparkles, Lock, CheckCircle2 }
 import Footer from '@/components/Footer';
 import AddToCrmButton from '@/components/AddToCrmButton';
 import InvestorAvatar from '@/components/InvestorAvatar';
+import {
+  HEX_SLUG_REGEX,
+  isBoilerplateBio,
+  extractFirmFromBio,
+  generateUniqueBio,
+} from '@/lib/investorUtils';
 import { notFound } from 'next/navigation';
 
 export const revalidate = 86400; // Cache hub pages on Vercel Edge CDN for 24h
@@ -60,11 +66,13 @@ function rankInvestorsForHub(investors, parsed, canonicalPath) {
       }
 
       // 2. Profile completeness & authority signals
+      if (!HEX_SLUG_REGEX.test(inv.slug || '')) score += 45;
       if (inv.avatar_url) score += 25;
       if (portArr.length > 0) score += Math.min(portArr.length * 8, 40);
-      if (bio.length > 60 && !bio.includes('public investor list')) score += 30;
+      if (bio.length > 60 && !isBoilerplateBio(inv.bio)) score += 30;
       if (inv.has_email) score += 15;
       if (inv.has_twitter || inv.has_linkedin) score += 15;
+      if (!inv.avatar_url && !inv.has_email) score -= 25;
 
       // 3. Deterministic hub-specific variation (breaks ties uniquely per hub URL)
       const tieBreaker = hashString(`${inv.slug || inv.id}::${canonicalPath}`) % 45;
@@ -174,7 +182,10 @@ const fetchHubInvestors = cache(async (filterKey) => {
   let totalMatches = 0;
 
   try {
-    const result = await query.order('has_email', { ascending: false }).limit(300);
+    const result = await query
+      .order('has_email', { ascending: false })
+      .order('created_at', { ascending: true })
+      .limit(300);
     if (result.error) throw result.error;
 
     let data = result.data || [];
@@ -183,7 +194,17 @@ const fetchHubInvestors = cache(async (filterKey) => {
     }
 
     const ranked = rankInvestorsForHub(data, parsed, canonicalPath);
-    investors = ranked.slice(0, 100);
+    investors = ranked.slice(0, 100).map((inv) => {
+      const cleanFirm = extractFirmFromBio(inv.bio, inv.firm);
+      const cleanBio = isBoilerplateBio(inv.bio)
+        ? generateUniqueBio({ ...inv, firm: cleanFirm })
+        : inv.bio;
+      return {
+        ...inv,
+        firm: cleanFirm,
+        bio: cleanBio,
+      };
+    });
     totalMatches = geoInfo?.countryMatch ? data.length : (result.count || data.length);
   } catch (err) {
     console.error('Error fetching filtered investors:', err);

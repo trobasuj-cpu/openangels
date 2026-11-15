@@ -1,4 +1,5 @@
 import { absoluteUrl, PRODUCT_NAME, SITE_URL } from '@/seo';
+import { HEX_SLUG_REGEX } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { notFound } from 'next/navigation';
@@ -33,7 +34,7 @@ export async function generateMetadata({ params, searchParams }) {
     description,
     alternates: { canonical: canonicalUrl },
     robots: {
-      index: true,
+      index: page === 1,
       follow: true,
     },
     openGraph: {
@@ -53,7 +54,7 @@ async function fetchInvestorsByLetter(letter) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_SERVICE_ROLE;
 
     const res = await fetch(
-      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=name.asc&limit=1500`,
+      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages,avatar_url,has_email,created_at&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=created_at.asc,name.asc&limit=2500`,
       {
         headers: {
           apikey: supabaseKey,
@@ -65,7 +66,14 @@ async function fetchInvestorsByLetter(letter) {
 
     if (!res.ok) return [];
     const data = await res.json();
-    return (data || []).filter((inv) => inv && inv.slug && inv.name);
+    const valid = (data || []).filter((inv) => inv && inv.slug && inv.name);
+
+    return valid.sort((a, b) => {
+      const aTier1 = !HEX_SLUG_REGEX.test(a.slug) || Boolean(a.avatar_url) ? 0 : 1;
+      const bTier1 = !HEX_SLUG_REGEX.test(b.slug) || Boolean(b.avatar_url) ? 0 : 1;
+      if (aTier1 !== bTier1) return aTier1 - bTier1;
+      return a.name.localeCompare(b.name);
+    });
   } catch (err) {
     console.error(`[DirectoryLetterPage] Error fetching letter ${letter}:`, err.message);
     return [];

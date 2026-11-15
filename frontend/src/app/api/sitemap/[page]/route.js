@@ -33,15 +33,16 @@ export async function GET(request, { params }) {
       .from('investors_public')
       .select('slug, created_at')
       .not('slug', 'is', null)
-      .order('has_email', { ascending: false })
-      .order('created_at', { ascending: false })
+      .or('avatar_url.not.is.null,has_email.eq.true')
+      .order('created_at', { ascending: true })
+      .order('id', { ascending: true })
       .range(from, to);
 
     if (error) throw error;
 
     const urls = (data || []).map((inv) => `  <url>
     <loc>${absoluteUrl(`/investor/${escapeXml(inv.slug)}`)}</loc>
-    <lastmod>${inv.created_at ? new Date(inv.created_at).toISOString() : new Date().toISOString()}</lastmod>
+    <lastmod>${inv.created_at ? new Date(inv.created_at).toISOString() : '2026-11-10T00:00:00.000Z'}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>`).join('\n');
