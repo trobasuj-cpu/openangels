@@ -159,6 +159,20 @@ export const POPULAR_HUBS = [
   { filters: ['edtech', 'pre-seed'], label: 'EdTech Pre-Seed' },
   { filters: ['biotech', 'seed'], label: 'Biotech Seed' },
   { filters: ['gaming', 'angel'], label: 'Gaming Angel' },
+  { filters: ['ai', 'series-a'], label: 'AI Series A' },
+  { filters: ['saas', 'series-a'], label: 'SaaS Series A' },
+  { filters: ['fintech', 'series-a'], label: 'Fintech Series A' },
+  { filters: ['developer-tools', 'san-francisco'], label: 'Developer Tools in San Francisco' },
+  { filters: ['ai', 'new-york'], label: 'AI in New York' },
+  { filters: ['saas', 'new-york'], label: 'SaaS in New York' },
+  { filters: ['fintech', 'new-york'], label: 'Fintech in New York' },
+  { filters: ['fintech', 'london'], label: 'Fintech in London' },
+  { filters: ['crypto', 'san-francisco'], label: 'Crypto in San Francisco' },
+  { filters: ['enterprise', 'seed'], label: 'Enterprise Seed' },
+  { filters: ['enterprise', 'pre-seed'], label: 'Enterprise Pre-Seed' },
+  { filters: ['health', 'seed'], label: 'Health Seed' },
+  { filters: ['deep-tech', 'seed'], label: 'Deep Tech Seed' },
+  { filters: ['security', 'seed'], label: 'Security Seed' },
 ];
 
 export const INDUSTRY_PAGES = [

@@ -1,5 +1,6 @@
+import { cache } from 'react';
 import { absoluteUrl, PRODUCT_NAME, SITE_URL } from '@/seo';
-import { HEX_SLUG_REGEX } from '@/lib/investorUtils';
+import { HEX_SLUG_REGEX, truncateMetaDescription } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { notFound } from 'next/navigation';
@@ -13,6 +14,44 @@ export async function generateStaticParams() {
   return LETTERS.map((letter) => ({ letter }));
 }
 
+const fetchInvestorsByLetter = cache(async (letter) => {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+    const FALLBACK_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_SERVICE_ROLE;
+
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages,avatar_url,has_email,created_at&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=created_at.asc,name.asc&limit=2500`,
+      {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+        next: { revalidate: 86400 },
+      }
+    );
+
+    if (!res.ok) return [];
+    const data = await res.json();
+    const valid = (data || []).filter((inv) => inv && inv.slug && inv.name);
+
+    const getTier = (inv) => {
+      if (!HEX_SLUG_REGEX.test(inv.slug)) return 0;
+      if (inv.avatar_url || inv.has_email) return 1;
+      return 2;
+    };
+
+    return valid.sort((a, b) => {
+      const tierDiff = getTier(a) - getTier(b);
+      if (tierDiff !== 0) return tierDiff;
+      return a.name.localeCompare(b.name);
+    });
+  } catch (err) {
+    console.error(`[DirectoryLetterPage] Error fetching letter ${letter}:`, err.message);
+    return [];
+  }
+});
+
 export async function generateMetadata({ params, searchParams }) {
   const { letter } = await params;
   const sp = searchParams ? await searchParams : {};
@@ -22,8 +61,26 @@ export async function generateMetadata({ params, searchParams }) {
 
   const upper = cleanLetter.toUpperCase();
   const pageSuffix = page > 1 ? ` (Page ${page})` : '';
-  const title = `Angel Investors Starting with "${upper}"${pageSuffix} (2026 Directory)`;
-  const description = `Browse active early-stage angel investors, venture partners, and syndicate backers whose names start with the letter ${upper}${pageSuffix}. View check sizes, portfolios, and verified emails.`;
+  const allInvestors = await fetchInvestorsByLetter(cleanLetter);
+  const total = allInvestors.length;
+  const topNames = allInvestors.slice(0, 2).map((i) => i.name);
+  const top3Names = allInvestors.slice(0, 3).map((i) => i.name).join(', ');
+
+  let title = `Angel Investors Starting with "${upper}"${pageSuffix} (2026)`;
+  if (page === 1 && topNames.length >= 2) {
+    const twoNamesTitle = `${total} "${upper}" Angel Investors: ${topNames.join(', ')}`;
+    const oneNameTitle = `${total} "${upper}" Angel Investors: ${topNames[0]} & More`;
+    if (twoNamesTitle.length <= 58) title = twoNamesTitle;
+    else if (oneNameTitle.length <= 58) title = oneNameTitle;
+  } else if (page === 1 && topNames.length === 1) {
+    const oneNameTitle = `${total} "${upper}" Angel Investors: ${topNames[0]} & More`;
+    if (oneNameTitle.length <= 58) title = oneNameTitle;
+  }
+
+  const description = truncateMetaDescription(
+    `Browse ${total} verified angel investors starting with ${upper}${top3Names ? ` — including ${top3Names}` : ''}. Compare check sizes, backed startups, and direct pitch emails.`,
+    155
+  );
 
   const canonicalUrl = page > 1
     ? absoluteUrl(`/directory/${cleanLetter}?page=${page}`)
@@ -45,39 +102,6 @@ export async function generateMetadata({ params, searchParams }) {
       type: 'website',
     },
   };
-}
-
-async function fetchInvestorsByLetter(letter) {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
-    const FALLBACK_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_SERVICE_ROLE;
-
-    const res = await fetch(
-      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages,avatar_url,has_email,created_at&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=created_at.asc,name.asc&limit=2500`,
-      {
-        headers: {
-          apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
-        },
-        next: { revalidate: 86400 },
-      }
-    );
-
-    if (!res.ok) return [];
-    const data = await res.json();
-    const valid = (data || []).filter((inv) => inv && inv.slug && inv.name);
-
-    return valid.sort((a, b) => {
-      const aTier1 = !HEX_SLUG_REGEX.test(a.slug) || Boolean(a.avatar_url) ? 0 : 1;
-      const bTier1 = !HEX_SLUG_REGEX.test(b.slug) || Boolean(b.avatar_url) ? 0 : 1;
-      if (aTier1 !== bTier1) return aTier1 - bTier1;
-      return a.name.localeCompare(b.name);
-    });
-  } catch (err) {
-    console.error(`[DirectoryLetterPage] Error fetching letter ${letter}:`, err.message);
-    return [];
-  }
 }
 
 export default async function DirectoryLetterPage({ params, searchParams }) {

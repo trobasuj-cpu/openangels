@@ -28,6 +28,7 @@ import companiesCache from '@/lib/companies_cache.json';
 import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
+import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio } from '@/lib/investorUtils';
 
 export function getVerificationInfo(investor) {
   const dateStr = investor?.created_at || investor?.updated_at;
@@ -1724,12 +1725,13 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                   {filteredInvestors.map((investor, index) => {
                     const isUnlocked = profile?.is_premium || index < 6;
                   
+                  const cleanFirm = extractFirmFromBio(investor.bio, investor.firm);
                   let cleanBio = investor.bio || '';
                   if (cleanBio.includes('Source: http')) {
                     cleanBio = cleanBio.split('Source: http')[0].trim();
                   }
-                  if (cleanBio === "Found via automated news parsing." || cleanBio === "Extracted from public investor list.") {
-                    cleanBio = "Active early-stage angel investor.";
+                  if (isBoilerplateBio(cleanBio)) {
+                    cleanBio = generateUniqueBio({ ...investor, firm: cleanFirm });
                   }
 
                   const rawInd = investor.industry || investor.industries;
@@ -1765,9 +1767,9 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                                     {investor.name}
                                   </h3>
                                 </Link>
-                                {investor.firm ? (
+                                {cleanFirm ? (
                                   <p className="text-xs font-medium text-amber-600 dark:text-amber-400 truncate">
-                                    {investor.title ? `${investor.title} at ` : ''}{investor.firm}
+                                    {investor.title ? `${investor.title} at ` : ''}{cleanFirm}
                                   </p>
                                 ) : investor.location ? (
                                   <div className="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
@@ -1874,7 +1876,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                           </div>
 
                           {/* Location row if firm was shown above */}
-                          {investor.firm && investor.location && (
+                          {cleanFirm && investor.location && (
                             <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mb-2">
                               <MapPin className="w-3 h-3 shrink-0" />
                               <span className="truncate">{investor.location}</span>

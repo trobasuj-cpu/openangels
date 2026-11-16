@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio } from '@/lib/investorUtils';
 
 export const dynamic = 'force-dynamic';
 
@@ -229,12 +230,13 @@ export async function GET(request) {
       const isTeaserUnlocked = !hasActiveFilters && !orderParam && from === 0 && idx < 6;
       const canAccessFullData = isPremium || isTeaserUnlocked;
 
+      const cleanFirm = extractFirmFromBio(inv.bio, inv.firm);
       let cleanBio = inv.bio || '';
       if (cleanBio.includes('Source: http')) {
         cleanBio = cleanBio.split('Source: http')[0].trim();
       }
-      if (cleanBio === "Found via automated news parsing." || cleanBio === "Extracted from public investor list.") {
-        cleanBio = "Active early-stage angel investor.";
+      if (isBoilerplateBio(cleanBio)) {
+        cleanBio = generateUniqueBio({ ...inv, firm: cleanFirm });
       }
 
       const has_email = inv.has_email !== undefined ? inv.has_email : !!inv.email;
@@ -245,6 +247,7 @@ export async function GET(request) {
 
       return {
         ...inv,
+        firm: cleanFirm,
         bio: cleanBio,
         quality_score,
         email: canAccessFullData ? (inv.email || null) : null,

@@ -16,6 +16,7 @@ import {
   isBoilerplateBio,
   extractFirmFromBio,
   generateUniqueBio,
+  truncateMetaDescription,
 } from '@/lib/investorUtils';
 import { notFound } from 'next/navigation';
 
@@ -183,8 +184,8 @@ const fetchHubInvestors = cache(async (filterKey) => {
 
   try {
     const result = await query
-      .order('has_email', { ascending: false })
       .order('created_at', { ascending: true })
+      .order('has_email', { ascending: false })
       .limit(300);
     if (result.error) throw result.error;
 
@@ -230,15 +231,19 @@ export async function generateMetadata({ params }) {
     return {};
   }
 
-  const { totalMatches: numInvestors, industryLabel, stageLabel, geoLabel, canonicalPath } = await fetchHubInvestors(filters.join('/'));
+  const { investors, totalMatches: numInvestors, industryLabel, stageLabel, geoLabel, canonicalPath } = await fetchHubInvestors(filters.join('/'));
 
   const parts = [industryLabel, stageLabel].filter(Boolean);
   const typeStr = parts.length > 0 ? parts.join(' ') : '';
   const geoStr = geoLabel ? ` in ${geoLabel}` : '';
+  const topNames = (investors || []).slice(0, 3).map((i) => i.name).filter(Boolean).join(', ');
 
   const title = buildHubTitle(numInvestors, typeStr, geoStr, CURRENT_YEAR);
 
-  const description = `Free ${CURRENT_YEAR} directory of ${numInvestors > 0 ? numInvestors.toLocaleString() : 'active'} ${typeStr} angel investors & seed VCs${geoStr}. Compare check sizes, backed startups, and direct founder pitch emails on OpenAngels.`.replace(/\s+/g, ' ').trim();
+  const description = truncateMetaDescription(
+    `Compare ${numInvestors > 0 ? numInvestors.toLocaleString() : 'active'} verified ${typeStr} angel investors & seed VCs${geoStr}${topNames ? ` (including ${topNames})` : ''}. Check sizes, portfolios & direct pitch emails.`,
+    155
+  );
 
   return {
     title,

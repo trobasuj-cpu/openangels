@@ -143,7 +143,86 @@ export function extractFirmFromBio(bio, existingFirm = null) {
     return null;
   }
 
+  const ofMatch = bio.match(
+    /(?:^|\b)(?:Co-?Founder(?:\s+and\s+[A-Z]+)?|Founder|Former\s+CEO|CEO|Chairman|Partner|General\s+Partner|Managing\s+Partner)\s+of\s+([^.\n,;()]+)/i
+  );
+  if (ofMatch?.[1]) {
+    const candidate = ofMatch[1].split(/\s+and\s+/i)[0].trim();
+    if (!isJunkFirm(candidate)) {
+      return candidate;
+    }
+  }
+
   return null;
+}
+
+const HUMAN_LABEL_MAP = {
+  ai: 'AI',
+  saas: 'SaaS',
+  b2b: 'B2B',
+  web3: 'Web3',
+  'ar-vr': 'AR/VR',
+  api: 'API',
+  edtech: 'EdTech',
+  fintech: 'Fintech',
+  biotech: 'Biotech',
+  'deep-tech': 'Deep Tech',
+  'developer-tools': 'Developer Tools',
+  'pre-seed': 'Pre-Seed',
+  'series-a': 'Series A',
+  'series-b': 'Series B',
+  seed: 'Seed',
+  angel: 'Angel',
+  growth: 'Growth',
+  'e-commerce': 'E-Commerce',
+  'open-source': 'Open Source',
+  'marketing-tech': 'Marketing Tech',
+  'legal-tech': 'Legal Tech',
+  'future-of-work': 'Future of Work',
+  'creator-economy': 'Creator Economy',
+};
+
+/**
+ * Convert slug/raw tags (e.g., "developer-tools", "series-a") into clean display labels for SEO snippets.
+ * @param {string|null|undefined} value
+ * @returns {string}
+ */
+export function formatHumanLabel(value) {
+  if (!value || typeof value !== 'string') return '';
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+  const key = trimmed.toLowerCase().replace(/[\s_]+/g, '-');
+  if (HUMAN_LABEL_MAP[key]) return HUMAN_LABEL_MAP[key];
+  return trimmed
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((word) => {
+      const lower = word.toLowerCase();
+      if (HUMAN_LABEL_MAP[lower]) return HUMAN_LABEL_MAP[lower];
+      if (/^[A-Z0-9]{2,5}$/.test(word)) return word;
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join(' ');
+}
+
+/**
+ * Truncate a meta description at word boundaries to avoid cutting words in half in SERP snippets.
+ * @param {string|null|undefined} text
+ * @param {number} maxLen
+ * @returns {string}
+ */
+export function truncateMetaDescription(text, maxLen = 155) {
+  if (!text || typeof text !== 'string') return '';
+  const cleaned = text.replace(/\s+/g, ' ').trim();
+  if (cleaned.length <= maxLen) return cleaned;
+
+  const sliced = cleaned.slice(0, maxLen - 1);
+  const lastSpace = sliced.lastIndexOf(' ');
+  const boundary = lastSpace > Math.floor(maxLen * 0.6) ? sliced.slice(0, lastSpace) : sliced;
+  const trimmed = boundary.replace(/[,;:\-–\s]+$/g, '');
+  if (!trimmed) return cleaned.slice(0, maxLen).trim();
+  if (/[.!?]$/.test(trimmed)) return trimmed;
+  return `${trimmed}…`;
 }
 
 /**
@@ -210,8 +289,10 @@ export function generateUniqueBio(
       ? portfolioList
       : parseListField(investor?.portfolio || investor?.past_investments);
 
-  const primaryIndustries = indList.slice(0, 3).join(', ') || 'early-stage technology';
-  const primaryStages = stageList.slice(0, 2).join(' and ') || 'Pre-Seed and Seed';
+  const primaryIndustries =
+    indList.slice(0, 3).map(formatHumanLabel).filter(Boolean).join(', ') || 'early-stage technology';
+  const primaryStages =
+    stageList.slice(0, 2).map(formatHumanLabel).filter(Boolean).join(' and ') || 'Pre-Seed and Seed';
   const notableBacking = portList.length > 0 ? portList.slice(0, 2).join(' and ') : '';
   const firmClause = cleanFirm ? ` at ${cleanFirm}` : '';
   const locationClause = location ? ` based in ${location}` : '';

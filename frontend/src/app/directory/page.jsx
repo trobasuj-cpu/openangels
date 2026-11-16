@@ -1,4 +1,5 @@
 import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS, absoluteUrl, PRODUCT_NAME, SITE_URL } from '@/seo';
+import { HEX_SLUG_REGEX, extractFirmFromBio } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { ChevronRight, Users, ArrowUpRight, Sparkles, Lock, CheckCircle2 } from 'lucide-react';
@@ -53,7 +54,39 @@ export const metadata = {
   },
 };
 
-export default function DirectoryPage() {
+async function getTopCuratedAngels() {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,bio,location,industries&slug=not.is.null&order=created_at.asc,id.asc&limit=140`,
+      {
+        headers: {
+          apikey: anonKey,
+          Authorization: `Bearer ${anonKey}`,
+        },
+        next: { revalidate: 86400 },
+      }
+    );
+    if (!res.ok) return FEATURED_ANGELS;
+    const data = await res.json();
+    const curated = (data || [])
+      .filter((inv) => inv && inv.slug && inv.name && !HEX_SLUG_REGEX.test(inv.slug))
+      .slice(0, 120)
+      .map((inv) => {
+        const cleanFirm = extractFirmFromBio(inv.bio);
+        const sub = [cleanFirm, inv.location].filter(Boolean).join(' • ') || 'Verified Angel Investor';
+        return { name: inv.name, slug: inv.slug, firm: sub };
+      });
+    return curated.length > 0 ? curated : FEATURED_ANGELS;
+  } catch (err) {
+    console.error('[DirectoryPage] Error fetching curated angels:', err.message);
+    return FEATURED_ANGELS;
+  }
+}
+
+export default async function DirectoryPage() {
+  const featuredAngels = await getTopCuratedAngels();
 
   const schemaData = {
     '@context': 'https://schema.org',
@@ -75,8 +108,8 @@ export default function DirectoryPage() {
     },
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems: FEATURED_ANGELS.length,
-      itemListElement: FEATURED_ANGELS.map((inv, idx) => ({
+      numberOfItems: featuredAngels.length,
+      itemListElement: featuredAngels.map((inv, idx) => ({
         '@type': 'ListItem',
         position: idx + 1,
         url: absoluteUrl(`/investor/${inv.slug}`),
@@ -206,7 +239,7 @@ export default function DirectoryPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
-            {FEATURED_ANGELS.map((inv) => (
+            {featuredAngels.map((inv) => (
               <Link
                 key={inv.slug}
                 href={`/investor/${inv.slug}`}

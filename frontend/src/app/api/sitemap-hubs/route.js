@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { absoluteUrl, INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS } from '@/seo';
 
-const HUBS_LASTMOD = '2026-11-09T12:00:00.000Z';
+const HUBS_LASTMOD = '2026-11-16T08:00:00.000Z';
 
 export async function GET() {
   const hubs = new Set();
@@ -26,6 +26,24 @@ export async function GET() {
     if (hub?.filters && hub.filters.length > 0) {
       hubs.add(`/investors/${hub.filters.join('/')}`);
     }
+  });
+
+  // 5. High-intent Industry x Stage combinations (top 12 sectors x core early stages)
+  const coreStages = ['pre-seed', 'seed', 'series-a'];
+  INDUSTRY_PAGES.slice(0, 12).forEach(page => {
+    if (!page?.slug) return;
+    coreStages.forEach(stage => {
+      hubs.add(`/investors/${page.slug}/${stage}`);
+    });
+  });
+
+  // 6. High-intent Industry x Geo combinations (top 8 sectors x core startup hubs)
+  const coreGeos = ['san-francisco', 'new-york', 'silicon-valley', 'london', 'europe', 'usa'];
+  INDUSTRY_PAGES.slice(0, 8).forEach(page => {
+    if (!page?.slug) return;
+    coreGeos.forEach(geo => {
+      hubs.add(`/investors/${page.slug}/${geo}`);
+    });
   });
 
   const urls = Array.from(hubs).map(path => `  <url>

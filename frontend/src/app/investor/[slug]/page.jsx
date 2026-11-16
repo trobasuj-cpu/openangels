@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { absoluteUrl, INVESTOR_COUNT } from '@/seo';
+import { absoluteUrl, INVESTOR_COUNT, STAGE_SLUGS } from '@/seo';
 import InvestorProfileModal from '@/components/InvestorProfileModal';
 import Footer from '@/components/Footer';
 import InvestorAvatar from '@/components/InvestorAvatar';
@@ -10,6 +10,8 @@ import {
   extractFirmFromBio,
   isThinInvestorProfile,
   generateUniqueBio,
+  formatHumanLabel,
+  truncateMetaDescription,
 } from '@/lib/investorUtils';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -63,6 +65,13 @@ const TOP_FEATURED_SLUGS = [
   'naval-ravikant', 'sam-altman', 'lenny-rachitsky', 'elad-gil',
   'paul-graham', 'garry-tan', 'peter-thiel', 'reid-hoffman',
   'balaji-srinivasan', 'jason-calacanis', 'greg-brockman', 'pieter-levels',
+  'marc-andreessen', 'ron-conway', 'chris-dixon', 'palmer-luckey',
+  'ben-horowitz', 'hiten-shah', 'bill-gates', 'nat-friedman',
+  'dharmesh-shah', 'justin-kan', 'vinod-khosla', 'david-sacks',
+  'chamath-palihapitiya', 'brian-armstrong', 'patrick-collison', 'john-collison',
+  'max-levchin', 'andrej-karpathy', 'daniel-gross', 'packy-mccormick',
+  'dylan-field', 'alexis-ohanian', 'keith-rabois', 'tim-draper',
+  'fred-wilson', 'brad-feld', 'cyan-banister', 'michael-seibel',
 ];
 
 export async function generateStaticParams() {
@@ -93,11 +102,13 @@ export async function generateMetadata({ params }) {
 
   const rawInd = investor.industry || investor.industries;
   const indArr = Array.isArray(rawInd) ? rawInd.filter(Boolean) : (typeof rawInd === 'string' && rawInd ? [rawInd] : []);
-  const indStr = indArr.length > 0 ? indArr.slice(0, 4).join(', ') : 'early-stage technology';
+  const indStr = indArr.length > 0
+    ? indArr.slice(0, 3).map(formatHumanLabel).filter(Boolean).join(', ')
+    : 'early-stage technology';
 
   const rawStg = investor.stages || investor.stage;
   const stgArr = Array.isArray(rawStg) ? rawStg.filter(Boolean) : (typeof rawStg === 'string' && rawStg ? [rawStg] : ['Pre-Seed', 'Seed']);
-  const stgStr = stgArr.slice(0, 2).join(' & ');
+  const stgStr = stgArr.slice(0, 2).map(formatHumanLabel).filter(Boolean).join(' & ') || 'Pre-Seed & Seed';
 
   const rawPort = investor.portfolio || investor.past_investments;
   const portArr = Array.isArray(rawPort)
@@ -108,7 +119,22 @@ export async function generateMetadata({ params }) {
   const isThinProfile = isThinInvestorProfile(investor, portArr);
 
   const title = buildInvestorTitle(investorName, cleanFirm);
-  const description = `${investorName}${firmText} angel portfolio${locText}: ${stgStr} check sizes in ${indStr}.${portSnippet} Direct verified founder pitch contact on OpenAngels.`.substring(0, 155);
+  let bioLead = '';
+  if (investor.bio && !isBoilerplateBio(investor.bio)) {
+    const cleanSourceBio = investor.bio.includes('Source: http')
+      ? investor.bio.split('Source: http')[0].trim()
+      : investor.bio.trim();
+    const firstSentence = cleanSourceBio.split(/(?<=[.!?])\s+/)[0].replace(/[.!?]+$/, '').trim();
+    if (firstSentence.length > 10) {
+      bioLead = firstSentence.length <= 85
+        ? firstSentence
+        : truncateMetaDescription(firstSentence, 85).replace(/…$/, '');
+    }
+  }
+  const rawDescription = bioLead
+    ? `${investorName}${firmText}: ${bioLead}.${portSnippet} ${stgStr} checks in ${indStr}. Verified pitch email on OpenAngels.`
+    : `${investorName}${firmText} angel portfolio${locText}:${portSnippet} ${stgStr} check sizes in ${indStr}. Direct verified founder pitch email on OpenAngels.`;
+  const description = truncateMetaDescription(rawDescription, 155);
 
   return {
     title,
@@ -206,11 +232,11 @@ export default async function StandaloneInvestorPage({ params }) {
   }
   safeInvestor.bio = cleanBio;
 
-  // Fetch a pool of active angels in the same sector (cached 24h) and deterministically select 9 unique peers
+  // Fetch a pool of active angels in the same sector (cached 24h) and deterministically select up to 12 unique verified peers
   let relatedInvestors = [];
   try {
     const relKey = serviceRoleKey || anonKey;
-    const relUrl = `${supabaseUrl}/rest/v1/investors_public?select=id,name,slug,location,avatar_url,stages,industries&industries=cs.{${encodeURIComponent(primaryIndustry)}}&slug=neq.${encodeURIComponent(decodedSlug)}&limit=60`;
+    const relUrl = `${supabaseUrl}/rest/v1/investors_public?select=id,name,slug,location,avatar_url,stages,industries&industries=cs.{${encodeURIComponent(primaryIndustry)}}&slug=neq.${encodeURIComponent(decodedSlug)}&or=(avatar_url.not.is.null,has_email.eq.true)&order=created_at.asc,id.asc&limit=80`;
     const relRes = await fetch(relUrl, {
       headers: {
         apikey: relKey,
@@ -222,7 +248,7 @@ export default async function StandaloneInvestorPage({ params }) {
     if (relData && relData.length > 0) {
       const slugHash = (decodedSlug || '').split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
       const picked = [];
-      for (let i = 0; i < Math.min(9, relData.length); i++) {
+      for (let i = 0; i < Math.min(12, relData.length); i++) {
         const idx = (slugHash + i * 7) % relData.length;
         const candidate = relData[idx];
         if (candidate && !picked.some((p) => p.slug === candidate.slug)) {
@@ -440,20 +466,46 @@ export default async function StandaloneInvestorPage({ params }) {
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {industries.length > 0 ? (
-                  industries.map((ind) => {
-                    const filterSlug = ind.toLowerCase().replace(/[\s/]+/g, '-');
-                    return (
-                      <Link
-                        key={ind}
-                        href={`/investors/${filterSlug}`}
-                        title={`Browse all ${ind} angel investors and venture backers`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-amber-500/40 transition-colors"
-                      >
-                        <span>{ind} Investors</span>
-                        <ChevronRight className="w-3 h-3 text-zinc-500" />
-                      </Link>
-                    );
-                  })
+                  <>
+                    {industries.map((ind) => {
+                      const filterSlug = ind.toLowerCase().replace(/[\s/]+/g, '-');
+                      return (
+                        <Link
+                          key={ind}
+                          href={`/investors/${filterSlug}`}
+                          title={`Browse all ${formatHumanLabel(ind)} angel investors and venture backers`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-amber-500/40 transition-colors"
+                        >
+                          <span>{formatHumanLabel(ind)} Investors</span>
+                          <ChevronRight className="w-3 h-3 text-zinc-500" />
+                        </Link>
+                      );
+                    })}
+                    {(() => {
+                      const validStages = stages
+                        .map((s) => String(s).toLowerCase().trim().replace(/[\s_]+/g, '-'))
+                        .filter((s) => Boolean(STAGE_SLUGS[s]));
+                      const crossLinks = [];
+                      for (const ind of industries.slice(0, 2)) {
+                        const indSlug = ind.toLowerCase().replace(/[\s/]+/g, '-');
+                        for (const stgSlug of validStages.slice(0, 2)) {
+                          if (crossLinks.length >= 4) break;
+                          crossLinks.push({ indSlug, stgSlug, label: `${formatHumanLabel(ind)} ${STAGE_SLUGS[stgSlug].label} Investors` });
+                        }
+                      }
+                      return crossLinks.map((cl) => (
+                        <Link
+                          key={`${cl.indSlug}/${cl.stgSlug}`}
+                          href={`/investors/${cl.indSlug}/${cl.stgSlug}`}
+                          title={`Browse ${cl.label}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-zinc-900/60 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800/80 hover:border-emerald-500/40 transition-colors"
+                        >
+                          <span>{cl.label}</span>
+                          <ChevronRight className="w-3 h-3 text-zinc-500" />
+                        </Link>
+                      ));
+                    })()}
+                  </>
                 ) : (
                   <span className="text-zinc-500 text-xs">Technology & Early-Stage Venture</span>
                 )}
