@@ -2,8 +2,12 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import Footer from '@/components/Footer';
+import { getDynamicInvestorCount } from '@/seo';
 
-export default function Refund() {
+export const revalidate = 3600;
+
+export default async function Refund() {
+  const { seoLabel } = await getDynamicInvestorCount();
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans selection:bg-amber-500/30 flex flex-col">
       <main className="flex-1 max-w-4xl mx-auto px-6 py-12 w-full">
@@ -24,7 +28,7 @@ export default function Refund() {
           
           <h2 className="text-2xl font-bold mt-8 mb-4">No Refunds After Data Export</h2>
           <p>
-            Because OpenAngels provides immediate access to a proprietary, downloadable database of 3,500+ investors, <strong>we cannot offer refunds once the data has been accessed or exported.</strong>
+            Because OpenAngels provides immediate access to a proprietary, downloadable database of {seoLabel} investors, <strong>we cannot offer refunds once the data has been accessed or exported.</strong>
           </p>
           
           <p>

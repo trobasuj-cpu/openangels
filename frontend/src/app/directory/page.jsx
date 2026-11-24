@@ -1,10 +1,10 @@
-import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS, absoluteUrl, PRODUCT_NAME, SITE_URL } from '@/seo';
+import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS, absoluteUrl, PRODUCT_NAME, SITE_URL, getDynamicInvestorCount } from '@/seo';
 import { HEX_SLUG_REGEX, extractFirmFromBio } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { ChevronRight, Users, ArrowUpRight, Sparkles, Lock, CheckCircle2 } from 'lucide-react';
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
@@ -35,24 +35,29 @@ const FEATURED_ANGELS = [
   { name: 'Bob Pasker', slug: 'bob-pasker', firm: 'Enterprise & Cloud Infrastructure' },
 ];
 
-export const metadata = {
-  title: 'Angel Investor Directory: 10,400+ Verified Startup Backers',
-  description: 'Explore 10,400+ verified angel investors, syndicate leads, and early-stage VCs organized by industry (AI, SaaS, Fintech), stage (Pre-Seed, Seed), and A–Z index.',
-  alternates: { canonical: absoluteUrl('/directory') },
-  robots: {
-    index: true,
-    follow: true,
-    'max-image-preview': 'large',
-    'max-snippet': -1,
-  },
-  openGraph: {
-    title: 'Angel Investor Directory: 10,400+ Verified Startup Backers',
-    description: 'Explore 10,400+ verified angel investors and early-stage VCs by industry, stage, location, and A–Z index.',
-    url: absoluteUrl('/directory'),
-    siteName: 'OpenAngels',
-    type: 'website',
-  },
-};
+export async function generateMetadata() {
+  const { seoLabel } = await getDynamicInvestorCount();
+  const title = `Angel Investor Directory: ${seoLabel} Verified Startup Backers`;
+  const description = `Explore ${seoLabel} verified angel investors, syndicate leads, and early-stage VCs organized by industry (AI, SaaS, Fintech), stage (Pre-Seed, Seed), and A–Z index.`;
+  return {
+    title,
+    description,
+    alternates: { canonical: absoluteUrl('/directory') },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+    openGraph: {
+      title,
+      description: `Explore ${seoLabel} verified angel investors and early-stage VCs by industry, stage, location, and A–Z index.`,
+      url: absoluteUrl('/directory'),
+      siteName: 'OpenAngels',
+      type: 'website',
+    },
+  };
+}
 
 async function getTopCuratedAngels() {
   try {
@@ -86,14 +91,18 @@ async function getTopCuratedAngels() {
 }
 
 export default async function DirectoryPage() {
-  const featuredAngels = await getTopCuratedAngels();
+  const [featuredAngels, countData] = await Promise.all([
+    getTopCuratedAngels(),
+    getDynamicInvestorCount(),
+  ]);
+  const { seoLabel, formatted } = countData;
 
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'OpenAngels Investor Directory (2026)',
     url: absoluteUrl('/directory'),
-    description: 'Master directory of 10,800+ verified angel investors and early-stage venture funds organized by industry, funding stage, geography, and alphabetical index.',
+    description: `Master directory of ${seoLabel} verified angel investors and early-stage venture funds organized by industry, funding stage, geography, and alphabetical index.`,
     isPartOf: {
       '@type': 'WebSite',
       name: PRODUCT_NAME,
@@ -146,13 +155,13 @@ export default async function DirectoryPage() {
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-400 mb-3">
             <Users className="w-3.5 h-3.5 text-emerald-400" />
-            <span>10,800+ Verified Angel Profiles • Updated 2026</span>
+            <span>{seoLabel} Verified Angel Profiles • Updated 2026</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-semibold tracking-tight text-white mb-3">
             Angel Investor &amp; Venture Directory
           </h1>
           <p className="text-sm sm:text-base text-zinc-400 max-w-3xl leading-relaxed">
-            OpenAngels indexes over 10,800 active early-stage angel investors, operator-angels, and venture syndicates. Browse below by alphabetical index (A–Z), target industry, investment stage, or geographic hub to inspect verified check sizes, backed startups, and direct founder pitch contacts.
+            OpenAngels indexes {formatted} active early-stage angel investors, operator-angels, and venture syndicates. Browse below by alphabetical index (A–Z), target industry, investment stage, or geographic hub to inspect verified check sizes, backed startups, and direct founder pitch contacts.
           </p>
         </div>
 
@@ -165,17 +174,17 @@ export default async function DirectoryPage() {
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>All 10,400+ Investor Profiles</span>
+                <span>All {seoLabel} Investor Profiles</span>
               </div>
               <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
                 Want Direct Pitch Email Access to the Full Database?
               </h2>
               <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                Unlock direct verified founder pitch emails, AI cold pitch generator, check sizes, and complete CSV export for all 10,400+ angel investors and seed VCs across every sector.
+                Unlock direct verified founder pitch emails, AI cold pitch generator, check sizes, and complete CSV export for all {seoLabel} angel investors and seed VCs across every sector.
               </p>
               <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 pt-1">
                 <span className="flex items-center gap-1.5 text-zinc-300">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 10,400+ verified contacts
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> {seoLabel} verified contacts
                 </span>
                 <span className="flex items-center gap-1.5 text-zinc-300">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Full CSV export
@@ -203,7 +212,7 @@ export default async function DirectoryPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
               <h2 id="az-heading" className="text-base sm:text-lg font-semibold text-white tracking-tight">
-                Browse All 10,800+ Investors Alphabetically (A–Z)
+                Browse All {seoLabel} Investors Alphabetically (A–Z)
               </h2>
               <p className="text-xs text-zinc-400 mt-0.5">
                 Select a letter to browse the complete index of verified angel investors by last or first name.

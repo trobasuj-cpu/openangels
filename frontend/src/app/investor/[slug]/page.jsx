@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { absoluteUrl, INVESTOR_COUNT, STAGE_SLUGS } from '@/seo';
+import { absoluteUrl, getDynamicInvestorCount, STAGE_SLUGS } from '@/seo';
 import InvestorProfileModal from '@/components/InvestorProfileModal';
 import Footer from '@/components/Footer';
 import InvestorAvatar from '@/components/InvestorAvatar';
@@ -175,7 +175,11 @@ export default async function StandaloneInvestorPage({ params }) {
   let decodedSlug = slug;
   try { decodedSlug = decodeURIComponent(slug); } catch {}
 
-  const rawInvestor = await getInvestorBySlug(decodedSlug);
+  const [rawInvestor, countData] = await Promise.all([
+    getInvestorBySlug(decodedSlug),
+    getDynamicInvestorCount(),
+  ]);
+  const { seoLabel } = countData;
 
   if (!rawInvestor) {
     notFound();
@@ -563,7 +567,7 @@ export default async function StandaloneInvestorPage({ params }) {
               </h3>
               
               <p className="text-sm text-zinc-300 leading-relaxed">
-                Unlock {safeInvestor.name}&apos;s verified direct pitch email address, AI-personalized cold pitch drafter tailored to their portfolio thesis, plus instant lifetime access to our entire database of 10,400+ angel investors and seed VCs.
+                Unlock {safeInvestor.name}&apos;s verified direct pitch email address, AI-personalized cold pitch drafter tailored to their portfolio thesis, plus instant lifetime access to our entire database of {seoLabel} angel investors and seed VCs.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-400 pt-1">
@@ -588,7 +592,7 @@ export default async function StandaloneInvestorPage({ params }) {
                 <span>Unlock Pitch Email ($49)</span>
               </a>
               <p className="text-[11px] text-zinc-500 text-center">
-                Instant unlock • 10,400+ contacts
+                Instant unlock • {seoLabel} contacts
               </p>
             </div>
           </div>

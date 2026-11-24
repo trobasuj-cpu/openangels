@@ -1,13 +1,34 @@
 export const SITE_URL = 'https://openangels.xyz';
 export const PRODUCT_NAME = 'OpenAngels';
-export const INVESTOR_COUNT = '10,000+';
+export const DEFAULT_INVESTOR_COUNT = 11600;
 export const LEGAL_UPDATED_LABEL = 'October 28, 2026';
 export const SEO_LASTMOD = '2026-10-28';
 
 /**
+ * Format an investor count consistently across SSR and client hydration (en-US).
+ * Rounds seoLabel down to the nearest hundred (e.g. 11,642 -> "11,600+") so copy
+ * never contradicts the live counter right next to it.
+ */
+export function formatInvestorCount(total) {
+  const safe =
+    typeof total === 'number' && !isNaN(total) && total >= 1000
+      ? Math.floor(total)
+      : DEFAULT_INVESTOR_COUNT;
+  const roundedHundred = Math.floor(safe / 100) * 100;
+  return {
+    total: safe,
+    formatted: safe.toLocaleString('en-US'),
+    seoLabel: `${roundedHundred.toLocaleString('en-US')}+`,
+    exactPlus: `${safe.toLocaleString('en-US')}+`,
+  };
+}
+
+export const INVESTOR_COUNT = formatInvestorCount(DEFAULT_INVESTOR_COUNT).seoLabel;
+
+/**
  * Server-side dynamic investor count fetcher with Next.js ISR cache (1 hour).
  * Provides dynamic numbers for Google SEO (title, description, Schema.org)
- * and keeps metadata in sync with database additions.
+ * and keeps all UI banners & metadata automatically in sync with database growth.
  */
 export async function getDynamicInvestorCount() {
   try {
@@ -21,7 +42,7 @@ export async function getDynamicInvestorCount() {
         'Authorization': `Bearer ${apiKey}`,
         'Prefer': 'count=exact'
       },
-      next: { revalidate: 86400 }
+      next: { revalidate: 3600 }
     });
 
     if (res.ok) {
@@ -29,13 +50,7 @@ export async function getDynamicInvestorCount() {
       if (range.includes('/')) {
         const total = parseInt(range.split('/')[1], 10);
         if (!isNaN(total) && total >= 1000) {
-          const roundedHundred = Math.floor(total / 100) * 100;
-          return {
-            total,
-            formatted: total.toLocaleString('en-US'),
-            seoLabel: `${roundedHundred.toLocaleString('en-US')}+`,
-            exactPlus: `${total.toLocaleString('en-US')}+`
-          };
+          return formatInvestorCount(total);
         }
       }
     }
@@ -43,12 +58,7 @@ export async function getDynamicInvestorCount() {
     console.error('[getDynamicInvestorCount] Error fetching count:', err);
   }
 
-  return {
-    total: 10400,
-    formatted: '10,400',
-    seoLabel: '10,000+',
-    exactPlus: '10,400+'
-  };
+  return formatInvestorCount(DEFAULT_INVESTOR_COUNT);
 }
 
 // Stage slugs for catch-all routes

@@ -25,7 +25,8 @@ import EmergingSignalsRadar from './EmergingSignalsRadar';
 import { computeSignalStats, filterCompaniesBySignal, matchCompanySignals, detectCompoundSignals, RADAR_SIGNAL_DEFINITIONS, COMPOUND_SIGNAL_DEFINITIONS } from '../lib/radarSignals';
 import { KNOWN_COMPANIES } from '@/lib/companyData';
 import companiesCache from '@/lib/companies_cache.json';
-import { absoluteUrl, INDUSTRY_PAGES, INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
+import { absoluteUrl, INDUSTRY_PAGES, DEFAULT_INVESTOR_COUNT, formatInvestorCount, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
+import { useInvestorCount } from './InvestorCountProvider';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
 import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio } from '@/lib/investorUtils';
@@ -89,7 +90,7 @@ const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = f
   );
 };
 
-const MarketingShowcase = ({ isPremium }) => {
+const MarketingShowcase = ({ isPremium, countLabel }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -148,7 +149,7 @@ const MarketingShowcase = ({ isPremium }) => {
       badge: 'Smart Matching',
       icon: Search,
       title: 'Discover active angels you didn\'t know existed.',
-      desc: "Don't manually scroll through 4,700+ (and constantly growing) profiles. Give us your pitch, and we'll instantly surface the exact angels actively investing in your specific niche right now.",
+      desc: `Don't manually scroll through ${countLabel} (and constantly growing) profiles. Give us your pitch, and we'll instantly surface the exact angels actively investing in your specific niche right now.`,
       features: ['Discovers hidden angels', 'Ranks by relevance score', 'Exports matched shortlists'],
       content: (
         <div className="flex-1 w-full flex items-center justify-center p-2">
@@ -285,9 +286,12 @@ const MarketingShowcase = ({ isPremium }) => {
   );
 };
 
-export default function Dashboard({ initialInvestors = [], initialCount = 10400 }) {
+export default function Dashboard({ initialInvestors = [], initialCount }) {
+  const { total: contextTotal } = useInvestorCount();
+  const resolvedInitialCount = initialCount || contextTotal || DEFAULT_INVESTOR_COUNT;
   const [investors, setInvestors] = useState(initialInvestors);
-  const [totalDatabaseCount, setTotalDatabaseCount] = useState(initialCount);
+  const [totalDatabaseCount, setTotalDatabaseCount] = useState(resolvedInitialCount);
+  const formattedDbCount = useMemo(() => formatInvestorCount(totalDatabaseCount), [totalDatabaseCount]);
   const [loading, setLoading] = useState(initialInvestors.length === 0);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState(() => {
@@ -367,7 +371,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
   const [selectedStages, setSelectedStages] = useState([]);
   const [industrySearch, setIndustrySearch] = useState('');
   const [copiedEmailId, setCopiedEmailId] = useState(null);
-  const [matchingCount, setMatchingCount] = useState(initialCount);
+  const [matchingCount, setMatchingCount] = useState(resolvedInitialCount);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [viewMode, setViewMode] = useState('founders'); // 'founders' | 'investors'
@@ -1044,7 +1048,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                   Premium (Lifetime Access)
                 </h4>
                 <p className="text-[11px] text-zinc-400 mb-3 leading-relaxed relative">
-                  Unlimited access to {INVESTOR_COUNT} investor contacts, CRM, and AI drafting.
+                  Unlimited access to {formattedDbCount.seoLabel} investor contacts, CRM, and AI drafting.
                 </p>
                 <button 
                   onClick={() => { setCheckoutDiscount(''); setIsCheckoutOpen(true); }}
@@ -1270,7 +1274,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                   <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full ${
                     viewMode === 'founders' ? 'bg-white/20 text-white' : 'bg-zinc-800 text-zinc-400'
                   }`}>
-                    {totalDatabaseCount ? `${totalDatabaseCount.toLocaleString()} Angels` : '7,430 Angels'}
+                    {`${formattedDbCount.formatted} Angels`}
                   </span>
                 </button>
 
@@ -1613,7 +1617,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
               </div>
             ) : (
               <>
-                <MarketingShowcase isPremium={profile?.is_premium} />
+                <MarketingShowcase isPremium={profile?.is_premium} countLabel={formattedDbCount.seoLabel} />
 
                 {(!profile?.is_premium || isAiMatch) && (
                   <div className="flex flex-col xl:flex-row gap-6 mb-8">
@@ -1642,7 +1646,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                             <>
                               <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight mb-1.5">Angel Investor Directory</h1>
                               <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
-                                Verified database of 10,400+ early-stage angel investors and venture syndicates. Filter by industry, stage, and check size to find relevant backers.
+                                Verified database of {formattedDbCount.seoLabel} early-stage angel investors and venture syndicates. Filter by industry, stage, and check size to find relevant backers.
                               </p>
                             </>
                           )}
@@ -1667,11 +1671,11 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                             </div>
                             <div className="flex flex-col text-left sm:text-right">
                               <div className="text-sm font-medium text-zinc-300">
-                                <span className="text-white font-bold text-xl">{totalDatabaseCount.toLocaleString()}</span> active
+                                <span className="text-white font-bold text-xl">{formattedDbCount.formatted}</span> active
                               </div>
                               {(totalActiveFilters > 0 || (search && search.trim() !== '')) && (
                                 <div className="text-xs font-medium text-blue-400">
-                                  {matchingCount.toLocaleString()} matching
+                                  {matchingCount.toLocaleString('en-US')} matching
                                 </div>
                               )}
                             </div>
@@ -2076,7 +2080,7 @@ export default function Dashboard({ initialInvestors = [], initialCount = 10400 
                       <span>Loading More Investors...</span>
                     </>
                   ) : (
-                    <span>Load More Investors ({investors.length} of {matchingCount.toLocaleString()})</span>
+                    <span>Load More Investors ({investors.length.toLocaleString('en-US')} of {matchingCount.toLocaleString('en-US')})</span>
                   )}
                 </button>
               </div>

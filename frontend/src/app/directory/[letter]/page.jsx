@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { absoluteUrl, PRODUCT_NAME, SITE_URL } from '@/seo';
+import { absoluteUrl, PRODUCT_NAME, SITE_URL, getDynamicInvestorCount } from '@/seo';
 import { HEX_SLUG_REGEX, truncateMetaDescription } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
@@ -114,7 +114,10 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
   }
 
   const upper = cleanLetter.toUpperCase();
-  const allInvestors = await fetchInvestorsByLetter(cleanLetter);
+  const [allInvestors, countData] = await Promise.all([
+    fetchInvestorsByLetter(cleanLetter),
+    getDynamicInvestorCount(),
+  ]);
   const totalInvestors = allInvestors.length;
   
   const PAGE_SIZE = 120;
@@ -242,7 +245,7 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
                 Pitching Investors Starting with &ldquo;{upper}&rdquo;?
               </h2>
               <p className="text-xs text-zinc-300 leading-relaxed">
-                Unlock direct verified founder pitch emails, AI pitch generator, and complete CSV export for all {totalInvestors.toLocaleString()} investors under letter {upper} (and all 10,400+ investors across the platform).
+                Unlock direct verified founder pitch emails, AI pitch generator, and complete CSV export for all {totalInvestors.toLocaleString('en-US')} investors under letter {upper} (and all {countData.seoLabel} investors across the platform).
               </p>
             </div>
 

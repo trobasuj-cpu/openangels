@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { INVESTOR_COUNT } from '../seo.js';
+import { useInvestorCount } from './InvestorCountProvider';
 
 const FAQ = () => {
+  const { seoLabel } = useInvestorCount();
   const faqs = [
     {
       question: 'What is OpenAngels?',
-      answer: `OpenAngels is a curated database of ${INVESTOR_COUNT} angel investors and venture capitalists. Founders use it to search investors by industry, stage, location, and check size, then manage outreach from one workspace.`,
+      answer: `OpenAngels is a curated database of ${seoLabel} angel investors and venture capitalists. Founders use it to search investors by industry, stage, location, and check size, then manage outreach from one workspace.`,
     },
     {
       question: 'How much does OpenAngels cost?',

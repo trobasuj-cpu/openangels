@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { absoluteUrl } from '@/seo';
+import { absoluteUrl, getDynamicInvestorCount } from '@/seo';
 import { getCompanyIntelligence, KNOWN_COMPANIES } from '@/lib/companyData';
 import Footer from '@/components/Footer';
 import { 
@@ -41,6 +41,8 @@ const KNOWN_INVESTOR_SLUGS = {
   'Pieter Levels': 'pieter-levels',
   'Y Combinator': 'y-combinator',
 };
+
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return Object.keys(KNOWN_COMPANIES).map((slug) => ({ slug }));
@@ -99,6 +101,7 @@ export default async function CompanyIntelligencePage({ params }) {
     notFound();
   }
 
+  const { seoLabel } = await getDynamicInvestorCount();
   const compoundInfo = detectCompoundSignals(company);
   const score = company.openangelsScore || 80;
   const getScoreColor = (sc) => {
@@ -161,7 +164,7 @@ export default async function CompanyIntelligencePage({ params }) {
             href="/directory"
             className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors flex items-center gap-1"
           >
-            <span>Browse 5,400+ Angel Investors</span>
+            <span>Browse {seoLabel} Angel Investors</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>

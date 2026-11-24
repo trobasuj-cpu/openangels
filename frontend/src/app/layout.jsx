@@ -1,6 +1,7 @@
 import Script from "next/script";
 import "./globals.css";
 import { getDynamicInvestorCount } from "@/seo";
+import { InvestorCountProvider } from "@/components/InvestorCountProvider";
 
 export async function generateMetadata() {
   const { seoLabel } = await getDynamicInvestorCount();
@@ -38,7 +39,7 @@ export const viewport = {
 };
 
 export default async function RootLayout({ children, modal }) {
-  const { seoLabel } = await getDynamicInvestorCount();
+  const { total, seoLabel } = await getDynamicInvestorCount();
 
   const siteSchema = {
     "@context": "https://schema.org",
@@ -92,8 +93,10 @@ export default async function RootLayout({ children, modal }) {
       </head>
       <body className="antialiased min-h-screen bg-zinc-50 dark:bg-black font-sans text-zinc-900 dark:text-zinc-100 flex flex-col">
         <Script src="https://gumroad.com/js/gumroad.js" strategy="afterInteractive" />
-        {children}
-        {modal}
+        <InvestorCountProvider initialTotal={total}>
+          {children}
+          {modal}
+        </InvestorCountProvider>
       </body>
     </html>
   );

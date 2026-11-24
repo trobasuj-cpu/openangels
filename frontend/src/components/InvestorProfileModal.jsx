@@ -9,13 +9,14 @@ import InvestorAvatar from './InvestorAvatar';
 import AiPitchModal from './AiPitchModal';
 import InvestorEvidenceSection from './InvestorEvidenceSection';
 import CompanyProfileModal from './CompanyProfileModal';
-import { INVESTOR_COUNT } from '@/seo';
+import { useInvestorCount } from './InvestorCountProvider';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { getVerificationInfo } from './Dashboard';
 
 const GUMROAD_URL = 'https://beatsprom.gumroad.com/l/vgobnh';
 
 export default function InvestorProfileModal({ investor, isStandalone = false, isPremium: isPremiumProp = false }) {
+  const { seoLabel } = useInvestorCount();
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [inCrm, setInCrm] = useState(false);
@@ -597,7 +598,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                       <div>
                         <h4 className="text-xs sm:text-sm font-bold text-white">Unlock Verified Direct Email & Founder Pitch Tools</h4>
                         <p className="text-[11px] text-zinc-400 leading-snug mt-0.5">
-                          Get instant access to {investor.name}'s verified mailbox, personalized AI pitch drafts, and {INVESTOR_COUNT} active angel profiles.
+                          Get instant access to {investor.name}'s verified mailbox, personalized AI pitch drafts, and {seoLabel} active angel profiles.
                         </p>
                       </div>
                     </div>

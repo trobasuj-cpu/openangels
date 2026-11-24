@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { FileDown, Check, Loader2 } from 'lucide-react';
 import { getCompanyIntelligence } from '@/lib/companyData';
+import { useInvestorCount } from './InvestorCountProvider';
 
-function buildPrintableMemoHtml(company) {
+function buildPrintableMemoHtml(company, countLabel) {
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -419,7 +420,7 @@ function buildPrintableMemoHtml(company) {
     <!-- Syndicate & Backers -->
     <div class="section-title">
       <span>4. Syndicate Backers & Co-Investor Match</span>
-      <span class="section-title-tag">Powered by OpenAngels 7,430+ Network</span>
+      <span class="section-title-tag">Powered by OpenAngels ${countLabel} Network</span>
     </div>
     ${investors.length > 0 ? `
     <div style="font-size: 8pt; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">
@@ -501,7 +502,7 @@ function buildPrintableMemoHtml(company) {
       </div>
       <div class="footer-right">
         https://openangels.xyz<br>
-        <span style="font-weight: normal; color: #64748b;">7,430+ Verified Angels & VCs</span>
+        <span style="font-weight: normal; color: #64748b;">${countLabel} Verified Angels & VCs</span>
       </div>
     </div>
   </div>
@@ -510,6 +511,7 @@ function buildPrintableMemoHtml(company) {
 }
 
 export default function ExportMemoButton({ companyName = "Company", className = "", label, compact = false }) {
+  const { seoLabel } = useInvestorCount();
   const [loading, setLoading] = useState(false);
   const [exported, setExported] = useState(false);
 
@@ -527,7 +529,7 @@ export default function ExportMemoButton({ companyName = "Company", className = 
         throw new Error("Company dossier not found");
       }
 
-      const memoHtml = buildPrintableMemoHtml(company);
+      const memoHtml = buildPrintableMemoHtml(company, seoLabel);
 
       // Create an isolated hidden iframe for printing
       const iframe = document.createElement('iframe');

@@ -1,32 +1,38 @@
 import Dashboard from "@/components/Dashboard";
-import { getDynamicInvestorCount, absoluteUrl, PRODUCT_NAME, SITE_URL } from "@/seo";
+import { getDynamicInvestorCount, DEFAULT_INVESTOR_COUNT, absoluteUrl, PRODUCT_NAME, SITE_URL } from "@/seo";
 import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio } from "@/lib/investorUtils";
 
-export const revalidate = 86400; // ISR 24 hours
+export const revalidate = 3600; // ISR 1 hour so banner, cards, and metadata stay synced with DB growth
 
-export const metadata = {
-  title: 'OpenAngels: 10,400+ Verified Angel Investors & Pitch Emails',
-  description: 'Search 10,400+ verified angel investors & seed VCs (Naval Ravikant, Sam Altman, Chris Dixon & more). Filter by sector, check size, portfolio & direct pitch emails.',
-  alternates: { canonical: absoluteUrl('/') },
-  robots: {
-    index: true,
-    follow: true,
-    'max-image-preview': 'large',
-    'max-snippet': -1,
-  },
-  openGraph: {
-    title: 'OpenAngels: 10,400+ Verified Angel Investors & Pitch Emails',
-    description: 'Search 10,400+ verified angel investors & seed VCs (Naval Ravikant, Sam Altman, Chris Dixon & more). Filter by sector, check size, portfolio & direct pitch emails.',
-    url: absoluteUrl('/'),
-    siteName: 'OpenAngels',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'OpenAngels: 10,400+ Verified Angel Investors & Pitch Emails',
-    description: 'Search 10,400+ verified angel investors & seed VCs (Naval Ravikant, Sam Altman, Chris Dixon & more). Filter by sector, check size, portfolio & direct pitch emails.',
-  }
-};
+export async function generateMetadata() {
+  const { seoLabel } = await getDynamicInvestorCount();
+  const title = `OpenAngels: ${seoLabel} Verified Angel Investors & Pitch Emails`;
+  const description = `Search ${seoLabel} verified angel investors & seed VCs (Naval Ravikant, Sam Altman, Chris Dixon & more). Filter by sector, check size, portfolio & direct pitch emails.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: absoluteUrl('/') },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+    openGraph: {
+      title,
+      description,
+      url: absoluteUrl('/'),
+      siteName: 'OpenAngels',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    }
+  };
+}
 
 async function getInitialInvestors() {
   try {
@@ -112,7 +118,7 @@ export default async function Home() {
       />
       <Dashboard
         initialInvestors={initialInvestors}
-        initialCount={countData?.total || 10400}
+        initialCount={countData?.total || DEFAULT_INVESTOR_COUNT}
       />
     </>
   );

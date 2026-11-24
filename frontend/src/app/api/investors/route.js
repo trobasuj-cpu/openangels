@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { DEFAULT_INVESTOR_COUNT } from '@/seo';
 import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio } from '@/lib/investorUtils';
 
 export const dynamic = 'force-dynamic';
@@ -131,7 +132,7 @@ export async function GET(request) {
     const restUrl = `${supabaseUrl}/rest/v1/investors?${queryParts.join('&')}`;
 
     let data = [];
-    let totalCount = 10407;
+    let totalCount = DEFAULT_INVESTOR_COUNT;
 
     try {
       const restRes = await fetch(restUrl, {

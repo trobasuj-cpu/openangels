@@ -1,9 +1,12 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import { Mail } from 'lucide-react';
-import { INDUSTRY_PAGES, INVESTOR_COUNT } from '../seo.js';
+import { INDUSTRY_PAGES } from '../seo.js';
+import { useInvestorCount } from './InvestorCountProvider';
 
 export default function Footer() {
+  const { seoLabel } = useInvestorCount();
   const footerIndustries = INDUSTRY_PAGES.slice(0, 8);
 
   return (
@@ -19,7 +22,7 @@ export default function Footer() {
             </span>
           </Link>
           <p className="text-sm leading-relaxed">
-            A curated database of {INVESTOR_COUNT} angel investors and VCs for founders raising pre-seed and seed rounds.
+            A curated database of {seoLabel} angel investors and VCs for founders raising pre-seed and seed rounds.
           </p>
           <a href="mailto:tackssignals@gmail.com" className="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors">
             <Mail className="w-4 h-4" />
