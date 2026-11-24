@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { absoluteUrl, getDynamicInvestorCount, STAGE_SLUGS } from '@/seo';
+import { absoluteUrl, DEFAULT_OG_IMAGE, getDynamicInvestorCount, STAGE_SLUGS } from '@/seo';
 import InvestorProfileModal from '@/components/InvestorProfileModal';
 import Footer from '@/components/Footer';
 import InvestorAvatar from '@/components/InvestorAvatar';
@@ -151,12 +151,14 @@ export async function generateMetadata({ params }) {
       description,
       url: absoluteUrl(`/investor/${decodedSlug}`),
       siteName: 'OpenAngels',
+      images: [DEFAULT_OG_IMAGE],
       type: 'profile',
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     }
   };
 }

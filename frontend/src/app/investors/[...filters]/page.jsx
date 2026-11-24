@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { supabase } from '@/lib/supabase';
 import {
   absoluteUrl, formatIndustryLabel, getIndustryPage,
-  INVESTOR_COUNT, PRODUCT_NAME, SITE_URL,
+  INVESTOR_COUNT, PRODUCT_NAME, SITE_URL, DEFAULT_OG_IMAGE,
   STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS,
   parseFilters, getStageInfo, getGeoInfo, isUSLocation,
 } from '@/seo.js';
@@ -255,12 +255,14 @@ export async function generateMetadata({ params }) {
       description,
       url: absoluteUrl(canonicalPath),
       siteName: 'OpenAngels',
+      images: [DEFAULT_OG_IMAGE],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     },
   };
 }

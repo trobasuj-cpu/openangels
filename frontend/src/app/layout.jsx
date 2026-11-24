@@ -1,6 +1,6 @@
 import Script from "next/script";
 import "./globals.css";
-import { getDynamicInvestorCount } from "@/seo";
+import { getDynamicInvestorCount, DEFAULT_OG_IMAGE } from "@/seo";
 import { InvestorCountProvider } from "@/components/InvestorCountProvider";
 
 export async function generateMetadata() {
@@ -18,18 +18,14 @@ export async function generateMetadata() {
       description: `The largest open database of ${seoLabel} verified angel investors and VCs. Filter by 90+ industries, draft AI pitch emails, and fundraise faster.`,
       url: "https://openangels.xyz/",
       siteName: "OpenAngels",
-      images: [
-        {
-          url: "https://openangels.xyz/og-image.png",
-        },
-      ],
+      images: [DEFAULT_OG_IMAGE],
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title: `OpenAngels — ${seoLabel} Angel Investors & VCs`,
       description: `The largest open investor database of ${seoLabel} verified contacts. Filter by 90+ industries, get verified contacts, and draft AI pitches instantly.`,
-      images: ["https://openangels.xyz/og-image.png"],
+      images: [DEFAULT_OG_IMAGE.url],
     },
   };
 }

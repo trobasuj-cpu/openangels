@@ -1,6 +1,12 @@
 export const SITE_URL = 'https://openangels.xyz';
 export const PRODUCT_NAME = 'OpenAngels';
 export const DEFAULT_INVESTOR_COUNT = 11600;
+export const DEFAULT_OG_IMAGE = {
+  url: `${SITE_URL}/og-image.png`,
+  width: 1280,
+  height: 720,
+  alt: 'OpenAngels — Verified Angel Investors & Seed VCs Database',
+};
 export const LEGAL_UPDATED_LABEL = 'October 28, 2026';
 export const SEO_LASTMOD = '2026-10-28';
 

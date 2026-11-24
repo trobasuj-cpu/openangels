@@ -1,5 +1,5 @@
 import Dashboard from "@/components/Dashboard";
-import { getDynamicInvestorCount, DEFAULT_INVESTOR_COUNT, absoluteUrl, PRODUCT_NAME, SITE_URL } from "@/seo";
+import { getDynamicInvestorCount, DEFAULT_INVESTOR_COUNT, DEFAULT_OG_IMAGE, absoluteUrl, PRODUCT_NAME, SITE_URL } from "@/seo";
 import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio } from "@/lib/investorUtils";
 
 export const revalidate = 3600; // ISR 1 hour so banner, cards, and metadata stay synced with DB growth
@@ -24,12 +24,14 @@ export async function generateMetadata() {
       description,
       url: absoluteUrl('/'),
       siteName: 'OpenAngels',
+      images: [DEFAULT_OG_IMAGE],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     }
   };
 }

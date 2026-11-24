@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { absoluteUrl, PRODUCT_NAME, SITE_URL, getDynamicInvestorCount } from '@/seo';
+import { absoluteUrl, PRODUCT_NAME, SITE_URL, DEFAULT_OG_IMAGE, getDynamicInvestorCount } from '@/seo';
 import { HEX_SLUG_REGEX, truncateMetaDescription } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
@@ -99,7 +99,14 @@ export async function generateMetadata({ params, searchParams }) {
       description,
       url: canonicalUrl,
       siteName: 'OpenAngels',
+      images: [DEFAULT_OG_IMAGE],
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE.url],
     },
   };
 }

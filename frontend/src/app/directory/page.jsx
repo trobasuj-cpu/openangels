@@ -1,4 +1,4 @@
-import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS, absoluteUrl, PRODUCT_NAME, SITE_URL, getDynamicInvestorCount } from '@/seo';
+import { INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS, absoluteUrl, PRODUCT_NAME, SITE_URL, DEFAULT_OG_IMAGE, getDynamicInvestorCount } from '@/seo';
 import { HEX_SLUG_REGEX, extractFirmFromBio } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
@@ -54,7 +54,14 @@ export async function generateMetadata() {
       description: `Explore ${seoLabel} verified angel investors and early-stage VCs by industry, stage, location, and A–Z index.`,
       url: absoluteUrl('/directory'),
       siteName: 'OpenAngels',
+      images: [DEFAULT_OG_IMAGE],
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: `Explore ${seoLabel} verified angel investors and early-stage VCs by industry, stage, location, and A–Z index.`,
+      images: [DEFAULT_OG_IMAGE.url],
     },
   };
 }

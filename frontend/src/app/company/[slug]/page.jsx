@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { absoluteUrl, getDynamicInvestorCount } from '@/seo';
+import { absoluteUrl, DEFAULT_OG_IMAGE, getDynamicInvestorCount } from '@/seo';
 import { getCompanyIntelligence, KNOWN_COMPANIES } from '@/lib/companyData';
 import Footer from '@/components/Footer';
 import { 
@@ -83,12 +83,14 @@ export async function generateMetadata({ params }) {
       description,
       url: absoluteUrl(`/company/${slug}`),
       siteName: 'OpenAngels',
+      images: [DEFAULT_OG_IMAGE],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     }
   };
 }

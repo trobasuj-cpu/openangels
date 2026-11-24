@@ -180,21 +180,21 @@ export async function POST(request) {
       );
     }
 
-    // 3. Generate Pitch with Gemini 2.5 Flash / OpenRouter
+    // 3. Generate Pitch with Resilient Gemini 3.x Flash Cascade -> OpenRouter Fallback
     const geminiApiKey = process.env.GEMINI_API_KEY;
     const openRouterApiKey = process.env.OPENROUTER_API_KEY;
 
-    const indStr = Array.isArray(investorIndustry) ? investorIndustry.join(', ') : (investorIndustry || 'early-stage technology');
-    const bioContext = investorBio ? `Investor Bio: "${investorBio}"` : '';
+    const indStr = Array.isArray(investorIndustry) ? investorIndustry.filter(Boolean).join(', ') : (investorIndustry || 'early-stage technology');
+    const bioContext = safeInvestorBio ? `Investor Bio: "${safeInvestorBio}"` : '';
 
     const prompt = `
-You are an elite Silicon Valley pitch consultant. Draft a compelling, personalized cold pitch email from a startup founder to angel investor ${investorName}.
+You are an elite Silicon Valley pitch consultant. Draft a compelling, personalized cold pitch email from a startup founder to angel investor ${safeInvestorName}.
 
 CONTEXT:
-- Investor Name: ${investorName}
+- Investor Name: ${safeInvestorName}
 - Investor Focus/Industries: ${indStr}
 ${bioContext}
-- Startup Description & Traction: "${startupDescription}"
+- Startup Description & Traction: "${safeStartupDescription}"
 
 CRITICAL ZERO-HALLUCINATION GUARDRAILS:
 1. STRICT FACTUAL FIDELITY: ONLY use facts, metrics, and numbers explicitly provided in the "Startup Description & Traction".
@@ -219,80 +219,123 @@ FORMAT & STRUCTURE:
   }
 `.trim();
 
+    const extractJsonPayload = (rawText) => {
+      if (!rawText) return null;
+      const cleaned = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+      try {
+        return JSON.parse(cleaned);
+      } catch {
+        const match = cleaned.match(/\{[\s\S]*\}/);
+        if (match) {
+          try {
+            return JSON.parse(match[0]);
+          } catch {
+            return null;
+          }
+        }
+        return null;
+      }
+    };
+
     let generatedSubject = '';
     let generatedBody = '';
+    let aiProvider = 'fallback';
 
-    // Primary: Gemini 2.5 Flash
+    // Primary: Direct Google Gemini API (resilient cascade of active fast Flash models)
+    const GEMINI_MODELS = ['gemini-3.1-flash-lite', 'gemini-3-flash-preview', 'gemini-3.5-flash-lite'];
     if (geminiApiKey) {
-      try {
-        const geminiRes = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: {
-                temperature: 0.2,
-                responseMimeType: 'application/json'
-              }
-            })
-          }
-        );
+      for (const model of GEMINI_MODELS) {
+        if (generatedBody) break;
+        try {
+          const geminiRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`,
+            {
+              method: 'POST',
+              signal: AbortSignal.timeout(9000),
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  temperature: 0.2,
+                  maxOutputTokens: 600,
+                  responseMimeType: 'application/json'
+                }
+              })
+            }
+          );
 
-        if (geminiRes.ok) {
-          const gData = await geminiRes.json();
-          const rawText = gData.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          const cleaned = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-          const parsed = JSON.parse(cleaned);
-          generatedSubject = parsed.subject || `Intro: Pitch for ${investorName}`;
-          generatedBody = parsed.body || parsed.email || '';
+          if (geminiRes.ok) {
+            const gData = await geminiRes.json();
+            const rawText = gData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            const parsed = extractJsonPayload(rawText);
+            if (parsed && (parsed.body || parsed.email)) {
+              generatedSubject = parsed.subject || `Intro: Pitch for ${safeInvestorName}`;
+              generatedBody = parsed.body || parsed.email || '';
+              aiProvider = `gemini:${model}`;
+              break;
+            }
+          } else {
+            console.warn(`[AI Generate Email] Gemini ${model} returned ${geminiRes.status}`);
+          }
+        } catch (geminiErr) {
+          console.warn(`[AI Generate Email] Gemini ${model} error:`, geminiErr.message);
         }
-      } catch (geminiErr) {
-        console.warn('[AI Generate Email] Gemini fallback triggered:', geminiErr.message);
       }
     }
 
-    // Fallback: OpenRouter
+    // Fallback: OpenRouter (explicit max_tokens prevents 402 credit-reservation failures)
+    const OPENROUTER_MODELS = ['google/gemini-2.5-flash', 'openai/gpt-4o-mini'];
     if (!generatedBody && openRouterApiKey) {
-      try {
-        const orRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openRouterApiKey}`,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': 'https://openangels.xyz',
-            'X-Title': 'OpenAngels Pitch Generator'
-          },
-          body: JSON.stringify({
-            model: 'google/gemini-2.5-flash',
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.2,
-            response_format: { type: 'json_object' }
-          })
-        });
+      for (const model of OPENROUTER_MODELS) {
+        if (generatedBody) break;
+        try {
+          const orRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            signal: AbortSignal.timeout(9000),
+            headers: {
+              'Authorization': `Bearer ${openRouterApiKey}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': 'https://openangels.xyz',
+              'X-Title': 'OpenAngels Pitch Generator'
+            },
+            body: JSON.stringify({
+              model,
+              messages: [{ role: 'user', content: prompt }],
+              temperature: 0.2,
+              max_tokens: 600,
+              response_format: { type: 'json_object' }
+            })
+          });
 
-        if (orRes.ok) {
-          const orData = await orRes.json();
-          const rawText = orData.choices?.[0]?.message?.content || '';
-          const cleaned = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-          const parsed = JSON.parse(cleaned);
-          generatedSubject = parsed.subject || `Pitch: Investment Opportunity`;
-          generatedBody = parsed.body || parsed.email || '';
+          if (orRes.ok) {
+            const orData = await orRes.json();
+            const rawText = orData.choices?.[0]?.message?.content || '';
+            const parsed = extractJsonPayload(rawText);
+            if (parsed && (parsed.body || parsed.email)) {
+              generatedSubject = parsed.subject || `Intro: Pitch for ${safeInvestorName}`;
+              generatedBody = parsed.body || parsed.email || '';
+              aiProvider = `openrouter:${model}`;
+              break;
+            }
+          } else {
+            console.warn(`[AI Generate Email] OpenRouter ${model} returned ${orRes.status}`);
+          }
+        } catch (orErr) {
+          console.error(`[AI Generate Email] OpenRouter ${model} error:`, orErr.message);
         }
-      } catch (orErr) {
-        console.error('[AI Generate Email] OpenRouter error:', orErr.message);
       }
     }
 
     if (!generatedBody) {
-      // Deterministic ultra-high quality template fallback
-      generatedSubject = `Quick intro / ${startupDescription.slice(0, 30)}...`;
-      generatedBody = `Hi ${investorName.split(' ')[0]},\n\nI noticed your active investments in ${indStr} and wanted to reach out.\n\n${startupDescription}\n\nWe are currently opening our round and would love to share our deck if this is something of interest.\n\nBest regards,\n[Your Name]`;
+      // Clean deterministic fallback if all upstream AI providers are unreachable
+      const firstName = safeInvestorName.split(' ')[0] || 'there';
+      const primaryFocus = indStr.split(',')[0]?.trim() || 'early-stage tech';
+      generatedSubject = `Quick intro — ${primaryFocus} startup`;
+      generatedBody = `Hi ${firstName},\n\nI noticed your focus on ${indStr} and wanted to share a quick note on what we're building.\n\n${safeStartupDescription}\n\nWe're currently opening our early round and would love to send over a short deck if this aligns with your thesis.\n\nBest regards,\n[Your Name]`;
     }
 
     // Apply Post-Generation Metric Consistency Sanitizer
-    generatedBody = sanitizeHallucinatedMetrics(generatedBody, startupDescription);
+    generatedBody = sanitizeHallucinatedMetrics(generatedBody, safeStartupDescription);
 
     return NextResponse.json(
       {
@@ -300,6 +343,7 @@ FORMAT & STRUCTURE:
         subject: generatedSubject,
         body: generatedBody,
         email: generatedBody,
+        provider: aiProvider,
         remaining: rateCheck.remaining,
         limit: rateCheck.limit,
         resetInSeconds: rateCheck.resetInSeconds,

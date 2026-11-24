@@ -67,22 +67,33 @@ Raw Text:
 ${rawText}
         `.trim();
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                    temperature: 0.2,
-                }
-            })
-        });
+        const ENRICH_MODELS = ['gemini-3.1-flash-lite', 'gemini-3-flash-preview', 'gemini-3.5-flash-lite'];
+        let response = null;
+        let lastErrorText = '';
+        for (const model of ENRICH_MODELS) {
+            const candidate = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                signal: AbortSignal.timeout(12000),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        temperature: 0.2,
+                        responseMimeType: 'application/json',
+                    }
+                })
+            });
+            if (candidate.ok) {
+                response = candidate;
+                break;
+            }
+            lastErrorText = `${model}: ${candidate.status} ${await candidate.text()}`;
+        }
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Gemini API Error: ${response.status} ${errorText}`);
+        if (!response) {
+            throw new Error(`Gemini API Error: ${lastErrorText}`);
         }
 
         const data = await response.json();
