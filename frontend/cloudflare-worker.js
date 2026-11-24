@@ -1,12 +1,14 @@
 export * from './.open-next/worker.js';
 import worker from './.open-next/worker.js';
 
-function prepareResponseForCache(res) {
+function prepareResponseForCache(res, pathname) {
   const headers = new Headers(res.headers);
   headers.delete('set-cookie');
-  const currentCc = headers.get('cache-control') || '';
-  if (!currentCc.includes('max-age') && !currentCc.includes('s-maxage')) {
-    headers.set('cache-control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
+  const isImmutableAsset = pathname.startsWith('/_next/static/');
+  if (!isImmutableAsset) {
+    // Cap HTML/XML caching to 5m browser + 1h Edge CDN + 1h SWR (overrides Next.js 1-year SWR)
+    // so live investor counts and fresh deploys propagate automatically without stale 24h HTML.
+    headers.set('cache-control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=3600');
   }
   return new Response(res.body, {
     status: res.status,
@@ -37,11 +39,12 @@ export default {
       cacheUrl.searchParams.delete('utm_campaign');
       cacheUrl.searchParams.delete('utm_term');
       cacheUrl.searchParams.delete('utm_content');
-      
-      const cacheKey = new Request(cacheUrl.toString(), {
-        method: 'GET',
-        headers: request.headers,
-      });
+
+      // Namespace Worker cache by Cloudflare deployment version so every deploy auto-invalidates old HTML
+      const deployVersion = env?.CF_VERSION_METADATA?.id || 'v2';
+      cacheUrl.searchParams.set('__v', deployVersion);
+
+      const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
 
       try {
         const cached = await cache.match(cacheKey);
@@ -63,8 +66,10 @@ export default {
 
         if (!isExplicitNoStore || url.pathname.includes('sitemap') || url.pathname.startsWith('/investor') || url.pathname.startsWith('/directory')) {
           try {
-            const cacheableResponse = prepareResponseForCache(response.clone());
-            ctx.waitUntil(cache.put(cacheKey, cacheableResponse));
+            const cacheableResponse = prepareResponseForCache(response.clone(), url.pathname);
+            ctx.waitUntil(cache.put(cacheKey, cacheableResponse.clone()));
+            cacheableResponse.headers.set('x-worker-cache', 'MISS');
+            return cacheableResponse;
           } catch (err) {}
         }
 
