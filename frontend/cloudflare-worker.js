@@ -136,9 +136,24 @@ export default {
 
       if (response && (response.status === 200 || response.status === 404)) {
         const cc = response.headers.get('cache-control') || '';
-        const isExplicitPrivate = cc.includes('private');
+        // Next.js App Router emits `private, no-cache, no-store` on all dynamic SSR routes
+        // (e.g. /directory/[letter] using searchParams) and on all notFound() 404 responses.
+        // Force-cache known public routes & 404s (auth/admin/crm/private APIs are already excluded above).
+        const isKnownPublicCacheable =
+          response.status === 404 ||
+          pathname === '/' ||
+          pathname.startsWith('/investor/') ||
+          pathname.startsWith('/investors/') ||
+          pathname.startsWith('/company/') ||
+          pathname === '/directory' ||
+          pathname.startsWith('/directory/') ||
+          pathname.startsWith('/sitemap') ||
+          pathname.startsWith('/api/sitemap') ||
+          pathname === '/api/investors' ||
+          pathname === '/api/investors/count' ||
+          pathname === '/api/companies';
 
-        if (!isExplicitPrivate) {
+        if (isKnownPublicCacheable || !cc.includes('private')) {
           try {
             const headers = new Headers(response.headers);
             headers.delete('set-cookie');
