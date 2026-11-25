@@ -170,9 +170,17 @@ function ConversationalFAQ({ questions, industryLabel, stageLabel, geoLabel }) {
   );
 }
 
-const HUB_COLUMNS = '*';
+const HUB_COLUMNS = 'id,slug,name,bio,location,avatar_url,stages,industries,portfolio,past_investments,has_email,has_linkedin,has_twitter,created_at';
+const HUB_MEM_CACHE = new Map();
+const HUB_MEM_TTL_MS = 5 * 60 * 1000;
 
 const fetchHubInvestors = cache(async (filterKey) => {
+  const now = Date.now();
+  const cached = HUB_MEM_CACHE.get(filterKey);
+  if (cached && now < cached.expiresAt) {
+    return cached.value;
+  }
+
   const filters = filterKey.split('/').filter(Boolean);
   const parsed = parseFilters(filters);
   const { query, industryLabel, stageLabel, geoLabel, geoInfo } = buildQuery(parsed, HUB_COLUMNS, false);
@@ -186,7 +194,7 @@ const fetchHubInvestors = cache(async (filterKey) => {
     const result = await query
       .order('created_at', { ascending: true })
       .order('has_email', { ascending: false })
-      .limit(300);
+      .limit(150);
     if (result.error) throw result.error;
 
     let data = result.data || [];
@@ -195,7 +203,7 @@ const fetchHubInvestors = cache(async (filterKey) => {
     }
 
     const ranked = rankInvestorsForHub(data, parsed, canonicalPath);
-    investors = ranked.slice(0, 100).map((inv) => {
+    investors = ranked.slice(0, 48).map((inv) => {
       const cleanFirm = extractFirmFromBio(inv.bio, inv.firm);
       const cleanBio = isBoilerplateBio(inv.bio)
         ? generateUniqueBio({ ...inv, firm: cleanFirm })
@@ -211,7 +219,12 @@ const fetchHubInvestors = cache(async (filterKey) => {
     console.error('Error fetching filtered investors:', err);
   }
 
-  return { parsed, investors, totalMatches, industryLabel, stageLabel, geoLabel, canonicalPath };
+  const value = { parsed, investors, totalMatches, industryLabel, stageLabel, geoLabel, canonicalPath };
+  if (HUB_MEM_CACHE.size >= 40) {
+    HUB_MEM_CACHE.delete(HUB_MEM_CACHE.keys().next().value);
+  }
+  HUB_MEM_CACHE.set(filterKey, { value, expiresAt: now + HUB_MEM_TTL_MS });
+  return value;
 });
 
 function buildHubTitle(numInvestors, typeStr, geoStr, currentYear) {

@@ -14,14 +14,23 @@ export async function generateStaticParams() {
   return LETTERS.map((letter) => ({ letter }));
 }
 
+const LETTER_MEM_CACHE = new Map();
+const LETTER_MEM_TTL_MS = 5 * 60 * 1000;
+
 const fetchInvestorsByLetter = cache(async (letter) => {
+  const now = Date.now();
+  const cached = LETTER_MEM_CACHE.get(letter);
+  if (cached && now < cached.expiresAt) {
+    return cached.value;
+  }
+
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
     const FALLBACK_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_SERVICE_ROLE;
 
     const res = await fetch(
-      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages,avatar_url,has_email,created_at&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=created_at.asc,name.asc&limit=2500`,
+      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages,avatar_url,has_email,created_at&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=created_at.asc,name.asc&limit=1000`,
       {
         headers: {
           apikey: supabaseKey,
@@ -33,19 +42,31 @@ const fetchInvestorsByLetter = cache(async (letter) => {
 
     if (!res.ok) return [];
     const data = await res.json();
-    const valid = (data || []).filter((inv) => inv && inv.slug && inv.name);
 
-    const getTier = (inv) => {
-      if (!HEX_SLUG_REGEX.test(inv.slug)) return 0;
-      if (inv.avatar_url || inv.has_email) return 1;
-      return 2;
-    };
+    // Precompute sort keys once O(N) & avoid ICU localeCompare (~40x faster in Cloudflare workerd)
+    const decorated = [];
+    for (let i = 0; i < (data || []).length; i++) {
+      const inv = data[i];
+      if (!inv || !inv.slug || !inv.name) continue;
+      const tier = !HEX_SLUG_REGEX.test(inv.slug)
+        ? 0
+        : (inv.avatar_url || inv.has_email)
+        ? 1
+        : 2;
+      decorated.push({ inv, tier, sortName: inv.name.toLowerCase() });
+    }
 
-    return valid.sort((a, b) => {
-      const tierDiff = getTier(a) - getTier(b);
-      if (tierDiff !== 0) return tierDiff;
-      return a.name.localeCompare(b.name);
+    decorated.sort((a, b) => {
+      if (a.tier !== b.tier) return a.tier - b.tier;
+      return a.sortName < b.sortName ? -1 : a.sortName > b.sortName ? 1 : 0;
     });
+
+    const sorted = decorated.map((d) => d.inv);
+    if (LETTER_MEM_CACHE.size >= 26) {
+      LETTER_MEM_CACHE.delete(LETTER_MEM_CACHE.keys().next().value);
+    }
+    LETTER_MEM_CACHE.set(letter, { value: sorted, expiresAt: now + LETTER_MEM_TTL_MS });
+    return sorted;
   } catch (err) {
     console.error(`[DirectoryLetterPage] Error fetching letter ${letter}:`, err.message);
     return [];
@@ -127,7 +148,7 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
   ]);
   const totalInvestors = allInvestors.length;
   
-  const PAGE_SIZE = 120;
+  const PAGE_SIZE = 60;
   const totalPages = Math.max(1, Math.ceil(totalInvestors / PAGE_SIZE));
   const currentPage = Math.min(totalPages, Math.max(1, parseInt(sp?.page || '1', 10)));
   const investors = allInvestors.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);

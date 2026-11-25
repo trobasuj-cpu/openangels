@@ -33,6 +33,41 @@ const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey || anonKey, {
   auth: { persistSession: false },
 });
 
+const RELATED_POOL_CACHE = new Map();
+const RELATED_POOL_TTL_MS = 10 * 60 * 1000;
+const RELATED_POOL_MAX = 25;
+
+async function getRelatedIndustryPool(primaryIndustry) {
+  const key = String(primaryIndustry || 'AI').toLowerCase();
+  const now = Date.now();
+  const cached = RELATED_POOL_CACHE.get(key);
+  if (cached && now < cached.expiresAt) {
+    return cached.data;
+  }
+
+  try {
+    const relKey = serviceRoleKey || anonKey;
+    const relUrl = `${supabaseUrl}/rest/v1/investors_public?select=id,name,slug,location,avatar_url,stages,industries&industries=cs.{${encodeURIComponent(primaryIndustry)}}&or=(avatar_url.not.is.null,has_email.eq.true)&order=created_at.asc,id.asc&limit=40`;
+    const relRes = await fetch(relUrl, {
+      headers: {
+        apikey: relKey,
+        Authorization: `Bearer ${relKey}`,
+      },
+      next: { revalidate: 86400 },
+    });
+    const relData = relRes.ok ? await relRes.json() : [];
+    if (Array.isArray(relData) && relData.length > 0) {
+      if (RELATED_POOL_CACHE.size >= RELATED_POOL_MAX) {
+        const oldestKey = RELATED_POOL_CACHE.keys().next().value;
+        RELATED_POOL_CACHE.delete(oldestKey);
+      }
+      RELATED_POOL_CACHE.set(key, { data: relData, expiresAt: now + RELATED_POOL_TTL_MS });
+      return relData;
+    }
+  } catch {}
+  return [];
+}
+
 const getInvestorBySlug = cache(async (decodedSlug) => {
   if (!decodedSlug) return null;
   if (serviceRoleKey && !serviceRoleKey.startsWith('sb_publishable_')) {
@@ -238,26 +273,17 @@ export default async function StandaloneInvestorPage({ params }) {
   }
   safeInvestor.bio = cleanBio;
 
-  // Fetch a pool of active angels in the same sector (cached 24h) and deterministically select up to 12 unique verified peers
+  // Fetch a pool of active angels in the same sector (isolate-cached 10m + ISR 24h) and deterministically select up to 12 peers
   let relatedInvestors = [];
   try {
-    const relKey = serviceRoleKey || anonKey;
-    const relUrl = `${supabaseUrl}/rest/v1/investors_public?select=id,name,slug,location,avatar_url,stages,industries&industries=cs.{${encodeURIComponent(primaryIndustry)}}&slug=neq.${encodeURIComponent(decodedSlug)}&or=(avatar_url.not.is.null,has_email.eq.true)&order=created_at.asc,id.asc&limit=80`;
-    const relRes = await fetch(relUrl, {
-      headers: {
-        apikey: relKey,
-        Authorization: `Bearer ${relKey}`,
-      },
-      next: { revalidate: 86400 },
-    });
-    const relData = relRes.ok ? await relRes.json() : [];
+    const relData = await getRelatedIndustryPool(primaryIndustry);
     if (relData && relData.length > 0) {
       const slugHash = (decodedSlug || '').split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
       const picked = [];
-      for (let i = 0; i < Math.min(12, relData.length); i++) {
+      for (let i = 0; i < relData.length && picked.length < 12; i++) {
         const idx = (slugHash + i * 7) % relData.length;
         const candidate = relData[idx];
-        if (candidate && !picked.some((p) => p.slug === candidate.slug)) {
+        if (candidate && candidate.slug !== decodedSlug && !picked.some((p) => p.slug === candidate.slug)) {
           picked.push(candidate);
         }
       }

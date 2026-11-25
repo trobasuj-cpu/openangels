@@ -66,8 +66,28 @@ export function parseListField(value) {
   return [];
 }
 
+const JUNK_FIRM_EXACT = new Set([
+  'hotmail', 'hotmail.com', 'gmail', 'gmail.com', 'yahoo', 'yahoo.com',
+  'outlook', 'outlook.com', 'icloud', 'icloud.com', 'aol', 'aol.com',
+  'proton', 'proton.com', 'protonmail', 'protonmail.com', 'live', 'live.com',
+  'msn', 'msn.com', 'yandex', 'yandex.ru', 'yandex.com', 'mail', 'mail.ru', 'mail.com',
+  'gmx', 'gmx.com', 'gmx.de', 'zoho', 'zoho.com', 'fastmail', 'fastmail.com',
+  'me', 'me.com', 'self-employed', 'self employed', 'selfemployed', 'stealth',
+  'stealth startup', 'stealth mode', 'stealth company', 'stealth venture', 'stealth ventures',
+  'independent', 'freelance', 'individual', 'personal', 'private',
+  'angel', 'angel investor', 'investor', 'unknown', 'undisclosed',
+  'none', 'na', 'n/a', 'tbd', 'null', '-', '--', '---',
+]);
+
+const JUNK_FIRM_COMBINED_RE =
+  /^(?:(?:hotmail|gmail|yahoo|outlook|icloud|aol|proton(?:mail)?|live|msn|zoho|fastmail|me)\.com|(?:yandex|gmx)\.[a-z]+|mail\.(?:ru|com)|self[- ]?employed|stealth(?:\s+(?:startup|mode|company|ventures?))?|-+)$/i;
+
+const BOILERPLATE_BIO_RE =
+  /active early-stage technology angel investor and vc|active early-stage angel investor and technology backer|^active investor in early-stage startups\.?$|automated news|public investor list/i;
+
 /**
  * Check whether a firm string is a consumer email provider, placeholder, or junk value.
+ * Uses O(1) Set lookup + single combined RegExp to minimize Worker SSR CPU time.
  * @param {string|null|undefined} firm
  * @returns {boolean}
  */
@@ -75,7 +95,8 @@ export function isJunkFirm(firm) {
   if (!firm || typeof firm !== 'string') return true;
   const cleaned = firm.trim().replace(/^@+/, '').replace(/[.,;:]+$/, '');
   if (cleaned.length < 2) return true;
-  return JUNK_FIRM_PATTERNS.some((pattern) => pattern.test(cleaned));
+  const lower = cleaned.toLowerCase();
+  return JUNK_FIRM_EXACT.has(lower) || JUNK_FIRM_COMBINED_RE.test(lower);
 }
 
 /**
@@ -87,23 +108,8 @@ export function isBoilerplateBio(bio) {
   if (!bio || typeof bio !== 'string') return true;
   const trimmed = bio.trim();
   if (trimmed.length < 20) return true;
-
-  const lower = trimmed.toLowerCase();
-  if (
-    lower.includes('active early-stage technology angel investor and vc') ||
-    lower.includes('active early-stage angel investor and technology backer') ||
-    lower === 'active investor in early-stage startups.' ||
-    lower === 'active investor in early-stage startups' ||
-    lower.includes('automated news') ||
-    lower.includes('public investor list')
-  ) {
-    return true;
-  }
-
-  if (/^founder\s*@/i.test(trimmed) && trimmed.length < 140) {
-    return true;
-  }
-
+  if (BOILERPLATE_BIO_RE.test(trimmed)) return true;
+  if (trimmed.length < 140 && /^founder\s*@/i.test(trimmed)) return true;
   return false;
 }
 

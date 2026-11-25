@@ -31,40 +31,69 @@ export function formatInvestorCount(total) {
 
 export const INVESTOR_COUNT = formatInvestorCount(DEFAULT_INVESTOR_COUNT).seoLabel;
 
+// Module-level isolate cache (10 min TTL) + in-flight deduplication so RootLayout
+// (generateMetadata + RootLayout) and child pages share one fetch with ~0ms CPU overhead.
+let _memCount = null;
+let _memCountExpiresAt = 0;
+let _inFlightCountPromise = null;
+const COUNT_MEM_TTL_MS = 10 * 60 * 1000;
+
 /**
- * Server-side dynamic investor count fetcher with Next.js ISR cache (1 hour).
+ * Server-side dynamic investor count fetcher with isolate memory cache + 1h ISR cache.
  * Provides dynamic numbers for Google SEO (title, description, Schema.org)
  * and keeps all UI banners & metadata automatically in sync with database growth.
  */
 export async function getDynamicInvestorCount() {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
-    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
-    const apiKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || anonKey;
-
-    const res = await fetch(`${supabaseUrl}/rest/v1/investors_public?select=slug&limit=1`, {
-      headers: {
-        'apikey': apiKey,
-        'Authorization': `Bearer ${apiKey}`,
-        'Prefer': 'count=exact'
-      },
-      next: { revalidate: 3600 }
-    });
-
-    if (res.ok) {
-      const range = res.headers.get('content-range') || '';
-      if (range.includes('/')) {
-        const total = parseInt(range.split('/')[1], 10);
-        if (!isNaN(total) && total >= 1000) {
-          return formatInvestorCount(total);
-        }
-      }
-    }
-  } catch (err) {
-    console.error('[getDynamicInvestorCount] Error fetching count:', err);
+  const now = Date.now();
+  if (_memCount && now < _memCountExpiresAt) {
+    return _memCount;
+  }
+  if (_inFlightCountPromise) {
+    return _inFlightCountPromise;
   }
 
-  return formatInvestorCount(DEFAULT_INVESTOR_COUNT);
+  _inFlightCountPromise = (async () => {
+    try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
+      const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
+      const apiKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || anonKey;
+
+      const res = await fetch(`${supabaseUrl}/rest/v1/investors_public?select=slug&limit=1`, {
+        headers: {
+          'apikey': apiKey,
+          'Authorization': `Bearer ${apiKey}`,
+          'Prefer': 'count=exact'
+        },
+        next: { revalidate: 3600 }
+      });
+
+      if (res.ok) {
+        const range = res.headers.get('content-range') || '';
+        if (range.includes('/')) {
+          const total = parseInt(range.split('/')[1], 10);
+          if (!isNaN(total) && total >= 1000) {
+            const formatted = formatInvestorCount(total);
+            _memCount = formatted;
+            _memCountExpiresAt = Date.now() + COUNT_MEM_TTL_MS;
+            return formatted;
+          }
+        }
+      }
+    } catch (err) {
+      console.error('[getDynamicInvestorCount] Error fetching count:', err);
+    }
+
+    const fallback = formatInvestorCount(DEFAULT_INVESTOR_COUNT);
+    _memCount = fallback;
+    _memCountExpiresAt = Date.now() + 60 * 1000;
+    return fallback;
+  })();
+
+  try {
+    return await _inFlightCountPromise;
+  } finally {
+    _inFlightCountPromise = null;
+  }
 }
 
 // Stage slugs for catch-all routes
