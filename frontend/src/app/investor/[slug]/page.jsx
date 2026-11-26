@@ -107,7 +107,10 @@ const TOP_FEATURED_SLUGS = [
   'mercedes-bent', 'bob-pasker', 'sahil-lavingia', 'kevin-hale',
   'alex-maccaw', 'fabrice-grinda', 'bill-gurley', 'amjad-masad',
   'pieter-abbeel', 'micah-rosenbloom', 'matt-harris', 'josh-buckley',
-  'scott-belsky', 'naval', 'mark-cuban', 'ashton-kutcher',
+  'scott-belsky', 'mark-cuban', 'ashton-kutcher',
+  'alexandr-wang', 'marc-benioff', 'daniel-ek', 'roelof-botha',
+  'stewart-butterfield', 'aaron-levie', 'alfred-lin', 'harry-stebbings',
+  'aileen-lee', 'kirsten-green', 'josh-kopelman',
 ];
 
 export async function generateStaticParams() {

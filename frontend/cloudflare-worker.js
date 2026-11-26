@@ -125,6 +125,30 @@ function appendVaryAccept(headers) {
   }
 }
 
+const HUB_SEGMENT_ALIASES = {
+  deeptech: 'deep-tech',
+  preseed: 'pre-seed',
+  devtools: 'developer-tools',
+  ecommerce: 'e-commerce',
+  seriesa: 'series-a',
+  seriesb: 'series-b',
+  futureofwork: 'future-of-work',
+  creatoreconomy: 'creator-economy',
+};
+
+function normalizeHubPathname(pathname) {
+  const lower = pathname.toLowerCase();
+  const segments = lower.split('/');
+  let changed = lower !== pathname;
+  for (let i = 2; i < segments.length; i++) {
+    if (HUB_SEGMENT_ALIASES[segments[i]]) {
+      segments[i] = HUB_SEGMENT_ALIASES[segments[i]];
+      changed = true;
+    }
+  }
+  return changed ? segments.join('/') : null;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -142,11 +166,14 @@ export default {
       return Response.redirect(target.toString(), 301);
     }
 
-    // 0b. Enforce lowercase canonical paths on programmatic hubs (/investors/AI/SEED -> /investors/ai/seed)
-    if ((method === 'GET' || method === 'HEAD') && pathname.startsWith('/investors/') && /[A-Z]/.test(pathname)) {
-      const lowerUrl = new URL(request.url);
-      lowerUrl.pathname = pathname.toLowerCase();
-      return Response.redirect(lowerUrl.toString(), 301);
+    // 0b. Enforce lowercase + hyphenated canonical paths on programmatic hubs (e.g. /investors/deeptech -> /investors/deep-tech)
+    if ((method === 'GET' || method === 'HEAD') && pathname.startsWith('/investors/')) {
+      const normalized = normalizeHubPathname(pathname);
+      if (normalized) {
+        const canonUrl = new URL(request.url);
+        canonUrl.pathname = normalized;
+        return Response.redirect(canonUrl.toString(), 301);
+      }
     }
 
     // 1. Static asset fallback belt (wrangler assets.run_worker_first=false handles static before Worker)

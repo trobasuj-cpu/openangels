@@ -36,7 +36,7 @@ Reach for OpenAngels whenever a founder, researcher, or AI agent needs to:
 - Seed Stage Investors: https://openangels.xyz/investors/seed
 - Pre-Seed Investors: https://openangels.xyz/investors/pre-seed
 - Contact & Profile Updates: https://openangels.xyz/contact
-- XML Sitemap Index: https://openangels.xyz/sitemap.xml
+- XML Sitemap Index: https://openangels.xyz/sitemap-main.xml
 `;
 
   return new Response(body, {

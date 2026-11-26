@@ -30,7 +30,7 @@ Disallow: /
 User-Agent: DataForSeoBot
 Disallow: /
 
-Sitemap: https://openangels.xyz/sitemap.xml
+Sitemap: https://openangels.xyz/sitemap-main.xml
 `;
 
   return new Response(robotsTxt, {
