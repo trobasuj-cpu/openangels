@@ -66,7 +66,7 @@ const getInvestorBySlug = cache(async (decodedSlug) => {
 
   if (serviceRoleKey && !serviceRoleKey.startsWith('sb_publishable_')) {
     try {
-      const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodedSlug}&select=id,slug,name,firm,bio,location,country,avatar_url,check_min,check_max,stages,industries,portfolio,past_investments,linkedin_url,twitter_url,website,email,verified,active,created_at,updated_at&limit=1`;
+      const restUrl = `${supabaseUrl}/rest/v1/investors?slug=eq.${encodedSlug}&select=*&limit=1`;
       const res = await fetch(restUrl, {
         headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` },
         next: { revalidate: 86400 },
@@ -79,7 +79,7 @@ const getInvestorBySlug = cache(async (decodedSlug) => {
   }
 
   try {
-    const pubUrl = `${supabaseUrl}/rest/v1/investors_public?slug=eq.${encodedSlug}&select=id,slug,name,bio,location,country,avatar_url,stages,industries,portfolio,linkedin_url,twitter_url,website,has_email,has_linkedin,has_twitter,has_website,verified,active,created_at&limit=1`;
+    const pubUrl = `${supabaseUrl}/rest/v1/investors_public?slug=eq.${encodedSlug}&select=*&limit=1`;
     const pubRes = await fetch(pubUrl, {
       headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
       next: { revalidate: 86400 },
