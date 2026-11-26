@@ -7,9 +7,6 @@ export async function generateMetadata() {
   const { seoLabel } = await getDynamicInvestorCount();
   return {
     metadataBase: new URL('https://openangels.xyz'),
-    alternates: {
-      canonical: 'https://openangels.xyz',
-    },
     title: `OpenAngels: Find Angel Investors & VCs (${seoLabel} Database)`,
     description: `The largest open database of ${seoLabel} verified angel investors and VCs. Filter by industry, stage, and check size. Draft personalized AI pitch emails. One lifetime payment — no subscriptions.`,
     keywords: "find angel investors, angel investor database, list of angel investors, startup investors, VC database, seed funding, pre-seed investors, how to find investors for startup, AI cold email generator, pitch investors, angel investor directory, venture capital list, openvc alternative, signal nfx alternative, investor contact database",
@@ -46,6 +43,9 @@ export default async function RootLayout({ children, modal }) {
         "url": "https://openangels.xyz",
         "name": "OpenAngels",
         "description": `The largest open database of ${seoLabel} verified angel investors and VCs.`,
+        "publisher": {
+          "@id": "https://openangels.xyz/#organization",
+        },
         "potentialAction": {
           "@type": "SearchAction",
           "target": "https://openangels.xyz/?search={search_term_string}",
@@ -57,21 +57,27 @@ export default async function RootLayout({ children, modal }) {
         "@id": "https://openangels.xyz/#organization",
         "name": "OpenAngels",
         "url": "https://openangels.xyz",
-        "logo": "https://openangels.xyz/og-image.png",
-      },
-      {
-        "@type": "WebApplication",
-        "@id": "https://openangels.xyz/#webapp",
-        "name": "OpenAngels",
-        "url": "https://openangels.xyz",
-        "description": `The largest open database of ${seoLabel} verified angel investors and VCs. Filter by 90+ industries, stage, and check size. Draft personalized AI pitch emails and fundraise faster.`,
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "All",
-        "offers": {
-          "@type": "Offer",
-          "price": "49.00",
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://openangels.xyz/icon.svg",
+          "width": 512,
+          "height": 512,
+        },
+        "sameAs": [
+          "https://www.producthunt.com/products/openangels",
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "tackssignals@gmail.com",
+          "url": "https://openangels.xyz/contact",
+          "availableLanguage": ["English"],
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "San Francisco",
+          "addressRegion": "CA",
+          "addressCountry": "US",
         },
       },
     ],
@@ -88,7 +94,7 @@ export default async function RootLayout({ children, modal }) {
         />
       </head>
       <body className="antialiased min-h-screen bg-zinc-50 dark:bg-black font-sans text-zinc-900 dark:text-zinc-100 flex flex-col">
-        <Script src="https://gumroad.com/js/gumroad.js" strategy="afterInteractive" />
+        <Script src="https://gumroad.com/js/gumroad.js" strategy="lazyOnload" />
         <InvestorCountProvider initialTotal={total}>
           {children}
           {modal}

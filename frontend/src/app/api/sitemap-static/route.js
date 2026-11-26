@@ -2,19 +2,16 @@ export const dynamic = 'force-dynamic';
 import { absoluteUrl } from '@/seo';
 
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
-
-const STATIC_LASTMOD = '2026-11-09T12:00:00.000Z';
+const STATIC_LASTMOD = '2026-11-26T00:00:00.000Z';
 
 export async function GET() {
+  // Keep sitemap focused on high-value indexable pages (legal pages remain linked in footer)
   const staticPages = [
     '/',
     '/directory',
-    ...LETTERS.map((l) => `/directory/${l}`),
+    '/methodology',
     '/contact',
-    '/privacy',
-    '/terms',
-    '/gdpr',
-    '/refund',
+    ...LETTERS.map((l) => `/directory/${l}`),
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -23,7 +20,7 @@ ${staticPages.map(path => `  <url>
     <loc>${absoluteUrl(path)}</loc>
     <lastmod>${STATIC_LASTMOD}</lastmod>
     <changefreq>${path === '/' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${path === '/' ? '1.0' : path.startsWith('/directory') ? '0.9' : '0.7'}</priority>
+    <priority>${path === '/' ? '1.0' : path.startsWith('/directory') ? '0.9' : '0.6'}</priority>
   </url>`).join('\n')}
 </urlset>`;
 

@@ -1,4 +1,7 @@
 export async function GET() {
+  // RFC 9309 compliant: all major search & AI search engines (Googlebot, Bingbot, Yandex,
+  // OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-SearchBot, Applebot-Extended)
+  // inherit the wildcard block cleanly so Disallow rules are strictly honored.
   const robotsTxt = `User-Agent: *
 Allow: /
 Allow: /sitemap*.xml
@@ -8,33 +11,7 @@ Disallow: /admin/
 Disallow: /crm
 Disallow: /monitoring
 
-# Search Engines & Web Crawlers
-User-Agent: Googlebot
-Allow: /
-
-User-Agent: Bingbot
-Allow: /
-
-User-Agent: Yandex
-Allow: /
-
-# Modern AI Search & Answer Engines
-User-Agent: OAI-SearchBot
-Allow: /
-
-User-Agent: ChatGPT-User
-Allow: /
-
-User-Agent: PerplexityBot
-Allow: /
-
-User-Agent: Claude-SearchBot
-Allow: /
-
-User-Agent: Applebot-Extended
-Allow: /
-
-# Block aggressive non-search scraper bots to protect serverless bandwidth
+# Block aggressive non-search scraper bots to protect serverless CPU & bandwidth
 User-Agent: Bytespider
 Disallow: /
 
@@ -53,7 +30,6 @@ Disallow: /
 User-Agent: DataForSeoBot
 Disallow: /
 
-Sitemap: https://openangels.xyz/sitemap-main.xml
 Sitemap: https://openangels.xyz/sitemap.xml
 `;
 

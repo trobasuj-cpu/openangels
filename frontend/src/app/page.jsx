@@ -86,21 +86,27 @@ export default async function Home() {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'WebSite',
-        '@id': absoluteUrl('/#website'),
+        '@type': 'WebApplication',
+        '@id': absoluteUrl('/#webapp'),
         name: PRODUCT_NAME,
         url: SITE_URL,
-      },
-      {
-        '@type': 'Organization',
-        '@id': absoluteUrl('/#organization'),
-        name: PRODUCT_NAME,
-        url: SITE_URL,
-        logo: absoluteUrl('/og-image.png'),
+        description: `The largest open database of ${countData?.seoLabel || '11,700+'} verified angel investors and VCs. Filter by 90+ industries, stage, and check size, draft AI pitch emails, and manage fundraising CRM.`,
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'All',
+        publisher: { '@id': absoluteUrl('/#organization') },
+        offers: {
+          '@type': 'Offer',
+          price: '49.00',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+          url: SITE_URL,
+        },
       },
       {
         '@type': 'ItemList',
+        '@id': absoluteUrl('/#featured-investors'),
         name: 'Top Verified Angel Investors & Seed VCs',
+        isPartOf: { '@id': absoluteUrl('/#website') },
         numberOfItems: Math.min(24, initialInvestors.length),
         itemListElement: initialInvestors.slice(0, 24).map((inv, idx) => ({
           '@type': 'ListItem',

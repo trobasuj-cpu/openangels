@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { absoluteUrl, DEFAULT_OG_IMAGE, getDynamicInvestorCount } from '@/seo';
 import { getCompanyIntelligence, KNOWN_COMPANIES } from '@/lib/companyData';
+import companiesCache from '@/lib/companies_cache.json';
 import Footer from '@/components/Footer';
 import { 
   Building2, Globe, MapPin, ShieldCheck, DollarSign, 
@@ -45,7 +46,11 @@ const KNOWN_INVESTOR_SLUGS = {
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  return Object.keys(KNOWN_COMPANIES).map((slug) => ({ slug }));
+  const allSlugs = new Set([
+    ...Object.keys(KNOWN_COMPANIES || {}),
+    ...Object.keys(companiesCache || {}),
+  ].map((s) => s.toLowerCase().trim()));
+  return Array.from(allSlugs).map((slug) => ({ slug }));
 }
 
 function buildCompanyTitle(name) {
@@ -156,13 +161,13 @@ export default async function CompanyIntelligencePage({ params }) {
       <div className="border-b border-zinc-800/80 bg-zinc-950/60 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between text-xs">
           <div className="flex items-center gap-2 text-zinc-400">
-            <Link href="/" className="hover:text-white transition-colors">OpenAngels</Link>
+            <Link prefetch={false} href="/" className="hover:text-white transition-colors">OpenAngels</Link>
             <span>/</span>
-            <Link href="/directory" className="hover:text-white transition-colors">Directory</Link>
+            <Link prefetch={false} href="/directory" className="hover:text-white transition-colors">Directory</Link>
             <span>/</span>
             <span className="text-zinc-200 font-semibold">{company.name} Intelligence</span>
           </div>
-          <Link
+          <Link prefetch={false}
             href="/directory"
             className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors flex items-center gap-1"
           >
@@ -561,7 +566,7 @@ export default async function CompanyIntelligencePage({ params }) {
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       {KNOWN_INVESTOR_SLUGS[f.name] && (
-                        <Link
+                        <Link prefetch={false}
                           href={`/investor/${KNOWN_INVESTOR_SLUGS[f.name]}`}
                           className="px-2.5 py-1.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 transition-all text-[11px] font-mono font-bold flex items-center gap-1"
                           title={`View ${f.name} Angel Investor Profile`}
@@ -814,7 +819,7 @@ export default async function CompanyIntelligencePage({ params }) {
                 const targetSlug = KNOWN_INVESTOR_SLUGS[invName];
                 const href = targetSlug ? `/investor/${targetSlug}` : `/?search=${encodeURIComponent(invName)}`;
                 return (
-                  <Link
+                  <Link prefetch={false}
                     key={idx}
                     href={href}
                     className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-purple-950/40 hover:bg-purple-900/60 text-purple-200 hover:text-white border border-purple-500/30 hover:border-purple-500/60 transition-all flex items-center gap-2 group shadow-sm cursor-pointer"

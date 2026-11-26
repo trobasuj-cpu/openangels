@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 
-export default function InvestorAvatar({ name, avatarUrl, className = "w-11 h-11" }) {
+export default function InvestorAvatar({ name, avatarUrl, className = "w-11 h-11", size = 44 }) {
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
@@ -16,12 +16,17 @@ export default function InvestorAvatar({ name, avatarUrl, className = "w-11 h-11
   };
 
   const initials = getInitials(name);
-  const hasValidUrl = typeof avatarUrl === 'string' && avatarUrl.trim().length > 5;
+  // Filter sunsetted logo.clearbit.com hosts to avoid ERR_NAME_NOT_RESOLVED console errors
+  const isDeadHost = typeof avatarUrl === 'string' && avatarUrl.toLowerCase().includes('logo.clearbit.com');
+  const hasValidUrl = typeof avatarUrl === 'string' && avatarUrl.trim().length > 5 && !isDeadHost;
 
   if (hasValidUrl && !imgError) {
     return (
       <img
         loading="lazy"
+        decoding="async"
+        width={size}
+        height={size}
         src={avatarUrl}
         alt={name || 'Investor'}
         onError={() => setImgError(true)}
@@ -30,7 +35,6 @@ export default function InvestorAvatar({ name, avatarUrl, className = "w-11 h-11
     );
   }
 
-  // Red theme matching OpenAngels design system
   return (
     <div
       className={`${className} rounded-full bg-gradient-to-br from-red-950/80 via-zinc-900 to-black border border-red-500/30 flex items-center justify-center shrink-0 shadow-sm shadow-red-500/10 select-none`}

@@ -1,17 +1,20 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { Sparkles, X, Copy, Mail, Globe, MapPin, Check, Briefcase, DollarSign, Layers, ShieldCheck, UserPlus, CheckCircle2, Lock, Crown, Zap, Users, BarChart3, ChevronDown, ChevronUp, ExternalLink, GitFork, User, Building2, Target } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import GumroadIframeModal from './GumroadIframeModal';
 import InvestorAvatar from './InvestorAvatar';
-import AiPitchModal from './AiPitchModal';
 import InvestorEvidenceSection from './InvestorEvidenceSection';
-import CompanyProfileModal from './CompanyProfileModal';
 import { useInvestorCount } from './InvestorCountProvider';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
-import { getVerificationInfo } from './Dashboard';
+import { getVerificationInfo } from '@/lib/investorUtils';
+
+// Lazy-load heavy modals client-side only so /investor/[slug] SSR stays ultra-fast (<5ms CPU)
+const GumroadIframeModal = dynamic(() => import('./GumroadIframeModal'), { ssr: false });
+const AiPitchModal = dynamic(() => import('./AiPitchModal'), { ssr: false });
+const CompanyProfileModal = dynamic(() => import('./CompanyProfileModal'), { ssr: false });
 
 const GUMROAD_URL = 'https://beatsprom.gumroad.com/l/vgobnh';
 
@@ -35,17 +38,17 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
           setUser(session.user);
-          // Check profile is_premium
-          const { data: prof } = await supabase
-            .from('profiles')
-            .select('is_premium')
-            .eq('id', session.user.id)
-            .single();
-          if (prof?.is_premium) {
-            setIsPremium(true);
-          }
+          // Check profile is_premium and CRM status in parallel with single session read
+          const [{ data: prof }, { data: lead }] = await Promise.all([
+            supabase.from('profiles').select('is_premium').eq('id', session.user.id).single(),
+            investor?.id
+              ? supabase.from('crm_leads').select('id').eq('user_id', session.user.id).eq('investor_id', investor.id).single()
+              : Promise.resolve({ data: null }),
+          ]);
+          if (prof?.is_premium) setIsPremium(true);
+          if (lead) setInCrm(true);
         }
-        
+
         const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
         const res = await fetch(
           `/api/investor/contact?slug=${encodeURIComponent(investor?.slug || '')}&id=${encodeURIComponent(investor?.id || '')}`,
@@ -53,33 +56,14 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
         );
         if (res.ok) {
           const contactData = await res.json();
-          if (contactData.contact) {
-            setUnlockedContact(contactData.contact);
-          }
-          if (contactData.isPremium !== undefined) {
-            setIsPremium(contactData.isPremium);
-          }
+          if (contactData.contact) setUnlockedContact(contactData.contact);
+          if (contactData.isPremium !== undefined) setIsPremium(contactData.isPremium);
         }
       } catch (e) {
         console.error('Failed to load contact info:', e);
       }
     }
     loadContactDetails();
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        // Check CRM status
-        supabase
-          .from('crm_leads')
-          .select('id')
-          .eq('user_id', session.user.id)
-          .eq('investor_id', investor?.id)
-          .single()
-          .then(({ data: lead }) => {
-            if (lead) setInCrm(true);
-          });
-      }
-    });
   }, [investor]);
 
   useEffect(() => {
@@ -547,7 +531,7 @@ export default function InvestorProfileModal({ investor, isStandalone = false, i
                                   }
 
                                   return displaySyndicates.map((synd, sIdx) => (
-                                    <Link
+                                    <Link prefetch={false}
                                       key={sIdx}
                                       href={`/directory?q=${encodeURIComponent(synd.name)}`}
                                       onClick={() => handleClose()}

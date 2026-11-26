@@ -1,14 +1,14 @@
 export const SITE_URL = 'https://openangels.xyz';
 export const PRODUCT_NAME = 'OpenAngels';
-export const DEFAULT_INVESTOR_COUNT = 11600;
+export const DEFAULT_INVESTOR_COUNT = 11700;
 export const DEFAULT_OG_IMAGE = {
   url: `${SITE_URL}/og-image.png`,
   width: 1280,
   height: 720,
   alt: 'OpenAngels — Verified Angel Investors & Seed VCs Database',
 };
-export const LEGAL_UPDATED_LABEL = 'October 28, 2026';
-export const SEO_LASTMOD = '2026-10-28';
+export const LEGAL_UPDATED_LABEL = 'November 26, 2026';
+export const SEO_LASTMOD = '2026-11-26';
 
 /**
  * Format an investor count consistently across SSR and client hydration (en-US).
@@ -105,25 +105,29 @@ export const STAGE_SLUGS = {
   'angel': { label: 'Angel', dbValue: 'angel' },
 };
 
-// Geo regions for catch-all routes вЂ” each maps to an array of DB location prefixes
+// PostgREST OR filter matching all US investors on the DB side (avoids JS truncation on /investors/usa)
+export const US_LOCATION_OR_FILTER =
+  'or=(country.eq.USA,location.ilike.%22*United%20States*%22,location.ilike.%22*,%20CA%22,location.ilike.%22*,%20NY%22,location.ilike.%22*,%20TX%22,location.ilike.%22*,%20MA%22,location.ilike.%22*,%20WA%22,location.ilike.%22*,%20IL%22,location.ilike.%22*,%20FL%22,location.ilike.%22*,%20CO%22,location.ilike.%22*,%20GA%22,location.ilike.%22*,%20PA%22,location.ilike.%22*,%20DC%22,location.ilike.%22*,%20NJ%22,location.ilike.%22*,%20VA%22,location.ilike.%22*,%20NC%22,location.ilike.%22*,%20OH%22,location.ilike.%22*,%20MI%22,location.ilike.%22*,%20AZ%22,location.ilike.%22*,%20OR%22,location.ilike.%22*,%20UT%22,location.ilike.%22*,%20MN%22,location.ilike.%22*,%20TN%22,location.ilike.%22*,%20MD%22,location.ilike.%22*,%20CT%22)';
+
+// Geo regions for catch-all routes — uses ilike substring matching so "London, United Kingdom" & "Toronto, Canada" match reliably
 export const GEO_REGIONS = {
   'usa': { label: 'the USA', locations: null, countryMatch: true },
-  'europe': { label: 'Europe', locations: ['London', 'Berlin', 'Paris', 'Amsterdam', 'Stockholm', 'Barcelona', 'Madrid', 'Munich', 'Helsinki', 'Copenhagen', 'Oslo', 'Milan', 'Rome', 'Zurich', 'Geneva', 'Basel', 'Lisbon', 'Dublin', 'Prague', 'Warsaw', 'Vienna', 'Budapest', 'Bucharest', 'Bratislava', 'Tallinn', 'Riga', 'Brussels', 'Luxembourg', 'Hamburg', 'Genoa', 'Malmo', 'Sarajevo', 'Newcastle Upon Tyne', 'Limassol', 'St. Gallen', 'Valencia', 'LiГЁge'] },
-  'asia': { label: 'Asia', locations: ['Singapore', 'Tokyo', 'Seoul', 'Hong Kong', 'Beijing', 'Shenzhen', 'Hangzhou', 'Bangalore', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Noida', 'Gurugram', 'Kolkata', 'Jakarta', 'Kuala Lumpur', 'Osaka', 'Bangkok'] },
-  'san-francisco': { label: 'San Francisco', locations: ['San Francisco, CA'] },
-  'new-york': { label: 'New York', locations: ['New York, NY'] },
+  'europe': { label: 'Europe', locations: ['London', 'United Kingdom', 'Berlin', 'Germany', 'Paris', 'France', 'Amsterdam', 'Netherlands', 'Stockholm', 'Sweden', 'Barcelona', 'Madrid', 'Spain', 'Munich', 'Helsinki', 'Copenhagen', 'Oslo', 'Milan', 'Zurich', 'Geneva', 'Switzerland', 'Lisbon', 'Dublin', 'Prague', 'Warsaw', 'Vienna', 'Tallinn', 'Brussels', 'Luxembourg'] },
+  'asia': { label: 'Asia', locations: ['Singapore', 'Tokyo', 'Japan', 'Seoul', 'Hong Kong', 'Beijing', 'Shanghai', 'Shenzhen', 'Bangalore', 'Bengaluru', 'Mumbai', 'Delhi', 'India', 'Jakarta', 'Bangkok'] },
+  'san-francisco': { label: 'San Francisco', locations: ['San Francisco'] },
+  'new-york': { label: 'New York', locations: ['New York, NY', 'Brooklyn, NY'] },
   'london': { label: 'London', locations: ['London'] },
-  'los-angeles': { label: 'Los Angeles', locations: ['Los Angeles, CA', 'Santa Monica, CA'] },
-  'silicon-valley': { label: 'Silicon Valley', locations: ['San Francisco, CA', 'Palo Alto, CA', 'Menlo Park, CA', 'Mountain View, CA', 'Sunnyvale, CA', 'San Jose, CA', 'San Mateo, CA', 'Redwood City, CA', 'Los Altos, CA', 'Atherton, CA', 'Portola Valley, CA', 'Pescadero, CA'] },
-  'india': { label: 'India', locations: ['Bangalore', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Noida', 'Gurugram', 'Kolkata'] },
-  'middle-east': { label: 'the Middle East', locations: ['Dubai', 'Riyadh', 'Amman', 'Beirut', 'Kuwait City', 'Manama', 'Muscat', 'Jerusalem', 'Tel Aviv'] },
-  'africa': { label: 'Africa', locations: ['Lagos', 'Nairobi', 'Cape Town', 'Johannesburg', 'Accra', 'Cairo', 'Abuja', 'Yaounde'] },
-  'latam': { label: 'Latin America', locations: ['Sao Paulo', 'Buenos Aires', 'Mexico City', 'Santiago', 'Bogota'] },
-  'canada': { label: 'Canada', locations: ['Toronto', 'Montreal', 'Ottawa', 'Victoria, BC', 'Moncton'] },
-  'boston': { label: 'Boston', locations: ['Boston, MA', 'Cambridge, MA', 'Northampton, MA'] },
+  'los-angeles': { label: 'Los Angeles', locations: ['Los Angeles', 'Santa Monica', 'Beverly Hills'] },
+  'silicon-valley': { label: 'Silicon Valley', locations: ['San Francisco', 'Palo Alto', 'Menlo Park', 'Mountain View', 'Sunnyvale', 'San Jose, CA', 'San Mateo', 'Redwood City', 'Los Altos', 'Atherton'] },
+  'india': { label: 'India', locations: ['India', 'Bangalore', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Gurugram'] },
+  'middle-east': { label: 'the Middle East', locations: ['Dubai', 'Abu Dhabi', 'Riyadh', 'Tel Aviv', 'Israel'] },
+  'africa': { label: 'Africa', locations: ['Lagos', 'Nairobi', 'Cape Town', 'Johannesburg', 'Cairo', 'Accra'] },
+  'latam': { label: 'Latin America', locations: ['Sao Paulo', 'Brazil', 'Buenos Aires', 'Mexico City', 'Santiago', 'Bogota'] },
+  'canada': { label: 'Canada', locations: ['Canada', 'Toronto', 'Vancouver', 'Montreal', 'Ottawa'] },
+  'boston': { label: 'Boston', locations: ['Boston, MA', 'Cambridge, MA'] },
   'miami': { label: 'Miami', locations: ['Miami, FL', 'Fort Lauderdale, FL'] },
   'austin': { label: 'Austin', locations: ['Austin, TX'] },
-  'seattle': { label: 'Seattle', locations: ['Seattle, WA', 'Medina, WA'] },
+  'seattle': { label: 'Seattle', locations: ['Seattle, WA', 'Bellevue, WA'] },
   'chicago': { label: 'Chicago', locations: ['Chicago, IL'] },
 };
 
@@ -203,7 +207,7 @@ export const POPULAR_HUBS = [
   { filters: ['climate', 'seed'], label: 'Climate Seed' },
   { filters: ['edtech', 'pre-seed'], label: 'EdTech Pre-Seed' },
   { filters: ['biotech', 'seed'], label: 'Biotech Seed' },
-  { filters: ['gaming', 'angel'], label: 'Gaming Angel' },
+  { filters: ['gaming', 'seed'], label: 'Gaming Seed' },
   { filters: ['ai', 'series-a'], label: 'AI Series A' },
   { filters: ['saas', 'series-a'], label: 'SaaS Series A' },
   { filters: ['fintech', 'series-a'], label: 'Fintech Series A' },

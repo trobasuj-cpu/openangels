@@ -1,25 +1,30 @@
 import { cache } from 'react';
 import { absoluteUrl, PRODUCT_NAME, SITE_URL, DEFAULT_OG_IMAGE, getDynamicInvestorCount } from '@/seo';
-import { HEX_SLUG_REGEX, truncateMetaDescription } from '@/lib/investorUtils';
+import { truncateMetaDescription } from '@/lib/investorUtils';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ChevronRight, Users, Sparkles, Lock, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Users, Sparkles, Lock } from 'lucide-react';
 
 export const revalidate = 86400;
 
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const PAGE_SIZE = 60;
 
 export async function generateStaticParams() {
   return LETTERS.map((letter) => ({ letter }));
 }
 
-const LETTER_MEM_CACHE = new Map();
+const LETTER_PAGE_CACHE = new Map();
 const LETTER_MEM_TTL_MS = 5 * 60 * 1000;
 
-const fetchInvestorsByLetter = cache(async (letter) => {
+// True server-side PostgREST pagination: fetches ONLY 60 rows per page + exact total count
+// (~15x less Cloudflare Worker CPU than fetching/sorting 1000 rows, and never orphans >1000 profiles)
+const fetchLetterPage = cache(async (letter, pageNum) => {
+  const safePage = Math.max(1, pageNum);
+  const cacheKey = `${letter}:${safePage}`;
   const now = Date.now();
-  const cached = LETTER_MEM_CACHE.get(letter);
+  const cached = LETTER_PAGE_CACHE.get(cacheKey);
   if (cached && now < cached.expiresAt) {
     return cached.value;
   }
@@ -28,48 +33,37 @@ const fetchInvestorsByLetter = cache(async (letter) => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
     const FALLBACK_SERVICE_ROLE = Buffer.from('c2Jfc2VjcmV0X3BWVHBFMVc5V2FYU0lqRHJYbFFnT3dfN3VVSUVpMHo=', 'base64').toString('utf-8');
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_SERVICE_ROLE;
+    const offset = (safePage - 1) * PAGE_SIZE;
 
     const res = await fetch(
-      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages,avatar_url,has_email,created_at&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=created_at.asc,name.asc&limit=1000`,
+      `${supabaseUrl}/rest/v1/investors_public?select=slug,name,location,industries,stages&slug=not.is.null&name=ilike.${encodeURIComponent(letter)}*&order=has_email.desc,created_at.asc,name.asc&offset=${offset}&limit=${PAGE_SIZE}`,
       {
         headers: {
           apikey: supabaseKey,
           Authorization: `Bearer ${supabaseKey}`,
+          Prefer: 'count=exact',
         },
         next: { revalidate: 86400 },
       }
     );
 
-    if (!res.ok) return [];
+    if (!res.ok) return { investors: [], total: 0 };
+
+    const range = res.headers.get('content-range') || '';
+    const parsedTotal = range.includes('/') ? parseInt(range.split('/')[1], 10) : 0;
     const data = await res.json();
+    const investors = (Array.isArray(data) ? data : []).filter((inv) => inv && inv.slug && inv.name);
+    const total = !isNaN(parsedTotal) && parsedTotal > 0 ? parsedTotal : investors.length;
 
-    // Precompute sort keys once O(N) & avoid ICU localeCompare (~40x faster in Cloudflare workerd)
-    const decorated = [];
-    for (let i = 0; i < (data || []).length; i++) {
-      const inv = data[i];
-      if (!inv || !inv.slug || !inv.name) continue;
-      const tier = !HEX_SLUG_REGEX.test(inv.slug)
-        ? 0
-        : (inv.avatar_url || inv.has_email)
-        ? 1
-        : 2;
-      decorated.push({ inv, tier, sortName: inv.name.toLowerCase() });
+    const value = { investors, total };
+    if (LETTER_PAGE_CACHE.size >= 40) {
+      LETTER_PAGE_CACHE.delete(LETTER_PAGE_CACHE.keys().next().value);
     }
-
-    decorated.sort((a, b) => {
-      if (a.tier !== b.tier) return a.tier - b.tier;
-      return a.sortName < b.sortName ? -1 : a.sortName > b.sortName ? 1 : 0;
-    });
-
-    const sorted = decorated.map((d) => d.inv);
-    if (LETTER_MEM_CACHE.size >= 26) {
-      LETTER_MEM_CACHE.delete(LETTER_MEM_CACHE.keys().next().value);
-    }
-    LETTER_MEM_CACHE.set(letter, { value: sorted, expiresAt: now + LETTER_MEM_TTL_MS });
-    return sorted;
+    LETTER_PAGE_CACHE.set(cacheKey, { value, expiresAt: now + LETTER_MEM_TTL_MS });
+    return value;
   } catch (err) {
     console.error(`[DirectoryLetterPage] Error fetching letter ${letter}:`, err.message);
-    return [];
+    return { investors: [], total: 0 };
   }
 });
 
@@ -82,24 +76,24 @@ export async function generateMetadata({ params, searchParams }) {
 
   const upper = cleanLetter.toUpperCase();
   const pageSuffix = page > 1 ? ` (Page ${page})` : '';
-  const allInvestors = await fetchInvestorsByLetter(cleanLetter);
-  const total = allInvestors.length;
-  const topNames = allInvestors.slice(0, 2).map((i) => i.name);
-  const top3Names = allInvestors.slice(0, 3).map((i) => i.name).join(', ');
+  const { investors, total } = await fetchLetterPage(cleanLetter, page);
+  const topNames = investors.slice(0, 2).map((i) => i.name);
+  const top3Names = investors.slice(0, 3).map((i) => i.name).join(', ');
+  const totalFormatted = total.toLocaleString('en-US');
 
   let title = `Angel Investors Starting with "${upper}"${pageSuffix} (2026)`;
   if (page === 1 && topNames.length >= 2) {
-    const twoNamesTitle = `${total} "${upper}" Angel Investors: ${topNames.join(', ')}`;
-    const oneNameTitle = `${total} "${upper}" Angel Investors: ${topNames[0]} & More`;
+    const twoNamesTitle = `${totalFormatted} "${upper}" Angel Investors: ${topNames.join(', ')}`;
+    const oneNameTitle = `${totalFormatted} "${upper}" Angel Investors: ${topNames[0]} & More`;
     if (twoNamesTitle.length <= 58) title = twoNamesTitle;
     else if (oneNameTitle.length <= 58) title = oneNameTitle;
   } else if (page === 1 && topNames.length === 1) {
-    const oneNameTitle = `${total} "${upper}" Angel Investors: ${topNames[0]} & More`;
+    const oneNameTitle = `${totalFormatted} "${upper}" Angel Investors: ${topNames[0]} & More`;
     if (oneNameTitle.length <= 58) title = oneNameTitle;
   }
 
   const description = truncateMetaDescription(
-    `Browse ${total} verified angel investors starting with ${upper}${top3Names ? ` — including ${top3Names}` : ''}. Compare check sizes, backed startups, and direct pitch emails.`,
+    `Browse ${totalFormatted} verified angel investors starting with ${upper}${top3Names ? ` — including ${top3Names}` : ''}. Compare check sizes, backed startups, and direct pitch emails.`,
     155
   );
 
@@ -141,33 +135,28 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
     notFound();
   }
 
+  const requestedPage = Math.max(1, parseInt(sp?.page || '1', 10));
   const upper = cleanLetter.toUpperCase();
-  const [allInvestors, countData] = await Promise.all([
-    fetchInvestorsByLetter(cleanLetter),
+  const [{ investors, total: totalInvestors }, countData] = await Promise.all([
+    fetchLetterPage(cleanLetter, requestedPage),
     getDynamicInvestorCount(),
   ]);
-  const totalInvestors = allInvestors.length;
-  
-  const PAGE_SIZE = 60;
+
   const totalPages = Math.max(1, Math.ceil(totalInvestors / PAGE_SIZE));
-  const currentPage = Math.min(totalPages, Math.max(1, parseInt(sp?.page || '1', 10)));
-  const investors = allInvestors.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const currentPage = Math.min(totalPages, requestedPage);
 
   const canonicalUrl = currentPage > 1
     ? absoluteUrl(`/directory/${cleanLetter}?page=${currentPage}`)
     : absoluteUrl(`/directory/${cleanLetter}`);
 
+  const schemaItems = investors.slice(0, 20);
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Angel Investors Starting with ${upper} | OpenAngels`,
     url: canonicalUrl,
-    description: `Directory of ${totalInvestors} verified angel investors and VCs starting with the letter ${upper}.`,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: PRODUCT_NAME,
-      url: SITE_URL,
-    },
+    description: `Directory of ${totalInvestors.toLocaleString('en-US')} verified angel investors and VCs starting with the letter ${upper}.`,
+    isPartOf: { '@id': absoluteUrl('/#website') },
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
@@ -178,8 +167,8 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
     },
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems: Math.min(investors.length, 50),
-      itemListElement: investors.slice(0, 20).map((inv, idx) => ({
+      numberOfItems: schemaItems.length,
+      itemListElement: schemaItems.map((inv, idx) => ({
         '@type': 'ListItem',
         position: idx + 1,
         url: absoluteUrl(`/investor/${inv.slug}`),
@@ -190,27 +179,21 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
 
       <header className="h-14 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-3">
           <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-zinc-400 min-w-0">
-            <Link href="/" className="hover:text-white transition-colors">
-              Home
-            </Link>
+            <Link href="/" prefetch={false} className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
-            <Link href="/directory" className="hover:text-white transition-colors">
-              Directory
-            </Link>
+            <Link href="/directory" prefetch={false} className="hover:text-white transition-colors">Directory</Link>
             <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
             <span className="text-zinc-200 font-semibold">Letter {upper}</span>
           </nav>
 
           <Link
             href="/directory"
+            prefetch={false}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-colors text-xs font-medium shrink-0"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -223,17 +206,16 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-400 mb-3">
             <Users className="w-3.5 h-3.5 text-emerald-400" />
-            <span>{totalInvestors.toLocaleString()} Verified Profiles • Page {currentPage} of {totalPages}</span>
+            <span>{totalInvestors.toLocaleString('en-US')} Verified Profiles • Page {currentPage} of {totalPages}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight">
             Angel Investors Starting with &ldquo;{upper}&rdquo;{currentPage > 1 ? ` (Page ${currentPage})` : ''}
           </h1>
           <p className="text-sm text-zinc-400 mt-1.5 max-w-2xl leading-relaxed">
-            Showing {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, totalInvestors)} of {totalInvestors.toLocaleString()} verified early-stage angel investors, venture partners, and syndicate backers alphabetically under {upper}. Click any profile to inspect check sizes, portfolio startups, and direct pitch contact details.
+            Showing {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, totalInvestors)} of {totalInvestors.toLocaleString('en-US')} verified early-stage angel investors, venture partners, and syndicate backers alphabetically under {upper}. Click any profile to inspect check sizes, portfolio startups, and direct pitch contact details.
           </p>
         </div>
 
-        {/* Alphabetical Switcher Bar */}
         <nav aria-label="Alphabetical Directory" className="p-3 rounded-xl bg-zinc-900/40 border border-zinc-800/80">
           <div className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider mb-2">
             Browse Alphabetically (A–Z)
@@ -245,10 +227,11 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
                 <Link
                   key={l}
                   href={`/directory/${l}`}
-                  className={`w-8 h-8 flex items-center justify-center rounded-md text-xs font-mono font-medium border transition-colors ${
+                  prefetch={false}
+                  className={`w-9 h-9 flex items-center justify-center rounded-md text-xs font-mono font-medium border transition-colors ${
                     isCurrent
                       ? 'bg-white text-zinc-950 border-white font-semibold'
-                      : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-white'
+                      : 'bg-zinc-900 text-zinc-300 border-zinc-800 hover:bg-zinc-800 hover:text-white'
                   }`}
                 >
                   {l.toUpperCase()}
@@ -258,8 +241,7 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
           </div>
         </nav>
 
-        {/* Unlock & Outreach CTA Banner */}
-        <section 
+        <section
           aria-label="Unlock Full Investor Database"
           className="rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-red-950/30 border border-zinc-800 p-5 sm:p-6 relative overflow-hidden shadow-xl"
         >
@@ -273,7 +255,7 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
                 Pitching Investors Starting with &ldquo;{upper}&rdquo;?
               </h2>
               <p className="text-xs text-zinc-300 leading-relaxed">
-                Unlock direct verified founder pitch emails, AI pitch generator, and complete CSV export for all {totalInvestors.toLocaleString('en-US')} investors under letter {upper} (and all {countData.seoLabel} investors across the platform).
+                Unlock direct verified founder pitch emails, AI pitch generator, and CRM shortlist export for all {totalInvestors.toLocaleString('en-US')} investors under letter {upper} (and all {countData.seoLabel} investors across the platform).
               </p>
             </div>
 
@@ -289,7 +271,6 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
           </div>
         </section>
 
-        {/* Investors Grid */}
         <section aria-label={`Investors starting with ${upper}`}>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
             {investors.map((inv) => {
@@ -298,20 +279,21 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
                 <Link
                   key={inv.slug}
                   href={`/investor/${inv.slug}`}
+                  prefetch={false}
                   className="p-3 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700 transition-colors flex flex-col justify-between group"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs sm:text-sm font-medium text-zinc-200 group-hover:text-white truncate">
                       {inv.name}
                     </span>
-                    <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-300 shrink-0 transition-colors" />
+                    <ChevronRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 shrink-0 transition-colors" />
                   </div>
-                  <div className="flex items-center gap-1.5 mt-1 text-[11px] text-zinc-500 truncate">
+                  <div className="flex items-center gap-1.5 mt-1 text-[11px] text-zinc-400 truncate">
                     {inv.location ? <span>{inv.location}</span> : <span>Angel Investor</span>}
                     {primaryInd && (
                       <>
                         <span>•</span>
-                        <span className="text-zinc-400">{primaryInd}</span>
+                        <span className="text-zinc-300">{primaryInd}</span>
                       </>
                     )}
                   </div>
@@ -320,25 +302,25 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
             })}
           </div>
 
-          {/* Pagination Controls */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between pt-6 border-t border-zinc-800/80 mt-6">
               <div>
                 {currentPage > 1 ? (
                   <Link
                     href={`/directory/${cleanLetter}${currentPage - 1 > 1 ? `?page=${currentPage - 1}` : ''}`}
+                    prefetch={false}
                     className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 text-xs font-medium transition-colors"
                   >
                     ← Previous Page
                   </Link>
                 ) : (
-                  <span className="px-4 py-2 rounded-lg bg-zinc-950 text-zinc-600 border border-zinc-900 text-xs font-medium cursor-not-allowed">
+                  <span className="px-4 py-2 rounded-lg bg-zinc-950 text-zinc-500 border border-zinc-900 text-xs font-medium cursor-not-allowed">
                     ← Previous Page
                   </span>
                 )}
               </div>
 
-              <div className="text-xs font-mono text-zinc-500">
+              <div className="text-xs font-mono text-zinc-400">
                 Page {currentPage} of {totalPages}
               </div>
 
@@ -346,12 +328,13 @@ export default async function DirectoryLetterPage({ params, searchParams }) {
                 {currentPage < totalPages ? (
                   <Link
                     href={`/directory/${cleanLetter}?page=${currentPage + 1}`}
+                    prefetch={false}
                     className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 text-xs font-medium transition-colors"
                   >
                     Next Page →
                   </Link>
                 ) : (
-                  <span className="px-4 py-2 rounded-lg bg-zinc-950 text-zinc-600 border border-zinc-900 text-xs font-medium cursor-not-allowed">
+                  <span className="px-4 py-2 rounded-lg bg-zinc-950 text-zinc-500 border border-zinc-900 text-xs font-medium cursor-not-allowed">
                     Next Page →
                   </span>
                 )}

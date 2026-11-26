@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { absoluteUrl, INDUSTRY_PAGES, STAGE_SLUGS, GEO_REGIONS, POPULAR_HUBS } from '@/seo';
 
-const HUBS_LASTMOD = '2026-11-16T08:00:00.000Z';
+const HUBS_LASTMOD = '2026-11-26T00:00:00.000Z';
 
 export async function GET() {
   const hubs = new Set();

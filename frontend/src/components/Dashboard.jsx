@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo, useDeferredValue, useRef } from 'react';
-// helmet removed
-// helmet removed
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { 
   Search, SlidersHorizontal, MapPin, Briefcase, DollarSign, Mail, Globe, Lock, Sparkles, 
@@ -13,73 +12,48 @@ import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase.js';
 import BackgroundAnimation from './BackgroundAnimation';
 import InvestorAvatar from './InvestorAvatar';
-import LoginModal from './LoginModal';
 import FAQ from './FAQ';
 import Footer from './Footer';
-import GumroadIframeModal from './GumroadIframeModal';
-import AiPitchModal from './AiPitchModal';
-import CompanyProfileModal from './CompanyProfileModal';
 import CompanyAvatar from './CompanyAvatar';
 import ExportMemoButton from './ExportMemoButton';
-import EmergingSignalsRadar from './EmergingSignalsRadar';
 import { computeSignalStats, filterCompaniesBySignal, matchCompanySignals, detectCompoundSignals, RADAR_SIGNAL_DEFINITIONS, COMPOUND_SIGNAL_DEFINITIONS } from '../lib/radarSignals';
-import { KNOWN_COMPANIES } from '@/lib/companyData';
-import companiesCache from '@/lib/companies_cache.json';
 import { absoluteUrl, INDUSTRY_PAGES, DEFAULT_INVESTOR_COUNT, formatInvestorCount, PRODUCT_NAME, SITE_URL, POPULAR_HUBS } from '@/seo.js';
 import { useInvestorCount } from './InvestorCountProvider';
 import { formatTwitterUrl, formatLinkedinUrl, formatWebsiteUrl } from '@/lib/socials';
 import { DEFAULT_INDUSTRIES, DEFAULT_STAGES, DEFAULT_LOCATIONS, DEFAULT_CHECK_SIZES } from '../lib/filterConstants';
-import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio } from '@/lib/investorUtils';
+import { isBoilerplateBio, extractFirmFromBio, generateUniqueBio, getVerificationInfo, KNOWN_COMPANY_SLUGS } from '@/lib/investorUtils';
 
-export function getVerificationInfo(investor) {
-  const dateStr = investor?.created_at || investor?.updated_at;
-  let formattedDate = 'Sep 2026';
-  if (dateStr) {
-    try {
-      const d = new Date(dateStr);
-      if (!isNaN(d.getTime())) {
-        formattedDate = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-      }
-    } catch (e) {}
-  }
+// Lazy-load heavy interactive modals & secondary Investor Radar view client-side only (~476KB+ bundle savings)
+const LoginModal = dynamic(() => import('./LoginModal'), { ssr: false });
+const GumroadIframeModal = dynamic(() => import('./GumroadIframeModal'), { ssr: false });
+const AiPitchModal = dynamic(() => import('./AiPitchModal'), { ssr: false });
+const CompanyProfileModal = dynamic(() => import('./CompanyProfileModal'), { ssr: false });
+const EmergingSignalsRadar = dynamic(() => import('./EmergingSignalsRadar'), { ssr: false });
 
-  const hasEmail = !!investor?.email || !!investor?.has_email;
-  const hasSocial = !!investor?.linkedin_url || !!investor?.has_linkedin || !!investor?.twitter_url || !!investor?.has_twitter;
-
-  let method = 'Registry Confirmed';
-  if (hasEmail) {
-    method = 'SMTP Validated';
-  } else if (hasSocial) {
-    method = 'Profile Confirmed';
-  }
-
-  return {
-    date: formattedDate,
-    method,
-    badgeText: `Verified: ${formattedDate} (${method})`
-  };
-}
+export { getVerificationInfo };
 
 const FilterSection = ({ title, icon: Icon, activeCount = 0, defaultExpanded = false, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
   return (
     <div className="border-b border-white/[0.06] last:border-0 pb-4 mb-4 last:pb-0 last:mb-0">
       <button 
+        type="button"
         onClick={() => setExpanded(!expanded)} 
+        aria-expanded={expanded}
         className="flex items-center justify-between w-full text-left p-2 rounded-xl group outline-none transition-all hover:bg-white/[0.04] border border-transparent hover:border-white/[0.06] cursor-pointer"
       >
-        <h3 className="text-xs sm:text-sm font-semibold text-zinc-300 group-hover:text-white flex items-center gap-2.5 transition-colors">
-          <div className="p-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] group-hover:bg-red-500/10 group-hover:border-red-500/25 transition-all">
+        <span className="text-xs sm:text-sm font-semibold text-zinc-300 group-hover:text-white flex items-center gap-2.5 transition-colors">
+          <span className="p-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] group-hover:bg-red-500/10 group-hover:border-red-500/25 transition-all">
             <Icon className="w-3.5 h-3.5 text-zinc-400 group-hover:text-red-400 transition-colors" />
-          </div>
+          </span>
           <span>{title}</span>
           {activeCount > 0 && (
             <span className="bg-red-500/20 text-red-400 text-[10px] font-bold px-1.5 py-0.2 rounded-full border border-red-500/30 shadow-sm">
               {activeCount}
             </span>
           )}
-        </h3>
-        <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 transition-transform duration-200", expanded ? "rotate-180" : "")} />
+        </span>
+        <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-200 transition-transform duration-200", expanded ? "rotate-180" : "")} />
       </button>
       {expanded && (
         <div className="mt-2.5 px-1 animate-in slide-in-from-top-2 fade-in duration-200">
@@ -126,7 +100,6 @@ const MarketingShowcase = ({ isPremium, countLabel }) => {
             </div>
           </div>
           <div className="bg-gradient-to-br from-zinc-900 to-black p-3 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden group">
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
             <div className="absolute top-0 right-0 p-1.5 opacity-50"><Sparkles className="w-4 h-4 text-red-500" /></div>
             <span className="relative z-10 text-[10px] font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider flex items-center gap-1">
               <Mail className="w-3 h-3" /> AI Draft
@@ -230,9 +203,11 @@ const MarketingShowcase = ({ isPremium, countLabel }) => {
       onMouseLeave={() => setIsPaused(false)}
     >
       <button 
+        type="button"
         onClick={() => setIsDismissed(true)}
-        className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-white z-20 transition-transform hover:scale-110"
+        className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-white z-20 transition-transform hover:scale-110"
         title="Dismiss showcase"
+        aria-label="Dismiss showcase"
       >
         <X className="w-3 h-3" />
       </button>
@@ -294,13 +269,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
   const formattedDbCount = useMemo(() => formatInvestorCount(totalDatabaseCount), [totalDatabaseCount]);
   const [loading, setLoading] = useState(initialInvestors.length === 0);
   const [error, setError] = useState(null);
-  const [search, setSearch] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('search') || params.get('q') || '';
-    }
-    return '';
-  });
+  const [search, setSearch] = useState('');
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -308,37 +277,44 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
   const [profile, setProfile] = useState(null);
   const [bccEmail, setBccEmail] = useState('');
   const [isSavingBcc, setIsSavingBcc] = useState(false);
-  const [crmLeadIds, setCrmLeadIds] = useState(new Set()); // investor IDs already in CRM
-  const [addingToCrm, setAddingToCrm] = useState(null); // investor ID currently being added
-  const [showNewOnly, setShowNewOnly] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('newest') === 'true';
-    }
-    return false;
-  });
+  const [crmLeadIds, setCrmLeadIds] = useState(new Set());
+  const [addingToCrm, setAddingToCrm] = useState(null);
+  const [showNewOnly, setShowNewOnly] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutDiscount, setCheckoutDiscount] = useState('');
   const [aiPitchInvestor, setAiPitchInvestor] = useState(null);
+  const [isAiMatch, setIsAiMatch] = useState(false);
+  const [aiMatchedIds, setAiMatchedIds] = useState(null);
+  const [selectedIndustries, setSelectedIndustries] = useState([]);
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
+  const [selectedStages, setSelectedStages] = useState([]);
+  const [industrySearch, setIndustrySearch] = useState('');
+  const [copiedEmailId, setCopiedEmailId] = useState(null);
+  const [matchingCount, setMatchingCount] = useState(resolvedInitialCount);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [viewMode, setViewMode] = useState('founders');
+  const [selectedCompanyModal, setSelectedCompanyModal] = useState(null);
+  const [companyCategoryFilter, setCompanyCategoryFilter] = useState('all');
+  const [selectedSignalFilter, setSelectedSignalFilter] = useState('all');
+  const [radarCompanies, setRadarCompanies] = useState([]);
 
+  // Sync URL query params strictly after hydration to avoid React Error #418
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('newest') === 'true') {
-        setShowNewOnly(true);
+      const urlQ = params.get('search') || params.get('q') || '';
+      if (urlQ) setSearch(urlQ);
+      if (params.get('newest') === 'true') setShowNewOnly(true);
+      if (params.get('ai_match') === 'true') setIsAiMatch(true);
+      const ind = params.get('industries');
+      if (ind) {
+        const parsedInd = ind.split(',').map(i => i.trim().toLowerCase()).filter(Boolean);
+        if (parsedInd.length > 0) setSelectedIndustries(parsedInd);
       }
     }
   }, []);
-
-  const isAiMatch = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('ai_match') === 'true';
-    }
-    return false;
-  }, []);
-
-  const [aiMatchedIds, setAiMatchedIds] = useState(null);
 
   useEffect(() => {
     if (isAiMatch) {
@@ -353,39 +329,18 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
     }
   }, [isAiMatch]);
 
-  // Initialize selectedIndustries from URL if present
-  const initialIndustries = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const ind = params.get('industries');
-      if (ind) {
-        return ind.split(',').map(i => i.trim().toLowerCase()).filter(Boolean);
-      }
-    }
-    return [];
-  }, []);
-
-  const [selectedIndustries, setSelectedIndustries] = useState(initialIndustries);
-  const [selectedLocations, setSelectedLocations] = useState([]);
-  const [selectedCheckSizes, setSelectedCheckSizes] = useState([]);
-  const [selectedStages, setSelectedStages] = useState([]);
-  const [industrySearch, setIndustrySearch] = useState('');
-  const [copiedEmailId, setCopiedEmailId] = useState(null);
-  const [matchingCount, setMatchingCount] = useState(resolvedInitialCount);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [viewMode, setViewMode] = useState('founders'); // 'founders' | 'investors'
-  const [selectedCompanyModal, setSelectedCompanyModal] = useState(null);
-  const [companyCategoryFilter, setCompanyCategoryFilter] = useState('all');
-  const [selectedSignalFilter, setSelectedSignalFilter] = useState('all');
-  const [radarCompanies, setRadarCompanies] = useState(() => {
-    const map = new Map();
-    Object.values(KNOWN_COMPANIES || {}).forEach(c => { if (c?.slug) map.set(c.slug, c); });
-    if (companiesCache && typeof companiesCache === 'object') {
-      Object.values(companiesCache).forEach(c => { if (c?.slug) map.set(c.slug, c); });
-    }
-    return Array.from(map.values());
-  });
+  // Lazy-fetch companies from Edge-cached /api/companies only when user activates Investor Radar view
+  useEffect(() => {
+    if (viewMode !== 'investors' || radarCompanies.length > 0) return;
+    fetch('/api/companies?limit=100')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (Array.isArray(d?.companies) && d.companies.length > 0) {
+          setRadarCompanies(d.companies);
+        }
+      })
+      .catch(() => {});
+  }, [viewMode, radarCompanies.length]);
   const mainScrollRef = useRef(null);
   const isInitialMount = useRef(true);
   const activeFetchIdRef = useRef(0);
@@ -725,7 +680,6 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
       })
       .catch(() => {});
 
-    // Continuously sync search if URL changes (popstate or client-side Next navigation)
     const checkUrl = () => {
       if (typeof window !== 'undefined') {
         const sp = new URLSearchParams(window.location.search);
@@ -733,9 +687,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
         setSearch(prev => (prev !== urlQ ? urlQ : prev));
       }
     };
-    checkUrl();
     window.addEventListener('popstate', checkUrl);
-    const interval = setInterval(checkUrl, 200);
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -761,7 +713,6 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
 
     return () => {
       window.removeEventListener('popstate', checkUrl);
-      clearInterval(interval);
       subscription.unsubscribe();
     };
   }, []);
@@ -1078,33 +1029,35 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
           </div>
           <div className="flex items-center gap-4">
             <button 
-              className="md:hidden p-2 text-zinc-500 hover:text-white transition-colors"
+              type="button"
+              aria-label="Open investor filters"
+              className="md:hidden p-2 text-zinc-400 hover:text-white transition-colors"
               onClick={() => setIsMobileFiltersOpen(true)}
             >
               <SlidersHorizontal className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3 relative">
-              {/* Active Investors Count Capsule (Positioned neatly between search and Recently Added) */}
+              {/* Active Investors Count Capsule */}
               <div 
                 className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 shadow-inner backdrop-blur-md transition-all select-none"
-                title={`${totalDatabaseCount ? totalDatabaseCount.toLocaleString() : '9,807'} active angel investors in directory`}
+                title={`${totalDatabaseCount ? totalDatabaseCount.toLocaleString('en-US') : '11,700'} active angel investors in directory`}
               >
                 <div className="flex -space-x-2 shrink-0">
-                  <img className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
-                  <img className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
-                  <img className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
+                  <img width={20} height={20} loading="lazy" decoding="async" className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Angel investor portrait" />
+                  <img width={20} height={20} loading="lazy" decoding="async" className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Venture partner portrait" />
+                  <img width={20} height={20} loading="lazy" decoding="async" className="w-5 h-5 rounded-full ring-1.5 ring-zinc-950 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Startup backer portrait" />
                 </div>
                 {(totalActiveFilters > 0 || (search && search.trim() !== '')) ? (
                   <div className="flex items-center gap-1.5 text-xs font-medium leading-none">
                     <span className="font-extrabold text-amber-400 tracking-tight font-mono">
-                      {matchingCount.toLocaleString()}
+                      {matchingCount.toLocaleString('en-US')}
                     </span>
                     <span className="text-[11px] text-zinc-400">matching</span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-1.5 text-xs font-medium leading-none">
                     <span className="font-extrabold text-white tracking-tight font-mono">
-                      {totalDatabaseCount ? totalDatabaseCount.toLocaleString() : '9,807'}
+                      {totalDatabaseCount ? totalDatabaseCount.toLocaleString('en-US') : '11,700'}
                     </span>
                     <span className="text-[11px] text-emerald-400 flex items-center gap-1 font-semibold">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
@@ -1139,7 +1092,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
               
               {/* CRM Button in Header (Always Visible) */}
               {user ? (
-                <Link
+                <Link prefetch={false}
                   href="/crm"
                   className="crm-btn-oil flex items-center gap-2 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-all border border-white/10"
                 >
@@ -1200,7 +1153,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                           </p>
                         </div>
                         <div className="p-1">
-                          <Link
+                          <Link prefetch={false}
                             href="/crm"
                             onClick={() => setIsProfileMenuOpen(false)}
                             className="w-full text-left px-3 py-2 text-sm text-zinc-300 hover:bg-white/5 rounded-lg transition-colors flex items-center justify-between group"
@@ -1462,7 +1415,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                                 <span>Headcount</span>
                               </div>
                               <div className="text-base font-black text-white tracking-tight mt-1 truncate">
-                                {company.employees ? `${company.employees.toLocaleString()} team` : 'High Velocity'}
+                                {company.employees ? `${company.employees.toLocaleString('en-US')} team` : 'High Velocity'}
                               </div>
                               <div className="text-[11px] font-bold text-emerald-400 truncate mt-0.5">
                                 {company.employeeGrowth90d || '+20% 90d growth'}
@@ -1584,7 +1537,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                               className="w-full py-2.5 px-3 rounded-xl bg-zinc-950 hover:bg-zinc-850 text-zinc-200 hover:text-white border border-zinc-800 text-xs font-semibold"
                             />
                           </div>
-                          <Link
+                          <Link prefetch={false}
                             href={`/company/${company.slug}`}
                             className="flex items-center justify-center gap-1 text-[11px] font-semibold text-zinc-400 hover:text-emerald-400 transition-colors py-1 group/link"
                           >
@@ -1664,10 +1617,10 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                         ) : (
                           <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 bg-white/5 p-4 rounded-xl border border-white/10">
                             <div className="flex -space-x-3">
-                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Investor" />
-                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Investor" />
-                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Investor" />
-                              <img className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Investor" />
+                              <img width={40} height={40} loading="lazy" decoding="async" className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="Verified angel investor" />
+                              <img width={40} height={40} loading="lazy" decoding="async" className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=100&h=100" alt="Verified seed VC" />
+                              <img width={40} height={40} loading="lazy" decoding="async" className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=100&h=100" alt="Verified syndicate lead" />
+                              <img width={40} height={40} loading="lazy" decoding="async" className="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover bg-zinc-800" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?fit=crop&w=100&h=100" alt="Verified startup operator-angel" />
                             </div>
                             <div className="flex flex-col text-left sm:text-right">
                               <div className="text-sm font-medium text-zinc-300">
@@ -1694,7 +1647,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                               P
                             </div>
                             <div>
-                              <h3 className="font-bold text-lg leading-tight">Welcome, Product Hunt!</h3>
+                              <h2 className="font-bold text-lg leading-tight">Welcome, Product Hunt!</h2>
                             </div>
                           </div>
                           <p className="text-white/90 text-sm mb-4 relative z-10">Use code <strong>PHLAUNCH</strong> for 30% off lifetime premium access.</p>
@@ -1766,10 +1719,10 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                             <div className="flex items-center gap-3 min-w-0">
                               <InvestorAvatar name={investor.name} avatarUrl={displayAvatar} className="w-11 h-11" />
                               <div className="min-w-0">
-                                <Link href={`/investor/${investor.slug || investor.id}`} className="hover:underline">
-                                  <h3 className="text-sm sm:text-base font-semibold text-white truncate hover:text-amber-400 transition-colors">
+                                <Link href={`/investor/${investor.slug || investor.id}`} prefetch={false} className="hover:underline">
+                                  <h2 className="text-sm sm:text-base font-semibold text-white truncate hover:text-amber-400 transition-colors">
                                     {investor.name}
-                                  </h3>
+                                  </h2>
                                 </Link>
                                 {cleanFirm ? (
                                   <p className="text-xs font-medium text-amber-600 dark:text-amber-400 truncate">
@@ -1801,7 +1754,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                                   return (
                                     <div className="flex items-center gap-1 text-zinc-400">
                                       {hasEmail && (
-                                        <Link 
+                                        <Link prefetch={false} 
                                           href={`/investor/${investor.slug || investor.id}`}
                                           onClick={(e) => e.stopPropagation()}
                                           className="hover:text-emerald-300 transition-colors p-1"
@@ -1852,6 +1805,8 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
 
                                 return (
                                   <button
+                                    type="button"
+                                    aria-label={`Unlock verified contacts for ${investor.name}`}
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setCheckoutDiscount('');
@@ -1918,7 +1873,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                             </span>
                           )}
                           {displayIndustries.slice(0, 2).map(tag => (
-                            <Link key={tag} href={`/investors/${tag.toLowerCase().replace(/[\s/]+/g, '-')}`} onClick={(e) => e.stopPropagation()} className="px-2 py-0.5 text-[11px] font-medium bg-zinc-100 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400 rounded-md border border-zinc-200 dark:border-zinc-800 hover:border-amber-500/50 hover:text-amber-500 transition-colors">
+                            <Link prefetch={false} key={tag} href={`/investors/${tag.toLowerCase().replace(/[\s/]+/g, '-')}`} onClick={(e) => e.stopPropagation()} className="px-2 py-0.5 text-[11px] font-medium bg-zinc-100 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400 rounded-md border border-zinc-200 dark:border-zinc-800 hover:border-amber-500/50 hover:text-amber-500 transition-colors">
                               {tag}
                             </Link>
                           ))}
@@ -1937,13 +1892,16 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                               <span className="text-zinc-500 text-[10.5px] font-medium">Backed:</span>
                               {portfolioList.slice(0, 2).map((comp, pIdx) => {
                                 const cleanSlug = comp.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                                const hasDossier = KNOWN_COMPANY_SLUGS.has(cleanSlug);
+                                const targetHref = hasDossier ? `/company/${cleanSlug}` : `/?search=${encodeURIComponent(comp)}`;
                                 return (
                                   <Link
                                     key={pIdx}
-                                    href={`/company/${cleanSlug}`}
+                                    href={targetHref}
+                                    prefetch={false}
                                     onClick={(e) => e.stopPropagation()}
                                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:border-amber-500/40 transition-colors"
-                                    title={`View ${comp} Company Intelligence Profile`}
+                                    title={hasDossier ? `View ${comp} Company Intelligence Profile` : `Search investors who backed ${comp}`}
                                   >
                                     <span className="w-1 h-1 rounded-full bg-amber-400" />
                                     <span>{comp}</span>
@@ -2158,7 +2116,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                   }
 
                   return (
-                    <Link
+                    <Link prefetch={false}
                       key={hub.filters.join('/')}
                       href={`/investors/${hub.filters.join('/')}`}
                       className={`group flex items-center justify-between py-2.5 px-3.5 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/40 border border-zinc-200/40 dark:border-zinc-800/60 ${borderColor} hover:bg-white dark:hover:bg-zinc-900/90 transition-all duration-200`}
@@ -2189,7 +2147,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
               </div>
               <div className="flex flex-wrap justify-center gap-2.5">
                 {INDUSTRY_PAGES.map((page) => (
-                  <Link
+                  <Link prefetch={false}
                     key={page.slug}
                     href={`/investors/${page.slug}`}
                     className="group relative px-4 py-2 rounded-full bg-white/50 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-white/5 backdrop-blur-md overflow-hidden hover:border-zinc-700 hover:bg-zinc-800/80 transition-colors duration-150"
@@ -2200,7 +2158,7 @@ export default function Dashboard({ initialInvestors = [], initialCount }) {
                 ))}
               </div>
               <div className="mt-8 flex justify-center">
-                <Link
+                <Link prefetch={false}
                   href="/directory"
                   className="inline-flex items-center justify-center px-6 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-xs rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all hover:scale-105 active:scale-95 shadow-lg group"
                 >

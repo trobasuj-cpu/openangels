@@ -4,6 +4,47 @@
 
 export const HEX_SLUG_REGEX = /-[0-9a-f]{6}$/i;
 
+// Lightweight slug set for known company dossiers (avoids importing 232KB companyData.js in investor SSR)
+export const KNOWN_COMPANY_SLUGS = new Set([
+  'openai', 'stripe', 'anthropic', 'perplexity', 'cursor', 'figma', 'airbnb', 'uber',
+  'twitter', 'linkedin', 'facebook', 'cognition', 'glean', 'harvey', 'mercor', 'poolside',
+  'decagon', 'sierra', 'figure-ai', 'groq', 'restate', 'nori-robotics', 'notion', 'linear',
+  'vercel', 'supabase', 'scale-ai', 'databricks', 'coinbase', 'discord', 'ramp', 'rippling',
+]);
+
+/**
+ * Deterministic verification badge metadata (shared by Dashboard and InvestorProfileModal
+ * without pulling Dashboard.jsx into standalone /investor/[slug] SSR/client bundles).
+ */
+export function getVerificationInfo(investor) {
+  const dateStr = investor?.created_at || investor?.updated_at;
+  let formattedDate = 'Sep 2026';
+  if (dateStr) {
+    try {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        formattedDate = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+      }
+    } catch {}
+  }
+
+  const hasEmail = !!investor?.email || !!investor?.has_email;
+  const hasSocial = !!investor?.linkedin_url || !!investor?.has_linkedin || !!investor?.twitter_url || !!investor?.has_twitter;
+
+  let method = 'Registry Confirmed';
+  if (hasEmail) {
+    method = 'SMTP Validated';
+  } else if (hasSocial) {
+    method = 'Profile Confirmed';
+  }
+
+  return {
+    date: formattedDate,
+    method,
+    badgeText: `Verified: ${formattedDate} (${method})`,
+  };
+}
+
 export const JUNK_FIRM_PATTERNS = [
   /^hotmail(?:\.com)?$/i,
   /^gmail(?:\.com)?$/i,

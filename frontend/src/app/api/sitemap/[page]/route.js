@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 import { absoluteUrl } from '@/seo';
-import { createClient } from '@supabase/supabase-js';
 
 function escapeXml(unsafe) {
   if (!unsafe) return '';
@@ -21,24 +20,20 @@ export async function GET(request, { params }) {
       return new Response('Invalid sitemap page', { status: 400 });
     }
 
-    const from = (pageNum - 1) * 1000;
-    const to = pageNum * 1000 - 1;
-
+    const offset = (pageNum - 1) * 1000;
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://rjdewjyhtbfkujhvkwig.supabase.co';
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ial7j5MzK6ni3y-Y8YszGg_7ZeV-2D3';
 
-    const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
-    
-    const { data, error } = await supabase
-      .from('investors_public')
-      .select('slug, created_at')
-      .not('slug', 'is', null)
-      .or('avatar_url.not.is.null,has_email.eq.true')
-      .order('created_at', { ascending: true })
-      .order('id', { ascending: true })
-      .range(from, to);
-
-    if (error) throw error;
+    // Lightweight native fetch avoids @supabase/supabase-js CPU overhead on Cloudflare Free Tier
+    const restUrl = `${supabaseUrl}/rest/v1/investors_public?select=slug,created_at&slug=not.is.null&or=(avatar_url.not.is.null,has_email.eq.true)&order=created_at.asc,id.asc&offset=${offset}&limit=1000`;
+    const res = await fetch(restUrl, {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    });
+    if (!res.ok) throw new Error(`Supabase HTTP ${res.status}`);
+    const data = await res.json();
 
     const urls = (data || []).map((inv) => `  <url>
     <loc>${absoluteUrl(`/investor/${escapeXml(inv.slug)}`)}</loc>
@@ -55,14 +50,14 @@ ${urls}
     return new Response(xml, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+        'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
       },
     });
   } catch (e) {
     console.error('Dynamic sitemap page error:', e);
     return new Response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>', {
       headers: { 'Content-Type': 'application/xml; charset=utf-8' },
-      status: 500
+      status: 500,
     });
   }
 }
